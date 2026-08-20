@@ -27,12 +27,12 @@ Committed autoloads: `global` → `core/global.gd`, `Events` → `core/events.gd
 
 ## Architecture
 
-- HUD and combat talk through `Events` (`score_changed`, `wave_changed`, `energy_changed`, `player_died`, `game_over_requested`, `powerup_collected`). Do not recouple HUD to player nodes.
+- HUD, combat, and screen flow talk through `Events` (`score_changed`, `wave_changed`, `energy_changed`, `player_died`, `game_over_requested`, `powerup_collected`, `world_requested`, `hiscore_requested`, `start_screen_requested`, `resume_requested`, `restart_requested`, `graphic_changed`). Do not recouple HUD to player nodes. Coop mode lives on `global.coop`.
 - Waves: edit `data/waves/*.tres` / `wave_catalog.tres`; runtime is `scenes/waves/wave_spawner.gd`.
 - Weapons and upgrades are resources (`WeaponDefinition`, `UpgradeDefinition`, `PlayerLoadout`). Prefer data over hardcoded stats.
 - Player logic stays split: `player.gd`, `player_weapons.gd`, `player_vitals.gd`, `player_loadout.gd`.
 - Shots go through `ProjectilePool` (`scenes/combat/projectile_pool.gd`).
-- Collision layers are named in `project.godot` (`player`, `enemy`, `player_shot`, `enemy_shot`, `pickup`, `asteroid`).
+- Collision layers are named in `project.godot` (`player`, `enemy`, `player_shot`, `enemy_shot`, `pickup`, `asteroid`). Scripts preload `core/collision_layers.gd` instead of raw bitmasks.
 - Keep `global.Debug` and F1–F6 debug actions.
 
 `global.gd` preloads save with `const _Save := preload("res://core/save_service.gd")` — do not put `class_name` on that autoload helper if parse order breaks.

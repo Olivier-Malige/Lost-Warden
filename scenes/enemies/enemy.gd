@@ -114,7 +114,7 @@ func _refresh_score_hud() -> void:
 	Events.score_changed.emit(global.score)
 
 func _is_coop() -> bool:
-	return get_tree().current_scene.coop
+	return global.coop
 
 func _spawn_shot(packed: PackedScene, from: Vector2, speed_x: float = 0, rot_deg: float = 0) -> Node:
 	var shot = ProjectilePool.spawn(packed, from, get_parent())

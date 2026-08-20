@@ -1,5 +1,8 @@
 extends Node2D
 
+var _pips := {}
+var _scenes := {}
+
 func _ready() -> void:
 	Events.score_changed.connect(_on_score_changed)
 	Events.wave_changed.connect(_on_wave_changed)
@@ -15,10 +18,14 @@ func _on_energy_changed(player_id: String, energy: int) -> void:
 	var holder := get_node_or_null("energy_" + player_id)
 	if holder == null:
 		return
-	for ch in holder.get_children():
-		ch.queue_free()
-	var pip_scene = load("res://scenes/player/" + player_id + "_energy.tscn")
-	for i in range(energy):
-		var pip = pip_scene.instantiate()
-		pip.position = Vector2(0, -i * 12)
+	if not _pips.has(player_id):
+		_pips[player_id] = []
+		_scenes[player_id] = load("res://scenes/player/" + player_id + "_energy.tscn")
+	var pips: Array = _pips[player_id]
+	while pips.size() < energy:
+		var pip = _scenes[player_id].instantiate()
+		pip.position = Vector2(0, -pips.size() * 12)
 		holder.add_child(pip)
+		pips.append(pip)
+	for i in pips.size():
+		pips[i].visible = i < energy

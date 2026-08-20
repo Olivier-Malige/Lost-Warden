@@ -9,5 +9,5 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("start") and not event.is_echo():
-		get_tree().current_scene.go_Start_Screen()
+		Events.start_screen_requested.emit()
 		queue_free()

@@ -6,7 +6,7 @@ func _ready() -> void:
 	Events.score_changed.emit(0)
 	if $music.stream:
 		$music.stream.loop = true
-	var offsets := [Vector2(-50, 0), Vector2(50, 0)] if get_tree().current_scene.coop else [Vector2.ZERO]
+	var offsets := [Vector2(-50, 0), Vector2(50, 0)] if global.coop else [Vector2.ZERO]
 	nbr_Player = offsets.size()
 	for i in nbr_Player:
 		_spawn_player(i == 1, offsets[i])
@@ -21,5 +21,4 @@ func _on_player_died() -> void:
 	nbr_Player -= 1
 	if nbr_Player <= 0:
 		Events.game_over_requested.emit()
-		get_tree().current_scene.go_GameOver_Screen()
 		queue_free()

@@ -27,7 +27,6 @@ const OPTION_NODES := {
 	OPTION_GRAPHIC: "buttonGroup/graphic",
 }
 
-var menu = load("res://scenes/menu/menu.tscn")
 var config = global.saveData.config
 
 
@@ -62,24 +61,25 @@ func set_mode(menu_mode):
 
 
 func _show_options(enabled: Array = []) -> void:
-	for option in enabled:
-		get_node(OPTION_NODES[option]).add_to_group("enable")
-	for node in $buttonGroup.get_children():
-		if node.is_in_group("enable"):
+	var first: Control = null
+	for option in OPTION_NODES:
+		var node: Control = get_node(OPTION_NODES[option])
+		var on: bool = option in enabled
+		node.visible = on
+		node.focus_mode = Control.FOCUS_ALL if on else Control.FOCUS_NONE
+		if on:
 			node.size.x = 800
-		else:
-			node.queue_free()
-	await $optionTimer.timeout
+			if first == null:
+				first = node
 	$buttonGroup.size = Vector2(800, 0)
 	show()
-	$buttonGroup.get_child(0).grab_focus()
+	if first:
+		first.grab_focus()
 
 
 func start_game(game_mode):
-	get_tree().current_scene.coop = game_mode != MODE_SOLO
-	get_tree().current_scene.go_World_Screen()
-	get_tree().current_scene.get_node("start").queue_free()
-	queue_free()
+	global.coop = game_mode != MODE_SOLO
+	Events.world_requested.emit()
 
 
 func _on_Solo_button_down():
@@ -98,42 +98,34 @@ func _on_Exit_button_down():
 
 func _on_Resume_button_down():
 	if await _play_start():
-		get_tree().current_scene.set_Resume()
+		Events.resume_requested.emit()
 		queue_free()
 
 
 func _on_Restart_button_down():
 	if await _play_start():
-		get_tree().current_scene.set_Restart()
+		Events.restart_requested.emit()
 		queue_free()
 
 
 func _on_Hiscore_button_down():
 	await _play_select()
-	get_tree().current_scene.go_Hiscore_Screen()
+	Events.hiscore_requested.emit()
 	queue_free()
 
 
 func _on_options_button_down():
 	await _play_select()
-	new_menu(MENU_OPTIONS)
-
-
-func new_menu(menu_mode):
-	var m = menu.instantiate()
-	get_parent().add_child(m)
-	m.set_mode(menu_mode)
-	queue_free()
+	set_mode(MENU_OPTIONS)
 
 
 func _on_return_button_down():
 	await _play_select()
-	var scene = get_tree().current_scene
-	if scene.worldScreen:
-		new_menu(MENU_PAUSE)
-	elif scene.startScreen:
-		new_menu(MENU_START)
-	queue_free()
+	var game := get_tree().get_first_node_in_group("game")
+	if game.worldScreen:
+		set_mode(MENU_PAUSE)
+	elif game.startScreen:
+		set_mode(MENU_START)
 
 
 func _on_sound_button_down():
@@ -152,7 +144,7 @@ func _on_music_button_down():
 
 func _on_Controller_button_down():
 	await _play_select()
-	new_menu(MENU_CONTROLLER)
+	set_mode(MENU_CONTROLLER)
 
 
 func _on_fullscreen_button_down():
@@ -173,7 +165,7 @@ func _on_player2_button_down():
 func _on_graphic_button_down():
 	config.graphic = "low" if config.graphic == "high" else "high"
 	$buttonGroup/graphic.set_text("graphic : " + config.graphic)
-	get_tree().current_scene.set_Graphic(config.graphic)
+	Events.graphic_changed.emit(config.graphic)
 	global.save_Data()
 
 

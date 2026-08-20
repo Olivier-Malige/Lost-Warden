@@ -25,6 +25,7 @@ var saveData := {
 		graphic = "high",
 	}
 }
+var coop := false
 var sav_path := "user://data.json"
 const VERSION_NUMBER = "Alpha 7"
 func _ready() -> void:
@@ -44,7 +45,7 @@ func save_Data() -> void:
 	_Save.save_data(saveData)
 
 func update_Data() -> void:
-	var mode: Dictionary = saveData.coop if get_tree().current_scene.coop else saveData.solo
+	var mode: Dictionary = saveData.coop if coop else saveData.solo
 	var changed := false
 	if wave > mode.bestWave:
 		mode.bestWave = wave

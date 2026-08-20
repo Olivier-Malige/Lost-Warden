@@ -42,7 +42,7 @@ func _ready() -> void:
 	collision_mask = Layers.ENEMY | Layers.ENEMY_SHOT | Layers.PICKUP | Layers.ASTEROID
 
 func update_controller() -> void:
-	if get_tree().current_scene.coop:
+	if global.coop:
 		controller = global.saveData.config.player2 if set_Player_2 else global.saveData.config.player1
 	else:
 		controller = "all"

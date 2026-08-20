@@ -1,5 +1,4 @@
 extends Node
-var coop := false
 var startScreen := false
 var worldScreen := false
 var gameOverScreen := false
@@ -22,6 +21,13 @@ func _ready() -> void:
 	set_Graphic(global.saveData.config.graphic)
 	get_window().mode = Window.MODE_FULLSCREEN if global.saveData.config.fullscreen else Window.MODE_WINDOWED
 	set_process_mode(PROCESS_MODE_ALWAYS)
+	Events.world_requested.connect(go_World_Screen)
+	Events.hiscore_requested.connect(go_Hiscore_Screen)
+	Events.start_screen_requested.connect(go_Start_Screen)
+	Events.resume_requested.connect(set_Resume)
+	Events.restart_requested.connect(set_Restart)
+	Events.game_over_requested.connect(go_GameOver_Screen)
+	Events.graphic_changed.connect(set_Graphic)
 
 
 func _input(event: InputEvent) -> void:
@@ -106,6 +112,8 @@ func go_World_Screen() -> void:
 	worldScreen = true
 	startScreen = false
 	gameOverScreen = false
+	if has_node("start"):
+		$start.queue_free()
 
 
 # Title starfield sits behind the TV sprite so it cannot cover the frame or console.
