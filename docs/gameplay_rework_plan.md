@@ -2,11 +2,13 @@
 
 ## Summary
 
-Build the rework on `codex/dynamic-gameplay-rework` as six independently verifiable phases. Every phase must leave the game playable before the next phase starts.
+Evolve the existing game on `codex/dynamic-gameplay-rework` through two preparation phases followed by six independently verifiable gameplay phases. Keep the current repository and the existing itch.io project so the game-jam history, audience, and working code are preserved. A separate replacement repository is not required. Every phase must leave the game playable before the next phase starts.
 
 The final target is:
 
 - an uninterrupted run that ends when every player is dead;
+- an original space-opera universe and release identity that can replace the current game-jam presentation;
+- a full-viewport presentation without the decorative computer frame or legacy background ships, plus a responsive Web build suitable for itch.io;
 - an initial gameplay pace roughly 20% faster than the current game;
 - deterministic procedural encounters driven by an internal seed;
 - experience orbs and upgrade choices instead of direct random power-ups;
@@ -26,6 +28,69 @@ Permanent meta-progression, unlockable ships, profile levels, and account-wide u
 - Commit only `AGENTS.md` and this document as `docs: add dynamic gameplay rework plan`.
 
 Deliverable: a versioned roadmap with no gameplay changes in the commit.
+
+## Preparation phase A — Design the original universe and rebrand path
+
+- Continue from the current game and codebase instead of rebuilding the project from scratch.
+- Preserve the last game-jam-compatible state with an identifiable Git tag or release reference before identity-changing implementation begins.
+- Create `docs/universe_bible.md` in English and obtain maintainer approval before producing replacement art. It must define:
+  - the core premise, tone, themes, and three to five creative pillars;
+  - a working codename and a shortlist for the final original title;
+  - the player role, central conflict, major factions, and their motivations;
+  - original terminology for pilots, powers, weapons, ships, locations, and resources;
+  - a visual language for each faction, including shape grammar, palettes, materials, emblems, propulsion, and projectile styles;
+  - audio and interface direction that supports the new 8-bit universe.
+- Create an asset and terminology migration inventory covering the title, project metadata, source identifiers, ships, enemies, backgrounds, icons, audio, UI, screenshots, and itch.io store copy.
+- For every legacy reference, record its replacement, whether code compatibility requires a temporary alias, and the phase in which it will be replaced.
+- Separate mechanical reuse from fictional identity: retain proven gameplay code where practical, but redesign names, silhouettes, presentation, and lore.
+- Do not mass-rename files or identifiers until the migration inventory has been reviewed, because paths are referenced dynamically in the current project.
+- Stop extending legacy-specific names or designs once this phase is approved.
+
+Validation:
+
+- The universe bible is sufficient to design a player ship, three enemy families, an elite, and a boss within one coherent original visual language.
+- Every public-facing legacy reference has an explicit disposition in the migration inventory.
+- The maintainer has approved the creative pillars, working codename, and first faction design language.
+
+Planned commit:
+
+- `docs: define original universe and rebrand path`
+
+## Preparation phase B — Remove the screen frame and clean up the Web presentation
+
+- Treat the existing itch.io project as the release destination for the evolved game. Keep its continuity, followers, and devlog history instead of creating a replacement page.
+- Keep the current game-jam Web build playable while the rework is private. When the rebranded version is ready, make it the primary embedded Web build and preserve the final game-jam edition as a clearly labeled legacy download linked to its Git tag or release.
+- Publish itch.io devlogs for the universe reveal, gameplay milestones, rebrand, and release. Explain that the project grew from the original game-jam entry without presenting the rework as a separate sequel.
+- Update the itch.io title, page art, description, screenshots, downloadable filenames, and embedded build together with the first rebranded public build.
+- Audit and remove only demonstrably unused scenes, scripts, assets, inputs, resources, and export settings. Verify references before deletion and keep cleanup separate from gameplay changes.
+- Replace the project name, icon, export filenames, and remaining public-facing legacy terminology after the new title is approved.
+- Remove the decorative computer/television frame, its border masks, and the X-wing, TIE, and Death Star light groups from the main presentation.
+- Remove the camera zoom transition between the outside computer view and its internal screen. Present the title, menus, gameplay world, pause overlay, and game-over screen directly in one full logical viewport.
+- Derive and document the new logical viewport from the current playable area before moving nodes. Update player bounds, spawn positions, background coverage, HUD anchors, and menu layout as one coordinated change.
+- Delete `background_tv.png` and the decorative light scenes only after confirming that no retained scene references them.
+- Keep operating-system fullscreen as an independent user preference; it is not the objective of this phase and must not affect gameplay coordinates.
+- Make the Web canvas responsive inside the itch.io embed. Preserve the logical game aspect ratio, avoid non-uniform stretching, and use letterboxing or pillarboxing when necessary.
+- Expose browser fullscreen through an explicit player action because Web fullscreen requires a user gesture. Do not make browser fullscreen a prerequisite for playing.
+- Audit UI anchors and gameplay bounds at common 4:3, 5:4, 16:9, 16:10, and ultrawide window shapes while keeping the intended 8-bit pixel scale and readable HUD margins.
+- Keep the GL Compatibility renderer and validate keyboard and gamepad focus in the embedded Web build.
+- Produce a local release Web export and complete an itch.io draft-page smoke test before replacing the public build.
+
+Validation:
+
+- No computer casing, frame border, X-wing, TIE, or Death Star decoration remains around the game viewport.
+- Starting a run no longer zooms the camera into a simulated screen.
+- Every menu and gameplay layer fills the logical viewport, and player movement and enemy spawning use its visible bounds.
+- The existing operating-system fullscreen preference still works, can return to windowed mode, and remembers the setting.
+- The Web build remains playable without browser fullscreen and resizes without distorted sprites, clipped menus, or unreachable gameplay space.
+- Solo and local co-op controls work after entering and leaving browser fullscreen.
+- A clean export loads without missing resources, parser errors, console errors, or references to removed files.
+- The public update checklist contains the rebranded title, page assets, description, screenshots, credits, license notices, and Web archive.
+
+Planned commits:
+
+- `chore: remove unused legacy resources`
+- `feat(display): improve fullscreen and Web scaling`
+- `chore(release): prepare rebranded Web build`
 
 ## Phase 1 — Increase the core gameplay pace
 
@@ -160,7 +225,7 @@ Planned commits:
   - dive hunter: telegraphs and then charges the player's last known position;
   - bomber: follows a wide zigzag and drops slow projectiles;
   - sniper: strafes, telegraphs an aimed shot, fires, and retreats.
-- Build every new ship from an original silhouette and faction design language. The art may evoke cinematic space-opera dogfights, industrial fleets, and retro science fiction, but must not reproduce recognizable Star Wars ships, emblems, costumes, names, or color layouts.
+- Build every new ship from an original silhouette and the approved faction design language. Distinguish roles through this project's own shapes, palettes, propulsion, weapon, and animation rules.
 - In co-op, target the closest living player and break equal-distance ties deterministically by player identifier.
 - Add the new roles to progressively higher danger ranges, with all roles available before eight minutes.
 
@@ -228,29 +293,6 @@ Planned commits:
 - Add event-bus signals for enemy defeat, elite spawn, boss start, boss health, boss defeat, XP collection, run progression, time/danger updates, and upgrade selection.
 - Keep `powerup_collected` as the notification for a confirmed upgrade choice.
 
-## Intellectual-property and art-direction guardrails
-
-- Treat Star Wars as a genre and mood reference only, not as the game's fictional universe.
-- Create original factions, lore, ship names, silhouettes, emblems, interface graphics, weapon sounds, music, dialogue, and terminology.
-- Do not import, trace, recolor, edit, or redistribute assets taken from Star Wars films, games, promotional material, soundtracks, fan repositories, or merchandise.
-- Do not use Star Wars, Lucasfilm, Disney, Jedi, Sith, X-wing, TIE, canonical character names, logos, insignia, quotes, or other franchise identifiers in new public-facing content unless the maintainer has obtained appropriate permission and legal advice.
-- Treat the current title `The Lost Jedi` as a high-risk release name because of its close similarity to `The Last Jedi` and its use of `Jedi`. Renaming the public game to an original title is the default release requirement unless a qualified professional clears the name or the relevant rights holder authorizes it.
-- Treat independently drawn pixel art as original only when its overall silhouette, proportions, surface details, palette, and presentation are independently designed. Lower resolution or redrawing a recognizable franchise ship does not by itself satisfy this requirement.
-- Keep elite and boss designs visually readable through this project's own faction palette, outline language, particles, and geometry rather than recognizable franchise cues.
-- Before any public release, audit the current title, identifiers, images, audio, source assets, metadata, store copy, and screenshots for franchise references. The audit must explicitly include `The Lost Jedi`, `jedi`, `x_wing`, `tie`, `tie_fighter`, and any recognizable ship or film imagery already present in the repository.
-- Treat a free, open-source, non-commercial, or fan-game release and any non-affiliation disclaimer as risk-reduction context only, not as permission to reproduce or distribute protected material.
-- Apply `LICENSE.txt` only to material the project owns or is authorized to sublicense. Record every permitted third-party asset and its license separately, and remove any asset whose redistribution rights cannot be demonstrated.
-- If direct Star Wars fidelity remains a product requirement after the audit, stop public distribution work and obtain advice from a qualified intellectual-property professional or authorization from the relevant rights holder.
-
-Reference material:
-
-- [INPI — Copyright](https://www.inpi.fr/ressources/propriete-intellectuelle/droit-dauteur)
-- [INPI — Trademark validity requirements](https://www.inpi.fr/realiser-demarches/propriete-intellectuelle/conditions-de-validite-dune-marque)
-- [EUIPO — From videogame characters to AI avatars: an IP story](https://www.euipo.europa.eu/news/from-videogame-characters-to-ai-avatars-an-ip-story)
-- [Lucasfilm FAQ](https://www.lucasfilm.com/who-we-are/faq/)
-- [USPTO — `THE LAST JEDI` trademark application](https://tmng-al.uspto.gov/resting2/api/casedoc/ts/cd/87339214/RFA20170220094708/1/webcontent)
-- [USPTO Trademark Trial and Appeal Board — Lucasfilm `JEDI` marks](https://ttab-reading-room.uspto.gov/cms/rest/legal-proceeding/91273412/decision/OPP_68.pdf)
-
 ## Future roadmap — Meta-progression
 
 Create a separate `docs/meta_progression_plan.md` before implementing any permanent progression. That planning effort must decide:
@@ -266,10 +308,13 @@ Create a separate `docs/meta_progression_plan.md` before implementing any perman
 - balance limits that prevent permanent bonuses from trivializing the early run;
 - co-op ownership rules for currency and unlocks.
 
-Do not add any of these systems, screens, currencies, or save fields during phases 1–6. Stable identifiers introduced by the gameplay rework are the only current preparation for this future roadmap.
+Do not add any of these systems, screens, currencies, or save fields during preparation phases A–B or gameplay phases 1–6. Stable identifiers introduced by the gameplay rework are the only current preparation for this future roadmap.
 
 ## Assumptions
 
+- The existing repository and itch.io project remain the continuity of this game; the rework is not a greenfield sequel.
+- `The Lost Jedi` is a legacy working label only until an original release title is approved.
+- The next public itch.io build is the coordinated rebrand update produced after preparation phases A and B; development builds may remain private before that gate.
 - Upgrade progression resets at the start of every run.
 - Phase 2 includes one Command Carrier boss; further boss archetypes, rarity tiers, and weapon evolutions are outside this roadmap.
 - The seed remains internal and is logged only while `global.Debug` is enabled.
