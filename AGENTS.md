@@ -4,6 +4,15 @@ Godot **4.7** shmup. Follow this file for layout, naming, and runtime rules. Kee
 
 Reply to the maintainer in **French**. All repo docs, new comments, and `class_name` docs are **English**.
 
+## Active roadmap
+
+The approved dynamic gameplay roadmap lives in [`docs/gameplay_rework_plan.md`](docs/gameplay_rework_plan.md).
+
+- Treat the roadmap as the source of truth for this refactor.
+- Implement only the phase explicitly requested by the maintainer.
+- Finish and verify each phase before starting the next.
+- Keep meta-progression planning-only until its separate roadmap is approved.
+
 ## Layout
 
 Do **not** bring back `src/`, `Scripts/`, `Scenes/`, `Prefabs/`, `Fonts/`, `Sounds/`, or a Unity-style split.
