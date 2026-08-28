@@ -1,5 +1,5 @@
 extends Shot
-const SPEED_Y = 500
+const SPEED_Y = 550
 @export var damage := 10
 @export var noDamageToGroup := ""
 

@@ -2,7 +2,7 @@
 
 ## Summary
 
-Evolve the existing game on `codex/dynamic-gameplay-rework` through two preparation phases followed by six independently verifiable gameplay phases. Keep the current repository and the existing itch.io project so the game-jam history, audience, and working code are preserved. A separate replacement repository is not required. Every phase must leave the game playable before the next phase starts.
+Evolve the existing game on `codex/dynamic-gameplay-rework` through two preparation phases, one visual production phase, and six independently verifiable gameplay phases. Keep the current repository and the existing itch.io project so the game-jam history, audience, and working code are preserved. A separate replacement repository is not required. Every phase must leave the game playable before the next phase starts.
 
 The final target is:
 
@@ -24,7 +24,9 @@ Permanent meta-progression, unlockable ships, profile levels, and account-wide u
 - Phase 0: completed.
 - Preparation phase A: completed and approved.
 - Preparation phase B: completed and approved on 2026-08-28.
-- Next implementation phase: Phase 1 — Increase the core gameplay pace.
+- Phase 1: implementation completed on 2026-08-28; solo and co-op readability playtests remain before approval.
+- Visual production phase: planned and approved on 2026-08-29; implementation starts only after Phase 1 approval.
+- Next implementation step: validate and approve Phase 1 — Increase the core gameplay pace.
 
 Preparation phase B delivered the direct 1066 by 800 viewport, responsive Web presentation, redesigned menus and HUD, browser-fullscreen recovery, the Lost Warden release identity, the approved 24-color palette, itch.io page art, and a validated release archive. Updated gameplay screenshots remain intentionally deferred until the sprite rework is visible. Candidate replacement music is preserved for later review and is not active in the current build.
 
@@ -105,23 +107,70 @@ Planned commits:
 
 ## Phase 1 — Increase the core gameplay pace
 
-- Increase player base speed from 300 to 360, world scrolling from 140 to 168, and base fire delay from 0.26 to 0.22 seconds.
+Status: implemented on 2026-08-28. Automated checks and a headless startup smoke test pass. The approved Phase B background base speed remains at 60 logical pixels per second because it is purely visual and its readability constraint supersedes the earlier 140-to-168 target. The maintainer later requested a subtle 1.1 multiplier for the nearest parallax layer while retaining the middle and far layer speeds. Solo and co-op readability playtests remain before this phase can be approved.
+
+- Increase player base speed from 300 to 360 and use a maintainer-adjusted base fire delay of 0.18 seconds. Keep the Phase B visual background at 60 logical pixels per second instead of the superseded 140-to-168 target.
+- Increase primary, side-cannon, and plasma-beam projectile travel speeds by 20% as requested by the maintainer.
 - Increase base enemy travel speeds by roughly 20% and enemy projectile speed by 10% to preserve readability.
 - Remove the movement penalty while charging the beam.
 - Keep the short movement penalty caused by taking damage.
 - Stop resetting the loadout when a player takes damage.
 - Keep run upgrades until the run ends.
+- Add a focused combat-feedback pass with player-weapon recoil, damage flashes, and proportional camera shake for player hits, plasma-beam fire, and enemy destruction. Keep the broader particle and shader work in Phase 5.
+- Add a short hit-stop on player-caused enemy destruction and a temporary score combo multiplier to reward sustained aggression.
 
 Validation:
 
 - Player movement speed is identical with and without beam charge.
+- Player projectiles travel 20% faster without changing their damage.
 - Taking damage does not remove any upgrade.
 - Movement, shooting, and collisions remain readable in solo and co-op.
+- Combat feedback never moves collision shapes or the HUD, and low graphics mode reduces shake and flash intensity.
 
 Planned commits:
 
 - `feat(player): increase gameplay pace`
 - `fix(player): preserve beam mobility and upgrades`
+
+## Visual production phase — Rebuild the core sprite set
+
+Status: planned and approved on 2026-08-29. Implement this phase after Phase 1 is approved and before Phase 2 begins.
+
+- Define one production specification from the approved universe bible and 24-color palette: pixel grid, maximum sprite dimensions, frame layout, pivots, animation timing, outline rules, faction materials, engine colors, and projectile readability.
+- Replace the retained player set with original Lost Warden art:
+  - Nomad fighter sprites for both players;
+  - reactor particles and gameplay energy icons;
+  - energy shield, pulse-cannon shots, side-cannon shots, and plasma beam.
+- Replace every retained current enemy and hazard sprite with original silhouettes from the approved faction language:
+  - Razor Fighter, Talon Interceptor, Siege Turret, Razor Wing drone, and Grave Carrier;
+  - small and large asteroids;
+  - all corresponding enemy projectiles.
+- Replace the retained space backgrounds and star textures while preserving the existing parallax behavior and gameplay readability.
+- Preserve scene paths, stable gameplay identifiers, pivots, animation names, and collision shapes unless an atomic compatibility migration is explicitly required.
+- Keep editable source files synchronized with exported runtime PNG files. Do not commit a runtime sprite without its corresponding source when one is used.
+- Do not redraw the legacy direct power-up because Phase 3 removes it.
+- Produce phase-specific future art in the phase that owns its mechanics:
+  - elite variants and the Dread Ark in Phase 2;
+  - Energy Shards and upgrade icons in Phase 3;
+  - hunter, bomber, and sniper sprite sheets in Phase 4;
+  - explosions, particles, and combat effects in Phase 5.
+- Keep this phase visual-only. Do not change damage, movement, collision sizes, encounter data, or other gameplay behavior while replacing sprites.
+
+Validation:
+
+- No retained runtime ship, enemy, hazard, projectile, shield, or background uses a legacy-franchise silhouette or unapproved palette.
+- Player, enemy-family, projectile, and hazard silhouettes remain readable at gameplay scale in solo and co-op.
+- Every animation keeps its expected frame count, pivot, node path, and callback behavior.
+- Collision shapes remain aligned without being resized to match decorative effects.
+- High and low graphics modes remain legible under the GL Compatibility renderer.
+- Title, gameplay, pause, game-over, solo, co-op, browser fullscreen, and responsive Web flows load without missing resources or distorted sprites.
+- Updated gameplay screenshots are captured only after this phase passes validation.
+
+Planned commits:
+
+- `feat(art): replace player and weapon sprites`
+- `feat(art): replace enemy and hazard sprites`
+- `feat(art): replace space backgrounds`
 
 ## Phase 2 — Add the seeded encounter director, elites, and bosses
 
@@ -319,7 +368,7 @@ Create a separate `docs/meta_progression_plan.md` before implementing any perman
 - balance limits that prevent permanent bonuses from trivializing the early run;
 - co-op ownership rules for currency and unlocks.
 
-Do not add any of these systems, screens, currencies, or save fields during preparation phases A–B or gameplay phases 1–6. Stable identifiers introduced by the gameplay rework are the only current preparation for this future roadmap.
+Do not add any of these systems, screens, currencies, or save fields during preparation phases A–B, the visual production phase, or gameplay phases 1–6. Stable identifiers introduced by the gameplay rework are the only current preparation for this future roadmap.
 
 ## Assumptions
 

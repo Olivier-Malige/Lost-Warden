@@ -462,7 +462,7 @@ angular_damp = 1.0
 audio_bus_override = false
 audio_bus_name = "Master"
 script = ExtResource( 1 )
-speedY = -900
+speedY = -1080
 speedX = 0
 rotate = false
 playerShot = true
@@ -511,5 +511,4 @@ blend_times = [  ]
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_screen_exited"]
-
 

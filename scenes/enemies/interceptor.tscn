@@ -95,7 +95,7 @@ life = 10
 hitSomething = 1
 points = 250
 speedX = 0
-speedY = 150.0
+speedY = 180.0
 randomX = 0
 randomY = 0
 randPowerUp = 80
@@ -182,5 +182,4 @@ area_mask = 1
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_screen_exited"]
 
 [connection signal="timeout" from="ShootTimer" to="." method="_on_ShootTimer_timeout"]
-
 

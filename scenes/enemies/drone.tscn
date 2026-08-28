@@ -97,7 +97,7 @@ life = 2
 hitSomething = 1
 points = 10
 speedX = 0.0
-speedY = 250.0
+speedY = 300.0
 randomX = 0
 randomY = 0
 randPowerUp = 20
@@ -169,5 +169,4 @@ area_mask = 1
 [connection signal="animation_finished" from="anim" to="." method="_on_anim_animation_finished"]
 
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_screen_exited"]
-
 

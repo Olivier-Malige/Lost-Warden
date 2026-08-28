@@ -155,6 +155,15 @@ func _set_world_background(on: bool) -> void:
 func go_GameOver_Screen() -> void:
 	gameOverScreen = true
 	worldScreen = false
+	var current_world := get_node_or_null("world")
+	if current_world:
+		_set_world_background(false)
+		current_world.visible = false
+		current_world.process_mode = Node.PROCESS_MODE_DISABLED
+		var hud := current_world.get_node_or_null("hud")
+		if hud:
+			hud.visible = false
+		current_world.queue_free()
 	var gameOver = preload("res://scenes/menu/game_over.tscn").instantiate()
 	add_child(gameOver)
 

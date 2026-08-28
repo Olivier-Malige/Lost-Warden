@@ -1,5 +1,6 @@
 extends Node
 
+@warning_ignore_start("unused_signal")
 signal score_changed(score: int)
 signal wave_changed(wave: int)
 signal energy_changed(player_id: String, energy: int)
@@ -12,3 +13,8 @@ signal start_screen_requested()
 signal resume_requested()
 signal restart_requested()
 signal graphic_changed(level: String)
+signal screen_shake_requested(strength: float, duration: float)
+signal screen_flash_requested(color: Color, duration: float)
+signal hit_stop_requested(duration: float)
+signal combo_changed(combo: int, multiplier: float, time_left: float)
+@warning_ignore_restore("unused_signal")

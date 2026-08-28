@@ -1,6 +1,7 @@
 class_name Enemy
 extends Area2D
 const Layers := preload("res://core/collision_layers.gd")
+const PROJECTILE_SPEED_MULTIPLIER := 1.1
 @export var dropOnDestroy: bool = false
 
 @export var dropRange: int = 64
@@ -18,7 +19,7 @@ const Layers := preload("res://core/collision_layers.gd")
 @export var randomY: float = 0
 @export var randPowerUp: int = 0 # chance out of 100
 @export var setRotation: bool = false
-@export var speedRotation: int = 0
+@export var speedRotation: float = 0.0
 @export var rndRotation: bool = false
 var destroyed := false
 var hitByPlayerShot := false
@@ -34,7 +35,7 @@ func _process(delta: float) -> void:
 
 func _ready() -> void:
 	if _is_coop():
-		life *= bonusCoop
+		life = int(life * bonusCoop)
 	if rndRotation:
 		speedRotation = randf_range(rnd_Roation_Range_Min, rnd_Roation_Range_Max)
 
@@ -84,10 +85,16 @@ func _drop() -> void:
 	for i in range(nbrObjectOnDestroy):
 		var objDroped = objectOnDestroy.instantiate()
 		objDroped.position = Vector2(position.x + randf_range(-dropRange, dropRange), position.y + randf_range(-dropRange, dropRange))
-		get_parent().add_child(objDroped)
+		get_parent().call_deferred("add_child", objDroped)
 
 func _destroy() -> void:
 	destroyed = true
+	if hitByPlayerShot:
+		Events.hit_stop_requested.emit(0.035 if points < 500 else 0.05)
+	var shake_strength := clampf(1.25 + sqrt(float(maxi(points, 0))) * 0.08, 1.25, 5.0)
+	Events.screen_shake_requested.emit(shake_strength, 0.08 + shake_strength * 0.015)
+	if shake_strength >= 4.0:
+		Events.screen_flash_requested.emit(Color(0.88, 0.35, 0.25, 0.08), 0.08)
 	$sound_Explode.playing = true
 	$anim.play("explode")
 	if has_node("CollisionShape2D"):
@@ -100,25 +107,21 @@ func _destroy() -> void:
 		var score_popup = preload("res://scenes/ui/score.tscn").instantiate()
 		score_popup.position = global_position
 		score_popup.setScore = points
-		get_parent().add_child(score_popup)
-		global.score += points
-		_refresh_score_hud()
+		get_parent().call_deferred("add_child", score_popup)
+		global.register_kill(points)
 		if randi() % 101 <= randPowerUp:
 			var powerUp = preload("res://scenes/ui/power_up.tscn").instantiate()
 			powerUp.position = global_position
-			get_parent().add_child(powerUp)
+			get_parent().call_deferred("add_child", powerUp)
 	if dropOnDestroy:
 		_drop()
-
-func _refresh_score_hud() -> void:
-	Events.score_changed.emit(global.score)
 
 func _is_coop() -> bool:
 	return global.coop
 
 func _spawn_shot(packed: PackedScene, from: Vector2, speed_x: float = 0, rot_deg: float = 0) -> Node:
 	var shot = ProjectilePool.spawn(packed, from, get_parent())
-	shot.speedX = speed_x
+	shot.speedX = speed_x * PROJECTILE_SPEED_MULTIPLIER
 	if rot_deg != 0.0:
 		shot.rotation_degrees = rot_deg
 	return shot

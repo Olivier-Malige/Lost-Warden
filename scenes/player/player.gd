@@ -16,7 +16,9 @@ var set_Player_2 := false # set before add_child for P2 colors and stats
 var loadout: PlayerLoadout
 var weapons: PlayerWeapons
 var vitals: PlayerVitals
-@onready var energy = STATS.energy_max / 2
+var _recoil_tween: Tween
+var _ship_rest_position := Vector2.ZERO
+@onready var energy: int = int(STATS.energy_max / 2.0)
 @onready var touched = false
 @onready var canShooting = true
 @onready var malusSpeed = 0
@@ -34,6 +36,7 @@ func _ready() -> void:
 	weapons = PlayerWeapons.new(self)
 	vitals = PlayerVitals.new(self)
 	_setup_Player()
+	_ship_rest_position = $xWing.position
 	update_controller()
 	update_energy()
 	$ShootingDelay.set_wait_time(loadout.fire_delay)
@@ -105,7 +108,6 @@ func _set_Power_Beam(power) -> void:
 		beam_State.EMPTY:
 			_set_beam_particles(false)
 		beam_State.SMALL:
-			malusSpeed = STATS.malus_speed
 			_set_beam_particles(true, 1)
 		beam_State.NORMAL:
 			_set_beam_particles(true, 5)
@@ -124,13 +126,19 @@ func _set_beam_particles(emitting: bool, amount := -1) -> void:
 		if amount >= 0:
 			p.amount = amount
 
+func play_shot_recoil(amount := 2.0, duration := 0.07) -> void:
+	if _recoil_tween:
+		_recoil_tween.kill()
+	$xWing.position = _ship_rest_position + Vector2(0, amount)
+	_recoil_tween = create_tween()
+	_recoil_tween.tween_property($xWing, "position", _ship_rest_position, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
 func _hit_something(dmg := 1) -> void:
 	vitals.hit(dmg)
 
 func _on_touchedReset_timeout() -> void:
 	touched = false
-	if beam_Power == beam_State.EMPTY:
-		malusSpeed = 0
+	malusSpeed = 0
 	$xWing.set_modulate(Color(1, 1, 1, 1))
 
 

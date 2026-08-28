@@ -96,7 +96,7 @@ life = 4
 hitSomething = 3
 points = 70
 speedX = 0
-speedY = 250.0
+speedY = 300.0
 randomX = 40.0
 randomY = 0
 randPowerUp = 0
@@ -191,5 +191,4 @@ area_mask = 1
 [connection signal="timeout" from="shootTimer" to="." method="_on_shootTimer_timeout"]
 
 [connection signal="timeout" from="dirTimer" to="." method="_on_dirTimer_timeout"]
-
 

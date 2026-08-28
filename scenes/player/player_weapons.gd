@@ -9,12 +9,13 @@ func _init(p_player: Player) -> void:
 
 func fire_primary() -> void:
 	_spawn_gun(Player.WEAPON_PRIMARY.projectile, "shootFrom", player.loadout.damage_bonus)
+	player.play_shot_recoil()
 	player.get_node("sound_Shooting").playing = true
 	player.canShooting = false
 	player.get_node("ShootingDelay").start()
 	if player.loadout.side_shot:
-		_spawn_gun(Player.WEAPON_SIDE.projectile, "shootFromLeft", player.loadout.side_damage_bonus, 100)
-		_spawn_gun(Player.WEAPON_SIDE.projectile, "shootFromRight", player.loadout.side_damage_bonus, -100)
+		_spawn_gun(Player.WEAPON_SIDE.projectile, "shootFromLeft", player.loadout.side_damage_bonus, 120)
+		_spawn_gun(Player.WEAPON_SIDE.projectile, "shootFromRight", player.loadout.side_damage_bonus, -120)
 
 func fire_beam(power: int) -> void:
 	var weapon: WeaponDefinition
@@ -34,6 +35,9 @@ func fire_beam(power: int) -> void:
 	player.get_node(sound).playing = true
 	for from in ["shootFromLeft", "shootFromRight"]:
 		_spawn_beam(weapon.projectile, from)
+	var kick := float(power) * 1.5
+	player.play_shot_recoil(kick, 0.1)
+	Events.screen_shake_requested.emit(kick, 0.1)
 	player.malusSpeed = 0
 
 func _spawn_gun(packed: PackedScene, from: String, extra_damage: float, speed_x: float = 0) -> void:

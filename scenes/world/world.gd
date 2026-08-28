@@ -2,7 +2,7 @@ extends Node2D
 var nbr_Player := 0
 func _ready() -> void:
 	Events.player_died.connect(_on_player_died)
-	global.score = 0
+	global.reset_run()
 	Events.score_changed.emit(0)
 	if $music.stream:
 		$music.stream.loop = true
@@ -21,4 +21,3 @@ func _on_player_died() -> void:
 	nbr_Player -= 1
 	if nbr_Player <= 0:
 		Events.game_over_requested.emit()
-		queue_free()

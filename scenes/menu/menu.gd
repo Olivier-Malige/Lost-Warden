@@ -29,7 +29,7 @@ const OPTION_NODES := {
 
 var config = global.saveData.config
 var _first_option: Button
-var _menu_mode := MENU_START
+var _menu_mode: int = MENU_START
 
 
 func _input(event: InputEvent) -> void:

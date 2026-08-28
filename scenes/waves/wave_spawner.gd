@@ -52,7 +52,7 @@ func _on_rule_timeout(rule: SpawnRule) -> void:
 	var count := maxi(rule.formation, 1)
 	var center := _random_lane(rule.spawn_min, rule.spawn_max)
 	for i in count:
-		var lane := center + i - int(count / 2)
+		var lane := center + i - int(count / 2.0)
 		_spawn_at(rule.scene, lane)
 		if i < count - 1:
 			_formation_timer.start()

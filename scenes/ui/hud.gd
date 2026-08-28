@@ -5,11 +5,18 @@ var _scenes := {}
 
 func _ready() -> void:
 	Events.score_changed.connect(_on_score_changed)
+	Events.combo_changed.connect(_on_combo_changed)
 	Events.wave_changed.connect(_on_wave_changed)
 	Events.energy_changed.connect(_on_energy_changed)
 
 func _on_score_changed(score: int) -> void:
 	$LeftColumn/score.set_text("SCORE\n" + str(score))
+
+func _on_combo_changed(combo: int, multiplier: float, _time_left: float) -> void:
+	if combo < 2:
+		$LeftColumn/combo.set_text("COMBO\n—")
+	else:
+		$LeftColumn/combo.set_text("COMBO x" + str(snapped(multiplier, 0.1)))
 
 func _on_wave_changed(wave: int) -> void:
 	$RightColumn/wave.set_text("WAVE\n" + str(wave))

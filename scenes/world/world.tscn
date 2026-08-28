@@ -7,11 +7,29 @@
 [ext_resource type="PackedScene" path="res://scenes/world/background.tscn" id="5"]
 [ext_resource type="Script" uid="uid://ctihglpcctrbp" path="res://scenes/combat/projectile_pool.gd" id="6"]
 [ext_resource type="Script" uid="uid://cq5s6eielhtgt" path="res://scenes/ui/hud.gd" id="7"]
+[ext_resource type="Script" path="res://scenes/world/combat_feedback.gd" id="8"]
 
 [node name="world" type="Node2D" unique_id=871126695]
 process_mode = 1
 texture_filter = 1
 script = ExtResource("1")
+
+[node name="CombatFeedback" type="Camera2D" parent="."]
+position = Vector2(533, 400)
+enabled = true
+script = ExtResource("8")
+
+[node name="FeedbackLayer" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="Flash" type="ColorRect" parent="FeedbackLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
 
 [node name="hud" type="CanvasLayer" parent="." unique_id=1550003814]
 process_mode = 1
@@ -86,6 +104,16 @@ size_flags_vertical = 0
 theme_override_fonts/font = ExtResource("2")
 theme_override_font_sizes/font_size = 20
 text = "Score"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="combo" type="Label" parent="hud/LeftColumn"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 14
+text = "COMBO\n—"
 horizontal_alignment = 1
 vertical_alignment = 1
 

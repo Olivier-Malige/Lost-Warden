@@ -4,6 +4,8 @@ const _Save := preload("res://core/save_service.gd")
 
 var Debug := false
 var score := 0
+var combo := 0
+var combo_time_left := 0.0
 var wave := 0
 var hiscoreSolo := 0
 var hiscoreCoop := 0
@@ -27,6 +29,15 @@ var saveData := {
 }
 var coop := false
 var sav_path := "user://data.json"
+
+func _process(delta: float) -> void:
+	if combo <= 0:
+		return
+	combo_time_left = maxf(combo_time_left - delta, 0.0)
+	if combo_time_left <= 0.0:
+		combo = 0
+		Events.combo_changed.emit(combo, 1.0, combo_time_left)
+
 func _ready() -> void:
 	saveData = _Save.load_data(saveData)
 	if saveData.config.graphic == "hight":
@@ -54,3 +65,17 @@ func update_Data() -> void:
 		changed = true
 	if changed:
 		save_Data()
+
+func reset_run() -> void:
+	score = 0
+	combo = 0
+	combo_time_left = 0.0
+	Events.combo_changed.emit(combo, 1.0, combo_time_left)
+
+func register_kill(points: int) -> void:
+	combo = mini(combo + 1, 10)
+	combo_time_left = 2.0
+	var multiplier := 1.0 + float(combo - 1) * 0.1
+	score += roundi(float(points) * multiplier)
+	Events.score_changed.emit(score)
+	Events.combo_changed.emit(combo, multiplier, combo_time_left)

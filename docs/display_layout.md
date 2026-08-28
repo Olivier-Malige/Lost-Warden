@@ -33,7 +33,7 @@ Backgrounds may render behind the rails, but gameplay sprites must remain inside
 
 ## Background motion
 
-All retained parallax backgrounds use a maximum scroll speed of 60 logical pixels per second. Star sprites render at 75% scale, with matching parallax tiling, and the background script applies velocity once per frame to avoid accumulated acceleration.
+All retained parallax backgrounds use a base scroll speed of 60 logical pixels per second. The nearest layer uses a 1.1 motion scale for a subtle 66-pixel-per-second foreground drift, while the middle and far layers retain their original 48 and 30-pixel-per-second speeds. Star sprites render at 75% scale, with matching parallax tiling, and the background script applies velocity once per frame to avoid accumulated acceleration.
 
 Background motion is visual feedback only. It stays independent from gameplay RNG, player speed, enemy movement, and encounter timing.
 

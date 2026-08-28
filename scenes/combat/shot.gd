@@ -5,6 +5,7 @@ const Layers := preload("res://core/collision_layers.gd")
 
 @export var speedY: int = 0
 @export var speedX: int = 0
+@warning_ignore("shadowed_variable_base_class")
 @export var rotate: bool = false
 @export var playerShot: bool = false
 var speedRotation := 20 # radians per frame at 60 FPS

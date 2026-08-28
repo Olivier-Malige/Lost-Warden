@@ -24,7 +24,7 @@ speed_X = 0
 
 [node name="b1" type="ParallaxLayer" parent="." index="0"]
 
-motion_scale = Vector2( 1, 1 )
+motion_scale = Vector2( 1.1, 1.1 )
 motion_offset = Vector2( 1, 1 )
 motion_mirroring = Vector2( 1200, 900 )
 _sections_unfolded = [ "Material", "Motion", "Transform3D", "Visibility", "Z" ]

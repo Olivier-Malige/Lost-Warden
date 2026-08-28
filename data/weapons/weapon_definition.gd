@@ -7,4 +7,4 @@ enum Kind { PRIMARY, SIDE, BEAM_MINI, BEAM_NORMAL, BEAM_FULL }
 @export var kind: Kind = Kind.PRIMARY
 @export var projectile: PackedScene
 @export var damage: float = 1.0
-@export var fire_delay: float = 0.26
+@export var fire_delay: float = 0.18

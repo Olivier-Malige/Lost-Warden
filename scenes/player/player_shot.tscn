@@ -462,7 +462,7 @@ audio_bus_override = false
 audio_bus_name = "Master"
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform3D" ]
-speedY = -1000
+speedY = -1200
 speedX = 0
 rotate = false
 playerShot = true
@@ -508,5 +508,4 @@ blend_times = [  ]
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_screen_exited"]
-
 
