@@ -1,439 +1,272 @@
-[gd_scene format=3 uid="uid://bxmlnfjjbjfqo"]
+[gd_scene load_steps=8 format=3]
 
-[ext_resource type="Script" uid="uid://e0n6ifs2b32b" path="res://scenes/main/main.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://bio7ydxwi0bhy" path="res://assets/sprites/world/background_tv.png" id="2"]
-[ext_resource type="PackedScene" path="res://scenes/main/light_x_wing_red.tscn" id="3"]
-[ext_resource type="Texture2D" uid="uid://cmcs8ulhu431v" path="res://assets/sprites/world/light.png" id="4"]
-[ext_resource type="Script" uid="uid://iw8dsvqxk65o" path="res://scenes/main/light_2d.gd" id="5"]
-[ext_resource type="Texture2D" uid="uid://c8ly8q43dfpol" path="res://assets/sprites/world/light_2.png" id="6"]
-[ext_resource type="PackedScene" path="res://scenes/main/light_tie.tscn" id="7"]
-[ext_resource type="PackedScene" path="res://scenes/main/light_star.tscn" id="8"]
-[ext_resource type="Script" uid="uid://cuq04wtnfqdja" path="res://scenes/main/loader.gd" id="9"]
-[ext_resource type="AudioStream" uid="uid://n1qaeapratsf" path="res://assets/audio/music/loader.ogg" id="10"]
-[ext_resource type="PackedScene" path="res://scenes/world/background.tscn" id="11"]
-[ext_resource type="Script" path="res://scenes/main/star_field.gd" id="13"]
-[ext_resource type="FontFile" uid="uid://b2lht0aff7caj" path="res://assets/fonts/vermin_vibes_1989.ttf" id="12"]
+[ext_resource type="Script" path="res://scenes/main/main.gd" id="1"]
+[ext_resource type="Script" path="res://scenes/main/loader.gd" id="2"]
+[ext_resource type="AudioStream" path="res://assets/audio/music/loader.ogg" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/world/background.tscn" id="4"]
+[ext_resource type="FontFile" path="res://assets/fonts/vermin_vibes_1989.ttf" id="5"]
+[ext_resource type="FontFile" path="res://assets/fonts/slkscr.ttf" id="6"]
+[ext_resource type="Script" path="res://scenes/main/star_field.gd" id="7"]
 
-[sub_resource type="Animation" id="1"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxLoader"]
+bg_color = Color( 0.0627451, 0.0823529, 0.133333, 0.96 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.611765, 0.12549, 0.12549, 1 )
+shadow_color = Color( 0.611765, 0.12549, 0.12549, 0.45 )
+shadow_size = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxProgressBackground"]
+bg_color = Color( 0.133333, 0.152941, 0.207843, 0.95 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.227451, 0.0509804, 0.0784314, 0.8 )
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxProgressFill"]
+bg_color = Color( 0.611765, 0.12549, 0.12549, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.882353, 0.352941, 0.262745, 1 )
+shadow_color = Color( 0.611765, 0.12549, 0.12549, 0.6 )
+shadow_size = 5
+
+[sub_resource type="Animation" id="AnimationLoader"]
 resource_name = "start"
-length = 7.0
+length = 9.0
 tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Arknoid:visible_ratio")
+tracks/0/path = NodePath("Center/Panel/Margin/Content/Studio:modulate:a")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.5, 2.6, 2.7, 2.8, 2.9, 3, 3.1, 3.2, 3.3, 3.4, 3.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array( 0, 0.5, 3, 4 ),
+"transitions": PackedFloat32Array( 1, 1, 1, 1 ),
 "update": 0,
-"values": [0.0, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.0]
+"values": [ 0.0, 1.0, 1.0, 0.0 ]
 }
 tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("ColorRect:position")
+tracks/1/path = NodePath("Center/Panel/Margin/Content/LostWarden:modulate:a")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5, 1, 6, 7),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array( 0, 2.5, 3.5, 8.5, 9 ),
+"transitions": PackedFloat32Array( 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [Vector2(844, 0), Vector2(844, 0), Vector2(1.00001, 0), Vector2(9.35793e-06, 0), Vector2(-1163, 0)]
+"values": [ 0.0, 0.0, 1.0, 1.0, 0.0 ]
 }
 tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("GameOff:position")
+tracks/2/path = NodePath("Center/Panel/Margin/Content/Tagline:modulate:a")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 3.3, 7),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array( 0, 3.5, 4.5, 8.5, 9 ),
+"transitions": PackedFloat32Array( 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [Vector2(857, 272), Vector2(857, 272), Vector2(-2077, 272)]
+"values": [ 0.0, 0.0, 0.8, 0.8, 0.0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Center/Panel/Margin/Content/Presents:modulate:a")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array( 0, 0.5, 3, 4 ),
+"transitions": PackedFloat32Array( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0, 1.0, 0.0 ]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_1"]
+[sub_resource type="AnimationLibrary" id="AnimationLibraryLoader"]
 _data = {
-&"start": SubResource("1")
+&"start": SubResource( "AnimationLoader" )
 }
 
-[node name="main" type="Node" unique_id=682058767]
+[node name="main" type="Node"]
+
 process_mode = 1
-script = ExtResource("1")
+script = ExtResource( 1 )
 
-[node name="background" type="Sprite2D" parent="." unique_id=1101984701]
-z_index = 500
-position = Vector2(597.14, 466.619)
-scale = Vector2(1.71894, 1.85326)
-texture = ExtResource("2")
+[node name="Stars" type="CPUParticles2D" parent="."]
 
-[node name="Stars" type="CPUParticles2D" parent="background"]
 show_behind_parent = true
-z_index = -1
-position = Vector2(-80, -80)
-script = ExtResource("13")
-star_count = 72
+z_index = -5
+position = Vector2( 533, 400 )
+script = ExtResource( 7 )
 
-[node name="Lights" type="Control" parent="background" unique_id=128785989]
+[node name="loader" type="Control" parent="."]
+
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource( 2 )
 
-[node name="X-wings" type="Control" parent="background/Lights" unique_id=866473661]
-anchors_preset = 0
-offset_left = -348.0
-offset_top = -252.0
-offset_right = -308.0
-offset_bottom = -212.0
+[node name="Timer" type="Timer" parent="loader"]
 
-[node name="LightX-Wing_Red" parent="background/Lights/X-wings" unique_id=1430632832 instance=ExtResource("3")]
-position = Vector2(913.847, 140.909)
-rotation = -0.405383
-scale = Vector2(1.69931, 1.3442)
-color = Color(0.109804, 0.294118, 0.466667, 1)
-delay = 0.002
-
-[node name="LightX-Wing_Red2" parent="background/Lights/X-wings" unique_id=197568166 instance=ExtResource("3")]
-position = Vector2(888.708, 138.468)
-rotation = -0.360375
-scale = Vector2(1.61777, 1.09008)
-color = Color(0.109804, 0.294118, 0.466667, 1)
-delay = 0.002
-
-[node name="LightX-Wing_Red3" parent="background/Lights/X-wings" unique_id=1592646840 instance=ExtResource("3")]
-position = Vector2(912.638, 160.869)
-rotation = -0.243954
-scale = Vector2(0.955912, 0.754377)
-color = Color(0.109804, 0.294118, 0.466667, 1)
-delay = 0.002
-
-[node name="LightX-Wing4" parent="background/Lights/X-wings" unique_id=819743666 instance=ExtResource("3")]
-position = Vector2(848.859, 207.551)
-rotation = -0.444898
-scale = Vector2(2.86544, 2.34193)
-color = Color(0.611765, 0.121569, 0.121569, 1)
-delay = 0.002
-
-[node name="LightX-Wing5" parent="background/Lights/X-wings" unique_id=505302110 instance=ExtResource("3")]
-position = Vector2(812.12, 201.005)
-rotation = -0.444898
-scale = Vector2(3.06667, 2.27702)
-color = Color(0.611765, 0.121569, 0.121569, 1)
-delay = 0.002
-
-[node name="LightX-Wing6" parent="background/Lights/X-wings" unique_id=1789001184 instance=ExtResource("3")]
-position = Vector2(840.82, 246.023)
-scale = Vector2(2.55074, 1.36485)
-color = Color(0.611765, 0.121569, 0.121569, 1)
-delay = 0.002
-
-[node name="LightX-Wing7" parent="background/Lights/X-wings" unique_id=2026623622 instance=ExtResource("3")]
-position = Vector2(771.319, 233.661)
-rotation = -0.601966
-scale = Vector2(0.985253, 0.351185)
-color = Color(0.611765, 0.121569, 0.121569, 1)
-delay = 0.002
-
-[node name="Background" type="Control" parent="background/Lights" unique_id=2136155882]
-anchors_preset = 0
-offset_left = -83.1415
-offset_top = 62.3616
-offset_right = -43.1415
-offset_bottom = 102.362
-
-[node name="LightButtun" type="PointLight2D" parent="background/Lights/Background" unique_id=1552062514]
-position = Vector2(329.32, 1.26917)
-scale = Vector2(0.668851, 0.59083)
-color = Color(1, 0, 0, 1)
-range_z_min = 100
-range_z_max = 1000
-texture = ExtResource("4")
-script = ExtResource("5")
-range_Min = 1.0
-range_Max = 2.0
-delay = 0.001
-
-[node name="LightBackground" type="PointLight2D" parent="background/Lights/Background" unique_id=1628331623]
-position = Vector2(0.858429, 0.361633)
-scale = Vector2(11.004, 16.1542)
-color = Color(0.0427246, 0, 0.546875, 1)
-range_z_min = 100
-range_z_max = 1000
-texture = ExtResource("6")
-script = ExtResource("5")
-
-[node name="LightBackground2" type="PointLight2D" parent="background/Lights/Background" unique_id=1790057830]
-position = Vector2(8.44217, -8.72241)
-scale = Vector2(11.004, 16.1542)
-color = Color(0.0427246, 0, 0.546875, 1)
-range_z_min = 100
-range_z_max = 1000
-texture = ExtResource("6")
-script = ExtResource("5")
-
-[node name="Ties" type="Control" parent="background/Lights" unique_id=1061105434]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="LightTie2" parent="background/Lights/Ties" unique_id=1210341114 instance=ExtResource("7")]
-position = Vector2(-505.524, -40.9642)
-scale = Vector2(1.7848, 1.78705)
-
-[node name="LightTie3" parent="background/Lights/Ties" unique_id=1782504316 instance=ExtResource("7")]
-position = Vector2(-512.182, -204.072)
-scale = Vector2(0.590427, 0.57457)
-
-[node name="LightTie4" parent="background/Lights/Ties" unique_id=1874272335 instance=ExtResource("7")]
-position = Vector2(-581.893, -145.539)
-scale = Vector2(0.279135, 0.21069)
-
-[node name="LightTie5" parent="background/Lights/Ties" unique_id=1309926945 instance=ExtResource("7")]
-position = Vector2(-629.103, -182.982)
-scale = Vector2(0.279135, 0.21069)
-
-[node name="LightTie7" parent="background/Lights/Ties" unique_id=172118662 instance=ExtResource("7")]
-position = Vector2(-501.664, -235.079)
-scale = Vector2(0.130362, 0.101974)
-
-[node name="LightTie9" parent="background/Lights/Ties" unique_id=924567518 instance=ExtResource("7")]
-position = Vector2(-501.664, -235.079)
-scale = Vector2(0.130362, 0.101974)
-
-[node name="DeathStar" type="Control" parent="background/Lights" unique_id=1450428099]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="LightDeathStar" parent="background/Lights/DeathStar" unique_id=1556718138 instance=ExtResource("8")]
-position = Vector2(-662.277, -234.558)
-scale = Vector2(0.0975501, 0.0772769)
-color = Color(1, 0.0273438, 0.0273438, 1)
-range_Min = 0.5
-
-[node name="LightDeathStar2" parent="background/Lights/DeathStar" unique_id=169515194 instance=ExtResource("8")]
-position = Vector2(-656.874, -234.524)
-scale = Vector2(0.0999399, 0.0674091)
-color = Color(1, 0.0273438, 0.0273438, 1)
-range_Min = 0.5
-
-[node name="LightDeathStar3" parent="background/Lights/DeathStar" unique_id=586501055 instance=ExtResource("8")]
-position = Vector2(-650.184, -234.604)
-scale = Vector2(0.138857, 0.111838)
-color = Color(1, 0.0273438, 0.0273438, 1)
-range_Min = 0.5
-
-[node name="LightDeathStar4" parent="background/Lights/DeathStar" unique_id=2100007592 instance=ExtResource("8")]
-position = Vector2(-641.505, -234.764)
-scale = Vector2(0.124618, 0.103007)
-color = Color(1, 0.0273438, 0.0273438, 1)
-range_Min = 0.5
-
-[node name="LightDeathStar5" parent="background/Lights/DeathStar" unique_id=1864419602 instance=ExtResource("8")]
-position = Vector2(-508.412, -234.837)
-scale = Vector2(0.133417, 0.0966675)
-color = Color(1, 0.0273438, 0.0273438, 1)
-range_Min = 0.5
-
-[node name="LightDeathStar6" parent="background/Lights/DeathStar" unique_id=1357008273 instance=ExtResource("8")]
-position = Vector2(-629.68, -234.642)
-scale = Vector2(0.144972, 0.102023)
-color = Color(1, 0.0273438, 0.0273438, 1)
-range_Min = 0.5
-
-[node name="LightDeathStar7" parent="background/Lights/DeathStar" unique_id=557319710 instance=ExtResource("8")]
-position = Vector2(-617.218, -234.547)
-scale = Vector2(0.140941, 0.0989579)
-color = Color(1, 0.0273438, 0.0273438, 1)
-range_Min = 0.5
-
-[node name="LightDeathStar8" parent="background/Lights/DeathStar" unique_id=1520433656 instance=ExtResource("8")]
-position = Vector2(-603.22, -234.609)
-scale = Vector2(0.195671, 0.131545)
-color = Color(1, 0.0273438, 0.0273438, 1)
-range_Min = 0.5
-
-[node name="LightDeathStar9" parent="background/Lights/DeathStar" unique_id=1162625641 instance=ExtResource("8")]
-position = Vector2(-516.16, -234.89)
-scale = Vector2(0.140969, 0.104715)
-color = Color(1, 0.0273438, 0.0273438, 1)
-range_Min = 0.5
-
-[node name="LightDeathStar10" parent="background/Lights/DeathStar" unique_id=1300727373 instance=ExtResource("8")]
-position = Vector2(-589.683, -234.477)
-scale = Vector2(0.204465, 0.161598)
-color = Color(1, 0.0273438, 0.0273438, 1)
-range_Min = 0.5
-
-[node name="LightDeathStar11" parent="background/Lights/DeathStar" unique_id=1087671971 instance=ExtResource("8")]
-position = Vector2(-575.242, -234.589)
-scale = Vector2(0.216902, 0.128497)
-color = Color(1, 0.0273438, 0.0273438, 1)
-range_Min = 0.5
-
-[node name="LightDeathStar12" parent="background/Lights/DeathStar" unique_id=1275430038 instance=ExtResource("8")]
-position = Vector2(-525.82, -234.661)
-scale = Vector2(0.140382, 0.097656)
-color = Color(1, 0.0273438, 0.0273438, 1)
-range_Min = 0.5
-
-[node name="LightDeathStar13" parent="background/Lights/DeathStar" unique_id=266979362 instance=ExtResource("8")]
-position = Vector2(-561.018, -234.388)
-scale = Vector2(0.188535, 0.12638)
-color = Color(1, 0.0273438, 0.0273438, 1)
-range_Min = 0.5
-
-[node name="LightDeathStar14" parent="background/Lights/DeathStar" unique_id=750393971 instance=ExtResource("8")]
-position = Vector2(-535.756, -234.456)
-scale = Vector2(0.167042, 0.121452)
-color = Color(1, 0.0273438, 0.0273438, 1)
-range_Min = 0.5
-
-[node name="LightDeathStar15" parent="background/Lights/DeathStar" unique_id=685375289 instance=ExtResource("8")]
-position = Vector2(-548.227, -234.158)
-scale = Vector2(0.215744, 0.141017)
-color = Color(1, 0.0273438, 0.0273438, 1)
-range_Min = 0.5
-
-[node name="Border" type="Control" parent="background" unique_id=830215952]
-show_behind_parent = true
-layout_mode = 3
-anchors_preset = 0
-offset_left = -1.24493
-offset_top = -1.41318
-offset_right = 38.7551
-offset_bottom = 38.5868
-
-[node name="Border_Right" type="ColorRect" parent="background/Border" unique_id=561058511]
-modulate = Color(0, 0, 0, 1)
-show_behind_parent = true
-layout_mode = 0
-offset_left = 106.0
-offset_top = -1247.0
-offset_right = 2207.0
-offset_bottom = 1109.0
-
-[node name="Border_Up" type="ColorRect" parent="background/Border" unique_id=1422208172]
-modulate = Color(0, 0, 0, 1)
-show_behind_parent = true
-layout_mode = 0
-offset_left = -363.0
-offset_top = -1210.0
-offset_right = 128.0
-offset_bottom = -246.0
-
-[node name="Border_Down" type="ColorRect" parent="background/Border" unique_id=155282856]
-modulate = Color(0, 0, 0, 1)
-show_behind_parent = true
-layout_mode = 0
-offset_left = -362.0
-offset_top = 82.0
-offset_right = 139.0
-offset_bottom = 1177.0
-
-[node name="Border_Left" type="ColorRect" parent="background/Border" unique_id=1283131413]
-modulate = Color(0, 0, 0, 1)
-show_behind_parent = true
-layout_mode = 0
-offset_left = -1943.0
-offset_top = -1250.0
-offset_right = -341.0
-offset_bottom = 862.0
-
-[node name="camera_Pos_In" type="Marker2D" parent="." unique_id=1225447750]
-position = Vector2(511, 241)
-scale = Vector2(1.5, 1.5)
-
-[node name="camera_Pos_Out" type="Marker2D" parent="." unique_id=734932207]
-position = Vector2(513, 440)
-scale = Vector2(1.5, 1.5)
-
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1705689843]
-position = Vector2(513, 440)
-scale = Vector2(1.5, 1.5)
-zoom = Vector2(0.6, 0.6)
-drag_horizontal_enabled = true
-drag_vertical_enabled = true
-
-[node name="loader" type="Node2D" parent="." unique_id=910229744]
-script = ExtResource("9")
-
-[node name="Timer" type="Timer" parent="loader" unique_id=1614572844]
-wait_time = 7.0
+wait_time = 9.0
 one_shot = true
 autostart = true
 
-[node name="music" type="AudioStreamPlayer" parent="loader" unique_id=1045793292]
-stream = ExtResource("10")
+[node name="music" type="AudioStreamPlayer" parent="loader"]
+
+stream = ExtResource( 3 )
 volume_db = -10.0
 autoplay = true
 bus = &"Music"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="loader" unique_id=228046952]
-libraries/ = SubResource("AnimationLibrary_1")
+[node name="background" parent="loader" instance=ExtResource( 4 )]
 
-[node name="background" parent="loader" unique_id=249456238 instance=ExtResource("11")]
-speed_X = -200
+speed_X = -60
 
-[node name="ColorRect" type="Node2D" parent="loader" unique_id=206355802]
-position = Vector2(844, 0)
-scale = Vector2(1.33266, 1)
+[node name="Dim" type="ColorRect" parent="loader"]
 
-[node name="ColorRect1" type="ColorRect" parent="loader/ColorRect" unique_id=1542139596]
-offset_left = -18.0
-offset_top = 240.0
-offset_right = 832.0
-offset_bottom = 374.0
-color = Color(0.721569, 0.721569, 0.247059, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color( 0.0235294, 0.027451, 0.0470588, 0.38 )
 
-[node name="ColorRect2" type="ColorRect" parent="loader/ColorRect" unique_id=2079841413]
-offset_left = -15.0
-offset_top = 237.0
-offset_right = 833.0
-offset_bottom = 240.0
-color = Color(0.611765, 0.121569, 0.121569, 1)
+[node name="Center" type="CenterContainer" parent="loader"]
 
-[node name="ColorRect3" type="ColorRect" parent="loader/ColorRect" unique_id=351613577]
-offset_left = -15.0
-offset_top = 374.0
-offset_right = 825.0
-offset_bottom = 377.0
-color = Color(0.611765, 0.121569, 0.121569, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 100.0
+offset_right = -100.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="Arknoid" type="Label" parent="loader" unique_id=176268827]
-offset_left = 101.0
-offset_top = 272.0
-offset_right = 900.0
-offset_bottom = 867.0
-size_flags_horizontal = 2
-size_flags_vertical = 0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(0.611765, 0.12549, 0.12549, 1)
-theme_override_constants/shadow_offset_x = 4
-theme_override_constants/shadow_offset_y = 2
-theme_override_fonts/font = ExtResource("12")
-theme_override_font_sizes/font_size = 80
-text = "Arknoid present
-"
-visible_characters = 0
-visible_ratio = 0.0
+[node name="Panel" type="PanelContainer" parent="loader/Center"]
 
-[node name="GameOff" type="Label" parent="loader" unique_id=1028331637]
-offset_left = 857.0
-offset_top = 272.0
-offset_right = 2877.0
-offset_bottom = 867.0
-size_flags_horizontal = 2
-size_flags_vertical = 0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(0.611765, 0.12549, 0.12549, 1)
-theme_override_constants/shadow_offset_x = 4
-theme_override_constants/shadow_offset_y = 2
-theme_override_fonts/font = ExtResource("12")
-theme_override_font_sizes/font_size = 80
-text = "a postjam version for my entrie of the GameOff  2017 "
+custom_minimum_size = Vector2( 680, 470 )
+layout_mode = 2
+theme_override_styles/panel = SubResource( "StyleBoxLoader" )
+
+[node name="Margin" type="MarginContainer" parent="loader/Center/Panel"]
+
+layout_mode = 2
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 28
+
+[node name="Content" type="VBoxContainer" parent="loader/Center/Panel/Margin"]
+
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Studio" type="Label" parent="loader/Center/Panel/Margin/Content"]
+
+custom_minimum_size = Vector2( 0, 76 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.721569, 0.713725, 0.682353, 1 )
+theme_override_colors/font_shadow_color = Color( 0.611765, 0.12549, 0.12549, 1 )
+theme_override_constants/shadow_offset_x = 6
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource( 5 )
+theme_override_font_sizes/font_size = 68
+text = "ARKNOID"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Presents" type="Label" parent="loader/Center/Panel/Margin/Content"]
+
+custom_minimum_size = Vector2( 0, 28 )
+layout_mode = 2
+modulate = Color( 1, 1, 1, 0 )
+theme_override_colors/font_color = Color( 0.952941, 0.921569, 0.866667, 1 )
+theme_override_fonts/font = ExtResource( 6 )
+theme_override_font_sizes/font_size = 22
+text = "PRESENTS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CyanLine" type="ColorRect" parent="loader/Center/Panel/Margin/Content"]
+
+custom_minimum_size = Vector2( 0, 5 )
+layout_mode = 2
+color = Color( 0.611765, 0.12549, 0.12549, 1 )
+
+[node name="LostWarden" type="Label" parent="loader/Center/Panel/Margin/Content"]
+
+custom_minimum_size = Vector2( 0, 88 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
+theme_override_colors/font_shadow_color = Color( 0.611765, 0.12549, 0.12549, 1 )
+theme_override_constants/shadow_offset_x = 6
+theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource( 5 )
+theme_override_font_sizes/font_size = 72
+text = "LOST WARDEN"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MagentaLine" type="ColorRect" parent="loader/Center/Panel/Margin/Content"]
+
+custom_minimum_size = Vector2( 0, 5 )
+layout_mode = 2
+color = Color( 0.611765, 0.12549, 0.12549, 1 )
+
+[node name="Tagline" type="Label" parent="loader/Center/Panel/Margin/Content"]
+
+custom_minimum_size = Vector2( 0, 36 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.952941, 0.921569, 0.866667, 1 )
+theme_override_fonts/font = ExtResource( 6 )
+theme_override_font_sizes/font_size = 24
+text = "ARCADE STARFIGHTER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BootStatus" type="Label" parent="loader/Center/Panel/Margin/Content"]
+
+custom_minimum_size = Vector2( 0, 24 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.882353, 0.352941, 0.262745, 1 )
+theme_override_fonts/font = ExtResource( 6 )
+theme_override_font_sizes/font_size = 18
+text = "INITIALIZING FLIGHT SYSTEMS..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Progress" type="ProgressBar" parent="loader/Center/Panel/Margin/Content"]
+
+custom_minimum_size = Vector2( 0, 18 )
+layout_mode = 2
+step = 5.0
+theme_override_styles/background = SubResource( "StyleBoxProgressBackground" )
+theme_override_styles/fill = SubResource( "StyleBoxProgressFill" )
+show_percentage = false
+
+[node name="SkipHint" type="Label" parent="loader/Center/Panel/Margin/Content"]
+
+custom_minimum_size = Vector2( 0, 24 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
+theme_override_fonts/font = ExtResource( 6 )
+theme_override_font_sizes/font_size = 16
+text = "PRESS START TO SKIP"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="loader"]
+
+libraries = {
+"": SubResource( "AnimationLibraryLoader" )
+}
+autoplay = "start"
+root_node = NodePath( ".." )
 
 [connection signal="timeout" from="loader/Timer" to="." method="_on_Timer_timeout"]

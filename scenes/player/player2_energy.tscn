@@ -2,12 +2,15 @@
 
 [ext_resource path="res://assets/ui/player2_energy.png" type="Texture2D" id=1]
 
-[node name="player2Energy" type="Node2D" index="0"]
+[node name="player2Energy" type="Control" index="0"]
+
+custom_minimum_size = Vector2( 24, 12 )
+mouse_filter = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="." index="0"]
 
+position = Vector2( 12, 4 )
 scale = Vector2( 3, 1 )
 texture = ExtResource( 1 )
 _sections_unfolded = [ "Transform3D" ]
-
 

@@ -1,185 +1,221 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=9 format=3]
 
-[ext_resource path="res://scenes/menu/hi_score.gd" type="Script" id=1]
-[ext_resource path="res://assets/fonts/vermin_vibes_1989.ttf" type="FontFile" id=2]
-[ext_resource path="res://assets/fonts/slkscr.ttf" type="FontFile" id=3]
-[ext_resource path="res://assets/fonts/vermin_vibes_1989.ttf" type="FontFile" id=4]
+[ext_resource type="Script" path="res://scenes/menu/hi_score.gd" id="1"]
+[ext_resource type="FontFile" path="res://assets/fonts/vermin_vibes_1989.ttf" id="2"]
+[ext_resource type="FontFile" path="res://assets/fonts/slkscr.ttf" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/world/background.tscn" id="4"]
 
-[node name="hiscore" type="Node2D"]
+[sub_resource type="StyleBoxFlat" id="StylePanel"]
+bg_color = Color(0.0627451, 0.0823529, 0.133333, 0.96)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.611765, 0.12549, 0.12549, 0.95)
+shadow_color = Color(0.611765, 0.12549, 0.12549, 0.4)
+shadow_size = 8
 
-script = ExtResource( 1 )
-_sections_unfolded = [ "Transform3D" ]
+[sub_resource type="StyleBoxFlat" id="StyleCard"]
+bg_color = Color(0.133333, 0.152941, 0.207843, 0.86)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.611765, 0.12549, 0.12549, 0.7)
 
-[node name="title" type="Label" parent="." index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = -1.0
-offset_top = 107.0
-offset_right = 799.0
-offset_bottom = 707.0
-pivot_offset = Vector2( 0, 0 )
+[node name="hiscore" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 2
-size_flags_vertical = 0
-theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 50
-theme_override_colors/font_color = Color( 0.721569, 0.721569, 0.25098, 1 )
-theme_override_colors/font_shadow_color = Color( 0.611765, 0.12549, 0.12549, 1 )
-text = "Hiscore"
+script = ExtResource("1")
+
+[node name="Background" parent="." instance=ExtResource("4")]
+scroll_ignore_camera_zoom = true
+speed_X = -60
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0235294, 0.027451, 0.0470588, 0.28)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 100.0
+offset_right = -100.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(720, 520)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StylePanel")
+
+[node name="Margin" type="MarginContainer" parent="Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 34
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 34
+theme_override_constants/margin_bottom = 24
+
+[node name="Content" type="VBoxContainer" parent="Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Center/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 78)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.839216, 0.839216, 0.32549, 1)
+theme_override_colors/font_shadow_color = Color(0.611765, 0.12549, 0.12549, 1)
+theme_override_constants/shadow_offset_x = 5
+theme_override_constants/shadow_offset_y = 3
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 62
+text = "HISCORES"
 horizontal_alignment = 1
-visible_ratio = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "custom_colors", "custom_constants", "custom_fonts" ]
+vertical_alignment = 1
 
-[node name="wave_solo" type="Label" parent="." index="1"]
+[node name="Line" type="ColorRect" parent="Center/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+color = Color(0.611765, 0.12549, 0.12549, 0.95)
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 150.0
-offset_top = 310.0
-offset_right = 463.0
-offset_bottom = 343.0
-pivot_offset = Vector2( 0, 0 )
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 2
-size_flags_vertical = 0
-theme_override_fonts/font = ExtResource( 3 )
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color( 0.862745, 0.862745, 0.862745, 1 )
-text = "higher wave :"
-visible_ratio = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "custom_colors" ]
+[node name="Records" type="HBoxContainer" parent="Center/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
 
-[node name="wave_coop" type="Label" parent="." index="2"]
+[node name="Solo" type="PanelContainer" parent="Center/Panel/Margin/Content/Records"]
+custom_minimum_size = Vector2(305, 280)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleCard")
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 150.0
-offset_top = 480.0
-offset_right = 463.0
-offset_bottom = 513.0
-pivot_offset = Vector2( 0, 0 )
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 2
-size_flags_vertical = 0
-theme_override_fonts/font = ExtResource( 3 )
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color( 0.862745, 0.862745, 0.862745, 1 )
-text = "higher wave :"
-visible_ratio = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "custom_colors" ]
+[node name="Card" type="VBoxContainer" parent="Center/Panel/Margin/Content/Records/Solo"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
 
-[node name="score_solo" type="Label" parent="." index="3"]
+[node name="Mode" type="Label" parent="Center/Panel/Margin/Content/Records/Solo/Card"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.839216, 0.839216, 0.32549, 1)
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 38
+text = "SOLO"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 150.0
-offset_top = 268.0
-offset_right = 463.0
-offset_bottom = 301.0
-pivot_offset = Vector2( 0, 0 )
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 2
-size_flags_vertical = 0
-theme_override_fonts/font = ExtResource( 3 )
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color( 0.862745, 0.862745, 0.862745, 1 )
-text = "best score :"
-visible_ratio = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "custom_colors" ]
+[node name="ScoreLabel" type="Label" parent="Center/Panel/Margin/Content/Records/Solo/Card"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.952941, 0.921569, 0.866667, 1)
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "BEST SCORE"
+horizontal_alignment = 1
 
-[node name="solo" type="Label" parent="." index="4"]
+[node name="ScoreValue" type="Label" parent="Center/Panel/Margin/Content/Records/Solo/Card"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.882353, 0.352941, 0.262745, 1)
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 36
+text = "000000"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 120.0
-offset_top = 220.0
-offset_right = 452.0
-offset_bottom = 301.0
-scale = Vector2( 0.5, 0.5 )
-pivot_offset = Vector2( 0, 0 )
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 2
-size_flags_vertical = 0
-theme_override_fonts/font = ExtResource( 4 )
-theme_override_font_sizes/font_size = 60
-theme_override_colors/font_color = Color( 0.721569, 0.721569, 0.25098, 1 )
-text = "Solo :"
-visible_ratio = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "Size Flags", "Theme", "custom_colors", "custom_fonts" ]
+[node name="WaveLabel" type="Label" parent="Center/Panel/Margin/Content/Records/Solo/Card"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.952941, 0.921569, 0.866667, 1)
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "HIGHEST WAVE"
+horizontal_alignment = 1
 
-[node name="coop" type="Label" parent="." index="5"]
+[node name="WaveValue" type="Label" parent="Center/Panel/Margin/Content/Records/Solo/Card"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.839216, 0.839216, 0.32549, 1)
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 34
+text = "00"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 120.0
-offset_top = 395.0
-offset_right = 433.0
-offset_bottom = 464.0
-scale = Vector2( 0.5, 0.5 )
-pivot_offset = Vector2( 0, 0 )
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 2
-size_flags_vertical = 0
-theme_override_fonts/font = ExtResource( 4 )
-theme_override_font_sizes/font_size = 60
-theme_override_colors/font_color = Color( 0.721569, 0.721569, 0.25098, 1 )
-text = "Coop :"
-visible_ratio = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "custom_colors" ]
+[node name="Coop" type="PanelContainer" parent="Center/Panel/Margin/Content/Records"]
+custom_minimum_size = Vector2(305, 280)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleCard")
 
-[node name="score_coop" type="Label" parent="." index="6"]
+[node name="Card" type="VBoxContainer" parent="Center/Panel/Margin/Content/Records/Coop"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 150.0
-offset_top = 443.0
-offset_right = 463.0
-offset_bottom = 476.0
-pivot_offset = Vector2( 0, 0 )
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 2
-size_flags_vertical = 0
-theme_override_fonts/font = ExtResource( 3 )
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color( 0.862745, 0.862745, 0.862745, 1 )
-text = "best score :"
-visible_ratio = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "custom_colors", "custom_fonts" ]
+[node name="Mode" type="Label" parent="Center/Panel/Margin/Content/Records/Coop/Card"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.839216, 0.839216, 0.32549, 1)
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 38
+text = "CO-OP"
+horizontal_alignment = 1
+vertical_alignment = 1
 
+[node name="ScoreLabel" type="Label" parent="Center/Panel/Margin/Content/Records/Coop/Card"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.952941, 0.921569, 0.866667, 1)
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "BEST SCORE"
+horizontal_alignment = 1
 
+[node name="ScoreValue" type="Label" parent="Center/Panel/Margin/Content/Records/Coop/Card"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.882353, 0.352941, 0.262745, 1)
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 36
+text = "000000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WaveLabel" type="Label" parent="Center/Panel/Margin/Content/Records/Coop/Card"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.952941, 0.921569, 0.866667, 1)
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "HIGHEST WAVE"
+horizontal_alignment = 1
+
+[node name="WaveValue" type="Label" parent="Center/Panel/Margin/Content/Records/Coop/Card"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.839216, 0.839216, 0.32549, 1)
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 34
+text = "00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ReturnHint" type="Label" parent="Center/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.952941, 0.921569, 0.866667, 1)
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 20
+text = "PRESS START TO RETURN"
+horizontal_alignment = 1
+vertical_alignment = 1

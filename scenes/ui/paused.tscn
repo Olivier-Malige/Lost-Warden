@@ -1,69 +1,75 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=3 format=3]
 
-[ext_resource path="res://assets/fonts/slkscr.ttf" type="FontFile" id=1]
-[ext_resource path="res://scenes/ui/paused.gd" type="Script" id=2]
+[ext_resource type="FontFile" path="res://assets/fonts/vermin_vibes_1989.ttf" id="1"]
+[ext_resource type="FontFile" path="res://assets/fonts/slkscr.ttf" id="2"]
 
-
-[sub_resource type="Animation" id=2]
-
-length = 1.0
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PackedFloat32Array( 0, 0.5 ),
-"transitions": PackedFloat32Array( 1, 1 ),
-"update": 1,
-"values": [ true, false ]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_1"]
-_data = {
-"paused": SubResource( 2 )
-}
-
-[node name="paused" type="Label" index="0"]
+[node name="paused" type="Control"]
 
 process_mode = 3
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 307.0
-offset_top = 192.0
-offset_right = 517.0
-offset_bottom = 243.0
-pivot_offset = Vector2( 0, 0 )
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
-size_flags_horizontal = 2
-size_flags_vertical = 0
+
+[node name="Dim" type="ColorRect" parent="."]
+
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color( 0.0235294, 0.027451, 0.0470588, 0.6 )
+
+[node name="HeaderArea" type="CenterContainer" parent="."]
+
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 190.0
+offset_top = 100.0
+offset_right = -190.0
+offset_bottom = 300.0
+grow_horizontal = 2
+mouse_filter = 2
+
+[node name="Header" type="VBoxContainer" parent="HeaderArea"]
+
+custom_minimum_size = Vector2( 560, 150 )
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Paused" type="Label" parent="HeaderArea/Header"]
+
+custom_minimum_size = Vector2( 0, 88 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
+theme_override_colors/font_shadow_color = Color( 0.611765, 0.12549, 0.12549, 1 )
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 2
 theme_override_fonts/font = ExtResource( 1 )
-theme_override_font_sizes/font_size = 50
-theme_override_colors/font_color = Color( 0.862745, 0.862745, 0.862745, 1 )
-text = "Paused"
-visible_ratio = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-script = ExtResource( 2 )
-_sections_unfolded = [ "Visibility", "custom_colors", "custom_fonts" ]
+theme_override_font_sizes/font_size = 72
+text = "PAUSED"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="0"]
-libraries = {
-"": SubResource("AnimationLibrary_1")
-}
+[node name="Line" type="ColorRect" parent="HeaderArea/Header"]
 
-process_mode = 3
-callback_mode_process = 1
-playback_default_blend_time = 0.0
-root_node = NodePath("..")
-speed_scale = 0.8
-blend_times = [  ]
-autoplay = ""
-_sections_unfolded = [ "Pause", "Playback Options", "playback" ]
+custom_minimum_size = Vector2( 0, 3 )
+layout_mode = 2
+color = Color( 0.611765, 0.12549, 0.12549, 0.95 )
 
+[node name="Hint" type="Label" parent="HeaderArea/Header"]
 
+custom_minimum_size = Vector2( 0, 32 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.952941, 0.921569, 0.866667, 1 )
+theme_override_fonts/font = ExtResource( 2 )
+theme_override_font_sizes/font_size = 24
+text = "SELECT AN OPTION"
+horizontal_alignment = 1
+vertical_alignment = 1

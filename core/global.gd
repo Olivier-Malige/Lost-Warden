@@ -27,7 +27,6 @@ var saveData := {
 }
 var coop := false
 var sav_path := "user://data.json"
-const VERSION_NUMBER = "Alpha 7"
 func _ready() -> void:
 	saveData = _Save.load_data(saveData)
 	if saveData.config.graphic == "hight":

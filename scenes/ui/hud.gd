@@ -1,4 +1,4 @@
-extends Node2D
+extends CanvasLayer
 
 var _pips := {}
 var _scenes := {}
@@ -9,13 +9,14 @@ func _ready() -> void:
 	Events.energy_changed.connect(_on_energy_changed)
 
 func _on_score_changed(score: int) -> void:
-	$score.set_text("SCORE : " + str(score))
+	$LeftColumn/score.set_text("SCORE\n" + str(score))
 
 func _on_wave_changed(wave: int) -> void:
-	$wave.set_text("Wave : " + str(wave))
+	$RightColumn/wave.set_text("WAVE\n" + str(wave))
 
 func _on_energy_changed(player_id: String, energy: int) -> void:
-	var holder := get_node_or_null("energy_" + player_id)
+	var column := "LeftColumn" if player_id == "player1" else "RightColumn"
+	var holder := get_node_or_null(column + "/energy_" + player_id)
 	if holder == null:
 		return
 	if not _pips.has(player_id):
@@ -24,8 +25,8 @@ func _on_energy_changed(player_id: String, energy: int) -> void:
 	var pips: Array = _pips[player_id]
 	while pips.size() < energy:
 		var pip = _scenes[player_id].instantiate()
-		pip.position = Vector2(0, -pips.size() * 12)
 		holder.add_child(pip)
+		holder.move_child(pip, 0)
 		pips.append(pip)
 	for i in pips.size():
 		pips[i].visible = i < energy
