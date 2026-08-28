@@ -1,6 +1,6 @@
 # Rebrand Migration Inventory
 
-Status: draft for maintainer approval  
+Status: approved; Preparation phase B completed on 2026-08-28
 Legacy baseline: Git tag `alpha-7`  
 Target identity: the light arcade space-opera direction defined in `docs/universe_bible.md`
 
@@ -113,6 +113,18 @@ Compatibility aliases are temporary and exist only when a dynamic path, save fie
 | Save records | `data.json`, `core/save_service.gd`, `core/global.gd` | Preserve score and `bestWave`; add `bestTime` in Phase 2 | Retain/Extend | No destructive conversion; no fictional display text in keys | Phase 2 |
 | Legacy downloadable build | itch.io download linked to `alpha-7` | Clearly label as the original Game Off 2017 edition | Retain | Separate from the primary rebranded Web build | Preparation B release |
 
+### itch.io legacy labels
+
+Keep the historical uploads available with explicit display names:
+
+- `The Lost Jedi — Legacy Alpha 6 (Windows)`;
+- `The Lost Jedi — Legacy Alpha 6 (Linux)`;
+- `The Lost Jedi — Legacy Alpha 6 (macOS)`;
+- `The Lost Jedi — Legacy Web Build (pre-rebrand)` for the previous browser archive;
+- `Lost Warden — Current Web Build` for the primary embedded release.
+
+The legacy downloads remain historical artifacts and must not be presented as the recommended version.
+
 ## Mechanical reuse rules
 
 The following systems are not identity-bearing and should be retained unless their roadmap phase requires a focused refactor:
@@ -142,16 +154,6 @@ Before deleting any file listed as **Remove** or replaced asset:
 
 ## Approval record
 
-Preparation phase A is approved only when the maintainer records decisions for:
+Preparation phase A was approved before implementation began. The maintainer retained the arcade survival pitch, selected `Lost Warden` as the current public title, approved the Warden, Nomad fighter, Obsidian Dominion, enemy, boss, location, and optional faction directions, and confirmed the strict narrative limits and migration inventory.
 
-- unchanged arcade survival pitch: approved / revisions requested;
-- working codename `Project Lost Warden`: approved / revisions requested;
-- final-title selection: explicitly deferred / shortlist requested now;
-- Warden and Nomad fighter visual language: approved / revisions requested;
-- Obsidian Dominion visual language: approved / revisions requested;
-- Razor Wing, Siege Choir, Grave Fleet, Elite, and Dread Ark: approved / revisions requested;
-- optional Brood and Precursor visual families: approved / revisions requested;
-- strict narrative limits: approved / revisions requested;
-- migration inventory: approved / missing items identified.
-
-After approval, update this status and record the date. Do not begin replacement art or preparation phase B before that gate.
+Preparation phase B was approved on 2026-08-28 after the responsive Web build, direct viewport, interface redesign, palette, project icon, itch.io presentation, and release archive were reviewed. Gameplay screenshots remain deferred until the sprite rework is visible. Candidate music remains inactive pending a later audio review.

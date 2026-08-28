@@ -19,6 +19,15 @@ The final target is:
 
 Permanent meta-progression, unlockable ships, profile levels, and account-wide upgrades are explicitly deferred to a separate future plan. This rework must keep stable data identifiers so those systems can be added without coupling unlocks to file paths or display text.
 
+## Progress
+
+- Phase 0: completed.
+- Preparation phase A: completed and approved.
+- Preparation phase B: completed and approved on 2026-08-28.
+- Next implementation phase: Phase 1 — Increase the core gameplay pace.
+
+Preparation phase B delivered the direct 1066 by 800 viewport, responsive Web presentation, redesigned menus and HUD, browser-fullscreen recovery, the Lost Warden release identity, the approved 24-color palette, itch.io page art, and a validated release archive. Updated gameplay screenshots remain intentionally deferred until the sprite rework is visible. Candidate replacement music is preserved for later review and is not active in the current build.
+
 ## Phase 0 — Track and commit the roadmap
 
 - Create `codex/dynamic-gameplay-rework` from the current HEAD.
@@ -57,6 +66,8 @@ Planned commit:
 - `docs: define original universe and rebrand path`
 
 ## Preparation phase B — Remove the screen frame and clean up the Web presentation
+
+Status: completed and approved on 2026-08-28. Gameplay screenshots and music activation are explicitly deferred as recorded in the progress section.
 
 - Treat the existing itch.io project as the release destination for the evolved game. Keep its continuity, followers, and devlog history instead of creating a replacement page.
 - Keep the current game-jam Web build playable while the rework is private. When the rebranded version is ready, make it the primary embedded Web build and preserve the final game-jam edition as a clearly labeled legacy download linked to its Git tag or release.
