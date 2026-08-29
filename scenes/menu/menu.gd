@@ -43,7 +43,7 @@ func _ready() -> void:
 
 func set_mode(menu_mode: int) -> void:
 	_menu_mode = menu_mode
-	var enabled: Array = []
+	var enabled: Array[int] = []
 	match menu_mode:
 		MENU_START:
 			enabled = [OPTION_SOLO, OPTION_COOP, OPTION_OPTIONS, OPTION_HISCORE, OPTION_EXIT]
@@ -62,7 +62,7 @@ func set_mode(menu_mode: int) -> void:
 	_show_options(enabled)
 
 
-func _show_options(enabled: Array) -> void:
+func _show_options(enabled: Array[int]) -> void:
 	var first: Button = null
 	for option in OPTION_NODES:
 		var node: Button = get_node(OPTION_NODES[option])

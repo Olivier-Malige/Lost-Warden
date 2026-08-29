@@ -1,7 +1,8 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource path="res://scenes/player/player_shot.gd" type="Script" id=1]
 [ext_resource path="res://assets/sprites/player/beam.png" type="Texture2D" id=2]
+[ext_resource path="res://data/player/projectile_vfx_config.tres" type="Resource" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -474,6 +475,7 @@ power_Big = 3.5
 power_Large = 4.25
 power_Full = 5.0
 piercing = true
+vfx_config = ExtResource( 3 )
 
 [node name="head" type="Sprite2D" parent="." index="0"]
 

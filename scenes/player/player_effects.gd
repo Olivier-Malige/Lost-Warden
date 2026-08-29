@@ -9,42 +9,52 @@ extends Node
 var _reactors: Array[GPUParticles2D] = []
 var _charge_particles: GPUParticles2D
 var _reactor_amount_ratio := -1.0
+var _quality_amount_scale := 1.0
+var _configured := false
 
 func setup(low_graphics: bool) -> void:
+	if config == null or not config.is_valid():
+		push_error("PlayerEffects requires a valid PlayerEffectsConfig.")
+		return
 	_reactors = [
-		get_node(left_reactor_path) as GPUParticles2D,
-		get_node(right_reactor_path) as GPUParticles2D,
+		get_node_or_null(left_reactor_path) as GPUParticles2D,
+		get_node_or_null(right_reactor_path) as GPUParticles2D,
 	]
-	_charge_particles = get_node(charge_particles_path) as GPUParticles2D
+	_charge_particles = get_node_or_null(charge_particles_path) as GPUParticles2D
+	if _reactors.has(null) or _charge_particles == null:
+		push_error("PlayerEffects particle paths must reference GPUParticles2D nodes.")
+		return
+	_configured = true
+	_quality_amount_scale = config.low_graphics_amount_scale if low_graphics else 1.0
 	for reactor in _reactors:
 		reactor.emitting = true
 		reactor.visible = true
-		if low_graphics:
-			reactor.amount = ceili(float(reactor.amount) * config.low_graphics_amount_scale)
 
 func update_reactors(vertical_motion: float) -> void:
+	if not _configured:
+		return
 	var amount_ratio := config.idle_amount_ratio
 	if vertical_motion < 0.0:
 		amount_ratio = config.forward_amount_ratio
 	elif vertical_motion > 0.0:
 		amount_ratio = config.reverse_amount_ratio
+	amount_ratio *= _quality_amount_scale
 	if is_equal_approx(amount_ratio, _reactor_amount_ratio):
 		return
 	for reactor in _reactors:
 		reactor.amount_ratio = amount_ratio
 	_reactor_amount_ratio = amount_ratio
 
-func update_charge_particles(focusing: bool, charge: float, power: int, max_charge: float, low_graphics: bool) -> void:
+func update_charge_particles(focusing: bool, charge: float, power: int, max_charge: float) -> void:
+	if not _configured:
+		return
 	if not focusing or charge < config.visible_after:
 		hide_charge()
 		return
 	var intensity := maxf(_power_intensity(power), clampf(charge / max_charge, 0.0, 1.0))
-	var amount := roundi(lerpf(config.minimum_particles, config.maximum_particles, intensity))
-	if low_graphics:
-		amount = ceili(float(amount) * config.low_graphics_amount_scale_charge)
 	_charge_particles.visible = true
 	_charge_particles.emitting = true
-	_charge_particles.amount = amount
+	_charge_particles.amount_ratio = lerpf(config.minimum_amount_ratio, config.maximum_amount_ratio, intensity) * _quality_amount_scale
 	_charge_particles.speed_scale = lerpf(config.minimum_speed_scale, config.maximum_speed_scale, intensity)
 
 func hide_charge() -> void:
@@ -54,7 +64,8 @@ func hide_charge() -> void:
 
 func stop() -> void:
 	for reactor in _reactors:
-		reactor.emitting = false
+		if reactor:
+			reactor.emitting = false
 	hide_charge()
 
 func _power_intensity(power: int) -> float:

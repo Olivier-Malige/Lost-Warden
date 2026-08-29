@@ -12,7 +12,7 @@ var speedRotation := 20 # radians per frame at 60 FPS
 var trowbackByShield := false
 
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if rotate:
 		rotation += speedRotation * 60.0 * delta
 	translate(Vector2(speedX, speedY) * delta)
@@ -31,5 +31,5 @@ func _ready() -> void:
 func _on_screen_exited() -> void:
 	if get_meta("pooled", false):
 		return
-	set_process(false)
+	set_physics_process(false)
 	ProjectilePool.despawn(self)

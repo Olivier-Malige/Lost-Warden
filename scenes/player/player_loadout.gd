@@ -8,7 +8,7 @@ var damage_bonus := 0.0
 var side_shot := false
 var side_damage_bonus := 0.0
 var beam_damage_bonus := 0.0
-var ranks := {}
+var ranks: Dictionary[int, int] = {}
 
 func _init(p_stats: PlayerStats) -> void:
 	stats = p_stats
@@ -23,10 +23,10 @@ func reset() -> void:
 	beam_damage_bonus = 0.0
 	ranks.clear()
 
-func apply(upgrade: UpgradeDefinition) -> Dictionary:
+func apply(upgrade: UpgradeDefinition) -> UpgradeResult:
 	var rank := rank_for(upgrade.effect)
 	if rank >= upgrade.max_rank:
-		return {"applied": false, "rank": rank, "max_rank": upgrade.max_rank, "capped": true}
+		return UpgradeResult.new(false, rank, upgrade.max_rank, true)
 	rank += 1
 	ranks[upgrade.effect] = rank
 	match upgrade.effect:
@@ -46,7 +46,7 @@ func apply(upgrade: UpgradeDefinition) -> Dictionary:
 			pass
 	fire_delay = maxf(fire_delay, stats.shoot_delay_min)
 	speed_bonus = minf(speed_bonus, stats.speed_max - stats.speed)
-	return {"applied": true, "rank": rank, "max_rank": upgrade.max_rank, "capped": false}
+	return UpgradeResult.new(true, rank, upgrade.max_rank, false)
 
 func rank_for(effect: int) -> int:
 	return int(ranks.get(effect, 0))

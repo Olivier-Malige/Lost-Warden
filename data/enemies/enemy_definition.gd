@@ -4,11 +4,11 @@ extends Resource
 enum Durability { HAZARD, FODDER, FIGHTER, SPECIALIST, HEAVY }
 
 @export_group("Combat")
-@export var max_health := 1
-@export var collision_damage := 1
-@export var score := 0
+@export_range(1, 10000, 1) var max_health := 1
+@export_range(0, 10000, 1) var collision_damage := 1
+@export_range(0, 1000000, 1) var score := 0
 @export var durability: Durability = Durability.FODDER
-@export var power_up_chance := 0
+@export_range(0, 100, 1) var power_up_chance := 0
 
 @export_group("Movement")
 @export var speed := Vector2.ZERO
@@ -22,8 +22,17 @@ enum Durability { HAZARD, FODDER, FIGHTER, SPECIALIST, HEAVY }
 @export_group("Drops")
 @export var drops_on_destroy := false
 @export var drop_scene: PackedScene
-@export var drop_count := 1
-@export var drop_range := 64.0
+@export_range(0, 100, 1) var drop_count := 1
+@export_range(0.0, 1000.0, 1.0) var drop_range := 64.0
 
 @export_group("Presentation")
-@export var sprite_variants := 1
+@export_range(1, 64, 1) var sprite_variants := 1
+
+func is_valid() -> bool:
+	return max_health > 0 \
+		and collision_damage >= 0 \
+		and score >= 0 \
+		and power_up_chance >= 0 \
+		and power_up_chance <= 100 \
+		and sprite_variants > 0 \
+		and (not drops_on_destroy or drop_scene != null)

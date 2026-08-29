@@ -22,3 +22,11 @@ enum Pattern {
 @export_range(1, 12, 1) var lane_spacing: int = 1
 @export_range(0.0, 5.0, 0.01) var spawn_gap: float = 0.15
 @export_range(0, 1, 1) var elite_count: int = 0
+
+func is_valid(lane_count: int) -> bool:
+	return scene != null \
+		and interval > 0.0 \
+		and active_duration > 0.0 \
+		and spawn_min >= 0 \
+		and spawn_max >= spawn_min \
+		and spawn_max < lane_count

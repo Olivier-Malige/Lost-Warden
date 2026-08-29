@@ -18,7 +18,7 @@ func _ready() -> void:
 	else:
 		$anim.play("speedUp")
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	translate(Vector2(0, SPEED) * delta)
 
 func _on_screen_exited() -> void:
@@ -41,7 +41,7 @@ func _on_powerUp_area_entered(area: Area2D) -> void:
 func _play_pickup_sound() -> void:
 	if _upgrade == null:
 		return
-	var sounds := {
+	var sounds: Dictionary[int, AudioStreamPlayer2D] = {
 		UpgradeDefinition.Effect.SPEED: $sound_Speed_Up,
 		UpgradeDefinition.Effect.ENERGY: $sound_Energy_Up,
 		UpgradeDefinition.Effect.SIDE_SHOT: $sound_Lateral_Shot,

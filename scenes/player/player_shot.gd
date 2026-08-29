@@ -8,7 +8,8 @@ extends Shot
 @export var power_Large: float
 @export var power_Full: float
 @export var piercing := false
-var player_Id
+@export var vfx_config: ProjectileVfxConfig
+var player_Id: String
 var _base_damage: float = -1.0
 var _base_speed_y := 0
 var _follow_target: Node2D
@@ -21,6 +22,8 @@ var _trail: Line2D
 
 func _ready() -> void:
 	super._ready()
+	if vfx_config == null or not vfx_config.is_valid():
+		push_error("ProjectileVfxConfig is required for %s." % scene_file_path)
 	if _base_damage < 0.0:
 		_base_damage = damage
 		_base_speed_y = speedY
@@ -40,7 +43,7 @@ func set_damage_bonus(extra_damage: float) -> void:
 	damage = minf(_base_damage + extra_damage, damage_Max)
 	setPowerAnim()
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	_sync_glows()
 	_sync_trail()
 	if is_instance_valid(_follow_target) and _follow_time > 0.0:
@@ -49,7 +52,7 @@ func _process(delta: float) -> void:
 		if _follow_time <= 0.0:
 			ProjectilePool.despawn(self)
 		return
-	super._process(delta)
+	super._physics_process(delta)
 
 func follow_player(target: Node2D, offset: Vector2, duration: float) -> void:
 	_follow_target = target
@@ -72,17 +75,21 @@ func setPowerAnim() -> void:
 	_sync_glows()
 
 func _apply_player_color() -> void:
-	var color := Color(0.25, 0.95, 1.0) if player_Id == "player1" else Color(1.0, 0.42, 0.72)
-	for source in _glow_sources:
-		source.modulate = color
+	if vfx_config == null:
+		return
+	var color := vfx_config.player_color(player_Id)
+	for index in range(_glows.size()):
+		_glow_sources[index].modulate = color
+		_glows[index].modulate = vfx_config.glow_color(player_Id)
 	if _trail:
+		var trail_color := vfx_config.trail_color(player_Id)
 		var gradient := Gradient.new()
-		gradient.colors = PackedColorArray([Color.WHITE, color, Color(color.r, color.g, color.b, 0.0)])
-		gradient.offsets = PackedFloat32Array([0.0, 0.35, 1.0])
+		gradient.colors = PackedColorArray([vfx_config.trail_head_color, trail_color, Color(trail_color.r, trail_color.g, trail_color.b, 0.0)])
+		gradient.offsets = PackedFloat32Array([0.0, vfx_config.trail_middle_offset, 1.0])
 		_trail.gradient = gradient
 
 func _create_glows() -> void:
-	if global.saveData.config.graphic == "low" or not _glows.is_empty():
+	if vfx_config == null or global.saveData.config.graphic == "low" or not _glows.is_empty():
 		return
 	for child in get_children():
 		var source := child as Sprite2D
@@ -93,12 +100,10 @@ func _create_glows() -> void:
 		glow.hframes = source.hframes
 		glow.vframes = source.vframes
 		glow.position = source.position
-		glow.scale = source.scale * 2.15
-		glow.modulate = Color(0.3, 0.9, 1.0, 0.58)
+		glow.scale = source.scale * vfx_config.glow_scale
+		glow.modulate = vfx_config.glow_color(player_Id)
 		glow.z_index = -1
-		var material := CanvasItemMaterial.new()
-		material.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
-		glow.material = material
+		glow.material = vfx_config.glow_material
 		add_child(glow)
 		_glow_sources.append(source)
 		_glows.append(glow)
@@ -114,17 +119,14 @@ func _sync_glows() -> void:
 		glow.flip_v = source.flip_v
 
 func _create_trail() -> void:
-	if piercing or global.saveData.config.graphic == "low":
+	if vfx_config == null or piercing or global.saveData.config.graphic == "low":
 		return
 	_trail = Line2D.new()
-	_trail.width = 6.0
+	_trail.width = vfx_config.trail_width
 	_trail.antialiased = false
 	_trail.z_index = -2
-	var gradient := Gradient.new()
-	gradient.colors = PackedColorArray([Color(0.95, 0.98, 1.0, 0.95), Color(0.15, 0.8, 1.0, 0.45), Color(0.15, 0.8, 1.0, 0.0)])
-	gradient.offsets = PackedFloat32Array([0.0, 0.35, 1.0])
-	_trail.gradient = gradient
 	add_child(_trail)
+	_apply_player_color()
 
 func _sync_trail() -> void:
 	if _trail == null:
@@ -132,7 +134,7 @@ func _sync_trail() -> void:
 	var velocity := Vector2(speedX, speedY)
 	if velocity.length_squared() <= 0.0:
 		return
-	_trail.points = PackedVector2Array([Vector2.ZERO, -velocity.normalized() * 34.0])
+	_trail.points = PackedVector2Array([Vector2.ZERO, -velocity.normalized() * vfx_config.trail_length])
 
 
 func _on_area_entered(area: Area2D) -> void:

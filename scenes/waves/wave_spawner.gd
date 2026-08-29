@@ -14,6 +14,11 @@ func _ready() -> void:
 	if catalog == null or config == null:
 		push_error("WaveSpawner requires a catalog and a WaveSpawnerConfig.")
 		return
+	if not config.is_valid():
+		push_error("WaveSpawnerConfig contains invalid difficulty, pacing, cap, or elite values.")
+		return
+	if not _has_all_spawn_markers():
+		return
 	_master = Timer.new()
 	_master.one_shot = true
 	_master.timeout.connect(_on_master_timeout)
@@ -24,11 +29,14 @@ func _apply_wave(index: int) -> void:
 	if catalog == null or catalog.waves.is_empty():
 		return
 	_wave_generation += 1
+	_master.stop()
 	wave_index = clampi(index, 0, catalog.waves.size() - 1)
 	global.wave = wave_index + 1
 	Events.wave_changed.emit(global.wave)
 	var wave: WaveDefinition = catalog.waves[wave_index]
-	_master.stop()
+	if wave == null or not wave.is_valid(config.lane_count):
+		push_error("Wave %d contains an invalid definition or spawn rule." % (wave_index + 1))
+		return
 	for rule in wave.rules:
 		if rule == null or rule.scene == null:
 			continue
@@ -41,42 +49,45 @@ func _run_rule(rule: SpawnRule, generation: int, difficulty: float) -> void:
 		await get_tree().create_timer(rule.start_delay, false).timeout
 	if generation != _wave_generation:
 		return
-	var end_time := Time.get_ticks_msec() + int(maxf(rule.active_duration, 0.0) * 1000.0)
+	var active_duration := maxf(rule.active_duration, 0.0)
+	if active_duration <= 0.0:
+		return
+	var active_timer := get_tree().create_timer(active_duration, false)
 	var interval := maxf(rule.interval * _pace_multiplier(difficulty), 0.05)
 	if global.coop and rule.formation < 4 and interval < rule.active_duration:
 		interval *= 0.9
 	var cycle := 0
 	var elites_remaining := maxi(rule.elite_count, 0)
-	var next_spawn_time := Time.get_ticks_msec()
-	while generation == _wave_generation and Time.get_ticks_msec() < end_time:
-		var elite_spawned := await _spawn_formation(rule, generation, cycle, end_time, difficulty, elites_remaining > 0)
+	var next_spawn_elapsed := 0.0
+	while generation == _wave_generation and active_timer.time_left > 0.0:
+		var elapsed := active_duration - active_timer.time_left
+		if elapsed < next_spawn_elapsed:
+			await get_tree().create_timer(minf(next_spawn_elapsed - elapsed, active_timer.time_left), false).timeout
+			if generation != _wave_generation or active_timer.time_left <= 0.0:
+				return
+		var elite_spawned := await _spawn_formation(rule, generation, cycle, active_timer, difficulty, elites_remaining > 0)
 		if elite_spawned:
 			elites_remaining -= 1
 		cycle += 1
-		next_spawn_time += int(interval * 1000.0)
-		var remaining := float(end_time - Time.get_ticks_msec()) / 1000.0
-		if generation != _wave_generation or remaining <= 0.0:
-			return
-		var wait_time := maxf(float(next_spawn_time - Time.get_ticks_msec()) / 1000.0, 0.0)
-		if wait_time <= 0.0:
-			next_spawn_time = Time.get_ticks_msec()
-			continue
-		await get_tree().create_timer(minf(wait_time, remaining), false).timeout
+		next_spawn_elapsed += interval
+		elapsed = active_duration - active_timer.time_left
+		if next_spawn_elapsed <= elapsed:
+			next_spawn_elapsed = elapsed
 
-func _spawn_formation(rule: SpawnRule, generation: int, cycle: int, end_time: int, difficulty: float, can_spawn_elite: bool) -> bool:
+func _spawn_formation(rule: SpawnRule, generation: int, cycle: int, active_timer: SceneTreeTimer, difficulty: float, can_spawn_elite: bool) -> bool:
 	var count := maxi(rule.formation, 1)
 	if global.coop and count >= 4:
 		count += 1
 	var lanes := _formation_lanes(rule, count, cycle)
 	var spawn_elite := can_spawn_elite and _active_elite_count() < 3
 	for i in range(lanes.size()):
-		if generation != _wave_generation or Time.get_ticks_msec() >= end_time:
+		if generation != _wave_generation or active_timer.time_left <= 0.0:
 			return false
 		if _active_enemy_count() >= _enemy_cap():
 			return false
 		_spawn_at(rule.scene, lanes[i], difficulty, spawn_elite and i == 0)
 		if i < lanes.size() - 1 and rule.spawn_gap > 0.0:
-			await get_tree().create_timer(rule.spawn_gap, false).timeout
+			await get_tree().create_timer(minf(rule.spawn_gap, active_timer.time_left), false).timeout
 	return spawn_elite
 
 func _formation_lanes(rule: SpawnRule, requested_count: int, cycle: int) -> Array[int]:
@@ -172,18 +183,25 @@ func _enemy_cap() -> int:
 
 func _spawn_at(packed: PackedScene, lane: int, difficulty: float, elite: bool) -> void:
 	lane = clampi(lane, 0, config.lane_count - 1)
-	var marker := get_node_or_null("spawnPos" + str(lane))
+	var marker := get_node_or_null("spawnPos" + str(lane)) as Node2D
 	if marker == null:
 		return
-	var enemy = packed.instantiate()
+	var enemy := packed.instantiate()
 	if enemy is Enemy:
 		var health_multiplier := lerpf(1.0, _durability_health_cap(enemy.definition), _difficulty_progress(difficulty)) * _endless_health_multiplier()
 		enemy.configure_spawn(EnemySpawnContext.new(health_multiplier, elite, config.elite_definition))
-	enemy.position = marker.global_position
+	enemy.position = marker.position
 	add_child(enemy)
 	if enemy is Enemy:
 		_active_enemies[enemy.get_instance_id()] = elite
 		enemy.tree_exited.connect(_on_enemy_tree_exited.bind(enemy.get_instance_id()), CONNECT_ONE_SHOT)
+
+func _has_all_spawn_markers() -> bool:
+	for lane in range(config.lane_count):
+		if get_node_or_null("spawnPos" + str(lane)) is not Node2D:
+			push_error("WaveSpawner is missing spawnPos%d." % lane)
+			return false
+	return true
 
 func _difficulty_progress(difficulty: float) -> float:
 	return clampf(inverse_lerp(config.difficulty_start, config.difficulty_end, difficulty), 0.0, 1.0)

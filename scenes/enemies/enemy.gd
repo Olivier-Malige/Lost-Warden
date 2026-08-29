@@ -31,6 +31,10 @@ func _ready() -> void:
 		push_error("EnemyDefinition is required for %s." % scene_file_path)
 		queue_free()
 		return
+	if not definition.is_valid():
+		push_error("EnemyDefinition contains invalid combat or presentation values for %s." % scene_file_path)
+		queue_free()
+		return
 	_apply_definition()
 	_resolve_shoot_timers()
 	_apply_spawn_context()
@@ -39,7 +43,7 @@ func _ready() -> void:
 	if elite:
 		_setup_elite_indicator()
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	hitByPlayerShot = false
 	translate(Vector2(speedX, speedY) * delta)
 	if setRotation:
@@ -108,12 +112,12 @@ func _on_area_entered(area: Area2D) -> void:
 		area._hit_something(hitSomething)
 
 func _on_screen_exited() -> void:
-	set_process(false)
+	set_physics_process(false)
 	queue_free()
 
 func _on_anim_animation_finished(animation: StringName) -> void:
 	if animation == "explode":
-		set_process(false)
+		set_physics_process(false)
 		queue_free()
 	elif animation == "hit" + str(indexSprites):
 		$anim.play("start" + str(indexSprites))
@@ -142,7 +146,7 @@ func _award_player_kill() -> void:
 	Events.score_popup_requested.emit(awarded_points, global.combo, multiplier, global_position)
 	if not elite and randi() % 101 <= definition.power_up_chance:
 		var power_up := PowerUpScene.instantiate()
-		power_up.position = global_position
+		power_up.position = get_parent().to_local(global_position)
 		get_parent().call_deferred("add_child", power_up)
 
 func _drop_debris() -> void:
@@ -150,7 +154,8 @@ func _drop_debris() -> void:
 		return
 	for _index in range(definition.drop_count):
 		var debris := definition.drop_scene.instantiate()
-		debris.position = global_position + Vector2(randf_range(-definition.drop_range, definition.drop_range), randf_range(-definition.drop_range, definition.drop_range))
+		var drop_position := global_position + Vector2(randf_range(-definition.drop_range, definition.drop_range), randf_range(-definition.drop_range, definition.drop_range))
+		debris.position = get_parent().to_local(drop_position)
 		get_parent().call_deferred("add_child", debris)
 
 func _setup_elite_indicator() -> void:
