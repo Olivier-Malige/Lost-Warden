@@ -25,8 +25,9 @@ Permanent meta-progression, unlockable ships, profile levels, and account-wide u
 - Preparation phase A: completed and approved.
 - Preparation phase B: completed and approved on 2026-08-28.
 - Phase 1: implementation completed on 2026-08-28; solo and co-op readability playtests remain before approval.
+- Phase 1 follow-up — Wave variety preview: implementation completed on 2026-08-29; solo and co-op readability playtests remain before approval.
 - Visual production phase: planned and approved on 2026-08-29; implementation starts only after Phase 1 approval.
-- Next implementation step: validate and approve Phase 1 — Increase the core gameplay pace.
+- Next implementation step: validate and approve Phase 1 and its wave variety preview.
 
 Preparation phase B delivered the direct 1066 by 800 viewport, responsive Web presentation, redesigned menus and HUD, browser-fullscreen recovery, the Lost Warden release identity, the approved 24-color palette, itch.io page art, and a validated release archive. Updated gameplay screenshots remain intentionally deferred until the sprite rework is visible. Candidate replacement music is preserved for later review and is not active in the current build.
 
@@ -132,6 +133,32 @@ Planned commits:
 
 - `feat(player): increase gameplay pace`
 - `fix(player): preserve beam mobility and upgrades`
+
+## Phase 1 follow-up — Preview more varied enemy waves
+
+Status: implemented on 2026-08-29. Automated resource and formation checks pass, and a headless runtime smoke test completed one full wave and its transition without errors. Solo and co-op readability playtests remain before approval.
+
+- Keep the fixed 13-wave catalog as an intermediate gameplay preview rather than starting the seeded director from Phase 2.
+- Shorten every wave to 24 seconds and split its spawn schedule into a 6-second opening, a 2-second pause, a 6-second buildup, a 2-second pause, a 6-second climax, and a final 2-second transition window.
+- Recompose the catalog with the existing asteroid, drone, fighter, interceptor, turret, and carrier scenes. Do not introduce new enemies, artwork, combat statistics, elites, or bosses in this follow-up.
+- Add reusable single, line, V, alternating-edge, scatter, and offset-group formations. Keep every formation on unique valid lanes and reduce its size when the configured lane range cannot fit it.
+- Run each spawn rule on an independent timeline and cancel stale timelines with a wave-generation token when the wave changes or the debug controls skip forward or backward.
+- Keep existing enemies alive across wave transitions and cap active enemies and hazards at 45 in solo and 60 in co-op.
+- In co-op, add one enemy to formations of four or more and reduce the interval of smaller repeating formations by 10%. Keep the existing enemy health multiplier unchanged.
+- Preserve the unused encounter weight field for Phase 2 without assigning procedural selection behavior to it yet.
+- Keep the final catalog entry looping until the run ends.
+
+Validation:
+
+- Every wave resource loads with a 24-second duration, valid scenes, three scheduled acts, and the intended number of rules.
+- Every formation uses unique lanes within the configured range, including narrow edge ranges and oversized formations.
+- F1/F2 wave changes stop every pending spawn from the previous wave.
+- Solo and co-op runs respect their active-enemy caps without clearing surviving enemies at an act or wave transition.
+- Score, combos, power-ups, plasma beam, HUD, game-over flow, and legacy `bestWave` saves continue to work.
+
+Commit:
+
+- `feat(waves): diversify enemy wave encounters`
 
 ## Visual production phase — Rebuild the core sprite set
 
