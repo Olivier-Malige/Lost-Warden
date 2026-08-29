@@ -7,15 +7,19 @@ const Layers := preload("res://core/collision_layers.gd")
 @export var speedX: int = 0
 @warning_ignore("shadowed_variable_base_class")
 @export var rotate: bool = false
+@export var align_with_velocity := false
 @export var playerShot: bool = false
 var speedRotation := 20 # radians per frame at 60 FPS
 var trowbackByShield := false
 
 
 func _physics_process(delta: float) -> void:
+	var velocity := Vector2(speedX, speedY)
+	if align_with_velocity and velocity.length_squared() > 0.0:
+		rotation = Vector2.DOWN.angle_to(velocity)
 	if rotate:
 		rotation += speedRotation * 60.0 * delta
-	translate(Vector2(speedX, speedY) * delta)
+	position += velocity * delta
 
 func _ready() -> void:
 	if playerShot:
