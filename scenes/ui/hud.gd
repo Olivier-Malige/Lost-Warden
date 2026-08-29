@@ -2,6 +2,7 @@ extends CanvasLayer
 
 var _pips := {}
 var _scenes := {}
+var _combo_tween: Tween
 
 func _ready() -> void:
 	Events.score_changed.connect(_on_score_changed)
@@ -15,8 +16,15 @@ func _on_score_changed(score: int) -> void:
 func _on_combo_changed(combo: int, multiplier: float, _time_left: float) -> void:
 	if combo < 2:
 		$LeftColumn/combo.set_text("COMBO\n—")
+		$LeftColumn/combo.modulate = Color.WHITE
 	else:
-		$LeftColumn/combo.set_text("COMBO x" + str(snapped(multiplier, 0.1)))
+		$LeftColumn/combo.set_text("COMBO " + str(combo) + "\nx" + str(snapped(multiplier, 0.1)))
+		$LeftColumn/combo.modulate = Color(0.86, 0.79, 0.42)
+		if _combo_tween:
+			_combo_tween.kill()
+		$LeftColumn/combo.scale = Vector2(1.06, 1.06)
+		_combo_tween = create_tween()
+		_combo_tween.tween_property($LeftColumn/combo, "scale", Vector2.ONE, 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 func _on_wave_changed(wave: int) -> void:
 	$RightColumn/wave.set_text("WAVE\n" + str(wave))

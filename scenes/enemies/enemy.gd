@@ -89,8 +89,6 @@ func _drop() -> void:
 
 func _destroy() -> void:
 	destroyed = true
-	if hitByPlayerShot:
-		Events.hit_stop_requested.emit(0.035 if points < 500 else 0.05)
 	var shake_strength := clampf(1.25 + sqrt(float(maxi(points, 0))) * 0.08, 1.25, 5.0)
 	Events.screen_shake_requested.emit(shake_strength, 0.08 + shake_strength * 0.015)
 	if shake_strength >= 4.0:
@@ -104,11 +102,9 @@ func _destroy() -> void:
 	if has_node("shootTimer"):
 		$shootTimer.stop()
 	if hitByPlayerShot:
-		var score_popup = preload("res://scenes/ui/score.tscn").instantiate()
-		score_popup.position = global_position
-		score_popup.setScore = points
-		get_parent().call_deferred("add_child", score_popup)
-		global.register_kill(points)
+		var awarded_points := global.register_kill(points)
+		var multiplier := global.combo_multiplier(global.combo)
+		Events.score_popup_requested.emit(awarded_points, global.combo, multiplier, global_position)
 		if randi() % 101 <= randPowerUp:
 			var powerUp = preload("res://scenes/ui/power_up.tscn").instantiate()
 			powerUp.position = global_position

@@ -8,4 +8,4 @@ id = &"speed"
 effect = 0
 anim = &"speedUp"
 weight = 100
-value = 5.0
+value = 15.0

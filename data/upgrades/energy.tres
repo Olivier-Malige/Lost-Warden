@@ -7,5 +7,5 @@ script = ExtResource("1")
 id = &"energy"
 effect = 5
 anim = &"energieUp"
-weight = 2
+weight = 10
 value = 1.0

@@ -1,21 +1,21 @@
 extends Camera2D
 
 const MAX_SHAKE := 18.0
+const SCORE_POPUP := preload("res://scenes/ui/score.tscn")
 
 var _rng := RandomNumberGenerator.new()
 var _shake_strength := 0.0
 var _shake_time := 0.0
 var _shake_duration := 0.0
 var _flash_tween: Tween
-var _hit_stop_id := 0
+var _score_popup: Node2D
 @onready var _flash: ColorRect = $"../FeedbackLayer/Flash"
 
 func _ready() -> void:
 	_rng.randomize()
 	Events.screen_shake_requested.connect(_on_screen_shake_requested)
 	Events.screen_flash_requested.connect(_on_screen_flash_requested)
-	Events.hit_stop_requested.connect(_on_hit_stop_requested)
-	process_mode = Node.PROCESS_MODE_ALWAYS
+	Events.score_popup_requested.connect(_on_score_popup_requested)
 
 func _process(delta: float) -> void:
 	if _shake_time <= 0.0:
@@ -46,10 +46,16 @@ func _on_screen_flash_requested(color: Color, duration: float) -> void:
 	_flash_tween = create_tween()
 	_flash_tween.tween_property(_flash, "color:a", 0.0, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
-func _on_hit_stop_requested(duration: float) -> void:
-	_hit_stop_id += 1
-	var request_id := _hit_stop_id
-	get_tree().paused = true
-	await get_tree().create_timer(duration, true, false, true).timeout
-	if request_id == _hit_stop_id:
-		get_tree().paused = false
+func _on_score_popup_requested(points: int, combo: int, multiplier: float, world_position: Vector2) -> void:
+	call_deferred("_accumulate_score_popup", points, combo, multiplier, world_position)
+
+func _accumulate_score_popup(points: int, combo: int, multiplier: float, world_position: Vector2) -> void:
+	if is_instance_valid(_score_popup):
+		_score_popup.add_score(points, combo, multiplier, world_position)
+		return
+	_score_popup = SCORE_POPUP.instantiate()
+	_score_popup.setScore = points
+	_score_popup.combo = combo
+	_score_popup.multiplier = multiplier
+	_score_popup.position = world_position
+	get_parent().add_child(_score_popup)

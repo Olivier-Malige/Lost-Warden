@@ -56,24 +56,42 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-offset_right = 87.0
-offset_bottom = 33.0
+offset_left = -90.0
+offset_right = 90.0
+offset_bottom = 36.0
 pivot_offset = Vector2( 0, 0 )
 mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color( 0.611765, 0.12549, 0.12549, 1 )
+theme_override_colors/font_outline_color = Color(0.02, 0.02, 0.04, 1)
+theme_override_constants/outline_size = 2
 text = "Points
 "
+horizontal_alignment = 1
 visible_ratio = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "custom_colors", "custom_fonts" ]
 
-[node name="anim" type="AnimationPlayer" parent="." index="1"]
+[node name="MultiplierLabel" type="Label" parent="." index="1"]
+visible = false
+offset_left = -90.0
+offset_right = -4.0
+offset_bottom = 34.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.86, 0.79, 0.42, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.02, 0.04, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource( 2 )
+theme_override_font_sizes/font_size = 13
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="anim" type="AnimationPlayer" parent="." index="2"]
 libraries = {
 "": SubResource("AnimationLibrary_1")
 }
@@ -86,7 +104,7 @@ speed_scale = 1.0
 blend_times = [  ]
 autoplay = ""
 
-[node name="destroyDelay" type="Timer" parent="." index="2"]
+[node name="destroyDelay" type="Timer" parent="." index="3"]
 
 process_mode = 1
 wait_time = 1.0
@@ -94,5 +112,3 @@ one_shot = true
 autostart = true
 
 [connection signal="timeout" from="destroyDelay" to="." method="_on_destroyDelay_timeout"]
-
-

@@ -473,6 +473,7 @@ power_Normal = 3.0
 power_Big = 5.0
 power_Large = 6.0
 power_Full = 10.0
+piercing = true
 
 [node name="head" type="Sprite2D" parent="." index="0"]
 
@@ -511,4 +512,3 @@ rect = Rect2( -10, -10, 20, 20 )
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_screen_exited"]
-

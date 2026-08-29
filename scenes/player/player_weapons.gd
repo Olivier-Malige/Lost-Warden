@@ -1,6 +1,9 @@
 class_name PlayerWeapons
 extends RefCounted
 
+const FULL_BEAM_DURATION := 0.4
+const FULL_BEAM_WIDTH_SCALE := 1.25
+
 var player: Player
 var _beam_cache := {}
 
@@ -34,7 +37,7 @@ func fire_beam(power: int) -> void:
 			return
 	player.get_node(sound).playing = true
 	for from in ["shootFromLeft", "shootFromRight"]:
-		_spawn_beam(weapon.projectile, from)
+		_spawn_beam(weapon.projectile, from, power == Player.beam_State.FULL)
 	var kick := float(power) * 1.5
 	player.play_shot_recoil(kick, 0.1)
 	Events.screen_shake_requested.emit(kick, 0.1)
@@ -47,18 +50,42 @@ func _spawn_gun(packed: PackedScene, from: String, extra_damage: float, speed_x:
 	shot.setPowerAnim()
 	shot.speedX = speed_x
 
-func _spawn_beam(packed: PackedScene, from: String) -> void:
+func _spawn_beam(packed: PackedScene, from: String, fill_screen := false) -> void:
 	var origin: Vector2 = player.get_node(from).global_position
 	var world := player.get_parent()
-	for spec in _beam_segments(packed):
-		var shot = ProjectilePool.spawn(spec[0], origin + spec[1], world)
-		var scale: Vector2 = spec[2]
-		shot.scale = scale
-		shot.speedX = spec[3] * scale.x
-		shot.speedY = spec[4] * scale.y
-		shot.player_Id = player.id_Player
-		shot.damage += player.loadout.damage_bonus
-		shot.setPowerAnim()
+	var segments := _beam_segments(packed)
+	if fill_screen:
+		_spawn_full_screen_beam(segments, origin, world)
+		return
+	for spec in segments:
+		_spawn_beam_segment(spec, spec[1], origin, world)
+
+func _spawn_full_screen_beam(segments: Array, origin: Vector2, world: Node) -> void:
+	if segments.size() < 2:
+		return
+	var top: Array = segments[0]
+	var middle: Array = segments[1]
+	var step := absf(float(top[1].y - middle[1].y))
+	var y := 0.0
+	for spec in segments:
+		y = maxf(y, float(spec[1].y))
+	step = maxf(step, 16.0)
+	while origin.y + y > step:
+		_spawn_beam_segment(middle, Vector2(middle[1].x, y), origin, world, FULL_BEAM_DURATION, FULL_BEAM_WIDTH_SCALE)
+		y -= step
+	_spawn_beam_segment(top, Vector2(top[1].x, y), origin, world, FULL_BEAM_DURATION, FULL_BEAM_WIDTH_SCALE)
+
+func _spawn_beam_segment(spec: Array, offset: Vector2, origin: Vector2, world: Node, follow_duration := 0.0, width_scale := 1.0) -> void:
+	var shot = ProjectilePool.spawn(spec[0], origin + offset, world)
+	var scale: Vector2 = spec[2]
+	shot.scale = Vector2(scale.x * width_scale, scale.y)
+	shot.speedX = spec[3] * scale.x
+	shot.speedY = spec[4] * scale.y
+	shot.player_Id = player.id_Player
+	shot.damage += player.loadout.damage_bonus
+	shot.setPowerAnim()
+	if follow_duration > 0.0:
+		shot.follow_player(player, origin - player.global_position + offset, follow_duration)
 
 func _beam_segments(packed: PackedScene) -> Array:
 	var key := packed.resource_path

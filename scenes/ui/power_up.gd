@@ -30,7 +30,9 @@ func _on_powerUp_area_entered(area: Area2D) -> void:
 	Events.powerup_collected.emit(_upgrade)
 	$anim.queue_free()
 	$Sprite2D.queue_free()
-	$CollisionShape2D.queue_free()
+	$CollisionShape2D.set_deferred("disabled", true)
+	set_deferred("monitoring", false)
+	set_deferred("monitorable", false)
 
 func _play_pickup_sound() -> void:
 	if _upgrade == null:

@@ -7,5 +7,5 @@ script = ExtResource("1")
 id = &"side_shot"
 effect = 3
 anim = &"lateralShot"
-weight = 25
-value = 0.2
+weight = 42
+value = 0.3

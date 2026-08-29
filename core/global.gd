@@ -72,10 +72,23 @@ func reset_run() -> void:
 	combo_time_left = 0.0
 	Events.combo_changed.emit(combo, 1.0, combo_time_left)
 
-func register_kill(points: int) -> void:
-	combo = mini(combo + 1, 10)
+func register_kill(points: int) -> int:
+	combo = mini(combo + 1, 99)
 	combo_time_left = 2.0
-	var multiplier := 1.0 + float(combo - 1) * 0.1
-	score += roundi(float(points) * multiplier)
+	var multiplier := combo_multiplier(combo)
+	var awarded_points := roundi(float(points) * multiplier)
+	score += awarded_points
 	Events.score_changed.emit(score)
 	Events.combo_changed.emit(combo, multiplier, combo_time_left)
+	return awarded_points
+
+func combo_multiplier(combo_count: int) -> float:
+	if combo_count >= 12:
+		return 2.0
+	if combo_count >= 8:
+		return 1.75
+	if combo_count >= 5:
+		return 1.5
+	if combo_count >= 2:
+		return 1.25
+	return 1.0

@@ -7,5 +7,5 @@ script = ExtResource("1")
 id = &"damage"
 effect = 2
 anim = &"laserUp"
-weight = 50
-value = 0.25
+weight = 72
+value = 0.35

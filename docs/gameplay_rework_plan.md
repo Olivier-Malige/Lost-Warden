@@ -117,7 +117,8 @@ Status: implemented on 2026-08-28. Automated checks and a headless startup smoke
 - Stop resetting the loadout when a player takes damage.
 - Keep run upgrades until the run ends.
 - Add a focused combat-feedback pass with player-weapon recoil, damage flashes, and proportional camera shake for player hits, plasma-beam fire, and enemy destruction. Keep the broader particle and shader work in Phase 5.
-- Add a short hit-stop on player-caused enemy destruction and a temporary score combo multiplier to reward sustained aggression.
+- Add a temporary tiered score combo multiplier with one cumulative floating score popup to reward sustained aggression without cluttering dense encounters.
+- Make every plasma-beam tier pierce enemies, let a fully charged beam span the visible playfield and follow the player briefly, and favor meaningful offensive power-ups in the temporary direct-pickup system.
 
 Validation:
 
