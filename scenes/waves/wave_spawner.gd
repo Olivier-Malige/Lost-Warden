@@ -2,18 +2,18 @@ class_name WaveSpawner
 extends Node2D
 
 @export var catalog: WaveCatalog
-
-const LANE_COUNT := 12
-const SOLO_ENEMY_CAP := 45
-const COOP_ENEMY_CAP := 60
+@export var config: WaveSpawnerConfig
 
 var wave_index := 0
 var _master: Timer
 var _wave_generation := 0
+var _endless_cycle := 0
+var _active_enemies: Dictionary[int, bool] = {}
 
 func _ready() -> void:
-	if catalog == null:
-		catalog = load("res://data/waves/wave_catalog.tres")
+	if catalog == null or config == null:
+		push_error("WaveSpawner requires a catalog and a WaveSpawnerConfig.")
+		return
 	_master = Timer.new()
 	_master.one_shot = true
 	_master.timeout.connect(_on_master_timeout)
@@ -32,45 +32,56 @@ func _apply_wave(index: int) -> void:
 	for rule in wave.rules:
 		if rule == null or rule.scene == null:
 			continue
-		_run_rule(rule, _wave_generation)
+		_run_rule(rule, _wave_generation, wave.difficulty)
 	_master.wait_time = wave.duration
 	_master.start()
 
-func _run_rule(rule: SpawnRule, generation: int) -> void:
+func _run_rule(rule: SpawnRule, generation: int, difficulty: float) -> void:
 	if rule.start_delay > 0.0:
 		await get_tree().create_timer(rule.start_delay, false).timeout
 	if generation != _wave_generation:
 		return
 	var end_time := Time.get_ticks_msec() + int(maxf(rule.active_duration, 0.0) * 1000.0)
-	var interval := maxf(rule.interval, 0.05)
+	var interval := maxf(rule.interval * _pace_multiplier(difficulty), 0.05)
 	if global.coop and rule.formation < 4 and interval < rule.active_duration:
 		interval *= 0.9
 	var cycle := 0
+	var elites_remaining := maxi(rule.elite_count, 0)
+	var next_spawn_time := Time.get_ticks_msec()
 	while generation == _wave_generation and Time.get_ticks_msec() < end_time:
-		await _spawn_formation(rule, generation, cycle, end_time)
+		var elite_spawned := await _spawn_formation(rule, generation, cycle, end_time, difficulty, elites_remaining > 0)
+		if elite_spawned:
+			elites_remaining -= 1
 		cycle += 1
+		next_spawn_time += int(interval * 1000.0)
 		var remaining := float(end_time - Time.get_ticks_msec()) / 1000.0
 		if generation != _wave_generation or remaining <= 0.0:
 			return
-		await get_tree().create_timer(minf(interval, remaining), false).timeout
+		var wait_time := maxf(float(next_spawn_time - Time.get_ticks_msec()) / 1000.0, 0.0)
+		if wait_time <= 0.0:
+			next_spawn_time = Time.get_ticks_msec()
+			continue
+		await get_tree().create_timer(minf(wait_time, remaining), false).timeout
 
-func _spawn_formation(rule: SpawnRule, generation: int, cycle: int, end_time: int) -> void:
+func _spawn_formation(rule: SpawnRule, generation: int, cycle: int, end_time: int, difficulty: float, can_spawn_elite: bool) -> bool:
 	var count := maxi(rule.formation, 1)
 	if global.coop and count >= 4:
 		count += 1
 	var lanes := _formation_lanes(rule, count, cycle)
+	var spawn_elite := can_spawn_elite and _active_elite_count() < 3
 	for i in range(lanes.size()):
 		if generation != _wave_generation or Time.get_ticks_msec() >= end_time:
-			return
+			return false
 		if _active_enemy_count() >= _enemy_cap():
-			return
-		_spawn_at(rule.scene, lanes[i])
+			return false
+		_spawn_at(rule.scene, lanes[i], difficulty, spawn_elite and i == 0)
 		if i < lanes.size() - 1 and rule.spawn_gap > 0.0:
 			await get_tree().create_timer(rule.spawn_gap, false).timeout
+	return spawn_elite
 
 func _formation_lanes(rule: SpawnRule, requested_count: int, cycle: int) -> Array[int]:
-	var minimum := clampi(mini(rule.spawn_min, rule.spawn_max), 0, LANE_COUNT - 1)
-	var maximum := clampi(maxi(rule.spawn_min, rule.spawn_max), 0, LANE_COUNT - 1)
+	var minimum := clampi(mini(rule.spawn_min, rule.spawn_max), 0, config.lane_count - 1)
+	var maximum := clampi(maxi(rule.spawn_min, rule.spawn_max), 0, config.lane_count - 1)
 	var available: Array[int] = []
 	for lane in range(minimum, maximum + 1):
 		available.append(lane)
@@ -117,16 +128,21 @@ func _v_lanes(available: Array[int], count: int) -> Array[int]:
 	return lanes
 
 func _alternating_edge_lanes(available: Array[int], count: int, cycle: int) -> Array[int]:
+	var cluster_size := mini(available.size(), count + 1)
+	var cluster_start := randi_range(0, available.size() - cluster_size)
+	var cluster: Array[int] = []
+	for i in range(cluster_size):
+		cluster.append(available[cluster_start + i])
 	var lanes: Array[int] = []
 	var left := 0
-	var right := available.size() - 1
+	var right := cluster.size() - 1
 	var from_left := cycle % 2 == 0
 	while lanes.size() < count:
 		if from_left:
-			lanes.append(available[left])
+			lanes.append(cluster[left])
 			left += 1
 		else:
-			lanes.append(available[right])
+			lanes.append(cluster[right])
 			right -= 1
 		from_left = not from_left
 	return lanes
@@ -142,29 +158,72 @@ func _offset_group_lanes(available: Array[int], count: int, spacing: int, cycle:
 	return lanes
 
 func _active_enemy_count() -> int:
-	return get_tree().get_nodes_in_group("enemy").size()
+	return _active_enemies.size()
+
+func _active_elite_count() -> int:
+	var count := 0
+	for elite in _active_enemies.values():
+		if elite:
+			count += 1
+	return count
 
 func _enemy_cap() -> int:
-	return COOP_ENEMY_CAP if global.coop else SOLO_ENEMY_CAP
+	return config.coop_enemy_cap if global.coop else config.solo_enemy_cap
 
-func _spawn_at(packed: PackedScene, lane: int) -> void:
-	lane = clampi(lane, 0, LANE_COUNT - 1)
+func _spawn_at(packed: PackedScene, lane: int, difficulty: float, elite: bool) -> void:
+	lane = clampi(lane, 0, config.lane_count - 1)
 	var marker := get_node_or_null("spawnPos" + str(lane))
 	if marker == null:
 		return
 	var enemy = packed.instantiate()
+	if enemy is Enemy:
+		var health_multiplier := lerpf(1.0, _durability_health_cap(enemy.definition), _difficulty_progress(difficulty)) * _endless_health_multiplier()
+		enemy.configure_spawn(EnemySpawnContext.new(health_multiplier, elite, config.elite_definition))
 	enemy.position = marker.global_position
 	add_child(enemy)
+	if enemy is Enemy:
+		_active_enemies[enemy.get_instance_id()] = elite
+		enemy.tree_exited.connect(_on_enemy_tree_exited.bind(enemy.get_instance_id()), CONNECT_ONE_SHOT)
+
+func _difficulty_progress(difficulty: float) -> float:
+	return clampf(inverse_lerp(config.difficulty_start, config.difficulty_end, difficulty), 0.0, 1.0)
+
+func _pace_multiplier(difficulty: float) -> float:
+	var wave_pace := lerpf(1.0, config.max_wave_pace_multiplier, _difficulty_progress(difficulty))
+	var endless_pace := maxf(1.0 - _endless_cycle * config.pace_step, config.pace_cap)
+	return wave_pace * endless_pace
+
+func _endless_health_multiplier() -> float:
+	return minf(1.0 + _endless_cycle * config.health_step, config.health_cap)
 
 func _on_master_timeout() -> void:
 	goto_Next_Wave()
 
 func goto_Previous_Wave() -> void:
 	if wave_index > 0:
+		if wave_index <= config.loop_start_index:
+			_endless_cycle = 0
 		_apply_wave(wave_index - 1)
 
 func goto_Next_Wave() -> void:
 	if wave_index < catalog.waves.size() - 1:
 		_apply_wave(wave_index + 1)
 	else:
-		_apply_wave(wave_index)
+		_endless_cycle += 1
+		_apply_wave(mini(config.loop_start_index, catalog.waves.size() - 1))
+
+func _on_enemy_tree_exited(instance_id: int) -> void:
+	_active_enemies.erase(instance_id)
+
+func _durability_health_cap(definition: EnemyDefinition) -> float:
+	match definition.durability:
+		EnemyDefinition.Durability.FODDER:
+			return 1.15
+		EnemyDefinition.Durability.FIGHTER:
+			return 1.35
+		EnemyDefinition.Durability.SPECIALIST:
+			return 1.4
+		EnemyDefinition.Durability.HEAVY:
+			return 1.45
+		_:
+			return 1.0

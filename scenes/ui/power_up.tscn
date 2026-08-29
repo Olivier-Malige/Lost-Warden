@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource path="res://scenes/ui/power_up.gd" type="Script" id=1]
 [ext_resource path="res://assets/sprites/pickups/power_up.png" type="Texture2D" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://assets/audio/sfx/pickups/side_shot.wav" type="AudioStream" id=5]
 [ext_resource path="res://assets/audio/sfx/pickups/damage.wav" type="AudioStream" id=6]
 [ext_resource path="res://assets/audio/sfx/pickups/shield.wav" type="AudioStream" id=7]
+[ext_resource path="res://assets/sprites/pickups/beam_upgrade_v1.png" type="Texture2D" id=8]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -133,6 +134,12 @@ hframes = 5
 frame = 4
 _sections_unfolded = [ "Animation", "Region", "Transform3D" ]
 
+[node name="BeamIcon" type="Sprite2D" parent="."]
+
+scale = Vector2( 4, 4 )
+texture = ExtResource( 8 )
+visible = false
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1"]
 
 position = Vector2( 0.115309, 0.710733 )
@@ -218,5 +225,4 @@ area_mask = 1
 [connection signal="finished" from="sound_Shot_Up" to="." method="_on_audio_finished"]
 
 [connection signal="finished" from="sound_Shield" to="." method="_on_audio_finished"]
-
 

@@ -82,6 +82,10 @@ func register_kill(points: int) -> int:
 	Events.combo_changed.emit(combo, multiplier, combo_time_left)
 	return awarded_points
 
+func add_score(points: int) -> void:
+	score += points
+	Events.score_changed.emit(score)
+
 func combo_multiplier(combo_count: int) -> float:
 	if combo_count >= 12:
 		return 2.0

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EnemyDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/enemies/enemy_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+max_health = 4
+collision_damage = 3
+score = 1
+durability = 0
+power_up_chance = 2
+speed = Vector2(0, 204)
+rotates = true
+rotation_speed = 1.0
+random_rotation = true
+sprite_variants = 3

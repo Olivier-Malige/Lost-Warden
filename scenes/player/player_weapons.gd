@@ -1,9 +1,6 @@
 class_name PlayerWeapons
 extends RefCounted
 
-const FULL_BEAM_DURATION := 0.4
-const FULL_BEAM_WIDTH_SCALE := 1.25
-
 var player: Player
 var _beam_cache := {}
 
@@ -46,8 +43,7 @@ func fire_beam(power: int) -> void:
 func _spawn_gun(packed: PackedScene, from: String, extra_damage: float, speed_x: float = 0) -> void:
 	var shot = ProjectilePool.spawn(packed, player.get_node(from).global_position, player.get_parent())
 	shot.player_Id = player.id_Player
-	shot.damage += extra_damage
-	shot.setPowerAnim()
+	shot.set_damage_bonus(extra_damage)
 	shot.speedX = speed_x
 
 func _spawn_beam(packed: PackedScene, from: String, fill_screen := false) -> void:
@@ -71,9 +67,9 @@ func _spawn_full_screen_beam(segments: Array, origin: Vector2, world: Node) -> v
 		y = maxf(y, float(spec[1].y))
 	step = maxf(step, 16.0)
 	while origin.y + y > step:
-		_spawn_beam_segment(middle, Vector2(middle[1].x, y), origin, world, FULL_BEAM_DURATION, FULL_BEAM_WIDTH_SCALE)
+		_spawn_beam_segment(middle, Vector2(middle[1].x, y), origin, world, player.loadout.full_beam_duration(), player.loadout.full_beam_width_scale())
 		y -= step
-	_spawn_beam_segment(top, Vector2(top[1].x, y), origin, world, FULL_BEAM_DURATION, FULL_BEAM_WIDTH_SCALE)
+	_spawn_beam_segment(top, Vector2(top[1].x, y), origin, world, player.loadout.full_beam_duration(), player.loadout.full_beam_width_scale())
 
 func _spawn_beam_segment(spec: Array, offset: Vector2, origin: Vector2, world: Node, follow_duration := 0.0, width_scale := 1.0) -> void:
 	var shot = ProjectilePool.spawn(spec[0], origin + offset, world)
@@ -82,8 +78,7 @@ func _spawn_beam_segment(spec: Array, offset: Vector2, origin: Vector2, world: N
 	shot.speedX = spec[3] * scale.x
 	shot.speedY = spec[4] * scale.y
 	shot.player_Id = player.id_Player
-	shot.damage += player.loadout.damage_bonus
-	shot.setPowerAnim()
+	shot.set_damage_bonus(player.loadout.damage_bonus + player.loadout.beam_damage_bonus)
 	if follow_duration > 0.0:
 		shot.follow_player(player, origin - player.global_position + offset, follow_duration)
 

@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://ddy44l041lsts"]
+[gd_scene load_steps=2 format=3 uid="uid://ddy44l041lsts"]
 
 [ext_resource type="Script" uid="uid://bn0cagpwh0y8f" path="res://scenes/world/world.gd" id="1"]
 [ext_resource type="FontFile" uid="uid://cndq06brheuki" path="res://assets/fonts/slkscr.ttf" id="2"]
@@ -8,6 +8,22 @@
 [ext_resource type="Script" uid="uid://ctihglpcctrbp" path="res://scenes/combat/projectile_pool.gd" id="6"]
 [ext_resource type="Script" uid="uid://cq5s6eielhtgt" path="res://scenes/ui/hud.gd" id="7"]
 [ext_resource type="Script" path="res://scenes/world/combat_feedback.gd" id="8"]
+[ext_resource type="Resource" path="res://data/waves/wave_spawner_config.tres" id="9"]
+[ext_resource type="Resource" path="res://data/waves/wave_catalog.tres" id="10"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxRankPanel"]
+bg_color = Color(0.0470588, 0.0588235, 0.101961, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.611765, 0.12549, 0.12549, 0.85)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 3
 
 [node name="world" type="Node2D" unique_id=871126695]
 process_mode = 1
@@ -42,12 +58,30 @@ offset_bottom = 800.0
 mouse_filter = 2
 color = Color(0.133333, 0.152941, 0.207843, 0.96)
 
+[node name="LeftRankPanel" type="Panel" parent="hud"]
+offset_left = 4.0
+offset_top = 136.0
+offset_right = 96.0
+offset_bottom = 260.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxRankPanel")
+visible = false
+
 [node name="rightRail" type="ColorRect" parent="hud" unique_id=2112126863]
 offset_left = 966.0
 offset_right = 1066.0
 offset_bottom = 800.0
 mouse_filter = 2
 color = Color(0.133333, 0.152941, 0.207843, 0.96)
+
+[node name="RightRankPanel" type="Panel" parent="hud"]
+offset_left = 970.0
+offset_top = 72.0
+offset_right = 1062.0
+offset_bottom = 196.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxRankPanel")
+visible = false
 
 [node name="leftEdge" type="ColorRect" parent="hud" unique_id=1736162054]
 offset_left = 98.0
@@ -117,6 +151,17 @@ text = "COMBO\n—"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="ranks_player1" type="Label" parent="hud/LeftColumn"]
+custom_minimum_size = Vector2(0, 124)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.952941, 0.921569, 0.866667, 1)
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 14
+text = "UPGRADES\nSPD 0/8\nDMG 0/8\nRATE 0/8\nSIDE 0/7\nBEAM 0/8"
+horizontal_alignment = 1
+vertical_alignment = 1
+visible = false
+
 [node name="LeftSpacer" type="Control" parent="hud/LeftColumn" unique_id=445969611]
 layout_mode = 2
 size_flags_vertical = 3
@@ -148,6 +193,17 @@ text = "waves"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="ranks_player2" type="Label" parent="hud/RightColumn"]
+custom_minimum_size = Vector2(0, 124)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.952941, 0.921569, 0.866667, 1)
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 14
+text = "UPGRADES\nSPD 0/8\nDMG 0/8\nRATE 0/8\nSIDE 0/7\nBEAM 0/8"
+horizontal_alignment = 1
+vertical_alignment = 1
+visible = false
+
 [node name="RightSpacer" type="Control" parent="hud/RightColumn" unique_id=1455964552]
 layout_mode = 2
 size_flags_vertical = 3
@@ -162,10 +218,40 @@ alignment = 2
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 
+[node name="Feedback_player1" type="Label" parent="hud"]
+offset_left = 108.0
+offset_top = 144.0
+offset_right = 274.0
+offset_bottom = 172.0
+theme_override_colors/font_shadow_color = Color(0.08, 0.08, 0.12, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 0
+vertical_alignment = 1
+visible = false
+
+[node name="Feedback_player2" type="Label" parent="hud"]
+offset_left = 792.0
+offset_top = 144.0
+offset_right = 958.0
+offset_bottom = 172.0
+theme_override_colors/font_shadow_color = Color(0.08, 0.08, 0.12, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 2
+vertical_alignment = 1
+visible = false
+
 [node name="waveGenerator" type="Node2D" parent="." unique_id=927237786]
 process_mode = 1
 position = Vector2(0, 5)
 script = ExtResource("3")
+catalog = ExtResource("10")
+config = ExtResource("9")
 
 [node name="spawnPos0" type="Marker2D" parent="waveGenerator" unique_id=294103474]
 position = Vector2(125, -61)
@@ -216,4 +302,4 @@ script = ExtResource("6")
 
 [node name="background" parent="." unique_id=1458692991 instance=ExtResource("5")]
 scroll_ignore_camera_zoom = true
-speed_Y = 60
+speed_Y = 80

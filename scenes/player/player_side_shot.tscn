@@ -467,12 +467,12 @@ speedX = 0
 rotate = false
 playerShot = true
 damage = 0.4
-damage_Max = 3.0
-power_Small = 0.8
-power_Normal = 1.2
-power_Big = 1.6
-power_Large = 2.0
-power_Full = 2.4
+damage_Max = 1.0
+power_Small = 0.4
+power_Normal = 0.55
+power_Big = 0.7
+power_Large = 0.85
+power_Full = 1.0
 
 [node name="Sprite2D" type="Sprite2D" parent="." index="0"]
 
@@ -511,4 +511,3 @@ blend_times = [  ]
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_screen_exited"]
-

@@ -30,7 +30,7 @@ formation = 2
 start_delay = 8.0
 active_duration = 6.0
 pattern = 5
-lane_spacing = 2
+lane_spacing = 1
 spawn_gap = 0.15
 
 [sub_resource type="Resource" id="rule_3"]

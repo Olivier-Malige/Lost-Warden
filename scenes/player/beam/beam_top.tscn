@@ -467,12 +467,12 @@ speedX = 0
 rotate = false
 playerShot = true
 damage = 2.0
-damage_Max = 10.0
-power_Small = 1.0
-power_Normal = 3.0
-power_Big = 5.0
-power_Large = 6.0
-power_Full = 10.0
+damage_Max = 5.0
+power_Small = 2.0
+power_Normal = 2.75
+power_Big = 3.5
+power_Large = 4.25
+power_Full = 5.0
 piercing = true
 
 [node name="head" type="Sprite2D" parent="." index="0"]

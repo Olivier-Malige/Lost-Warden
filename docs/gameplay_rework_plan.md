@@ -26,6 +26,8 @@ Permanent meta-progression, unlockable ships, profile levels, and account-wide u
 - Preparation phase B: completed and approved on 2026-08-28.
 - Phase 1: implementation completed on 2026-08-28; solo and co-op readability playtests remain before approval.
 - Phase 1 follow-up — Wave variety preview: implementation completed on 2026-08-29; solo and co-op readability playtests remain before approval.
+- Phase 1 follow-up — Difficulty and elite preview: implementation completed on 2026-08-29; solo and co-op difficulty playtests remain before approval.
+- Phase 1 follow-up — Ranked direct power-ups and beam progression: implementation completed on 2026-08-29; balance playtests remain before approval.
 - Visual production phase: planned and approved on 2026-08-29; implementation starts only after Phase 1 approval.
 - Next implementation step: validate and approve Phase 1 and its wave variety preview.
 
@@ -159,6 +161,44 @@ Validation:
 Commit:
 
 - `feat(waves): diversify enemy wave encounters`
+
+## Phase 1 follow-up — Difficulty and elite preview
+
+Status: implemented on 2026-08-29. This controlled balancing pass keeps the fixed catalog and direct pickups while testing wave scaling and scheduled elites before the seeded encounter director from Phase 2.
+
+- Preserve the first three waves, then use existing wave difficulty values to scale combat enemy health and spawn cadence through wave 13. Asteroids remain unscaled hazards.
+- Loop waves 9 through 13 after the first full catalog pass. Each loop increases enemy health by 10%, up to 50%, and reduces spawn intervals by 5%, up to 20%.
+- Add durability categories for fodder, fighters, specialists, and heavy ships with distinct maximum health multipliers. Continue to apply the existing 1.5x co-op health multiplier after run scaling.
+- Add exactly one scheduled elite in the climax of waves 6, 9, 12, and 13. Elites use 2.5x health, 1.1x speed, 0.8x shooting delays, triple score, no power-up drop, a pale-violet treatment, pulsing red aura, and compact health bar.
+- Keep the collision shape unchanged and cap active elites at three. Do not add seeded promotion, threat budgets, XP rewards, boss scheduling, or future enemy roles in this preview.
+
+Validation:
+
+- Wave health and cadence scale only after difficulty 1.30, and asteroids never gain health.
+- The 13 → 9 loop increments exactly once per completed advanced cycle and respects its health and pace caps.
+- Scheduled elites appear only at their declared climax rules, never exceed one per formation or three active instances, award triple score, and suppress power-up drops.
+- Solo and co-op runs remain readable with no bonuses early and meaningful pressure after multiple offensive upgrades.
+
+## Phase 1 follow-up — Ranked direct power-ups and beam progression
+
+Status: implemented on 2026-08-29. This balancing follow-up keeps direct pickups temporarily while making their progression explicit before the Phase 3 XP-choice system replaces them.
+
+- Give speed, damage, fire rate, side shots, and plasma beam fixed visible ranks with explicit caps. Keep shield and energy as consumables.
+- Keep the plasma beam deliberately gated: the basic rank can only release its smallest bolt, rank 3 unlocks the normal charge, and rank 8 unlocks the full-screen charge.
+- Separate speed from firing cadence, add dedicated fire-rate and beam pickups, and use relative pickup weights instead of cumulative thresholds.
+- Spread the same final stat ceilings across 7 or 8 ranks and reduce power-up drop chances, so a fully built ship remains a late-run achievement.
+- Make every beam rank improve charge time, beam damage, full-beam duration, and width while retaining the screen-spanning follow behavior.
+- Convert a permanent pickup collected after its cap into 500 direct score points without affecting the combo or the co-op partner.
+- Display each player's permanent ranks and short upgrade feedback in the HUD. Reuse the current pickup art and audio with distinct tints until the visual production phase.
+- Raise the mother ship's base health from 30 to 40 while retaining its heavy-ship, elite, wave, cycle, and co-op scaling.
+
+Validation:
+
+- Every permanent upgrade stops exactly at its visible rank cap, including after pooled projectile reuse.
+- Fire rate reaches 0.12 seconds only through its dedicated pickup, and speed reaches 450 without changing it.
+- Solo and co-op HUDs display independent player ranks, capped pickup feedback, and the 500-point conversion.
+- Beam charge thresholds, damage, full duration, and width increase across all five ranks without regressing its pierce or follow behavior.
+- Mother ship health scales from the new 40-health base through the existing advanced-wave and co-op rules.
 
 ## Visual production phase — Rebuild the core sprite set
 

@@ -7,5 +7,5 @@ script = ExtResource("1")
 id = &"shield"
 effect = 4
 anim = &"shieldUp"
-weight = 22
+weight = 15
 value = 1.0

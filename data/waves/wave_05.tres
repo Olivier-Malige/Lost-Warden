@@ -47,6 +47,7 @@ active_duration = 6.0
 pattern = 2
 lane_spacing = 1
 spawn_gap = 0.15
+elite_count = 1
 
 [sub_resource type="Resource" id="rule_4"]
 script = ExtResource("2")

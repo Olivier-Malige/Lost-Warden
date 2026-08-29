@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/upgrade_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"beam"
+effect = 6
+anim = &"laserUp"
+weight = 14
+value = 0.1875
+max_rank = 8
+hud_label = &"BEAM"

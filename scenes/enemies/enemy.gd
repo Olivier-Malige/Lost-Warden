@@ -1,30 +1,43 @@
 class_name Enemy
 extends Area2D
-const Layers := preload("res://core/collision_layers.gd")
-const PROJECTILE_SPEED_MULTIPLIER := 1.1
-@export var dropOnDestroy: bool = false
 
-@export var dropRange: int = 64
-@export var objectOnDestroy: PackedScene
-@export var nbrObjectOnDestroy: int = 1
-@export var nbrSprites = 1
-@export var rnd_Roation_Range_Max: float = 1
-@export var rnd_Roation_Range_Min: float = -1
-@export var life: int = 0
-@export var hitSomething: int = 1
-@export var points: int = 0
-@export var speedX: float = 0
-@export var speedY: float = 0
-@export var randomX: float = 0
-@export var randomY: float = 0
-@export var randPowerUp: int = 0 # chance out of 100
-@export var setRotation: bool = false
-@export var speedRotation: float = 0.0
-@export var rndRotation: bool = false
+const Layers := preload("res://core/collision_layers.gd")
+const EliteIndicatorScene := preload("res://scenes/enemies/elite_indicator.gd")
+const PowerUpScene := preload("res://scenes/ui/power_up.tscn")
+const PROJECTILE_SPEED_MULTIPLIER := 1.1
+
+@export var definition: EnemyDefinition
+@export var shoot_timer_paths: Array[NodePath] = []
+
 var destroyed := false
 var hitByPlayerShot := false
-var indexSprites
-var bonusCoop := 1.5
+var life := 0
+var max_life := 0
+var hitSomething := 1
+var points := 0
+var speedX := 0.0
+var speedY := 0.0
+var setRotation := false
+var speedRotation := 0.0
+var indexSprites: Variant
+var elite := false
+
+var _spawn_context := EnemySpawnContext.new()
+var _elite_indicator: EliteIndicator
+var _shoot_timers: Array[Timer] = []
+
+func _ready() -> void:
+	if definition == null:
+		push_error("EnemyDefinition is required for %s." % scene_file_path)
+		queue_free()
+		return
+	_apply_definition()
+	_resolve_shoot_timers()
+	_apply_spawn_context()
+	_configure_collision()
+	_play_spawn_animation()
+	if elite:
+		_setup_elite_indicator()
 
 func _process(delta: float) -> void:
 	hitByPlayerShot = false
@@ -32,39 +45,63 @@ func _process(delta: float) -> void:
 	if setRotation:
 		rotation += speedRotation * delta
 
+func configure_spawn(context: EnemySpawnContext) -> void:
+	_spawn_context = context
 
-func _ready() -> void:
-	if _is_coop():
-		life = int(life * bonusCoop)
-	if rndRotation:
-		speedRotation = randf_range(rnd_Roation_Range_Min, rnd_Roation_Range_Max)
+func _apply_definition() -> void:
+	life = definition.max_health
+	hitSomething = definition.collision_damage
+	points = definition.score
+	speedX = definition.speed.x + randf_range(-definition.random_speed.x, definition.random_speed.x)
+	speedY = definition.speed.y + randf_range(-definition.random_speed.y, definition.random_speed.y)
+	setRotation = definition.rotates
+	speedRotation = definition.rotation_speed
+	if definition.random_rotation:
+		speedRotation = randf_range(definition.random_rotation_min, definition.random_rotation_max)
 
-	speedX = randf_range(speedX - randomX, speedX + randomX)
-	speedY = randf_range(speedY - randomY, speedY + randomY)
+func _apply_spawn_context() -> void:
+	var health_multiplier := _spawn_context.health_multiplier
+	elite = _spawn_context.elite
+	if elite and _spawn_context.elite_definition:
+		var elite_definition := _spawn_context.elite_definition
+		health_multiplier *= elite_definition.health_multiplier
+		speedX *= elite_definition.speed_multiplier
+		speedY *= elite_definition.speed_multiplier
+		points *= elite_definition.score_multiplier
+		for timer in _shoot_timers:
+			timer.wait_time *= elite_definition.fire_delay_multiplier
+	life = ceili(float(life) * health_multiplier)
+	max_life = life
 	add_to_group("enemy")
+	if elite:
+		add_to_group("elite")
+
+func _resolve_shoot_timers() -> void:
+	for path in shoot_timer_paths:
+		var timer := get_node_or_null(path) as Timer
+		if timer:
+			_shoot_timers.append(timer)
+
+func _configure_collision() -> void:
 	collision_layer = Layers.ENEMY
 	collision_mask = Layers.PLAYER | Layers.PLAYER_SHOT
 
-	if nbrSprites > 1:
-		indexSprites = randi() % nbrSprites + 1
-	else:
-		indexSprites = ""
+func _play_spawn_animation() -> void:
+	indexSprites = randi() % definition.sprite_variants + 1 if definition.sprite_variants > 1 else ""
 	$anim.play("start" + str(indexSprites))
 
 func _hit_something(dmg := 0) -> void:
 	if destroyed:
 		return
 	life -= dmg
+	if _elite_indicator:
+		_elite_indicator.set_health(life)
 	$sound_Hit.playing = true
-	var pos = global_position
-	pos.y -= 5
-	position = pos
-
+	position.y -= 5.0
 	if life <= 0:
 		_destroy()
 	else:
 		$anim.play("hit" + str(indexSprites))
-
 
 func _on_area_entered(area: Area2D) -> void:
 	if not destroyed and area.has_method("_hit_something"):
@@ -74,18 +111,12 @@ func _on_screen_exited() -> void:
 	set_process(false)
 	queue_free()
 
-func _on_anim_animation_finished(n: StringName) -> void:
-	if n == "explode":
+func _on_anim_animation_finished(animation: StringName) -> void:
+	if animation == "explode":
 		set_process(false)
 		queue_free()
-	elif n == "hit" + str(indexSprites):
+	elif animation == "hit" + str(indexSprites):
 		$anim.play("start" + str(indexSprites))
-
-func _drop() -> void:
-	for i in range(nbrObjectOnDestroy):
-		var objDroped = objectOnDestroy.instantiate()
-		objDroped.position = Vector2(position.x + randf_range(-dropRange, dropRange), position.y + randf_range(-dropRange, dropRange))
-		get_parent().call_deferred("add_child", objDroped)
 
 func _destroy() -> void:
 	destroyed = true
@@ -95,27 +126,43 @@ func _destroy() -> void:
 		Events.screen_flash_requested.emit(Color(0.88, 0.35, 0.25, 0.08), 0.08)
 	$sound_Explode.playing = true
 	$anim.play("explode")
-	if has_node("CollisionShape2D"):
-		$CollisionShape2D.set_deferred("disabled", true)
+	$CollisionShape2D.set_deferred("disabled", true)
 	set_deferred("monitoring", false)
 	set_deferred("monitorable", false)
-	if has_node("shootTimer"):
-		$shootTimer.stop()
+	for timer in _shoot_timers:
+		timer.stop()
 	if hitByPlayerShot:
-		var awarded_points := global.register_kill(points)
-		var multiplier := global.combo_multiplier(global.combo)
-		Events.score_popup_requested.emit(awarded_points, global.combo, multiplier, global_position)
-		if randi() % 101 <= randPowerUp:
-			var powerUp = preload("res://scenes/ui/power_up.tscn").instantiate()
-			powerUp.position = global_position
-			get_parent().call_deferred("add_child", powerUp)
-	if dropOnDestroy:
-		_drop()
+		_award_player_kill()
+	if definition.drops_on_destroy:
+		_drop_debris()
 
-func _is_coop() -> bool:
-	return global.coop
+func _award_player_kill() -> void:
+	var awarded_points := global.register_kill(points)
+	var multiplier := global.combo_multiplier(global.combo)
+	Events.score_popup_requested.emit(awarded_points, global.combo, multiplier, global_position)
+	if not elite and randi() % 101 <= definition.power_up_chance:
+		var power_up := PowerUpScene.instantiate()
+		power_up.position = global_position
+		get_parent().call_deferred("add_child", power_up)
 
-func _spawn_shot(packed: PackedScene, from: Vector2, speed_x: float = 0, rot_deg: float = 0) -> Node:
+func _drop_debris() -> void:
+	if definition.drop_scene == null:
+		return
+	for _index in range(definition.drop_count):
+		var debris := definition.drop_scene.instantiate()
+		debris.position = global_position + Vector2(randf_range(-definition.drop_range, definition.drop_range), randf_range(-definition.drop_range, definition.drop_range))
+		get_parent().call_deferred("add_child", debris)
+
+func _setup_elite_indicator() -> void:
+	var sprite := get_node_or_null("Sprite2D") as Sprite2D
+	if sprite and _spawn_context.elite_definition:
+		sprite.self_modulate = _spawn_context.elite_definition.outline_color
+	_elite_indicator = EliteIndicatorScene.new()
+	_elite_indicator.name = "EliteIndicator"
+	add_child(_elite_indicator)
+	_elite_indicator.setup(self, max_life, _spawn_context.elite_definition)
+
+func _spawn_shot(packed: PackedScene, from: Vector2, speed_x: float = 0.0, rot_deg: float = 0.0) -> Node:
 	var shot = ProjectilePool.spawn(packed, from, get_parent())
 	shot.speedX = speed_x * PROJECTILE_SPEED_MULTIPLIER
 	if rot_deg != 0.0:

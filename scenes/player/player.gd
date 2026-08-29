@@ -10,37 +10,56 @@ const WEAPON_BEAM_FULL: WeaponDefinition = preload("res://data/weapons/beam_full
 const UPGRADE_SPEED: UpgradeDefinition = preload("res://data/upgrades/speed.tres")
 const UPGRADE_DAMAGE: UpgradeDefinition = preload("res://data/upgrades/damage.tres")
 const UPGRADE_SIDE: UpgradeDefinition = preload("res://data/upgrades/side_shot.tres")
+const UPGRADE_FIRE_RATE: UpgradeDefinition = preload("res://data/upgrades/fire_rate.tres")
+const UPGRADE_BEAM: UpgradeDefinition = preload("res://data/upgrades/beam.tres")
 const Layers := preload("res://core/collision_layers.gd")
+
+@onready var effects: PlayerEffects = $Effects
+
+enum beam_State {EMPTY, SMALL, NORMAL, FULL}
+enum State { ACTIVE, HIT, DYING, DEAD }
 
 var set_Player_2 := false # set before add_child for P2 colors and stats
 var loadout: PlayerLoadout
 var weapons: PlayerWeapons
 var vitals: PlayerVitals
+var energy: int
+var touched := false
+var canShooting := true
+var malusSpeed := 0
+var controller := ""
+var id_Player := ""
+var shooting := false
+var beam_Focusing := false
+var accumBeam := 0.0
+var beam_Power := beam_State.EMPTY
+var state := State.ACTIVE
 var _recoil_tween: Tween
 var _ship_rest_position := Vector2.ZERO
-@onready var energy: int = int(STATS.energy_max / 2.0)
-@onready var touched = false
-@onready var canShooting = true
-@onready var malusSpeed = 0
-@onready var controller
-@onready var id_Player
-@onready var shooting
-@onready var beam_Focusing
-@onready var accumBeam = 0
-enum beam_State {EMPTY, SMALL, NORMAL, FULL}
-@onready var beam_Power = beam_State.EMPTY
-
 
 func _ready() -> void:
+	energy = int(STATS.energy_max / 2.0)
+	_setup_components()
+	_setup_player()
+
+func _setup_components() -> void:
 	loadout = PlayerLoadout.new(STATS)
 	weapons = PlayerWeapons.new(self)
 	vitals = PlayerVitals.new(self)
-	_setup_Player()
+
+func _setup_player() -> void:
+	id_Player = "player2" if set_Player_2 else "player1"
+	$anim.play(id_Player + "_idle")
+	effects.setup(global.saveData.config.graphic == "low")
 	_ship_rest_position = $xWing.position
 	update_controller()
 	update_energy()
 	$ShootingDelay.set_wait_time(loadout.fire_delay)
 	add_to_group("player")
+	_configure_collision()
+	_emit_upgrade_state()
+
+func _configure_collision() -> void:
 	collision_layer = Layers.PLAYER
 	collision_mask = Layers.ENEMY | Layers.ENEMY_SHOT | Layers.PICKUP | Layers.ASTEROID
 
@@ -51,51 +70,75 @@ func update_controller() -> void:
 		controller = "all"
 
 func _process(delta: float) -> void:
+	if state == State.DYING or state == State.DEAD:
+		return
 	energy = min(energy, STATS.energy_max)
+	var motion := _update_movement(delta)
+	_update_weapons(delta)
+	_update_effects(motion)
 
+func _update_movement(delta: float) -> Vector2:
+	var motion := _movement_input()
+	_update_movement_animation(motion.x)
+	position = (position + motion * delta * (loadout.move_speed() - malusSpeed)).clamp(STATS.bound_min, STATS.bound_max)
+	Events.player_motion_changed.emit(id_Player, -motion.y)
+	return motion
+
+func _movement_input() -> Vector2:
 	var motion := Vector2.ZERO
-	var anim: String = id_Player + "_idle"
-	_set_reactors(true, 0.4)
+
 	if Input.is_action_pressed(controller + "_up"):
 		motion.y -= 1
-		_set_reactors(true, 0.7)
 	if Input.is_action_pressed(controller + "_down"):
 		motion.y += 1
-		_set_reactors(false)
 	if Input.is_action_pressed(controller + "_left"):
 		motion.x -= 1
-		anim = id_Player + "_left"
 	if Input.is_action_pressed(controller + "_right"):
 		motion.x += 1
-		anim = id_Player + "_right"
-	if $anim.current_animation != anim:
-		$anim.play(anim)
+	return motion
 
-	position = (position + motion * delta * (loadout.move_speed() - malusSpeed)).clamp(STATS.bound_min, STATS.bound_max)
+func _update_movement_animation(horizontal_motion: float) -> void:
+	var animation := id_Player + "_idle"
+	if horizontal_motion < 0.0:
+		animation = id_Player + "_left"
+	elif horizontal_motion > 0.0:
+		animation = id_Player + "_right"
+	if $anim.current_animation != animation:
+		$anim.play(animation)
 
+func _update_weapons(delta: float) -> void:
 	shooting = Input.is_action_just_pressed(controller + "_fire")
 	beam_Focusing = Input.is_action_pressed(controller + "_fire")
-	_update_beam_charge()
-
-	if Input.is_action_just_released(controller + "_fire") and beam_Power != beam_State.EMPTY:
-		weapons.fire_beam(beam_Power)
-
-	accumBeam = accumBeam + delta if beam_Focusing else 0.0
-	if beam_Focusing or shooting:
-		_set_reactors(true, 0.1)
+	_update_beam(delta)
 	if shooting and canShooting:
 		weapons.fire_primary()
 
-func _setup_Player() -> void:
-	id_Player = "player2" if set_Player_2 else "player1"
-	var tex = load("res://assets/sprites/player/" + id_Player + "_particle.png")
-	for p in [$BeamParticlesLeft, $BeamParticlesRight, $reactorParticles, $reactorParticles2]:
-		p.set_texture(tex)
-	$anim.play(id_Player + "_idle")
+func _update_beam(delta: float) -> void:
+	if beam_Focusing:
+		accumBeam += delta
+		_update_beam_charge()
+		return
+	if Input.is_action_just_released(controller + "_fire") and beam_Power != beam_State.EMPTY:
+		weapons.fire_beam(beam_Power)
+	accumBeam = 0.0
+	if beam_Power != beam_State.EMPTY:
+		_set_Power_Beam(beam_State.EMPTY)
+
+func _update_effects(motion: Vector2) -> void:
+	var low_graphics: bool = global.saveData.config.graphic == "low"
+	effects.update_reactors(motion.y)
+	effects.update_charge_particles(beam_Focusing, accumBeam, beam_Power, _max_available_beam_charge(), low_graphics)
 
 func _update_beam_charge() -> void:
 	var next := beam_State.EMPTY
-	for tier in [[STATS.beam_full, beam_State.FULL], [STATS.beam_normal, beam_State.NORMAL], [STATS.beam_mini, beam_State.SMALL]]:
+	var charge_multiplier := loadout.beam_charge_multiplier()
+	var beam_rank := loadout.rank_for(UpgradeDefinition.Effect.BEAM)
+	var tiers := [[STATS.beam_mini * charge_multiplier, beam_State.SMALL]]
+	if beam_rank >= 3:
+		tiers.push_front([STATS.beam_normal * charge_multiplier, beam_State.NORMAL])
+	if beam_rank >= 8:
+		tiers.push_front([STATS.beam_full * charge_multiplier, beam_State.FULL])
+	for tier in tiers:
 		if accumBeam >= tier[0]:
 			next = tier[1]
 			break
@@ -104,27 +147,18 @@ func _update_beam_charge() -> void:
 
 func _set_Power_Beam(power) -> void:
 	beam_Power = power
-	match power:
-		beam_State.EMPTY:
-			_set_beam_particles(false)
-		beam_State.SMALL:
-			_set_beam_particles(true, 1)
-		beam_State.NORMAL:
-			_set_beam_particles(true, 5)
-		beam_State.FULL:
-			_set_beam_particles(true, 20)
+	if power == beam_State.EMPTY:
+		effects.hide_charge()
 
-func _set_reactors(emitting: bool, lifetime := 0.4) -> void:
-	for p in [$reactorParticles, $reactorParticles2]:
-		p.set_emitting(emitting)
-		p.set_lifetime(lifetime)
+func _max_available_beam_charge() -> float:
+	var multiplier := loadout.beam_charge_multiplier()
+	var rank := loadout.rank_for(UpgradeDefinition.Effect.BEAM)
+	if rank >= 8:
+		return STATS.beam_full * multiplier
+	if rank >= 3:
+		return STATS.beam_normal * multiplier
+	return STATS.beam_mini * multiplier
 
-func _set_beam_particles(emitting: bool, amount := -1) -> void:
-	for p in [$BeamParticlesLeft, $BeamParticlesRight]:
-		p.emitting = emitting
-		p.visible = emitting
-		if amount >= 0:
-			p.amount = amount
 
 func play_shot_recoil(amount := 2.0, duration := 0.07) -> void:
 	if _recoil_tween:
@@ -139,8 +173,9 @@ func _hit_something(dmg := 1) -> void:
 func _on_touchedReset_timeout() -> void:
 	touched = false
 	malusSpeed = 0
+	if state == State.HIT:
+		state = State.ACTIVE
 	$xWing.set_modulate(Color(1, 1, 1, 1))
-
 
 func setShootingDelay() -> void:
 	$ShootingDelay.set_wait_time(loadout.fire_delay)
@@ -151,18 +186,52 @@ func _on_ShootingDelay_timeout() -> void:
 func update_energy() -> void:
 	Events.energy_changed.emit(id_Player, energy)
 
-func apply_upgrade(upgrade: UpgradeDefinition) -> void:
+func apply_upgrade(upgrade: UpgradeDefinition) -> Dictionary:
 	if upgrade == null:
-		return
+		return {}
+	var result := {"applied": true, "rank": 0, "max_rank": 0, "capped": false}
+
 	match upgrade.effect:
 		UpgradeDefinition.Effect.ENERGY:
-			energy += int(upgrade.value)
-			update_energy()
+			_apply_energy_upgrade(upgrade)
 		UpgradeDefinition.Effect.SHIELD:
-			$shield.power = int(upgrade.value)
+			_apply_shield_upgrade(upgrade)
 		_:
-			loadout.apply(upgrade)
-			setShootingDelay()
+			result = _apply_ranked_upgrade(upgrade)
+
+	if upgrade.max_rank > 0:
+		_publish_upgrade_result(upgrade, result)
+
+	return result
+
+func _apply_energy_upgrade(upgrade: UpgradeDefinition) -> void:
+	energy += int(upgrade.value)
+	update_energy()
+
+func _apply_shield_upgrade(upgrade: UpgradeDefinition) -> void:
+	$shield.power = int(upgrade.value)
+
+func _apply_ranked_upgrade(upgrade: UpgradeDefinition) -> Dictionary:
+	var result := loadout.apply(upgrade)
+	if result.capped:
+		global.add_score(500)
+	setShootingDelay()
+	return result
+
+func _publish_upgrade_result(upgrade: UpgradeDefinition, result: Dictionary) -> void:
+	Events.upgrade_changed.emit(id_Player, upgrade.effect, result.rank, result.max_rank)
+	Events.upgrade_feedback_requested.emit(id_Player, _upgrade_feedback_text(upgrade, result), result.capped)
+
+func _upgrade_feedback_text(upgrade: UpgradeDefinition, result: Dictionary) -> String:
+	if result.capped:
+		return "MAX +500"
+	if result.rank >= result.max_rank:
+		return String(upgrade.hud_label) + " MAX"
+	return String(upgrade.hud_label) + " " + str(result.rank) + "/" + str(result.max_rank)
+
+func _emit_upgrade_state() -> void:
+	for upgrade in [UPGRADE_SPEED, UPGRADE_DAMAGE, UPGRADE_SIDE, UPGRADE_FIRE_RATE, UPGRADE_BEAM]:
+		Events.upgrade_changed.emit(id_Player, upgrade.effect, loadout.rank_for(upgrade.effect), upgrade.max_rank)
 
 func increase_Speed() -> void:
 	apply_upgrade(UPGRADE_SPEED)
@@ -179,11 +248,16 @@ func increase_Shield() -> void:
 
 func _on_anim_animation_finished(n: StringName) -> void:
 	if n == id_Player + "_explode":
+		state = State.DEAD
 		Events.player_died.emit()
 		queue_free()
 
-
 func _on_player_area_entered(area: Area2D) -> void:
+	if state != State.ACTIVE and state != State.HIT:
+		return
 	if area.is_in_group("enemy") and area.has_method("_hit_something"):
 		_hit_something()
 		area._hit_something(10)
+
+func set_state(next_state: State) -> void:
+	state = next_state
