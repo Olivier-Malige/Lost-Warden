@@ -6,6 +6,7 @@ var menu = load("res://scenes/menu/menu.tscn")
 var paused = load("res://scenes/ui/paused.tscn")
 
 var menuShow := false
+var _game_over_input_ready_at := 0
 const PLAYER_CHEATS := {
 	"debug_Key3": "increase_Speed",
 	"debug_Key4": "increase_Shot",
@@ -45,7 +46,7 @@ func _input(event: InputEvent) -> void:
 		if global.Debug:
 			_debug_cheats(event)
 	if gameOverScreen:
-		if event.is_action_pressed("start") and not event.is_echo():
+		if Time.get_ticks_msec() >= _game_over_input_ready_at and event.is_action_pressed("start") and not event.is_echo():
 			go_Start_Screen()
 
 func _debug_cheats(event: InputEvent) -> void:
@@ -153,8 +154,18 @@ func _set_world_background(on: bool) -> void:
 		layer.visible = on
 
 func go_GameOver_Screen() -> void:
+	if gameOverScreen and has_node("gameOver"):
+		return
+	get_tree().paused = false
+	menuShow = false
+	release_gameplay_input()
 	gameOverScreen = true
+	_game_over_input_ready_at = Time.get_ticks_msec() + 750
 	worldScreen = false
+	startScreen = false
+	var pause_overlay := get_node_or_null("paused")
+	if pause_overlay:
+		pause_overlay.queue_free()
 	var current_world := get_node_or_null("world")
 	if current_world:
 		_set_world_background(false)
@@ -164,8 +175,14 @@ func go_GameOver_Screen() -> void:
 		if hud:
 			hud.visible = false
 		current_world.queue_free()
-	var gameOver = preload("res://scenes/menu/game_over.tscn").instantiate()
-	add_child(gameOver)
+	var game_over_layer := CanvasLayer.new()
+	game_over_layer.name = "gameOver"
+	game_over_layer.layer = 10
+	add_child(game_over_layer)
+	var game_over = preload("res://scenes/menu/game_over.tscn").instantiate()
+	game_over.name = "Overlay"
+	game_over_layer.add_child(game_over)
+	game_over.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 func set_Graphic(level: String) -> void:
 	_set_title_stars(level == "high")

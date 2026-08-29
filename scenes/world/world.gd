@@ -20,4 +20,7 @@ func _spawn_player(is_p2: bool, offset: Vector2) -> void:
 func _on_player_died() -> void:
 	nbr_Player -= 1
 	if nbr_Player <= 0:
-		Events.game_over_requested.emit()
+		call_deferred("_request_game_over")
+
+func _request_game_over() -> void:
+	Events.game_over_requested.emit()
