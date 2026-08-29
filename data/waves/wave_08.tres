@@ -1,30 +1,68 @@
-[gd_resource type="Resource" script_class="WaveDefinition" load_steps=7 format=3]
+[gd_resource type="Resource" script_class="WaveDefinition" load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://data/waves/wave_definition.gd" id="1"]
 [ext_resource type="Script" path="res://data/waves/spawn_rule.gd" id="2"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/drone.tscn" id="3"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/mother_ship.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/mother_ship.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/drone.tscn" id="4"]
 
 [sub_resource type="Resource" id="rule_1"]
 script = ExtResource("2")
 scene = ExtResource("3")
-interval = 5.0
+interval = 8.0
 weight = 1.0
-spawn_min = 1
-spawn_max = 9
-formation = 3
+spawn_min = 0
+spawn_max = 11
+formation = 1
+start_delay = 0.0
+active_duration = 6.0
+pattern = 0
+lane_spacing = 1
+spawn_gap = 0.15
 
 [sub_resource type="Resource" id="rule_2"]
 script = ExtResource("2")
 scene = ExtResource("4")
-interval = 10.0
+interval = 3.5
+weight = 1.0
+spawn_min = 1
+spawn_max = 10
+formation = 5
+start_delay = 8.0
+active_duration = 6.0
+pattern = 2
+lane_spacing = 1
+spawn_gap = 0.15
+
+[sub_resource type="Resource" id="rule_3"]
+script = ExtResource("2")
+scene = ExtResource("3")
+interval = 8.0
 weight = 1.0
 spawn_min = 0
-spawn_max = 10
+spawn_max = 11
 formation = 1
+start_delay = 16.0
+active_duration = 6.0
+pattern = 0
+lane_spacing = 1
+spawn_gap = 0.15
+
+[sub_resource type="Resource" id="rule_4"]
+script = ExtResource("2")
+scene = ExtResource("4")
+interval = 4.0
+weight = 1.0
+spawn_min = 1
+spawn_max = 10
+formation = 4
+start_delay = 16.0
+active_duration = 6.0
+pattern = 3
+lane_spacing = 1
+spawn_gap = 0.15
 
 [resource]
 script = ExtResource("1")
-duration = 30.0
+duration = 24.0
 difficulty = 2.20
-rules = Array[SpawnRule]([SubResource("rule_1"), SubResource("rule_2")])
+rules = Array[SpawnRule]([SubResource("rule_1"), SubResource("rule_2"), SubResource("rule_3"), SubResource("rule_4")])

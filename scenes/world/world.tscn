@@ -167,42 +167,6 @@ process_mode = 1
 position = Vector2(0, 5)
 script = ExtResource("3")
 
-[node name="masterTimer" type="Timer" parent="waveGenerator" unique_id=392971405]
-process_mode = 1
-wait_time = 30.0
-autostart = true
-
-[node name="asteroidSpawnTimer" type="Timer" parent="waveGenerator" unique_id=1092301357]
-process_mode = 1
-
-[node name="droneResume" type="Timer" parent="waveGenerator" unique_id=432926118]
-process_mode = 1
-wait_time = 0.2
-
-[node name="tieSpawnTimer" type="Timer" parent="waveGenerator" unique_id=1514898380]
-process_mode = 1
-wait_time = 2.0
-
-[node name="bigAsteroidSpawnTimer" type="Timer" parent="waveGenerator" unique_id=488088707]
-process_mode = 1
-wait_time = 3.0
-
-[node name="interceptorSpwnTimer" type="Timer" parent="waveGenerator" unique_id=1225437411]
-process_mode = 1
-wait_time = 4.0
-
-[node name="droneSpawnTimer" type="Timer" parent="waveGenerator" unique_id=2111610773]
-process_mode = 1
-wait_time = 0.5
-
-[node name="motherShipSpawnTimer" type="Timer" parent="waveGenerator" unique_id=255758723]
-process_mode = 1
-wait_time = 5.0
-
-[node name="turretSpawnTimer" type="Timer" parent="waveGenerator" unique_id=177980235]
-process_mode = 1
-wait_time = 5.0
-
 [node name="spawnPos0" type="Marker2D" parent="waveGenerator" unique_id=294103474]
 position = Vector2(125, -61)
 
@@ -253,12 +217,3 @@ script = ExtResource("6")
 [node name="background" parent="." unique_id=1458692991 instance=ExtResource("5")]
 scroll_ignore_camera_zoom = true
 speed_Y = 60
-
-[connection signal="timeout" from="waveGenerator/masterTimer" to="waveGenerator" method="_on_masterTimer_timeout"]
-[connection signal="timeout" from="waveGenerator/asteroidSpawnTimer" to="waveGenerator" method="_on_asteroidSpawnTimer_timeout"]
-[connection signal="timeout" from="waveGenerator/tieSpawnTimer" to="waveGenerator" method="_on_tieSpawnTimer_timeout"]
-[connection signal="timeout" from="waveGenerator/bigAsteroidSpawnTimer" to="waveGenerator" method="_on_bigAsteroidSpawnTimer_timeout"]
-[connection signal="timeout" from="waveGenerator/interceptorSpwnTimer" to="waveGenerator" method="_on_interceptorSpwnTimer_timeout"]
-[connection signal="timeout" from="waveGenerator/droneSpawnTimer" to="waveGenerator" method="_on_droneSpawnTimer_timeout"]
-[connection signal="timeout" from="waveGenerator/motherShipSpawnTimer" to="waveGenerator" method="_on_motherShipSpawnTimer_timeout"]
-[connection signal="timeout" from="waveGenerator/turretSpawnTimer" to="waveGenerator" method="_on_turretSpawnTimer_timeout"]
