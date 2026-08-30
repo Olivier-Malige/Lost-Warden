@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1")
-max_health = 4
+max_health = 1
 collision_damage = 3
 score = 70
 durability = 2

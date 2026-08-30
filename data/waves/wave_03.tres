@@ -1,112 +1,92 @@
-[gd_resource type="Resource" script_class="WaveDefinition" load_steps=14 format=3]
+[gd_resource type="Resource" script_class="WaveDefinition" load_steps=5 format=3 uid="uid://61okduvwykpi"]
 
-[ext_resource type="Script" path="res://data/waves/wave_definition.gd" id="1"]
-[ext_resource type="Script" path="res://data/waves/spawn_rule.gd" id="2"]
+[ext_resource type="Script" uid="uid://dpr5rymyr25n2" path="res://data/waves/wave_definition.gd" id="1"]
+[ext_resource type="Script" uid="uid://ctp3qhk1vo1qm" path="res://data/waves/spawn_rule.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/asteroid.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/big_asteroid.tscn" id="4"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/drone.tscn" id="5"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/tie.tscn" id="6"]
 
-[sub_resource type="Resource" id="rule_1"]
+[sub_resource type="Resource" id="rule_opening"]
 script = ExtResource("2")
 scene = ExtResource("3")
-interval = 4.0
+interval = 1.6
+weight = 1.0
+spawn_min = 0
+spawn_max = 11
+formation = 7
+start_delay = 0.0
+active_duration = 6.0
+pattern = 5
+lane_spacing = 1
+spawn_gap = 0.05
+elite_count = 0
+speed_multiplier = 1.75
+
+[sub_resource type="Resource" id="rule_rise_small"]
+script = ExtResource("2")
+scene = ExtResource("3")
+interval = 1.35
 weight = 1.0
 spawn_min = 0
 spawn_max = 11
 formation = 5
-start_delay = 0.0
+start_delay = 8.0
 active_duration = 6.0
-pattern = 1
+pattern = 4
 lane_spacing = 1
-spawn_gap = 0.15
+spawn_gap = 0.05
+elite_count = 0
+speed_multiplier = 1.95
 
-[sub_resource type="Resource" id="rule_2"]
+[sub_resource type="Resource" id="rule_rise_heavy"]
 script = ExtResource("2")
 scene = ExtResource("4")
-interval = 4.5
+interval = 2.1
+weight = 1.0
+spawn_min = 0
+spawn_max = 11
+formation = 5
+start_delay = 8.0
+active_duration = 6.0
+pattern = 5
+lane_spacing = 2
+spawn_gap = 0.1
+elite_count = 0
+speed_multiplier = 1.55
+
+[sub_resource type="Resource" id="rule_climax_small"]
+script = ExtResource("2")
+scene = ExtResource("3")
+interval = 1.15
+weight = 1.0
+spawn_min = 0
+spawn_max = 11
+formation = 9
+start_delay = 16.0
+active_duration = 6.0
+pattern = 5
+lane_spacing = 1
+spawn_gap = 0.04
+elite_count = 0
+speed_multiplier = 2.25
+
+[sub_resource type="Resource" id="rule_climax_heavy"]
+script = ExtResource("2")
+scene = ExtResource("4")
+interval = 2.0
 weight = 1.0
 spawn_min = 0
 spawn_max = 11
 formation = 2
-start_delay = 8.0
-active_duration = 6.0
-pattern = 4
-lane_spacing = 1
-spawn_gap = 0.15
-
-[sub_resource type="Resource" id="rule_3"]
-script = ExtResource("2")
-scene = ExtResource("4")
-interval = 5.0
-weight = 1.0
-spawn_min = 0
-spawn_max = 11
-formation = 3
 start_delay = 16.0
 active_duration = 6.0
 pattern = 5
-lane_spacing = 2
-spawn_gap = 0.15
-
-[sub_resource type="Resource" id="rule_4"]
-script = ExtResource("2")
-scene = ExtResource("3")
-interval = 3.5
-weight = 1.0
-spawn_min = 0
-spawn_max = 11
-formation = 3
-start_delay = 16.0
-active_duration = 6.0
-pattern = 4
-lane_spacing = 1
-spawn_gap = 0.15
-
-[sub_resource type="Resource" id="rule_5"]
-script = ExtResource("2")
-scene = ExtResource("5")
-interval = 4.0
-weight = 1.0
-spawn_min = 2
-spawn_max = 9
-formation = 3
-start_delay = 0.0
-active_duration = 6.0
-pattern = 1
-lane_spacing = 1
-spawn_gap = 0.15
-
-[sub_resource type="Resource" id="rule_6"]
-script = ExtResource("2")
-scene = ExtResource("6")
-interval = 3.5
-weight = 1.0
-spawn_min = 2
-spawn_max = 9
-formation = 1
-start_delay = 8.0
-active_duration = 6.0
-pattern = 0
-lane_spacing = 1
-spawn_gap = 0.15
-
-[sub_resource type="Resource" id="rule_7"]
-script = ExtResource("2")
-scene = ExtResource("5")
-interval = 4.5
-weight = 1.0
-spawn_min = 2
-spawn_max = 9
-formation = 4
-start_delay = 16.0
-active_duration = 6.0
-pattern = 2
-lane_spacing = 1
-spawn_gap = 0.15
+lane_spacing = 4
+spawn_gap = 0.1
+elite_count = 0
+speed_multiplier = 1.65
 
 [resource]
 script = ExtResource("1")
 duration = 24.0
 difficulty = 1.45
-rules = Array[SpawnRule]([SubResource("rule_1"), SubResource("rule_5"), SubResource("rule_2"), SubResource("rule_6"), SubResource("rule_3"), SubResource("rule_4"), SubResource("rule_7")])
+rules = Array[ExtResource("2")]([SubResource("rule_opening"), SubResource("rule_rise_small"), SubResource("rule_rise_heavy"), SubResource("rule_climax_small"), SubResource("rule_climax_heavy")])

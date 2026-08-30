@@ -4,8 +4,10 @@
 
 [resource]
 script = ExtResource("1")
-max_health = 7
+max_health = 5
 score = 250
 durability = 3
 power_up_chance = 35
 speed = Vector2(0, 180)
+lateral_amplitude = 72.0
+lateral_frequency = 0.55

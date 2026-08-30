@@ -25,6 +25,8 @@ var elite := false
 var _spawn_context := EnemySpawnContext.new()
 var _elite_indicator: EliteIndicator
 var _shoot_timers: Array[Timer] = []
+var _lateral_phase := 0.0
+var _lateral_time := 0.0
 
 func _ready() -> void:
 	if definition == null:
@@ -44,8 +46,11 @@ func _ready() -> void:
 		_setup_elite_indicator()
 
 func _physics_process(delta: float) -> void:
+	if destroyed:
+		return
 	hitByPlayerShot = false
-	translate(Vector2(speedX, speedY) * delta)
+	_lateral_time += delta
+	translate(Vector2(_lateral_velocity(), speedY) * delta)
 	if setRotation:
 		rotation += speedRotation * delta
 
@@ -58,14 +63,24 @@ func _apply_definition() -> void:
 	points = definition.score
 	speedX = definition.speed.x + randf_range(-definition.random_speed.x, definition.random_speed.x)
 	speedY = definition.speed.y + randf_range(-definition.random_speed.y, definition.random_speed.y)
+	_lateral_phase = randf_range(0.0, TAU)
 	setRotation = definition.rotates
 	speedRotation = definition.rotation_speed
 	if definition.random_rotation:
+		rotation = randf_range(-PI, PI)
 		speedRotation = randf_range(definition.random_rotation_min, definition.random_rotation_max)
 
+func _lateral_velocity() -> float:
+	if definition.lateral_amplitude <= 0.0 or definition.lateral_frequency <= 0.0:
+		return speedX
+	var angular_frequency := TAU * definition.lateral_frequency
+	return speedX + cos(_lateral_time * angular_frequency + _lateral_phase) * definition.lateral_amplitude * angular_frequency
+
 func _apply_spawn_context() -> void:
-	var health_multiplier := _spawn_context.health_multiplier
+	var health_multiplier := _spawn_context.health_multiplier * _spawn_context.rule_health_multiplier
 	elite = _spawn_context.elite
+	speedX *= _spawn_context.speed_multiplier
+	speedY *= _spawn_context.speed_multiplier
 	if elite and _spawn_context.elite_definition:
 		var elite_definition := _spawn_context.elite_definition
 		health_multiplier *= elite_definition.health_multiplier

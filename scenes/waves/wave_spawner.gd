@@ -85,7 +85,7 @@ func _spawn_formation(rule: SpawnRule, generation: int, cycle: int, active_timer
 			return false
 		if _active_enemy_count() >= _enemy_cap():
 			return false
-		_spawn_at(rule.scene, lanes[i], difficulty, spawn_elite and i == 0)
+		_spawn_at(rule, lanes[i], difficulty, spawn_elite and i == 0)
 		if i < lanes.size() - 1 and rule.spawn_gap > 0.0:
 			await get_tree().create_timer(minf(rule.spawn_gap, active_timer.time_left), false).timeout
 	return spawn_elite
@@ -181,15 +181,15 @@ func _active_elite_count() -> int:
 func _enemy_cap() -> int:
 	return config.coop_enemy_cap if global.coop else config.solo_enemy_cap
 
-func _spawn_at(packed: PackedScene, lane: int, difficulty: float, elite: bool) -> void:
+func _spawn_at(rule: SpawnRule, lane: int, difficulty: float, elite: bool) -> void:
 	lane = clampi(lane, 0, config.lane_count - 1)
 	var marker := get_node_or_null("spawnPos" + str(lane)) as Node2D
 	if marker == null:
 		return
-	var enemy := packed.instantiate()
+	var enemy := rule.scene.instantiate()
 	if enemy is Enemy:
 		var health_multiplier := lerpf(1.0, _durability_health_cap(enemy.definition), _difficulty_progress(difficulty)) * _endless_health_multiplier()
-		enemy.configure_spawn(EnemySpawnContext.new(health_multiplier, elite, config.elite_definition))
+		enemy.configure_spawn(EnemySpawnContext.new(health_multiplier, elite, config.elite_definition, rule.speed_multiplier, rule.health_multiplier))
 	enemy.position = marker.position
 	add_child(enemy)
 	if enemy is Enemy:

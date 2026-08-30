@@ -54,7 +54,7 @@ var _ship_rest_position := Vector2.ZERO
 var _motion := Vector2.ZERO
 
 func _ready() -> void:
-	energy = int(STATS.energy_max / 2.0)
+	energy = mini(STATS.starting_energy, STATS.energy_max)
 	_setup_components()
 	_setup_player()
 

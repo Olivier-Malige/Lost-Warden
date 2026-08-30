@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1")
-max_health = 2
+max_health = 1
 score = 10
 durability = 1
 power_up_chance = 10

@@ -1,68 +1,51 @@
-[gd_resource type="Resource" script_class="WaveDefinition" load_steps=9 format=3]
+[gd_resource type="Resource" script_class="WaveDefinition" format=3 uid="uid://bbbo6pyj1bsyn"]
 
-[ext_resource type="Script" path="res://data/waves/wave_definition.gd" id="1"]
-[ext_resource type="Script" path="res://data/waves/spawn_rule.gd" id="2"]
+[ext_resource type="Script" uid="uid://dpr5rymyr25n2" path="res://data/waves/wave_definition.gd" id="1"]
+[ext_resource type="Script" uid="uid://ctp3qhk1vo1qm" path="res://data/waves/spawn_rule.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/tie.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/drone.tscn" id="4"]
 
 [sub_resource type="Resource" id="rule_1"]
 script = ExtResource("2")
 scene = ExtResource("3")
-interval = 3.5
-weight = 1.0
+interval = 2.8
 spawn_min = 1
 spawn_max = 10
-formation = 4
-start_delay = 0.0
-active_duration = 6.0
+formation = 5
 pattern = 3
-lane_spacing = 1
-spawn_gap = 0.15
 
 [sub_resource type="Resource" id="rule_2"]
 script = ExtResource("2")
 scene = ExtResource("4")
-interval = 3.5
-weight = 1.0
+interval = 2.8
 spawn_min = 1
 spawn_max = 10
-formation = 5
+formation = 7
 start_delay = 8.0
-active_duration = 6.0
 pattern = 2
-lane_spacing = 1
-spawn_gap = 0.15
 
 [sub_resource type="Resource" id="rule_3"]
 script = ExtResource("2")
 scene = ExtResource("3")
-interval = 4.0
-weight = 1.0
+interval = 3.2
 spawn_min = 1
 spawn_max = 10
-formation = 3
+formation = 4
 start_delay = 16.0
-active_duration = 6.0
 pattern = 5
-lane_spacing = 1
-spawn_gap = 0.15
 
 [sub_resource type="Resource" id="rule_4"]
 script = ExtResource("2")
 scene = ExtResource("4")
-interval = 3.5
-weight = 1.0
+interval = 2.8
 spawn_min = 1
 spawn_max = 10
-formation = 3
+formation = 5
 start_delay = 16.0
-active_duration = 6.0
 pattern = 2
-lane_spacing = 1
-spawn_gap = 0.15
 
 [resource]
 script = ExtResource("1")
 duration = 24.0
-difficulty = 1.60
-rules = Array[SpawnRule]([SubResource("rule_1"), SubResource("rule_2"), SubResource("rule_3"), SubResource("rule_4")])
+difficulty = 1.6
+rules = Array[ExtResource("2")]([SubResource("rule_1"), SubResource("rule_2"), SubResource("rule_3"), SubResource("rule_4")])

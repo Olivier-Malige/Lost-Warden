@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1")
-max_health = 4
+max_health = 2
 collision_damage = 3
 score = 1
 durability = 0
@@ -13,4 +13,6 @@ speed = Vector2(0, 204)
 rotates = true
 rotation_speed = 1.0
 random_rotation = true
+random_rotation_min = -2.4
+random_rotation_max = 2.4
 sprite_variants = 3

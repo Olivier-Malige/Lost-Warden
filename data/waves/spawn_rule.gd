@@ -23,10 +23,18 @@ enum Pattern {
 @export_range(0.0, 5.0, 0.01) var spawn_gap: float = 0.15
 @export_range(0, 1, 1) var elite_count: int = 0
 
+@export_group("Movement")
+@export_range(0.1, 3.0, 0.05) var speed_multiplier: float = 1.0
+
+@export_group("Survivability")
+@export_range(0.1, 5.0, 0.05) var health_multiplier: float = 1.0
+
 func is_valid(lane_count: int) -> bool:
 	return scene != null \
 		and interval > 0.0 \
 		and active_duration > 0.0 \
+		and speed_multiplier > 0.0 \
+		and health_multiplier > 0.0 \
 		and spawn_min >= 0 \
 		and spawn_max >= spawn_min \
 		and spawn_max < lane_count
