@@ -12,6 +12,9 @@ const PLAYER_CHEATS := {
 	"debug_Key4": "increase_Shot",
 	"debug_Key5": "increase_SideShot",
 	"debug_Key6": "increase_Shield",
+	"debug_Key7": "debug_increase_fire_rate",
+	"debug_Key8": "debug_increase_beam",
+	"debug_Key9": "debug_max_stats",
 }
 const PLAYER_INPUT_ACTIONS := [
 	"all_up", "all_down", "all_left", "all_right", "all_fire",

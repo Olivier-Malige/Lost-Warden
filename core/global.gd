@@ -2,7 +2,7 @@ extends Node
 
 const _Save := preload("res://core/save_service.gd")
 
-var Debug := false
+var Debug := OS.is_debug_build()
 var score := 0
 var combo := 0
 var combo_time_left := 0.0

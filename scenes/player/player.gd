@@ -265,6 +265,23 @@ func increase_Shot() -> void:
 func increase_Shield() -> void:
 	shield.power = 1
 
+func debug_increase_fire_rate() -> void:
+	apply_upgrade(UPGRADE_FIRE_RATE)
+
+func debug_increase_beam() -> void:
+	apply_upgrade(UPGRADE_BEAM)
+
+func debug_max_stats() -> void:
+	for upgrade in [UPGRADE_SPEED, UPGRADE_DAMAGE, UPGRADE_SIDE, UPGRADE_FIRE_RATE, UPGRADE_BEAM]:
+		while loadout.rank_for(upgrade.effect) < upgrade.max_rank:
+			loadout.apply(upgrade)
+	energy = STATS.energy_max
+	shield.power = 6
+	setShootingDelay()
+	update_energy()
+	_emit_upgrade_state()
+	Events.upgrade_feedback_requested.emit(id_Player, "DEBUG MAX", false)
+
 func _on_anim_animation_finished(n: StringName) -> void:
 	if n == id_Player + "_explode":
 		state = State.DEAD
