@@ -7,3 +7,7 @@
 # Local save leftovers (runtime uses user://)
 /data.json
 /sav_path
+
+# Local AIDD tooling
+/.agents/skills/aidd-*/
+/.codex/
