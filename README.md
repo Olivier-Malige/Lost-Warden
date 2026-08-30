@@ -69,8 +69,9 @@ JSON save via `core/save_service.gd` (`user://data.json`).
 
 ## Controls
 
-Keyboard (AZERTY / QWERTY / arrows) + Space (or keypad `+` / Insert).  
-Gamepad: stick / D-pad + face buttons. Pause: Enter, R, or Start / L1.
+Keyboard (AZERTY / QWERTY / arrows): Space (or keypad `+` / Insert) fires continuously; left Shift charges the plasma beam.
+
+Gamepad: stick / D-pad; A/Cross fires continuously and B/Circle charges the plasma beam. Pause: Enter, R, or Start / L1.
 
 In co-op, P1 is gamepad 0, P2 is keyboard (change in `global.saveData.config`).
 

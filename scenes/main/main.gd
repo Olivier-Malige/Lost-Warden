@@ -17,10 +17,10 @@ const PLAYER_CHEATS := {
 	"debug_Key9": "debug_max_stats",
 }
 const PLAYER_INPUT_ACTIONS := [
-	"all_up", "all_down", "all_left", "all_right", "all_fire",
-	"keyboard_up", "keyboard_down", "keyboard_left", "keyboard_right", "keyboard_fire",
-	"gamepad1_up", "gamepad1_down", "gamepad1_left", "gamepad1_right", "gamepad1_fire",
-	"gamepad2_up", "gamepad2_down", "gamepad2_left", "gamepad2_right", "gamepad2_fire",
+	"all_up", "all_down", "all_left", "all_right", "all_fire", "all_beam",
+	"keyboard_up", "keyboard_down", "keyboard_left", "keyboard_right", "keyboard_fire", "keyboard_beam",
+	"gamepad1_up", "gamepad1_down", "gamepad1_left", "gamepad1_right", "gamepad1_fire", "gamepad1_beam",
+	"gamepad2_up", "gamepad2_down", "gamepad2_left", "gamepad2_right", "gamepad2_fire", "gamepad2_beam",
 ]
 
 func _ready() -> void:
@@ -122,6 +122,7 @@ func go_Start_Screen() -> void:
 func release_gameplay_input() -> void:
 	for action in PLAYER_INPUT_ACTIONS:
 		Input.action_release(action)
+	_call_players("reset_weapon_input")
 
 
 func _on_window_size_changed() -> void:

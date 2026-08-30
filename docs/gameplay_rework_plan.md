@@ -136,6 +136,27 @@ Planned commits:
 - `feat(player): increase gameplay pace`
 - `fix(player): preserve beam mobility and upgrades`
 
+## Phase 1 follow-up — Dedicated weapon inputs
+
+Status: implemented on 2026-08-30. This control pass separates sustained primary fire from plasma-beam charging without changing weapon balance.
+
+- Keep primary fire on Space, Insert, keypad `+`, and A/Cross. Fire immediately and continue at the loadout's current fire delay while held.
+- Charge the plasma beam independently with left Shift or B/Circle, then release it at the highest reached tier.
+- Give plasma-beam charging priority when both actions are held. A successful beam release suppresses primary fire for that frame, then sustained fire may resume.
+- Clear both actions and cancel pending charge state across pause, restart, screen changes, and controller refreshes.
+- Preserve existing beam thresholds, rank gates, damage, mobility, recoil, and visual offsets.
+
+Validation:
+
+- Sustained primary fire follows the configured timer and stops on release.
+- Beam charge never emits primary shots and never shares its release frame with a primary salvo.
+- Releasing before the first beam tier resumes held primary fire without emitting a beam.
+- Solo, keyboard co-op, and both gamepad device mappings remain independent after pausing or changing screens.
+
+Commit:
+
+- `feat(player): separate primary fire and beam controls`
+
 ## Phase 1 follow-up — Preview more varied enemy waves
 
 Status: implemented on 2026-08-29. Automated resource and formation checks pass, and a headless runtime smoke test completed one full wave and its transition without errors. Solo and co-op readability playtests remain before approval.

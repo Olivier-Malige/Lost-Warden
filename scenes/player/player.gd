@@ -127,22 +127,32 @@ func _update_movement_animation(horizontal_motion: float) -> void:
 		animation_player.play(animation)
 
 func _update_weapons(delta: float) -> void:
-	shooting = Input.is_action_just_pressed(controller + "_fire")
-	beam_Focusing = Input.is_action_pressed(controller + "_fire")
-	_update_beam(delta)
+	var fire_action := controller + "_fire"
+	var beam_action := controller + "_beam"
+	beam_Focusing = Input.is_action_pressed(beam_action)
+	var beam_fired := _update_beam(delta, beam_action)
+	shooting = Input.is_action_pressed(fire_action) and not beam_Focusing and not beam_fired
 	if shooting and canShooting:
 		weapons.fire_primary()
 
-func _update_beam(delta: float) -> void:
+func _update_beam(delta: float, beam_action: String) -> bool:
 	if beam_Focusing:
 		accumBeam += delta
 		_update_beam_charge()
-		return
-	if Input.is_action_just_released(controller + "_fire") and beam_Power != beam_State.EMPTY:
+		return false
+	var beam_fired := Input.is_action_just_released(beam_action) and beam_Power != beam_State.EMPTY
+	if beam_fired:
 		weapons.fire_beam(beam_Power)
 	accumBeam = 0.0
 	if beam_Power != beam_State.EMPTY:
 		_set_Power_Beam(beam_State.EMPTY)
+	return beam_fired
+
+func reset_weapon_input() -> void:
+	shooting = false
+	beam_Focusing = false
+	accumBeam = 0.0
+	_set_Power_Beam(beam_State.EMPTY)
 
 func _update_effects(motion: Vector2) -> void:
 	effects.update_reactors(motion.y)
