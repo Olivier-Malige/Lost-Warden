@@ -3,6 +3,7 @@ extends RefCounted
 
 const BEAM_TOP: PackedScene = preload("res://scenes/player/beam/beam_top.tscn")
 const BEAM_BOTTOM: PackedScene = preload("res://scenes/player/beam/beam_bottom.tscn")
+const BEAM_ORIGIN_OFFSET := Vector2(0, -16)
 
 class BeamSegment:
 	extends RefCounted
@@ -68,7 +69,7 @@ func _spawn_gun(packed: PackedScene, origin: Marker2D, extra_damage: float, spee
 	shot.speedX = speed_x
 
 func _spawn_beam(packed: PackedScene, marker: Marker2D, fill_screen := false) -> void:
-	var origin := marker.global_position
+	var origin := marker.global_position + BEAM_ORIGIN_OFFSET
 	var world := player.get_parent()
 	var segments: Array[BeamSegment] = _beam_segments(packed)
 	if fill_screen:
