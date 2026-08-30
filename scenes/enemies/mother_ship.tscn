@@ -165,28 +165,27 @@ position = Vector2( 0.491587, -10.1347 )
 scale = Vector2( 2.50991, 4.13043 )
 shape = SubResource( 4 )
 
-[node name="ShootPos" type="Marker2D" parent="." index="4"]
+[node name="HullShootPos" type="Marker2D" parent="." index="4"]
 
-position = Vector2( -34.2943, -32.6769 )
+position = Vector2(0, 48)
 
-[node name="ShootPos1" type="Marker2D" parent="." index="5"]
+[node name="LeftTurretMount" type="Marker2D" parent="." index="5"]
 
-position = Vector2( 36.2943, -32.3534 )
+position = Vector2(-34, 4)
 
-[node name="ShootPos2" type="Marker2D" parent="." index="6"]
+[node name="RightTurretMount" type="Marker2D" parent="." index="6"]
 
-position = Vector2( -11.7354, 48.3529 )
-
-[node name="ShootPos3" type="Marker2D" parent="." index="7"]
-
-position = Vector2( 17.0883, 47.3529 )
+position = Vector2(34, 4)
 
 [node name="shootTimer" type="Timer" parent="." index="8"]
 
 process_mode = 1
-wait_time = 1.0
+wait_time = 2.4
 one_shot = false
-autostart = true
+autostart = false
+
+[node name="TeleportTimer" type="Timer" parent="."]
+one_shot = true
 
 [node name="droneReactorParticles" parent="." index="9" instance=ExtResource( 3 )]
 

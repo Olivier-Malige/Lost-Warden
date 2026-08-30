@@ -1,5 +1,5 @@
 extends Shot
-const SPEED_Y = 550
+const SPEED_Y := 550.0
 @export var damage := 10
 @export var noDamageToGroup := ""
 
@@ -9,7 +9,7 @@ func _ready() -> void:
 
 func prepare() -> void:
 	speedY = SPEED_Y
-	speedX = 0
+	speedX = 0.0
 	trowbackByShield = false
 	rotation = 0
 

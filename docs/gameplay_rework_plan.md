@@ -200,6 +200,34 @@ Validation:
 - Beam charge thresholds, damage, full duration, and width increase across all five ranks without regressing its pierce or follow behavior.
 - Mother ship health scales from the new 40-health base through the existing advanced-wave and co-op rules.
 
+## Phase 1 follow-up — Give turrets and mother ships distinct combat identities
+
+Status: implemented on 2026-08-30. Automated scene loading and the dedicated headless enemy-identity harness pass. Solo and co-op readability playtests in waves 9, 12, and 13 remain before approval.
+
+- Keep drones as simple fodder, fighters as mobile pressure, and interceptors as spread-fire specialists. Limit this follow-up to turrets and mother ships.
+- Replace the turret's random lateral shot with a telegraphed deterministic cycle: a three-shot aimed burst, a short pause, a ten-shot radial ring, and an alternating angular offset on successive rings.
+- Lock aimed volleys to the nearest living player at telegraph time. Let each turret choose independently in local co-op.
+- Slow standalone turrets to 80 logical pixels per second and begin their attack cycle only after they enter the visible playfield.
+- Teleport each mother ship to the first available upper-playfield anchor in center, left, right order. Keep it stationary and discard a fourth concurrent mother ship without reward.
+- Disable the mother ship and its mounted turrets during the 0.65-second arrival telegraph and materialization sequence.
+- Give each mother ship two independently destructible mounted turrets with 10 base health, normal run health scaling, 250 score, and no power-up drop. Stagger their attack cycles.
+- Keep the hull dangerous after both turrets are destroyed with a five-shot slow fan every 2.4 seconds.
+- Stop and disable every mounted turret before the hull explosion, without freeing a collision object during the physics callback.
+- Extend pooled enemy shots with full two-axis velocity while retaining the legacy horizontal-speed helper for existing enemies.
+
+Validation:
+
+- The first three concurrent mother ships occupy center, left, and right anchors without overlap; a fourth leaves the active-enemy tracker cleanly.
+- No hull, module collision, or projectile becomes active before materialization completes.
+- A turret fires exactly three aimed projectiles at `-5`, `0`, and `+5` degrees, then ten evenly distributed radial projectiles; successive rings differ by 18 degrees.
+- Destroying a mounted turret stops only that module, while destroying the hull immediately disables both modules.
+- Pooled turret projectiles reset their velocity before reuse.
+- Turret and mother-ship scenes run safely in isolation without a player target.
+
+Planned commit:
+
+- `feat(enemies): distinguish turret and mother ship combat`
+
 ## Visual production phase — Rebuild the core sprite set
 
 Status: planned and approved on 2026-08-29. Implement this phase after Phase 1 is approved and before Phase 2 begins.

@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemies/turret.tscn" id="1"]
+[ext_resource type="Resource" path="res://data/enemies/mother_ship_turret.tres" id="2"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(24, 20)
+
+[node name="mountedTurret" instance=ExtResource("1")]
+definition = ExtResource("2")
+mounted = true
+
+[node name="Sprite2D" parent="." index="0"]
+scale = Vector2(2, 2)
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(0, 0)
+scale = Vector2(1, 1)
+shape = SubResource("1")
+
+[node name="VisibleOnScreenNotifier2D" parent="." index="5"]
+rect = Rect2(-12, -10, 24, 20)

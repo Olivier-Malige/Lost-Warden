@@ -3,8 +3,8 @@ extends Area2D
 
 const Layers := preload("res://core/collision_layers.gd")
 
-@export var speedY: int = 0
-@export var speedX: int = 0
+@export var speedY := 0.0
+@export var speedX := 0.0
 @warning_ignore("shadowed_variable_base_class")
 @export var rotate: bool = false
 @export var align_with_velocity := false

@@ -119,7 +119,7 @@ position = Vector2( 0, -0.0126801 )
 [node name="ShotDelay" type="Timer" parent="." index="4"]
 
 process_mode = 1
-wait_time = 0.3
+wait_time = 1.0
 one_shot = true
 autostart = false
 

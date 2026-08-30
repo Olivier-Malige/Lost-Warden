@@ -274,6 +274,8 @@ func _on_anim_animation_finished(n: StringName) -> void:
 func _on_player_area_entered(area: Area2D) -> void:
 	if state != State.ACTIVE and state != State.HIT:
 		return
+	if area.is_in_group("mounted_turret"):
+		return
 	if area.is_in_group("enemy") and area.has_method("_hit_something"):
 		_hit_something()
 		area._hit_something(10)

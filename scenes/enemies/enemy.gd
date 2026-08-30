@@ -27,6 +27,7 @@ var _elite_indicator: EliteIndicator
 var _shoot_timers: Array[Timer] = []
 var _lateral_phase := 0.0
 var _lateral_time := 0.0
+var fire_delay_multiplier := 1.0
 
 func _ready() -> void:
 	if definition == null:
@@ -87,8 +88,9 @@ func _apply_spawn_context() -> void:
 		speedX *= elite_definition.speed_multiplier
 		speedY *= elite_definition.speed_multiplier
 		points *= elite_definition.score_multiplier
+		fire_delay_multiplier = elite_definition.fire_delay_multiplier
 		for timer in _shoot_timers:
-			timer.wait_time *= elite_definition.fire_delay_multiplier
+			timer.wait_time *= fire_delay_multiplier
 	life = ceili(float(life) * health_multiplier)
 	max_life = life
 	add_to_group("enemy")
@@ -183,8 +185,19 @@ func _setup_elite_indicator() -> void:
 	_elite_indicator.setup(self, max_life, _spawn_context.elite_definition)
 
 func _spawn_shot(packed: PackedScene, from: Vector2, speed_x: float = 0.0, rot_deg: float = 0.0) -> Node:
-	var shot = ProjectilePool.spawn(packed, from, get_parent())
+	var shot = ProjectilePool.spawn(packed, from, _projectile_parent())
 	shot.speedX = speed_x * PROJECTILE_SPEED_MULTIPLIER
+	shot.speedY *= PROJECTILE_SPEED_MULTIPLIER
 	if rot_deg != 0.0:
 		shot.rotation_degrees = rot_deg
 	return shot
+
+func _spawn_shot_velocity(packed: PackedScene, from: Vector2, velocity: Vector2) -> Node:
+	var shot = ProjectilePool.spawn(packed, from, _projectile_parent())
+	var scaled_velocity := velocity * PROJECTILE_SPEED_MULTIPLIER
+	shot.speedX = scaled_velocity.x
+	shot.speedY = scaled_velocity.y
+	return shot
+
+func _projectile_parent() -> Node:
+	return get_parent()
