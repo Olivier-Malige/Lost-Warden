@@ -6,6 +6,9 @@ extends Resource
 @export_range(1, 200, 1) var solo_enemy_cap := 45
 @export_range(1, 200, 1) var coop_enemy_cap := 60
 
+@export_group("Timing")
+@export_range(1.0, 180.0, 0.5) var wave_duration := 24.0
+
 @export_group("Difficulty")
 @export_range(0.1, 10.0, 0.05) var difficulty_start := 1.3
 @export_range(0.1, 10.0, 0.05) var difficulty_end := 2.8
@@ -22,7 +25,8 @@ extends Resource
 @export var elite_definition: EliteDefinition
 
 func is_valid() -> bool:
-	return lane_count > 0 \
+	return wave_duration > 0.0 \
+		and lane_count > 0 \
 		and solo_enemy_cap > 0 \
 		and coop_enemy_cap >= solo_enemy_cap \
 		and difficulty_end > difficulty_start \

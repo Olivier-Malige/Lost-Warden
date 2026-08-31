@@ -5,4 +5,5 @@
 
 [resource]
 script = ExtResource("1")
+wave_duration = 28.0
 elite_definition = ExtResource("2")

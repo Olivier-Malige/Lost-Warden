@@ -38,6 +38,7 @@ var _failures: Array[String] = []
 
 func _ready() -> void:
 	_test_enemy_health_curve()
+	_test_wave_timing()
 	_test_drop_curve()
 	_test_upgrade_power_curve()
 	_test_late_wave_choreography()
@@ -65,6 +66,15 @@ func _test_enemy_health_curve() -> void:
 	spawner._endless_cycle = 20
 	_expect(is_equal_approx(spawner._endless_health_multiplier(), 1.35), "Endless health scaling must stop at 1.35x.")
 	_expect(is_equal_approx(spawner._durability_health_cap(TurretDefinition), 1.3), "Heavy health scaling must stop at 1.30x.")
+	spawner.free()
+
+func _test_wave_timing() -> void:
+	var spawner := WaveSpawner.new()
+	spawner.config = SpawnerConfig
+	_expect(is_equal_approx(SpawnerConfig.wave_duration, 28.0), "Runtime waves must last twenty-eight seconds.")
+	for wave in WaveCatalogResource.waves:
+		_expect(is_equal_approx(wave.duration, 24.0), "Wave resources must retain their twenty-four-second authored baseline.")
+		_expect(is_equal_approx(spawner._timeline_scale(wave), 28.0 / 24.0), "Every authored timeline must scale proportionally to the configured duration.")
 	spawner.free()
 
 func _test_drop_curve() -> void:

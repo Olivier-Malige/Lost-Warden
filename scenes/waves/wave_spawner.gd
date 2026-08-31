@@ -37,24 +37,26 @@ func _apply_wave(index: int) -> void:
 	if wave == null or not wave.is_valid(config.lane_count):
 		push_error("Wave %d contains an invalid definition or spawn rule." % (wave_index + 1))
 		return
+	var timeline_scale := _timeline_scale(wave)
 	for rule in wave.rules:
 		if rule == null or rule.scene == null:
 			continue
-		_run_rule(rule, _wave_generation, wave.difficulty)
-	_master.wait_time = wave.duration
+		_run_rule(rule, _wave_generation, wave.difficulty, timeline_scale)
+	_master.wait_time = config.wave_duration
 	_master.start()
 
-func _run_rule(rule: SpawnRule, generation: int, difficulty: float) -> void:
-	if rule.start_delay > 0.0:
-		await get_tree().create_timer(rule.start_delay, false).timeout
+func _run_rule(rule: SpawnRule, generation: int, difficulty: float, timeline_scale: float) -> void:
+	var start_delay := rule.start_delay * timeline_scale
+	if start_delay > 0.0:
+		await get_tree().create_timer(start_delay, false).timeout
 	if generation != _wave_generation:
 		return
-	var active_duration := maxf(rule.active_duration, 0.0)
+	var active_duration := maxf(rule.active_duration * timeline_scale, 0.0)
 	if active_duration <= 0.0:
 		return
 	var active_timer := get_tree().create_timer(active_duration, false)
-	var interval := maxf(rule.interval * _pace_multiplier(difficulty), 0.05)
-	if global.coop and rule.formation < 4 and interval < rule.active_duration:
+	var interval := maxf(rule.interval * timeline_scale * _pace_multiplier(difficulty), 0.05)
+	if global.coop and rule.formation < 4 and interval < active_duration:
 		interval *= 0.9
 	var cycle := 0
 	var elites_remaining := maxi(rule.elite_count, 0)
@@ -65,7 +67,7 @@ func _run_rule(rule: SpawnRule, generation: int, difficulty: float) -> void:
 			await get_tree().create_timer(minf(next_spawn_elapsed - elapsed, active_timer.time_left), false).timeout
 			if generation != _wave_generation or active_timer.time_left <= 0.0:
 				return
-		var elite_spawned := await _spawn_formation(rule, generation, cycle, active_timer, difficulty, elites_remaining > 0)
+		var elite_spawned := await _spawn_formation(rule, generation, cycle, active_timer, difficulty, elites_remaining > 0, timeline_scale)
 		if elite_spawned:
 			elites_remaining -= 1
 		cycle += 1
@@ -74,7 +76,7 @@ func _run_rule(rule: SpawnRule, generation: int, difficulty: float) -> void:
 		if next_spawn_elapsed <= elapsed:
 			next_spawn_elapsed = elapsed
 
-func _spawn_formation(rule: SpawnRule, generation: int, cycle: int, active_timer: SceneTreeTimer, difficulty: float, can_spawn_elite: bool) -> bool:
+func _spawn_formation(rule: SpawnRule, generation: int, cycle: int, active_timer: SceneTreeTimer, difficulty: float, can_spawn_elite: bool, timeline_scale: float) -> bool:
 	var count := maxi(rule.formation, 1)
 	if global.coop and count >= 4:
 		count += 1
@@ -87,8 +89,11 @@ func _spawn_formation(rule: SpawnRule, generation: int, cycle: int, active_timer
 			return false
 		_spawn_at(rule, lanes[i], difficulty, spawn_elite and i == 0)
 		if i < lanes.size() - 1 and rule.spawn_gap > 0.0:
-			await get_tree().create_timer(minf(rule.spawn_gap, active_timer.time_left), false).timeout
+			await get_tree().create_timer(minf(rule.spawn_gap * timeline_scale, active_timer.time_left), false).timeout
 	return spawn_elite
+
+func _timeline_scale(wave: WaveDefinition) -> float:
+	return config.wave_duration / wave.duration
 
 func _formation_lanes(rule: SpawnRule, requested_count: int, cycle: int) -> Array[int]:
 	var minimum := clampi(mini(rule.spawn_min, rule.spawn_max), 0, config.lane_count - 1)
