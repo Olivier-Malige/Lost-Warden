@@ -14,7 +14,7 @@ extends Resource
 @export_group("Endless loop")
 @export_range(0, 99, 1) var loop_start_index := 8
 @export_range(0.0, 1.0, 0.01) var health_step := 0.1
-@export_range(1.0, 5.0, 0.05) var health_cap := 1.5
+@export_range(1.0, 5.0, 0.05) var health_cap := 1.35
 @export_range(0.0, 1.0, 0.01) var pace_step := 0.05
 @export_range(0.1, 1.0, 0.01) var pace_cap := 0.8
 

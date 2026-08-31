@@ -8,6 +8,6 @@ id = &"side_shot"
 effect = 3
 anim = &"lateralShot"
 weight = 12
-value = 0.1
+value = 0.08
 max_rank = 7
 hud_label = &"SIDE"

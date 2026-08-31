@@ -161,10 +161,13 @@ func _award_player_kill() -> void:
 	var awarded_points := global.register_kill(points)
 	var multiplier := global.combo_multiplier(global.combo)
 	Events.score_popup_requested.emit(awarded_points, global.combo, multiplier, global_position)
-	if not elite and randi() % 101 <= definition.power_up_chance:
+	if _should_drop_power_up(randi_range(0, 99)):
 		var power_up := PowerUpScene.instantiate()
 		power_up.position = get_parent().to_local(global_position)
 		get_parent().call_deferred("add_child", power_up)
+
+func _should_drop_power_up(roll: int) -> bool:
+	return elite or roll < definition.power_up_chance
 
 func _drop_debris() -> void:
 	if definition.drop_scene == null:

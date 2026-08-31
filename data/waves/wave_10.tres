@@ -4,7 +4,6 @@
 [ext_resource type="Script" uid="uid://ctp3qhk1vo1qm" path="res://data/waves/spawn_rule.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/interceptor.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/drone.tscn" id="4"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/tie.tscn" id="5"]
 
 [sub_resource type="Resource" id="rule_1"]
 script = ExtResource("2")
@@ -33,13 +32,13 @@ pattern = 5
 
 [sub_resource type="Resource" id="rule_4"]
 script = ExtResource("2")
-scene = ExtResource("5")
+scene = ExtResource("4")
 interval = 3.2
 spawn_min = 1
 spawn_max = 10
 formation = 5
 start_delay = 16.0
-pattern = 3
+pattern = 2
 
 [resource]
 script = ExtResource("1")

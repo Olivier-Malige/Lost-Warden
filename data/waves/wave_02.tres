@@ -53,7 +53,6 @@ lane_spacing = 1
 spawn_gap = 0.15
 elite_count = 0
 speed_multiplier = 1.0
-health_multiplier = 2.0
 
 [sub_resource type="Resource" id="rule_3"]
 script = ExtResource("2")

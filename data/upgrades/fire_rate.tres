@@ -8,6 +8,6 @@ id = &"fire_rate"
 effect = 1
 anim = &"laserUp"
 weight = 12
-value = 0.0075
+value = 0.00625
 max_rank = 8
 hud_label = &"RATE"

@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://ctp3qhk1vo1qm" path="res://data/waves/spawn_rule.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/mother_ship.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/drone.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/asteroid.tscn" id="5"]
 
 [sub_resource type="Resource" id="rule_1"]
 script = ExtResource("2")
@@ -22,9 +23,11 @@ pattern = 2
 
 [sub_resource type="Resource" id="rule_3"]
 script = ExtResource("2")
-scene = ExtResource("3")
-interval = 8.0
+scene = ExtResource("5")
+interval = 2.8
+formation = 4
 start_delay = 16.0
+pattern = 4
 
 [sub_resource type="Resource" id="rule_4"]
 script = ExtResource("2")

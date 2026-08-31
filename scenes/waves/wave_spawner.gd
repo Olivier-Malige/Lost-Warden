@@ -238,10 +238,10 @@ func _durability_health_cap(definition: EnemyDefinition) -> float:
 		EnemyDefinition.Durability.FODDER:
 			return 1.15
 		EnemyDefinition.Durability.FIGHTER:
-			return 1.35
+			return 1.25
 		EnemyDefinition.Durability.SPECIALIST:
-			return 1.4
+			return 1.3
 		EnemyDefinition.Durability.HEAVY:
-			return 1.45
+			return 1.3
 		_:
 			return 1.0
