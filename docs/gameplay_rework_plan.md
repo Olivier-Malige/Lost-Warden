@@ -28,8 +28,11 @@ Permanent meta-progression, unlockable ships, profile levels, and account-wide u
 - Phase 1 follow-up — Wave variety preview: implementation completed on 2026-08-29; solo and co-op readability playtests remain before approval.
 - Phase 1 follow-up — Difficulty and elite preview: implementation completed on 2026-08-29; solo and co-op difficulty playtests remain before approval.
 - Phase 1 follow-up — Ranked direct power-ups and beam progression: implementation completed on 2026-08-29; balance playtests remain before approval.
+- Phase 1 follow-up — Progression and readability balance: implementation completed on 2026-08-31; solo and co-op balance playtests remain before approval.
+- Phase 1 follow-up — Weapon movement commitment: implementation completed on 2026-08-31; gameplay feel playtests remain before approval.
+- Phase 1 follow-up — Configurable wave duration: implementation completed on 2026-08-31; pacing playtests remain before approval.
 - Visual production phase: planned and approved on 2026-08-29; implementation starts only after Phase 1 approval.
-- Next implementation step: validate and approve Phase 1 and its wave variety preview.
+- Next implementation step: validate the progression and late-wave readability balance in solo and co-op, then approve Phase 1.
 
 Preparation phase B delivered the direct 1066 by 800 viewport, responsive Web presentation, redesigned menus and HUD, browser-fullscreen recovery, the Lost Warden release identity, the approved 24-color palette, itch.io page art, and a validated release archive. Updated gameplay screenshots remain intentionally deferred until the sprite rework is visible. Candidate replacement music is preserved for later review and is not active in the current build.
 
@@ -115,7 +118,7 @@ Status: implemented on 2026-08-28. Automated checks and a headless startup smoke
 - Increase player base speed from 300 to 360 and use a maintainer-adjusted base fire delay of 0.18 seconds. Keep the Phase B visual background at 60 logical pixels per second instead of the superseded 140-to-168 target.
 - Increase primary, side-cannon, and plasma-beam projectile travel speeds by 20% as requested by the maintainer.
 - Increase base enemy travel speeds by roughly 20% and enemy projectile speed by 10% to preserve readability.
-- Remove the movement penalty while charging the beam.
+- Remove the original heavy movement penalty while charging the beam; a later follow-up applies a lighter tactical slowdown to both weapon inputs.
 - Keep the short movement penalty caused by taking damage.
 - Stop resetting the loadout when a player takes damage.
 - Keep run upgrades until the run ends.
@@ -125,7 +128,7 @@ Status: implemented on 2026-08-28. Automated checks and a headless startup smoke
 
 Validation:
 
-- Player movement speed is identical with and without beam charge.
+- Player weapon use retains 88% of the current loadout speed before the temporary hit penalty.
 - Player projectiles travel 20% faster without changing their damage.
 - Taking damage does not remove any upgrade.
 - Movement, shooting, and collisions remain readable in solo and co-op.
@@ -138,13 +141,14 @@ Planned commits:
 
 ## Phase 1 follow-up — Dedicated weapon inputs
 
-Status: implemented on 2026-08-30. This control pass separates sustained primary fire from plasma-beam charging without changing weapon balance.
+Status: implemented on 2026-08-30. This control pass separates sustained primary fire from plasma-beam charging and slightly shortens its charge cadence for the dedicated input.
 
 - Keep primary fire on Space, Insert, keypad `+`, and A/Cross. Fire immediately and continue at the loadout's current fire delay while held.
 - Charge the plasma beam independently with left Shift or B/Circle, then release it at the highest reached tier.
 - Give plasma-beam charging priority when both actions are held. A successful beam release suppresses primary fire for that frame, then sustained fire may resume.
 - Clear both actions and cancel pending charge state across pause, restart, screen changes, and controller refreshes.
-- Preserve existing beam thresholds, rank gates, damage, mobility, recoil, and visual offsets.
+- Shorten the small, normal, and full beam thresholds from 0.50/1.20/2.40 seconds to 0.45/1.05/2.10 seconds. Preserve rank gates, damage, recoil, and visual offsets.
+- Start the beam charge particles after 0.10 seconds so every valid charge has an immediate visual response.
 
 Validation:
 
@@ -157,12 +161,27 @@ Commit:
 
 - `feat(player): separate primary fire and beam controls`
 
+## Phase 1 follow-up — Add weapon movement commitment
+
+Status: implemented on 2026-08-31. This control refinement makes firing positions more deliberate without restoring the original heavy beam movement penalty.
+
+- Expose one shared `weapon_speed_multiplier` in the player stats resource and set it to 0.88 for both primary fire and beam charge.
+- Keep beam firing priority when both weapon inputs are active; the shared movement multiplier remains unchanged.
+- Restore full movement speed immediately when the relevant input is released. Apply the existing temporary hit penalty after the weapon multiplier.
+- Resolve the slowdown from each player's mapped actions so solo, keyboard co-op, and both gamepads remain independent.
+
+Validation:
+
+- Movement uses 100% of the current loadout speed while idle and 88% while firing or charging.
+- Holding both weapon inputs retains the shared 88% multiplier, and releasing every weapon immediately restores full speed.
+- One player's weapon input never slows the co-op partner.
+
 ## Phase 1 follow-up — Preview more varied enemy waves
 
 Status: implemented on 2026-08-29. Automated resource and formation checks pass, and a headless runtime smoke test completed one full wave and its transition without errors. Solo and co-op readability playtests remain before approval.
 
 - Keep the fixed 13-wave catalog as an intermediate gameplay preview rather than starting the seeded director from Phase 2.
-- Shorten every wave to 24 seconds and split its spawn schedule into a 6-second opening, a 2-second pause, a 6-second buildup, a 2-second pause, a 6-second climax, and a final 2-second transition window.
+- Keep a 24-second authored baseline split into a 6-second opening, a 2-second pause, a 6-second buildup, a 2-second pause, a 6-second climax, and a final 2-second transition window. A later follow-up scales this timeline to the configured runtime duration.
 - Recompose the catalog with the existing asteroid, drone, fighter, interceptor, turret, and carrier scenes. Do not introduce new enemies, artwork, combat statistics, elites, or bosses in this follow-up.
 - Add reusable single, line, V, alternating-edge, scatter, and offset-group formations. Keep every formation on unique valid lanes and reduce its size when the configured lane range cannot fit it.
 - Run each spawn rule on an independent timeline and cancel stale timelines with a wave-generation token when the wave changes or the debug controls skip forward or backward.
@@ -173,7 +192,7 @@ Status: implemented on 2026-08-29. Automated resource and formation checks pass,
 
 Validation:
 
-- Every wave resource loads with a 24-second duration, valid scenes, three scheduled acts, and the intended number of rules.
+- Every wave resource loads with a 24-second authored baseline, valid scenes, three scheduled acts, and the intended number of rules.
 - Every formation uses unique lanes within the configured range, including narrow edge ranges and oversized formations.
 - F1/F2 wave changes stop every pending spawn from the previous wave.
 - Solo and co-op runs respect their active-enemy caps without clearing surviving enemies at an act or wave transition.
@@ -183,21 +202,36 @@ Commit:
 
 - `feat(waves): diversify enemy wave encounters`
 
+## Phase 1 follow-up — Make wave duration configurable
+
+Status: implemented on 2026-08-31. This pacing adjustment lengthens the fixed catalog without creating an idle tail after the final act.
+
+- Expose one `wave_duration` value in the shared spawner configuration and set the current runtime duration to 28 seconds.
+- Keep each wave resource at its 24-second authored baseline and derive one runtime scale from `wave_duration / authored duration`.
+- Apply that scale to act start delays, active durations, formation intervals, and gaps while preserving difficulty and endless pace multipliers.
+- Use the configured duration for the master transition timer so debug wave changes continue to invalidate every pending timeline.
+
+Validation:
+
+- Every runtime wave lasts 28 seconds with the current configuration and every authored timing uses the same `28 / 24` scale.
+- Changing the shared duration requires no edit to the thirteen wave resources.
+- The number of scheduled formation cycles remains approximately stable instead of adding an empty transition tail or extra enemy density.
+
 ## Phase 1 follow-up — Difficulty and elite preview
 
 Status: implemented on 2026-08-29. This controlled balancing pass keeps the fixed catalog and direct pickups while testing wave scaling and scheduled elites before the seeded encounter director from Phase 2.
 
 - Preserve the first three waves, then use existing wave difficulty values to scale combat enemy health and spawn cadence through wave 13. Asteroids remain unscaled hazards.
 - Loop waves 9 through 13 after the first full catalog pass. Each loop increases enemy health by 10%, up to 50%, and reduces spawn intervals by 5%, up to 20%.
-- Add durability categories for fodder, fighters, specialists, and heavy ships with distinct maximum health multipliers. Continue to apply the existing 1.5x co-op health multiplier after run scaling.
-- Add exactly one scheduled elite in the climax of waves 6, 9, 12, and 13. Elites use 2.5x health, 1.1x speed, 0.8x shooting delays, triple score, no power-up drop, a pale-violet treatment, pulsing red aura, and compact health bar.
+- Add durability categories for fodder, fighters, specialists, and heavy ships with distinct maximum health multipliers. Keep co-op pressure density-based instead of adding a health multiplier.
+- Add exactly one scheduled elite in the climax of waves 6, 9, 12, and 13. Elites use 1.5x health, 1.1x speed, 0.8x shooting delays, triple score, a guaranteed power-up drop, a pale-violet treatment, pulsing red aura, and compact health bar.
 - Keep the collision shape unchanged and cap active elites at three. Do not add seeded promotion, threat budgets, XP rewards, boss scheduling, or future enemy roles in this preview.
 
 Validation:
 
 - Wave health and cadence scale only after difficulty 1.30, and asteroids never gain health.
 - The 13 → 9 loop increments exactly once per completed advanced cycle and respects its health and pace caps.
-- Scheduled elites appear only at their declared climax rules, never exceed one per formation or three active instances, award triple score, and suppress power-up drops.
+- Scheduled elites appear only at their declared climax rules, never exceed one per formation or three active instances, award triple score, and guarantee one power-up drop when destroyed by a player.
 - Solo and co-op runs remain readable with no bonuses early and meaningful pressure after multiple offensive upgrades.
 
 ## Phase 1 follow-up — Ranked direct power-ups and beam progression
@@ -216,10 +250,29 @@ Status: implemented on 2026-08-29. This balancing follow-up keeps direct pickups
 Validation:
 
 - Every permanent upgrade stops exactly at its visible rank cap, including after pooled projectile reuse.
-- Fire rate reaches 0.12 seconds only through its dedicated pickup, and speed reaches 450 without changing it.
+- Fire rate reaches 0.13 seconds only through its dedicated pickup, and speed reaches 450 without changing it.
 - Solo and co-op HUDs display independent player ranks, capped pickup feedback, and the 500-point conversion.
 - Beam charge thresholds, damage, full duration, and width increase across all five ranks without regressing its pierce or follow behavior.
-- Mother ship health scales from the new 40-health base through the existing advanced-wave and co-op rules.
+- Mother ship health scales from the new 40-health base through the advanced-wave and endless-loop rules.
+
+## Phase 1 follow-up — Balance progression and late-wave readability
+
+Status: implemented on 2026-08-31. This pass accounts for the sustained primary-fire input by increasing early shot breakpoints, slowing temporary direct-pickup growth, and separating late pattern families without starting the Phase 2 director.
+
+- Raise drones and fighters to 2 base health, interceptors to 6, and lower standalone turrets to 30. Keep hazards, the 40-health mothership, and its 10-health modules unchanged.
+- Cap first-cycle durability scaling at 1.15x for fodder, 1.25x for fighters, and 1.30x for specialists and heavy enemies. Cap endless health growth at 1.35x and retain the actual 1.50x elite multiplier.
+- Set exact direct-pickup chances to 2% for asteroids, 4% for large asteroids, 6% for drones, 25% for interceptors, 30% for standalone turrets, and 35% for motherships. Fighters and mounted modules never drop one, while every elite guarantees one.
+- Reduce damage and beam gains to 0.15 per rank, side-cannon gains to 0.08 after unlock, and fire-delay gains to 0.00625 seconds with a 0.13-second minimum. Preserve rank counts, pickup weights, speed, energy, shield, and beam thresholds.
+- Recompose waves 9 through 13 so each six-second act introduces at most one of the mothership, standalone turret, or interceptor pattern families. Use drones, fighters, and asteroids as support and preserve one scheduled elite in waves 6, 9, 12, and 13.
+- Keep every projectile produced by a pattern; readability is authored through encounter composition rather than a runtime projectile cap.
+
+Validation:
+
+- Base drones and fighters take two primary impacts and reach three health by wave 13; the endless and durability multipliers respect their new caps.
+- A seeded 10,000-run simulation averages two to four direct pickups through wave 3 and seven to ten through wave 5.
+- Maximum primary damage is 2.20, each side cannon reaches 0.88, the beam-specific bonus reaches 1.20, and sustained cannon DPS remains near 30.5.
+- Waves 9 through 13 introduce no conflicting major pattern families within one act and retain their intended elite schedule.
+- Solo and co-op playtests cover waves 1 through 3 and 9 through 13 before Phase 1 approval.
 
 ## Phase 1 follow-up — Give turrets and mother ships distinct combat identities
 
