@@ -17,7 +17,14 @@ func _run() -> void:
 
 	_expect(ship.get_node("LeftTurretMount").position == Vector2(-34, 4), "The left mothership turret must sit closer to the hull.")
 	_expect(ship.get_node("RightTurretMount").position == Vector2(34, 4), "The right mothership turret must sit closer to the hull.")
-	_expect(player.get_node("BeamChargeParticles").position == Vector2(0, -28), "The beam charge effect must remain above the player sprite.")
+	var charge_particles := player.get_node("BeamChargeParticles") as GPUParticles2D
+	_expect(charge_particles.position == Vector2(0, -28), "The beam charge effect must remain above the player sprite.")
+	_expect(is_equal_approx(player.effects.config.visible_after, 0.1), "Beam charge particles must react after 0.10 seconds.")
+	player.effects.hide_charge()
+	player.effects.update_charge_particles(true, 0.09, Player.beam_State.EMPTY, Player.STATS.beam_mini)
+	_expect(not charge_particles.visible and not charge_particles.emitting, "Beam charge particles must remain hidden before their short delay.")
+	player.effects.update_charge_particles(true, 0.1, Player.beam_State.EMPTY, Player.STATS.beam_mini)
+	_expect(charge_particles.visible and charge_particles.emitting, "Beam charge particles must appear as soon as their short delay elapses.")
 	_expect(PlayerWeapons.BEAM_ORIGIN_OFFSET == Vector2(0, -16), "Fired beams must start above the standard weapon markers.")
 	_expect(player.primary_origin.position == Vector2(0, -18.4036), "The beam offset must not move the primary weapon marker.")
 	var shot_count := get_tree().get_node_count_in_group("player_Shot")

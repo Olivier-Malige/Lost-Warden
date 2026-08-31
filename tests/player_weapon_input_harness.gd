@@ -24,6 +24,9 @@ func _run() -> void:
 	get_tree().quit(1)
 
 func _test_input_map() -> void:
+	_expect(is_equal_approx(Player.STATS.beam_mini, 0.45), "The small beam must charge in 0.45 seconds.")
+	_expect(is_equal_approx(Player.STATS.beam_normal, 1.05), "The normal beam must charge in 1.05 seconds.")
+	_expect(is_equal_approx(Player.STATS.beam_full, 2.1), "The full beam must charge in 2.10 seconds.")
 	for action in ["all_beam", "keyboard_beam", "gamepad1_beam", "gamepad2_beam"]:
 		_expect(InputMap.has_action(action), "%s must exist." % action)
 	_expect(_joy_buttons("all_fire") == [[0, JOY_BUTTON_A]], "Solo primary fire must use gamepad A/Cross only.")

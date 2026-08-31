@@ -8,7 +8,7 @@ extends Resource
 @export_range(0.1, 1.0, 0.1) var low_graphics_amount_scale := 0.5
 
 @export_group("Beam charge")
-@export_range(0.0, 5.0, 0.05) var visible_after := 0.5
+@export_range(0.0, 5.0, 0.05) var visible_after := 0.1
 @export_range(0.0, 1.0, 0.05) var minimum_amount_ratio := 0.25
 @export_range(0.0, 1.0, 0.05) var maximum_amount_ratio := 1.0
 @export_range(0.0, 4.0, 0.05) var minimum_speed_scale := 0.7
