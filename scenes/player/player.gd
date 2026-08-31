@@ -100,9 +100,15 @@ func _physics_process(delta: float) -> void:
 func _update_movement(delta: float) -> Vector2:
 	var motion := _movement_input()
 	_update_movement_animation(motion.x)
-	position = (position + motion * delta * (loadout.move_speed() - malusSpeed)).clamp(STATS.bound_min, STATS.bound_max)
+	position = (position + motion * delta * _current_move_speed()).clamp(STATS.bound_min, STATS.bound_max)
 	Events.player_motion_changed.emit(id_Player, -motion.y)
 	return motion
+
+func _current_move_speed() -> float:
+	var speed_multiplier := 1.0
+	if Input.is_action_pressed(controller + "_beam") or Input.is_action_pressed(controller + "_fire"):
+		speed_multiplier = STATS.weapon_speed_multiplier
+	return maxf(loadout.move_speed() * speed_multiplier - malusSpeed, 0.0)
 
 func _movement_input() -> Vector2:
 	var motion := Vector2.ZERO

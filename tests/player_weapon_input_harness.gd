@@ -10,6 +10,7 @@ func _ready() -> void:
 
 func _run() -> void:
 	_test_input_map()
+	await _test_combat_movement_slowdown()
 	await _test_sustained_primary_fire()
 	await _test_beam_priority_and_release()
 	await _test_coop_input_independence()
@@ -41,6 +42,39 @@ func _test_input_map() -> void:
 	_expect(_has_key("keyboard_beam", KEY_SHIFT, 1), "Keyboard beam charge must use left Shift.")
 	for action in ["all_beam", "keyboard_beam", "gamepad1_beam", "gamepad2_beam"]:
 		_expect(MainScript.PLAYER_INPUT_ACTIONS.has(action), "%s must be released during screen transitions." % action)
+
+func _test_combat_movement_slowdown() -> void:
+	global.coop = false
+	var player := await _new_player()
+	_expect(is_equal_approx(Player.STATS.weapon_speed_multiplier, 0.88), "The shared weapon movement multiplier must be configurable at eighty-eight percent.")
+	_expect(is_equal_approx(player._current_move_speed(), Player.STATS.speed), "A player without weapon input must retain full movement speed.")
+	Input.action_press("all_fire")
+	_expect(is_equal_approx(player._current_move_speed(), Player.STATS.speed * 0.88), "Held primary fire must reduce movement speed by twelve percent.")
+	Input.action_press("all_beam")
+	_expect(is_equal_approx(player._current_move_speed(), Player.STATS.speed * 0.88), "Beam charge must use the same twelve-percent movement reduction.")
+	Input.action_release("all_beam")
+	_expect(is_equal_approx(player._current_move_speed(), Player.STATS.speed * 0.88), "Releasing beam while fire remains held must retain the shared weapon movement speed.")
+	Input.action_release("all_fire")
+	_expect(is_equal_approx(player._current_move_speed(), Player.STATS.speed), "Releasing every weapon must restore full movement speed immediately.")
+	await _free_player_and_shots(player)
+
+	global.coop = true
+	global.saveData.config.player1 = "gamepad1"
+	global.saveData.config.player2 = "keyboard"
+	var player_one := await _new_player()
+	var player_two := PlayerScene.instantiate() as Player
+	player_two.set_Player_2 = true
+	add_child(player_two)
+	player_two.set_process(false)
+	await get_tree().process_frame
+	Input.action_press("gamepad1_fire")
+	_expect(is_equal_approx(player_one._current_move_speed(), Player.STATS.speed * 0.88), "Player 1 fire must slow only player 1.")
+	_expect(is_equal_approx(player_two._current_move_speed(), Player.STATS.speed), "Player 1 fire must not slow player 2.")
+	Input.action_release("gamepad1_fire")
+	await _free_player_and_shots(player_one)
+	player_two.queue_free()
+	await get_tree().process_frame
+	global.coop = false
 
 func _test_sustained_primary_fire() -> void:
 	global.coop = false

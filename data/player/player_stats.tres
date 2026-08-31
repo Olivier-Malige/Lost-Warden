@@ -5,3 +5,4 @@
 [resource]
 script = ExtResource("1")
 starting_energy = 4
+weapon_speed_multiplier = 0.88
