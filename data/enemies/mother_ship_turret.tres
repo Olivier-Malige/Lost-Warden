@@ -8,4 +8,5 @@ max_health = 10
 collision_damage = 0
 score = 250
 durability = 3
+plasma_drop_chance = 30
 speed = Vector2(0, 0)

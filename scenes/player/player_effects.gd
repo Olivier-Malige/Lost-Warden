@@ -8,11 +8,12 @@ extends Node
 
 var _reactors: Array[GPUParticles2D] = []
 var _charge_particles: GPUParticles2D
+var _charge_material: ParticleProcessMaterial
 var _reactor_amount_ratio := -1.0
 var _quality_amount_scale := 1.0
 var _configured := false
 
-func setup(low_graphics: bool) -> void:
+func setup(low_graphics: bool, charge_texture: Texture2D) -> void:
 	if config == null or not config.is_valid():
 		push_error("PlayerEffects requires a valid PlayerEffectsConfig.")
 		return
@@ -21,11 +22,15 @@ func setup(low_graphics: bool) -> void:
 		get_node_or_null(right_reactor_path) as GPUParticles2D,
 	]
 	_charge_particles = get_node_or_null(charge_particles_path) as GPUParticles2D
-	if _reactors.has(null) or _charge_particles == null:
+	if _reactors.has(null) or _charge_particles == null or not _charge_particles.process_material is ParticleProcessMaterial:
 		push_error("PlayerEffects particle paths must reference GPUParticles2D nodes.")
 		return
+	_charge_material = _charge_particles.process_material.duplicate() as ParticleProcessMaterial
+	_charge_particles.process_material = _charge_material
 	_configured = true
 	_quality_amount_scale = config.low_graphics_amount_scale if low_graphics else 1.0
+	_charge_particles.texture = charge_texture
+	_charge_particles.scale = Vector2.ONE
 	for reactor in _reactors:
 		reactor.emitting = true
 		reactor.visible = true
@@ -45,17 +50,21 @@ func update_reactors(vertical_motion: float) -> void:
 		reactor.amount_ratio = amount_ratio
 	_reactor_amount_ratio = amount_ratio
 
-func update_charge_particles(focusing: bool, charge: float, power: int, max_charge: float) -> void:
+func update_plasma_reserve(charge_ratio: float) -> void:
 	if not _configured:
 		return
-	if not focusing or charge < config.visible_after:
+	var intensity := clampf(charge_ratio, 0.0, 1.0)
+	if is_zero_approx(intensity):
 		hide_charge()
 		return
-	var intensity := maxf(_power_intensity(power), clampf(charge / max_charge, 0.0, 1.0))
 	_charge_particles.visible = true
 	_charge_particles.emitting = true
 	_charge_particles.amount_ratio = lerpf(config.minimum_amount_ratio, config.maximum_amount_ratio, intensity) * _quality_amount_scale
 	_charge_particles.speed_scale = lerpf(config.minimum_speed_scale, config.maximum_speed_scale, intensity)
+	_charge_material.emission_sphere_radius = lerpf(config.minimum_emission_radius, config.maximum_emission_radius, intensity)
+	var particle_scale := lerpf(config.minimum_particle_scale, config.maximum_particle_scale, intensity)
+	_charge_material.scale_min = particle_scale
+	_charge_material.scale_max = particle_scale
 
 func hide_charge() -> void:
 	if _charge_particles:
@@ -67,14 +76,3 @@ func stop() -> void:
 		if reactor:
 			reactor.emitting = false
 	hide_charge()
-
-func _power_intensity(power: int) -> float:
-	match power:
-		Player.beam_State.SMALL:
-			return 0.55
-		Player.beam_State.NORMAL:
-			return 0.78
-		Player.beam_State.FULL:
-			return 1.0
-		_:
-			return 0.3

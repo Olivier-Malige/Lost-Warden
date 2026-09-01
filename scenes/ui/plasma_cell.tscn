@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/plasma_cell.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/pickups/power_up.png" id="2"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/pickups/energy.wav" id="3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cell"]
+size = Vector2(20, 20)
+
+[node name="PlasmaCell" type="Area2D"]
+script = ExtResource("1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(4, 4)
+texture = ExtResource("2")
+hframes = 6
+frame = 5
+modulate = Color(0.74, 0.59, 0.9, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_cell")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+rect = Rect2(-10, -10, 20, 20)
+
+[node name="PickupSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3")
+bus = &"Sounds"
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_screen_exited"]
+[connection signal="finished" from="PickupSound" to="." method="_on_pickup_sound_finished"]

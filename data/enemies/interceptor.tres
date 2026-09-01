@@ -8,6 +8,7 @@ max_health = 6
 score = 250
 durability = 3
 power_up_chance = 25
+plasma_drop_chance = 63
 speed = Vector2(0, 180)
 lateral_amplitude = 72.0
 lateral_frequency = 0.55

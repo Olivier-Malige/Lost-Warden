@@ -22,6 +22,7 @@ func hit(_dmg := 1) -> void:
 		Events.screen_flash_requested.emit(Color(0.88, 0.12, 0.16, 0.2), 0.14)
 	else:
 		player.energy = 0
+		player.reset_weapon_input()
 		player.explosion_audio.playing = true
 		player.update_energy()
 		player.animation_player.play(player.id_Player + "_explode")

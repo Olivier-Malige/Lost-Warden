@@ -4,14 +4,10 @@ extends Area2D
 const STATS: PlayerStats = preload("res://data/player/player_stats.tres")
 const WEAPON_PRIMARY: WeaponDefinition = preload("res://data/weapons/primary.tres")
 const WEAPON_SIDE: WeaponDefinition = preload("res://data/weapons/side.tres")
-const WEAPON_BEAM_MINI: WeaponDefinition = preload("res://data/weapons/beam_mini.tres")
-const WEAPON_BEAM_NORMAL: WeaponDefinition = preload("res://data/weapons/beam_normal.tres")
-const WEAPON_BEAM_FULL: WeaponDefinition = preload("res://data/weapons/beam_full.tres")
 const UPGRADE_SPEED: UpgradeDefinition = preload("res://data/upgrades/speed.tres")
 const UPGRADE_DAMAGE: UpgradeDefinition = preload("res://data/upgrades/damage.tres")
 const UPGRADE_SIDE: UpgradeDefinition = preload("res://data/upgrades/side_shot.tres")
 const UPGRADE_FIRE_RATE: UpgradeDefinition = preload("res://data/upgrades/fire_rate.tres")
-const UPGRADE_BEAM: UpgradeDefinition = preload("res://data/upgrades/beam.tres")
 const Layers := preload("res://core/collision_layers.gd")
 
 @onready var effects: PlayerEffects = $Effects
@@ -24,14 +20,13 @@ const Layers := preload("res://core/collision_layers.gd")
 @onready var primary_origin: Marker2D = $shootFrom
 @onready var left_origin: Marker2D = $shootFromLeft
 @onready var right_origin: Marker2D = $shootFromRight
+@onready var continuous_beam: ContinuousBeam = $ContinuousBeam
 @onready var hit_audio: AudioStreamPlayer2D = $sound_Hit
 @onready var explosion_audio: AudioStreamPlayer2D = $sound_Explode
 @onready var shooting_audio: AudioStreamPlayer2D = $sound_Shooting
-@onready var mini_beam_audio: AudioStreamPlayer2D = $sound_Beam_mini
 @onready var normal_beam_audio: AudioStreamPlayer2D = $sound_Beam_normal
 @onready var full_beam_audio: AudioStreamPlayer2D = $sound_Beam_full
 
-enum beam_State {EMPTY, SMALL, NORMAL, FULL}
 enum State { ACTIVE, HIT, DYING, DEAD }
 
 var set_Player_2 := false # set before add_child for P2 colors and stats
@@ -45,16 +40,17 @@ var malusSpeed := 0
 var controller := ""
 var id_Player := ""
 var shooting := false
-var beam_Focusing := false
-var accumBeam := 0.0
-var beam_Power := beam_State.EMPTY
+var beam_charge := 0.0
+var beam_active := false
 var state := State.ACTIVE
 var _recoil_tween: Tween
 var _ship_rest_position := Vector2.ZERO
 var _motion := Vector2.ZERO
+var _beam_overdrive_left := 0.0
 
 func _ready() -> void:
 	energy = mini(STATS.starting_energy, STATS.energy_max)
+	beam_charge = clampf(STATS.beam_charge_start, 0.0, STATS.beam_charge_max)
 	_setup_components()
 	_setup_player()
 
@@ -66,14 +62,17 @@ func _setup_components() -> void:
 func _setup_player() -> void:
 	id_Player = "player2" if set_Player_2 else "player1"
 	animation_player.play(id_Player + "_idle")
-	effects.setup(global.saveData.config.graphic == "low")
+	var charge_texture := load("res://assets/sprites/player/" + id_Player + "_particle.png") as Texture2D
+	effects.setup(global.saveData.config.graphic == "low", charge_texture)
 	_ship_rest_position = ship_sprite.position
 	update_controller()
 	update_energy()
 	shooting_delay_timer.set_wait_time(loadout.fire_delay)
 	add_to_group("player")
 	_configure_collision()
+	Events.plasma_collected.connect(add_beam_charge)
 	_emit_upgrade_state()
+	update_beam_charge()
 
 func _configure_collision() -> void:
 	collision_layer = Layers.PLAYER
@@ -89,12 +88,12 @@ func _process(delta: float) -> void:
 	if state == State.DYING or state == State.DEAD:
 		return
 	energy = min(energy, STATS.energy_max)
-	_update_weapons(delta)
 	_update_effects(_motion)
 
 func _physics_process(delta: float) -> void:
 	if state == State.DYING or state == State.DEAD:
 		return
+	_update_weapons(delta)
 	_motion = _update_movement(delta)
 
 func _update_movement(delta: float) -> Vector2:
@@ -106,7 +105,7 @@ func _update_movement(delta: float) -> Vector2:
 
 func _current_move_speed() -> float:
 	var speed_multiplier := 1.0
-	if Input.is_action_pressed(controller + "_beam") or Input.is_action_pressed(controller + "_fire"):
+	if beam_active or shooting:
 		speed_multiplier = STATS.weapon_speed_multiplier
 	return maxf(loadout.move_speed() * speed_multiplier - malusSpeed, 0.0)
 
@@ -135,64 +134,66 @@ func _update_movement_animation(horizontal_motion: float) -> void:
 func _update_weapons(delta: float) -> void:
 	var fire_action := controller + "_fire"
 	var beam_action := controller + "_beam"
-	beam_Focusing = Input.is_action_pressed(beam_action)
-	var beam_fired := _update_beam(delta, beam_action)
-	shooting = Input.is_action_pressed(fire_action) and not beam_Focusing and not beam_fired
+	_update_beam(delta, Input.is_action_pressed(beam_action))
+	shooting = Input.is_action_pressed(fire_action) and not beam_active
 	if shooting and canShooting:
 		weapons.fire_primary()
 
-func _update_beam(delta: float, beam_action: String) -> bool:
-	if beam_Focusing:
-		accumBeam += delta
-		_update_beam_charge()
-		return false
-	var beam_fired := Input.is_action_just_released(beam_action) and beam_Power != beam_State.EMPTY
-	if beam_fired:
-		weapons.fire_beam(beam_Power)
-	accumBeam = 0.0
-	if beam_Power != beam_State.EMPTY:
-		_set_Power_Beam(beam_State.EMPTY)
-	return beam_fired
+func _update_beam(delta: float, beam_held: bool) -> void:
+	if not beam_held:
+		_stop_beam()
+		return
+	if not beam_active:
+		if beam_charge < STATS.beam_activation_min:
+			return
+		_start_beam()
+	beam_charge = maxf(beam_charge - STATS.beam_drain_per_second * delta, 0.0)
+	continuous_beam.set_damage(STATS.beam_damage + loadout.damage_bonus)
+	if _beam_overdrive_left > 0.0:
+		_beam_overdrive_left = maxf(_beam_overdrive_left - delta, 0.0)
+		if _beam_overdrive_left <= 0.0:
+			continuous_beam.set_overdrive(false)
+	update_beam_charge()
+	if beam_charge <= 0.0:
+		_stop_beam()
+
+func _start_beam() -> void:
+	var overdrive := is_equal_approx(beam_charge, STATS.beam_charge_max)
+	beam_active = true
+	_beam_overdrive_left = STATS.beam_overdrive_duration if overdrive else 0.0
+	continuous_beam.damage_interval = STATS.beam_damage_interval
+	continuous_beam.beam_width = STATS.beam_width
+	continuous_beam.overdrive_width = STATS.beam_overdrive_width
+	continuous_beam.overdrive_damage_multiplier = STATS.beam_overdrive_damage_multiplier
+	continuous_beam.activate(id_Player, STATS.beam_damage + loadout.damage_bonus, overdrive)
+	(full_beam_audio if overdrive else normal_beam_audio).play()
+	var kick := 4.0 if overdrive else 2.0
+	play_shot_recoil(kick, 0.1)
+	Events.screen_shake_requested.emit(kick, 0.1)
+
+func _stop_beam() -> void:
+	if not beam_active:
+		return
+	beam_active = false
+	_beam_overdrive_left = 0.0
+	continuous_beam.deactivate()
 
 func reset_weapon_input() -> void:
 	shooting = false
-	beam_Focusing = false
-	accumBeam = 0.0
-	_set_Power_Beam(beam_State.EMPTY)
+	_stop_beam()
 
 func _update_effects(motion: Vector2) -> void:
 	effects.update_reactors(motion.y)
-	effects.update_charge_particles(beam_Focusing, accumBeam, beam_Power, _max_available_beam_charge())
 
-func _update_beam_charge() -> void:
-	var next := beam_State.EMPTY
-	var charge_multiplier := loadout.beam_charge_multiplier()
-	var beam_rank := loadout.rank_for(UpgradeDefinition.Effect.BEAM)
-	var tiers := [[STATS.beam_mini * charge_multiplier, beam_State.SMALL]]
-	if beam_rank >= 3:
-		tiers.push_front([STATS.beam_normal * charge_multiplier, beam_State.NORMAL])
-	if beam_rank >= 8:
-		tiers.push_front([STATS.beam_full * charge_multiplier, beam_State.FULL])
-	for tier in tiers:
-		if accumBeam >= tier[0]:
-			next = tier[1]
-			break
-	if next != beam_Power:
-		_set_Power_Beam(next)
+func add_beam_charge(amount: float) -> void:
+	if state == State.DYING or state == State.DEAD:
+		return
+	beam_charge = clampf(beam_charge + amount, 0.0, STATS.beam_charge_max)
+	update_beam_charge()
 
-func _set_Power_Beam(power) -> void:
-	beam_Power = power
-	if power == beam_State.EMPTY:
-		effects.hide_charge()
-
-func _max_available_beam_charge() -> float:
-	var multiplier := loadout.beam_charge_multiplier()
-	var rank := loadout.rank_for(UpgradeDefinition.Effect.BEAM)
-	if rank >= 8:
-		return STATS.beam_full * multiplier
-	if rank >= 3:
-		return STATS.beam_normal * multiplier
-	return STATS.beam_mini * multiplier
+func update_beam_charge() -> void:
+	effects.update_plasma_reserve(beam_charge / STATS.beam_charge_max)
+	Events.beam_charge_changed.emit(id_Player, beam_charge, STATS.beam_charge_max, is_equal_approx(beam_charge, STATS.beam_charge_max))
 
 
 func play_shot_recoil(amount := 2.0, duration := 0.07) -> void:
@@ -265,7 +266,7 @@ func _upgrade_feedback_text(upgrade: UpgradeDefinition, result: UpgradeResult) -
 	return String(upgrade.hud_label) + " " + str(result.rank) + "/" + str(result.max_rank)
 
 func _emit_upgrade_state() -> void:
-	for upgrade in [UPGRADE_SPEED, UPGRADE_DAMAGE, UPGRADE_SIDE, UPGRADE_FIRE_RATE, UPGRADE_BEAM]:
+	for upgrade in [UPGRADE_SPEED, UPGRADE_DAMAGE, UPGRADE_SIDE, UPGRADE_FIRE_RATE]:
 		Events.upgrade_changed.emit(id_Player, upgrade.effect, loadout.rank_for(upgrade.effect), upgrade.max_rank)
 
 func increase_Speed() -> void:
@@ -284,17 +285,19 @@ func increase_Shield() -> void:
 func debug_increase_fire_rate() -> void:
 	apply_upgrade(UPGRADE_FIRE_RATE)
 
-func debug_increase_beam() -> void:
-	apply_upgrade(UPGRADE_BEAM)
+func debug_add_plasma() -> void:
+	add_beam_charge(25.0)
 
 func debug_max_stats() -> void:
-	for upgrade in [UPGRADE_SPEED, UPGRADE_DAMAGE, UPGRADE_SIDE, UPGRADE_FIRE_RATE, UPGRADE_BEAM]:
+	for upgrade in [UPGRADE_SPEED, UPGRADE_DAMAGE, UPGRADE_SIDE, UPGRADE_FIRE_RATE]:
 		while loadout.rank_for(upgrade.effect) < upgrade.max_rank:
 			loadout.apply(upgrade)
 	energy = STATS.energy_max
+	beam_charge = STATS.beam_charge_max
 	shield.power = 6
 	setShootingDelay()
 	update_energy()
+	update_beam_charge()
 	_emit_upgrade_state()
 	Events.upgrade_feedback_requested.emit(id_Player, "DEBUG MAX", false)
 

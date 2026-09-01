@@ -28,7 +28,7 @@ func _test_input_actions_and_routing() -> void:
 		var events := InputMap.action_get_events(action)
 		_expect(events.size() == 1 and events[0] is InputEventKey and events[0].keycode == expected_keys[index - 1], "Debug action F%d must use the matching function key." % index)
 	_expect(MainScript.PLAYER_CHEATS.get("debug_Key7") == "debug_increase_fire_rate", "F7 must increase fire rate.")
-	_expect(MainScript.PLAYER_CHEATS.get("debug_Key8") == "debug_increase_beam", "F8 must increase beam power.")
+	_expect(MainScript.PLAYER_CHEATS.get("debug_Key8") == "debug_add_plasma", "F8 must add plasma charge.")
 	_expect(MainScript.PLAYER_CHEATS.get("debug_Key9") == "debug_max_stats", "F9 must maximize player stats.")
 
 func _test_player_stat_cheats() -> void:
@@ -37,20 +37,20 @@ func _test_player_stat_cheats() -> void:
 	await get_tree().process_frame
 	var score_before := global.score
 	player.debug_increase_fire_rate()
-	player.debug_increase_beam()
+	var plasma_before := player.beam_charge
+	player.debug_add_plasma()
 	_expect(player.loadout.rank_for(UpgradeDefinition.Effect.FIRE_RATE) == 1, "F7 must add one fire-rate rank.")
-	_expect(player.loadout.rank_for(UpgradeDefinition.Effect.BEAM) == 1, "F8 must add one beam rank.")
-
+	_expect(is_equal_approx(player.beam_charge, plasma_before + 25.0), "F8 must add twenty-five plasma.")
 	player.energy = 1
 	player.debug_max_stats()
-	for upgrade in [Player.UPGRADE_SPEED, Player.UPGRADE_DAMAGE, Player.UPGRADE_SIDE, Player.UPGRADE_FIRE_RATE, Player.UPGRADE_BEAM]:
+	for upgrade in [Player.UPGRADE_SPEED, Player.UPGRADE_DAMAGE, Player.UPGRADE_SIDE, Player.UPGRADE_FIRE_RATE]:
 		_expect(player.loadout.rank_for(upgrade.effect) == upgrade.max_rank, "%s must reach its maximum rank." % upgrade.id)
 	_expect(is_equal_approx(player.loadout.fire_delay, Player.STATS.shoot_delay_min), "Maximum fire rate must respect the configured minimum delay.")
 	_expect(is_equal_approx(player.loadout.move_speed(), Player.STATS.speed_max), "Maximum speed must respect the configured cap.")
 	_expect(player.energy == Player.STATS.energy_max, "F9 must restore maximum energy.")
+	_expect(is_equal_approx(player.beam_charge, Player.STATS.beam_charge_max), "F9 must fill the plasma reserve.")
 	_expect(player.shield.power == 6, "F9 must restore the full shield.")
 	_expect(global.score == score_before, "Debug stat changes must not grant score.")
-
 	player.debug_max_stats()
 	_expect(global.score == score_before, "Repeated F9 use must not grant capped-upgrade score.")
 	player.queue_free()

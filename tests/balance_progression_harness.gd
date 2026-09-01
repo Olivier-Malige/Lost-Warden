@@ -13,7 +13,6 @@ const UpgradeTableResource := preload("res://data/upgrades/upgrade_table.tres")
 const DamageUpgrade := preload("res://data/upgrades/damage.tres")
 const SideUpgrade := preload("res://data/upgrades/side_shot.tres")
 const FireRateUpgrade := preload("res://data/upgrades/fire_rate.tres")
-const BeamUpgrade := preload("res://data/upgrades/beam.tres")
 const WaveCatalogResource := preload("res://data/waves/wave_catalog.tres")
 
 const DROP_SIMULATION_RUNS := 10000
@@ -86,29 +85,51 @@ func _test_drop_curve() -> void:
 	_expect(TurretDefinition.power_up_chance == 30, "Turret drop chance must be thirty percent.")
 	_expect(TieDefinition.power_up_chance == 0, "Fighters must not drop power-ups.")
 	_expect(MountedTurretDefinition.power_up_chance == 0, "Mounted turrets must not drop power-ups.")
+	_expect(AsteroidDefinition.plasma_drop_chance == 5, "Asteroids must have a five-percent plasma chance.")
+	_expect(BigAsteroidDefinition.plasma_drop_chance == 10, "Large asteroids must have a ten-percent plasma chance.")
+	_expect(DroneDefinition.plasma_drop_chance == 15, "Drones must have a fifteen-percent plasma chance.")
+	_expect(TieDefinition.plasma_drop_chance == 15, "Fighters must have a fifteen-percent plasma chance.")
+	_expect(InterceptorDefinition.plasma_drop_chance == 63, "Interceptors must have a sixty-three-percent plasma chance.")
+	_expect(MountedTurretDefinition.plasma_drop_chance == 30, "Mounted turrets must have a thirty-percent plasma chance.")
+	_expect(TurretDefinition.plasma_drop_chance == 59, "Turrets must have a fifty-nine-percent plasma chance.")
+	_expect(MotherShipDefinition.plasma_drop_chance == 55, "Motherships must have a fifty-five-percent plasma chance.")
 	var drop_probe := Enemy.new()
 	drop_probe.definition = TieDefinition
-	_expect(not drop_probe._should_drop_power_up(0), "A normal fighter with zero drop chance must not create a power-up.")
+	_expect(drop_probe._reward_for_roll(0) == Enemy.RewardDrop.PLASMA, "A fighter reward must be plasma.")
+	_expect(drop_probe._reward_for_roll(18) == Enemy.RewardDrop.NONE, "A fighter must not create a power-up after its plasma interval.")
 	drop_probe.definition = AsteroidDefinition
-	_expect(drop_probe._should_drop_power_up(1), "A small asteroid must accept both successful rolls of its two-percent chance.")
-	_expect(not drop_probe._should_drop_power_up(2), "A small asteroid must reject the first roll outside its two-percent chance.")
-	drop_probe.elite = true
-	_expect(drop_probe._should_drop_power_up(99), "An elite must guarantee one power-up regardless of its base drop chance.")
+	_expect(drop_probe._reward_for_roll(4) == Enemy.RewardDrop.PLASMA, "Asteroid plasma must occupy the first five roll values.")
+	_expect(drop_probe._reward_for_roll(5) == Enemy.RewardDrop.POWER_UP, "Asteroid power-ups must follow the plasma interval.")
+	_expect(drop_probe._reward_for_roll(7) == Enemy.RewardDrop.NONE, "A normal enemy must produce at most one exclusive reward.")
 	drop_probe.free()
 
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 0x5EEDB4A1
-	var first_three_total := 0
-	var first_five_total := 0
+	var first_three_power_total := 0
+	var first_five_power_total := 0
+	var first_five_plasma_total := 0
+	var first_five_coop_plasma_total := 0
 	for _run in range(DROP_SIMULATION_RUNS):
-		var first_three := _simulate_wave_range_drops(rng, 0, 3)
-		var next_two := _simulate_wave_range_drops(rng, 3, 5)
-		first_three_total += first_three
-		first_five_total += first_three + next_two
-	var first_three_mean := float(first_three_total) / DROP_SIMULATION_RUNS
-	var first_five_mean := float(first_five_total) / DROP_SIMULATION_RUNS
+		var first_three := _simulate_wave_range_drops(rng, 0, 3, false)
+		var next_two := _simulate_wave_range_drops(rng, 3, 5, false)
+		var coop_five := _simulate_wave_range_drops(rng, 0, 5, true)
+		first_three_power_total += first_three.y
+		first_five_power_total += first_three.y + next_two.y
+		first_five_plasma_total += first_three.x + next_two.x
+		first_five_coop_plasma_total += coop_five.x
+	var first_three_mean := float(first_three_power_total) / DROP_SIMULATION_RUNS
+	var first_five_mean := float(first_five_power_total) / DROP_SIMULATION_RUNS
+	var first_five_plasma_mean := float(first_five_plasma_total) / DROP_SIMULATION_RUNS
+	var first_five_coop_plasma_mean := float(first_five_coop_plasma_total) / DROP_SIMULATION_RUNS
 	_expect(first_three_mean >= 2.0 and first_three_mean <= 4.0, "The first three waves must average two to four power-ups, got %.2f." % first_three_mean)
 	_expect(first_five_mean >= 7.0 and first_five_mean <= 10.0, "The first five waves must average seven to ten power-ups, got %.2f." % first_five_mean)
+	var solo_recharge_seconds := 5.0 * SpawnerConfig.wave_duration * 100.0 / (first_five_plasma_mean * 12.5)
+	var coop_recharge_seconds := 5.0 * SpawnerConfig.wave_duration * 100.0 / (first_five_coop_plasma_mean * 12.5)
+	_expect(solo_recharge_seconds >= 35.0 and solo_recharge_seconds <= 50.0, "Solo plasma must refill in 35-50 seconds, got %.2f." % solo_recharge_seconds)
+	_expect(coop_recharge_seconds >= 35.0 and coop_recharge_seconds <= 50.0, "Shared co-op plasma must refill in 35-50 seconds, got %.2f." % coop_recharge_seconds)
+	var solo_uptime := 5.0 / (solo_recharge_seconds + 5.0)
+	var coop_uptime := 5.0 / (coop_recharge_seconds + 5.0)
+	_expect(solo_uptime < 0.2 and coop_uptime < 0.2, "Plasma income must keep theoretical beam uptime below twenty percent.")
 
 func _test_upgrade_power_curve() -> void:
 	var loadout := PlayerLoadout.new(Player.STATS)
@@ -119,15 +140,14 @@ func _test_upgrade_power_curve() -> void:
 		loadout.apply(SideUpgrade)
 	for _rank in range(FireRateUpgrade.max_rank):
 		loadout.apply(FireRateUpgrade)
-	for _rank in range(BeamUpgrade.max_rank):
-		loadout.apply(BeamUpgrade)
 	var primary_damage := PRIMARY_BASE_DAMAGE + loadout.damage_bonus
 	var side_damage := SIDE_BASE_DAMAGE + loadout.side_damage_bonus
+	var beam_tick_damage := Player.STATS.beam_damage + loadout.damage_bonus
 	var maximum_dps := (primary_damage + side_damage * 2.0) / loadout.fire_delay
 	_expect(is_equal_approx(base_dps, 1.0 / 0.18), "Base primary DPS must remain tied to the 0.18-second cadence.")
 	_expect(is_equal_approx(primary_damage, 2.2), "Maximum primary damage must be 2.20.")
 	_expect(is_equal_approx(side_damage, 0.88), "Each maximum-rank side cannon must deal 0.88 damage.")
-	_expect(is_equal_approx(loadout.beam_damage_bonus, 1.2), "Maximum beam-specific bonus must be 1.20.")
+	_expect(is_equal_approx(beam_tick_damage, 4.2), "The standard damage upgrade must raise beam tick damage to 4.20.")
 	_expect(is_equal_approx(loadout.fire_delay, 0.13), "Maximum fire rate must stop at 0.13 seconds.")
 	_expect(maximum_dps > 30.0 and maximum_dps < 31.0, "Maximum sustained cannon DPS must remain near 30.5, got %.2f." % maximum_dps)
 	_test_upgrade_distribution()
@@ -136,7 +156,7 @@ func _test_upgrade_distribution() -> void:
 	var expected_weight := 0
 	for upgrade in UpgradeTableResource.upgrades:
 		expected_weight += upgrade.weight
-	_expect(expected_weight == 100, "Upgrade weights must retain their one-hundred-point distribution.")
+	_expect(expected_weight == 86, "Removing beam ranks must leave the six existing upgrade weights unchanged.")
 	seed(0xB41A4CE)
 	var counts: Dictionary[StringName, int] = {}
 	for _roll in range(DROP_SIMULATION_RUNS):
@@ -173,19 +193,25 @@ func _effective_health(spawner: WaveSpawner, definition: EnemyDefinition, diffic
 	var multiplier := lerpf(1.0, spawner._durability_health_cap(definition), progress)
 	return ceili(definition.max_health * multiplier)
 
-func _simulate_wave_range_drops(rng: RandomNumberGenerator, start_index: int, end_index: int) -> int:
-	var drops := 0
+func _simulate_wave_range_drops(rng: RandomNumberGenerator, start_index: int, end_index: int, coop: bool) -> Vector2i:
+	var plasma_drops := 0
+	var power_drops := 0
 	for wave_index in range(start_index, end_index):
 		var wave: WaveDefinition = WaveCatalogResource.waves[wave_index]
 		for rule in wave.rules:
 			var definition: EnemyDefinition = DEFINITIONS_BY_SCENE.get(rule.scene.resource_path)
-			if definition == null or definition.power_up_chance <= 0:
+			if definition == null:
 				continue
-			var spawn_count := ceili(rule.active_duration / rule.interval) * _formation_size(rule)
+			var interval := rule.interval * (0.9 if coop and rule.formation < 4 else 1.0)
+			var formation_size := _formation_size(rule) + (1 if coop and rule.formation >= 4 else 0)
+			var spawn_count := ceili(rule.active_duration / interval) * formation_size
 			for _spawn in range(spawn_count):
-				if rng.randi_range(0, 99) < definition.power_up_chance:
-					drops += 1
-	return drops
+				var roll := rng.randi_range(0, 99)
+				if roll < definition.plasma_drop_chance:
+					plasma_drops += 1
+				elif roll < definition.plasma_drop_chance + definition.power_up_chance:
+					power_drops += 1
+	return Vector2i(plasma_drops, power_drops)
 
 func _formation_size(rule: SpawnRule) -> int:
 	var available_lanes := rule.spawn_max - rule.spawn_min + 1

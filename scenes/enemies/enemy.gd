@@ -4,7 +4,10 @@ extends Area2D
 const Layers := preload("res://core/collision_layers.gd")
 const EliteIndicatorScene := preload("res://scenes/enemies/elite_indicator.gd")
 const PowerUpScene := preload("res://scenes/ui/power_up.tscn")
+const PlasmaCellScene := preload("res://scenes/ui/plasma_cell.tscn")
 const PROJECTILE_SPEED_MULTIPLIER := 1.1
+
+enum RewardDrop { NONE, PLASMA, POWER_UP }
 
 @export var definition: EnemyDefinition
 @export var shoot_timer_paths: Array[NodePath] = []
@@ -111,17 +114,18 @@ func _play_spawn_animation() -> void:
 	indexSprites = randi() % definition.sprite_variants + 1 if definition.sprite_variants > 1 else ""
 	$anim.play("start" + str(indexSprites))
 
-func _hit_something(dmg := 0) -> void:
+func _hit_something(dmg := 0, impact_feedback := true) -> void:
 	if destroyed:
 		return
 	life -= dmg
 	if _elite_indicator:
 		_elite_indicator.set_health(life)
-	$sound_Hit.playing = true
-	position.y -= 5.0
+	if impact_feedback:
+		$sound_Hit.playing = true
+		position.y -= 5.0
 	if life <= 0:
 		_destroy()
-	else:
+	elif impact_feedback:
 		$anim.play("hit" + str(indexSprites))
 
 func _on_area_entered(area: Area2D) -> void:
@@ -161,13 +165,33 @@ func _award_player_kill() -> void:
 	var awarded_points := global.register_kill(points)
 	var multiplier := global.combo_multiplier(global.combo)
 	Events.score_popup_requested.emit(awarded_points, global.combo, multiplier, global_position)
-	if _should_drop_power_up(randi_range(0, 99)):
-		var power_up := PowerUpScene.instantiate()
-		power_up.position = get_parent().to_local(global_position)
-		get_parent().call_deferred("add_child", power_up)
+	if elite:
+		_spawn_power_up()
+		_spawn_plasma_cell(25.0)
+		return
+	match _reward_for_roll(randi_range(0, 99)):
+		RewardDrop.PLASMA:
+			_spawn_plasma_cell(12.5)
+		RewardDrop.POWER_UP:
+			_spawn_power_up()
 
-func _should_drop_power_up(roll: int) -> bool:
-	return elite or roll < definition.power_up_chance
+func _reward_for_roll(roll: int) -> RewardDrop:
+	if roll < definition.plasma_drop_chance:
+		return RewardDrop.PLASMA
+	if roll < definition.plasma_drop_chance + definition.power_up_chance:
+		return RewardDrop.POWER_UP
+	return RewardDrop.NONE
+
+func _spawn_power_up() -> void:
+	var power_up := PowerUpScene.instantiate()
+	power_up.position = get_parent().to_local(global_position)
+	get_parent().call_deferred("add_child", power_up)
+
+func _spawn_plasma_cell(amount: float) -> void:
+	var plasma_cell := PlasmaCellScene.instantiate() as PlasmaCell
+	plasma_cell.charge_amount = amount
+	plasma_cell.position = get_parent().to_local(global_position)
+	get_parent().call_deferred("add_child", plasma_cell)
 
 func _drop_debris() -> void:
 	if definition.drop_scene == null:

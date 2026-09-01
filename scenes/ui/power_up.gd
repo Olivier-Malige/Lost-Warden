@@ -13,8 +13,6 @@ func _ready() -> void:
 	if _upgrade:
 		$anim.play(String(_upgrade.anim))
 		$Sprite2D.modulate = _pickup_color(_upgrade.effect)
-		$Sprite2D.visible = _upgrade.effect != UpgradeDefinition.Effect.BEAM
-		$BeamIcon.visible = _upgrade.effect == UpgradeDefinition.Effect.BEAM
 	else:
 		$anim.play("speedUp")
 
@@ -33,7 +31,6 @@ func _on_powerUp_area_entered(area: Area2D) -> void:
 	Events.powerup_collected.emit(_upgrade)
 	$anim.queue_free()
 	$Sprite2D.queue_free()
-	$BeamIcon.queue_free()
 	$CollisionShape2D.set_deferred("disabled", true)
 	set_deferred("monitoring", false)
 	set_deferred("monitorable", false)
@@ -48,7 +45,6 @@ func _play_pickup_sound() -> void:
 		UpgradeDefinition.Effect.DAMAGE: $sound_Shot_Up,
 		UpgradeDefinition.Effect.SHIELD: $sound_Shield,
 		UpgradeDefinition.Effect.FIRE_RATE: $sound_Shot_Up,
-		UpgradeDefinition.Effect.BEAM: $sound_Shot_Up,
 	}
 	if sounds.has(_upgrade.effect):
 		sounds[_upgrade.effect].playing = true
@@ -57,8 +53,6 @@ func _pickup_color(effect: int) -> Color:
 	match effect:
 		UpgradeDefinition.Effect.FIRE_RATE:
 			return Color(0.9, 0.78, 0.2)
-		UpgradeDefinition.Effect.BEAM:
-			return Color(0.74, 0.59, 0.9)
 		_:
 			return Color.WHITE
 

@@ -4,6 +4,8 @@ extends Node
 signal score_changed(score: int)
 signal wave_changed(wave: int)
 signal energy_changed(player_id: String, energy: int)
+signal plasma_collected(amount: float)
+signal beam_charge_changed(player_id: String, current: float, maximum: float, overdrive_ready: bool)
 signal player_motion_changed(player_id: String, vertical_intent: float)
 signal player_died()
 signal game_over_requested()

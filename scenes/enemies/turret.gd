@@ -196,8 +196,8 @@ func _destroy() -> void:
 	stop_patterns()
 	super._destroy()
 
-func _hit_something(dmg := 0) -> void:
+func _hit_something(dmg := 0, impact_feedback := true) -> void:
 	var mounted_position := position
-	super._hit_something(dmg)
+	super._hit_something(dmg, impact_feedback)
 	if mounted:
 		position = mounted_position

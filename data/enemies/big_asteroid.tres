@@ -10,6 +10,7 @@ collision_damage = 10
 score = 10
 durability = 0
 power_up_chance = 4
+plasma_drop_chance = 10
 speed = Vector2(0, 204)
 rotates = true
 drops_on_destroy = true

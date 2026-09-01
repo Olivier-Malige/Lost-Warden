@@ -25,6 +25,21 @@ corner_radius_bottom_left = 3
 shadow_color = Color(0, 0, 0, 0.35)
 shadow_size = 3
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxPlasmaBackground"]
+bg_color = Color(0.027451, 0.0313726, 0.0666667, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.42, 0.36, 0.58, 0.9)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxPlasmaFill"]
+bg_color = Color(0.74, 0.59, 0.9, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+
 [node name="world" type="Node2D" unique_id=871126695]
 process_mode = 1
 texture_filter = 1
@@ -152,15 +167,37 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ranks_player1" type="Label" parent="hud/LeftColumn"]
-custom_minimum_size = Vector2(0, 124)
+custom_minimum_size = Vector2(0, 106)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.952941, 0.921569, 0.866667, 1)
 theme_override_fonts/font = ExtResource("2")
 theme_override_font_sizes/font_size = 14
-text = "UPGRADES\nSPD 0/8\nDMG 0/8\nRATE 0/8\nSIDE 0/7\nBEAM 0/8"
+text = "UPGRADES\nSPD 0/8\nDMG 0/8\nRATE 0/8\nSIDE 0/7"
 horizontal_alignment = 1
 vertical_alignment = 1
 visible = false
+
+[node name="plasma_holder_player1" type="VBoxContainer" parent="hud/LeftColumn"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_constants/separation = 2
+visible = false
+
+[node name="label" type="Label" parent="hud/LeftColumn/plasma_holder_player1"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 14
+text = "PLASMA"
+horizontal_alignment = 1
+
+[node name="plasma_player1" type="ProgressBar" parent="hud/LeftColumn/plasma_holder_player1"]
+custom_minimum_size = Vector2(84, 14)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/background = SubResource("StyleBoxPlasmaBackground")
+theme_override_styles/fill = SubResource("StyleBoxPlasmaFill")
+value = 0.0
+show_percentage = false
 
 [node name="LeftSpacer" type="Control" parent="hud/LeftColumn" unique_id=445969611]
 layout_mode = 2
@@ -194,15 +231,37 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ranks_player2" type="Label" parent="hud/RightColumn"]
-custom_minimum_size = Vector2(0, 124)
+custom_minimum_size = Vector2(0, 106)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.952941, 0.921569, 0.866667, 1)
 theme_override_fonts/font = ExtResource("2")
 theme_override_font_sizes/font_size = 14
-text = "UPGRADES\nSPD 0/8\nDMG 0/8\nRATE 0/8\nSIDE 0/7\nBEAM 0/8"
+text = "UPGRADES\nSPD 0/8\nDMG 0/8\nRATE 0/8\nSIDE 0/7"
 horizontal_alignment = 1
 vertical_alignment = 1
 visible = false
+
+[node name="plasma_holder_player2" type="VBoxContainer" parent="hud/RightColumn"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_constants/separation = 2
+visible = false
+
+[node name="label" type="Label" parent="hud/RightColumn/plasma_holder_player2"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 14
+text = "PLASMA"
+horizontal_alignment = 1
+
+[node name="plasma_player2" type="ProgressBar" parent="hud/RightColumn/plasma_holder_player2"]
+custom_minimum_size = Vector2(84, 14)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/background = SubResource("StyleBoxPlasmaBackground")
+theme_override_styles/fill = SubResource("StyleBoxPlasmaFill")
+value = 0.0
+show_percentage = false
 
 [node name="RightSpacer" type="Control" parent="hud/RightColumn" unique_id=1455964552]
 layout_mode = 2

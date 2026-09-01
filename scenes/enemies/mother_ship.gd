@@ -130,9 +130,9 @@ func _destroy() -> void:
 			turret.shutdown_from_parent()
 	super._destroy()
 
-func _hit_something(dmg := 0) -> void:
+func _hit_something(dmg := 0, impact_feedback := true) -> void:
 	var anchor_position := position
-	super._hit_something(dmg)
+	super._hit_something(dmg, impact_feedback)
 	position = anchor_position
 
 func _on_anim_animation_finished(n: StringName) -> void:

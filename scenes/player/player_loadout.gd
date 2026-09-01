@@ -7,7 +7,6 @@ var fire_delay: float
 var damage_bonus := 0.0
 var side_shot := false
 var side_damage_bonus := 0.0
-var beam_damage_bonus := 0.0
 var ranks: Dictionary[int, int] = {}
 
 func _init(p_stats: PlayerStats) -> void:
@@ -20,7 +19,6 @@ func reset() -> void:
 	damage_bonus = 0.0
 	side_shot = false
 	side_damage_bonus = 0.0
-	beam_damage_bonus = 0.0
 	ranks.clear()
 
 func apply(upgrade: UpgradeDefinition) -> UpgradeResult:
@@ -40,8 +38,6 @@ func apply(upgrade: UpgradeDefinition) -> UpgradeResult:
 			side_shot = true
 			if rank > 1:
 				side_damage_bonus += upgrade.value
-		UpgradeDefinition.Effect.BEAM:
-			beam_damage_bonus += upgrade.value
 		UpgradeDefinition.Effect.SHIELD, UpgradeDefinition.Effect.ENERGY:
 			pass
 	fire_delay = maxf(fire_delay, stats.shoot_delay_min)
@@ -50,15 +46,6 @@ func apply(upgrade: UpgradeDefinition) -> UpgradeResult:
 
 func rank_for(effect: int) -> int:
 	return int(ranks.get(effect, 0))
-
-func beam_charge_multiplier() -> float:
-	return 1.0 - 0.35 * float(rank_for(UpgradeDefinition.Effect.BEAM)) / 8.0
-
-func full_beam_duration() -> float:
-	return 0.4 + 0.2 * float(rank_for(UpgradeDefinition.Effect.BEAM)) / 8.0
-
-func full_beam_width_scale() -> float:
-	return 1.25 + 0.25 * float(rank_for(UpgradeDefinition.Effect.BEAM)) / 8.0
 
 func move_speed() -> float:
 	return stats.speed + speed_bonus

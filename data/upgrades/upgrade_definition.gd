@@ -1,7 +1,7 @@
 class_name UpgradeDefinition
 extends Resource
 
-enum Effect { SPEED, FIRE_RATE, DAMAGE, SIDE_SHOT, SHIELD, ENERGY, BEAM }
+enum Effect { SPEED, FIRE_RATE, DAMAGE, SIDE_SHOT, SHIELD, ENERGY }
 
 @export var id: StringName
 @export var effect: Effect = Effect.SPEED

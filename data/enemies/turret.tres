@@ -9,4 +9,5 @@ collision_damage = 10
 score = 2000
 durability = 4
 power_up_chance = 30
+plasma_drop_chance = 59
 speed = Vector2(0, 80)

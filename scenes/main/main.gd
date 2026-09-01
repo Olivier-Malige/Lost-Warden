@@ -13,7 +13,7 @@ const PLAYER_CHEATS := {
 	"debug_Key5": "increase_SideShot",
 	"debug_Key6": "increase_Shield",
 	"debug_Key7": "debug_increase_fire_rate",
-	"debug_Key8": "debug_increase_beam",
+	"debug_Key8": "debug_add_plasma",
 	"debug_Key9": "debug_max_stats",
 }
 const PLAYER_INPUT_ACTIONS := [

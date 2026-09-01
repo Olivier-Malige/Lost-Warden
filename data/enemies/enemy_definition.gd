@@ -9,6 +9,7 @@ enum Durability { HAZARD, FODDER, FIGHTER, SPECIALIST, HEAVY }
 @export_range(0, 1000000, 1) var score := 0
 @export var durability: Durability = Durability.FODDER
 @export_range(0, 100, 1) var power_up_chance := 0
+@export_range(0, 100, 1) var plasma_drop_chance := 0
 
 @export_group("Movement")
 @export var speed := Vector2.ZERO
@@ -35,7 +36,8 @@ func is_valid() -> bool:
 		and collision_damage >= 0 \
 		and score >= 0 \
 		and power_up_chance >= 0 \
-		and power_up_chance <= 100 \
+		and plasma_drop_chance >= 0 \
+		and power_up_chance + plasma_drop_chance <= 100 \
 		and lateral_amplitude >= 0.0 \
 		and lateral_frequency >= 0.0 \
 		and sprite_variants > 0 \

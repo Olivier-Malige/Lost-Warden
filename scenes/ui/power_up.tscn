@@ -1,228 +1,189 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene format=3 uid="uid://b8gnuqfyhsqj0"]
 
-[ext_resource path="res://scenes/ui/power_up.gd" type="Script" id=1]
-[ext_resource path="res://assets/sprites/pickups/power_up.png" type="Texture2D" id=2]
-[ext_resource path="res://assets/audio/sfx/pickups/speed.wav" type="AudioStream" id=3]
-[ext_resource path="res://assets/audio/sfx/pickups/energy.wav" type="AudioStream" id=4]
-[ext_resource path="res://assets/audio/sfx/pickups/side_shot.wav" type="AudioStream" id=5]
-[ext_resource path="res://assets/audio/sfx/pickups/damage.wav" type="AudioStream" id=6]
-[ext_resource path="res://assets/audio/sfx/pickups/shield.wav" type="AudioStream" id=7]
-[ext_resource path="res://assets/sprites/pickups/beam_upgrade_v1.png" type="Texture2D" id=8]
+[ext_resource type="Script" uid="uid://bg65kg7x8wyx4" path="res://scenes/ui/power_up.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://dxt6q2mq15odh" path="res://assets/sprites/pickups/power_up.png" id="2"]
+[ext_resource type="AudioStream" uid="uid://ysoujuvnicbi" path="res://assets/audio/sfx/pickups/speed.wav" id="3"]
+[ext_resource type="AudioStream" uid="uid://5guldj3ybi2f" path="res://assets/audio/sfx/pickups/energy.wav" id="4"]
+[ext_resource type="AudioStream" uid="uid://dj0owkcs0lyw4" path="res://assets/audio/sfx/pickups/side_shot.wav" id="5"]
+[ext_resource type="AudioStream" uid="uid://cmtad4y7b28js" path="res://assets/audio/sfx/pickups/damage.wav" id="6"]
+[ext_resource type="AudioStream" uid="uid://7i8k56wrn36x" path="res://assets/audio/sfx/pickups/shield.wav" id="7"]
 
-[sub_resource type="RectangleShape2D" id=1]
+[sub_resource type="RectangleShape2D" id="1"]
 
-size = Vector2( 20, 20 )
+[sub_resource type="Animation" id="Animation_4klvv"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id="Animation_e15ka"]
+resource_name = "beam"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [5]
+}
 
+[sub_resource type="Animation" id="2"]
 resource_name = "energieUp"
-length = 1.0
 loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PackedFloat32Array( 0 ),
-"transitions": PackedFloat32Array( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ 2 ]
+"values": [2]
 }
 
-[sub_resource type="Animation" id=3]
-
-length = 1.0
+[sub_resource type="Animation" id="3"]
 loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PackedFloat32Array( 0 ),
-"transitions": PackedFloat32Array( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ 0 ]
+"values": [0]
 }
 
-[sub_resource type="Animation" id=4]
-
+[sub_resource type="Animation" id="4"]
 resource_name = "lateralShot"
-length = 1.0
 loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PackedFloat32Array( 0 ),
-"transitions": PackedFloat32Array( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ 3 ]
+"values": [3]
 }
 
-[sub_resource type="Animation" id=5]
-
+[sub_resource type="Animation" id="5"]
 resource_name = "shieldUp"
-length = 1.0
 loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PackedFloat32Array( 0 ),
-"transitions": PackedFloat32Array( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ 4 ]
+"values": [4]
 }
 
-[sub_resource type="Animation" id=6]
-
-length = 1.0
+[sub_resource type="Animation" id="6"]
 loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PackedFloat32Array( 0 ),
-"transitions": PackedFloat32Array( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ 1 ]
+"values": [1]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1"]
 _data = {
-"energieUp": SubResource( 2 ),
-"laserUp": SubResource( 3 ),
-"lateralShot": SubResource( 4 ),
-"shieldUp": SubResource( 5 ),
-"speedUp": SubResource( 6 )
+&"RESET": SubResource("Animation_4klvv"),
+&"beam": SubResource("Animation_e15ka"),
+&"energieUp": SubResource("2"),
+&"laserUp": SubResource("3"),
+&"lateralShot": SubResource("4"),
+&"shieldUp": SubResource("5"),
+&"speedUp": SubResource("6")
 }
 
-[node name="powersUp" type="Area2D"]
-
-input_pickable = true
-gravity_direction = Vector2( 0, 1 )
+[node name="powersUp" type="Area2D" unique_id=1711967141]
 gravity = 98.0
-linear_damp = 0.1
-angular_damp = 1.0
-audio_bus_override = false
-audio_bus_name = "Master"
-script = ExtResource( 1 )
+script = ExtResource("1")
 
-[node name="Sprite2D" type="Sprite2D" parent="." index="0"]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=674438003]
+scale = Vector2(4, 4)
+texture = ExtResource("2")
+hframes = 6
+frame = 2
 
-scale = Vector2( 4, 4 )
-texture = ExtResource( 2 )
-hframes = 5
-frame = 4
-_sections_unfolded = [ "Animation", "Region", "Transform3D" ]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1441660611]
+position = Vector2(0.115309, 0.710733)
+scale = Vector2(1.5174, 1.3949)
+shape = SubResource("1")
 
-[node name="BeamIcon" type="Sprite2D" parent="."]
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." unique_id=1817208559]
 
-scale = Vector2( 4, 4 )
-texture = ExtResource( 8 )
-visible = false
+[node name="anim" type="AnimationPlayer" parent="." unique_id=462847660]
+libraries/ = SubResource("AnimationLibrary_1")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1"]
-
-position = Vector2( 0.115309, 0.710733 )
-scale = Vector2( 1.5174, 1.3949 )
-shape = SubResource( 1 )
-
-[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." index="2"]
-
-rect = Rect2( -10, -10, 20, 20 )
-
-[node name="anim" type="AnimationPlayer" parent="." index="3"]
-libraries = {
-"": SubResource("AnimationLibrary_1")
-}
-
-root_node = NodePath("..")
-autoplay = ""
-callback_mode_process = 1
-playback_default_blend_time = 0.0
-speed_scale = 1.0
-blend_times = [  ]
-
-[node name="sound_Speed_Up" type="AudioStreamPlayer2D" parent="." index="4"]
-
-stream = ExtResource( 3 )
-volume_db = 0.0
-autoplay = false
-max_distance = 2000.0
-attenuation = 1.0
-bus = "Sounds"
+[node name="sound_Speed_Up" type="AudioStreamPlayer2D" parent="." unique_id=1378628849]
+stream = ExtResource("3")
+bus = &"Sounds"
 area_mask = 1
 
-[node name="sound_Energy_Up" type="AudioStreamPlayer2D" parent="." index="5"]
-
-stream = ExtResource( 4 )
-volume_db = 0.0
-autoplay = false
-max_distance = 2000.0
-attenuation = 1.0
-bus = "Sounds"
+[node name="sound_Energy_Up" type="AudioStreamPlayer2D" parent="." unique_id=1240006784]
+stream = ExtResource("4")
+bus = &"Sounds"
 area_mask = 1
 
-[node name="sound_Lateral_Shot" type="AudioStreamPlayer2D" parent="." index="6"]
-
-stream = ExtResource( 5 )
-volume_db = 0.0
-autoplay = false
-max_distance = 2000.0
-attenuation = 1.0
-bus = "Sounds"
+[node name="sound_Lateral_Shot" type="AudioStreamPlayer2D" parent="." unique_id=20597373]
+stream = ExtResource("5")
+bus = &"Sounds"
 area_mask = 1
 
-[node name="sound_Shot_Up" type="AudioStreamPlayer2D" parent="." index="7"]
-
-stream = ExtResource( 6 )
-volume_db = 0.0
-autoplay = false
-max_distance = 2000.0
-attenuation = 1.0
-bus = "Sounds"
+[node name="sound_Shot_Up" type="AudioStreamPlayer2D" parent="." unique_id=1553648518]
+stream = ExtResource("6")
+bus = &"Sounds"
 area_mask = 1
 
-[node name="sound_Shield" type="AudioStreamPlayer2D" parent="." index="8"]
-
-stream = ExtResource( 7 )
-volume_db = 0.0
-autoplay = false
-max_distance = 2000.0
-attenuation = 1.0
-bus = "Sounds"
+[node name="sound_Shield" type="AudioStreamPlayer2D" parent="." unique_id=1035635731]
+stream = ExtResource("7")
+bus = &"Sounds"
 area_mask = 1
 
 [connection signal="area_entered" from="." to="." method="_on_powerUp_area_entered"]
-
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_screen_exited"]
-
 [connection signal="finished" from="sound_Speed_Up" to="." method="_on_audio_finished"]
-
 [connection signal="finished" from="sound_Energy_Up" to="." method="_on_audio_finished"]
-
 [connection signal="finished" from="sound_Lateral_Shot" to="." method="_on_audio_finished"]
-
 [connection signal="finished" from="sound_Shot_Up" to="." method="_on_audio_finished"]
-
 [connection signal="finished" from="sound_Shield" to="." method="_on_audio_finished"]
-

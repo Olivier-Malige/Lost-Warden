@@ -31,8 +31,9 @@ Permanent meta-progression, unlockable ships, profile levels, and account-wide u
 - Phase 1 follow-up — Progression and readability balance: implementation completed on 2026-08-31; solo and co-op balance playtests remain before approval.
 - Phase 1 follow-up — Weapon movement commitment: implementation completed on 2026-08-31; gameplay feel playtests remain before approval.
 - Phase 1 follow-up — Configurable wave duration: implementation completed on 2026-08-31; pacing playtests remain before approval.
+- Phase 1 follow-up — Plasma reserve beam: implementation completed on 2026-09-01; gameplay feel playtests remain before approval.
 - Visual production phase: planned and approved on 2026-08-29; implementation starts only after Phase 1 approval.
-- Next implementation step: validate the progression and late-wave readability balance in solo and co-op, then approve Phase 1.
+- Next implementation step: playtest the plasma reserve beam on waves 1–3, 6, and 9 in solo and co-op, then approve Phase 1 before starting another feature.
 
 Preparation phase B delivered the direct 1066 by 800 viewport, responsive Web presentation, redesigned menus and HUD, browser-fullscreen recovery, the Lost Warden release identity, the approved 24-color palette, itch.io page art, and a validated release archive. Updated gameplay screenshots remain intentionally deferred until the sprite rework is visible. Candidate replacement music is preserved for later review and is not active in the current build.
 
@@ -175,6 +176,27 @@ Validation:
 - Movement uses 100% of the current loadout speed while idle and 88% while firing or charging.
 - Holding both weapon inputs retains the shared 88% multiplier, and releasing every weapon immediately restores full speed.
 - One player's weapon input never slows the co-op partner.
+
+## Phase 1 follow-up — Replace beam charging with a plasma reserve
+
+Status: implemented on 2026-09-01. Automated gameplay, balance, and visual checks pass; maintainer gameplay feel playtests remain required before starting another feature phase.
+
+- Replace the tiered hold-and-release beam with a central continuous beam that drains a personal plasma reserve while its dedicated input is held.
+- Start each player at 0 plasma, require 10 to activate, cap the reserve at 100, and drain 20 per second. Releasing the input preserves the remaining reserve.
+- Suppress primary fire only while the beam is active and retain the shared 0.88 weapon movement multiplier.
+- Let a full reserve trigger a one-second overdrive with increased width and damage. The beam remains purely offensive and never destroys enemy projectiles.
+- Remove beam ranks and make the standard damage upgrade affect the continuous beam alongside the other player weapons.
+- Add frequent plasma-cell drops through one exclusive reward roll per normal enemy. Keep direct power-ups rarer within the overall reward stream until Phase 3 removes them.
+- Share every collected plasma cell with both living co-op players while keeping their reserves and activation inputs independent.
+- Keep plasma cells as an immediate-combat resource distinct from the shared experience introduced in Phase 3.
+
+Validation:
+
+- Partial activations, release conservation, empty-reserve shutdown, full-reserve overdrive, pause cleanup, and co-op input independence behave consistently.
+- The beam ticks every 0.1 seconds across every overlapping enemy without repeated impact recoil or collision changes during a physics callback.
+- Normal enemies drop at most one reward, elites guarantee one power-up plus a large plasma cell, and collection safely disables its collision.
+- Seeded balance simulation targets one full reserve every 35 to 50 seconds without exceeding 20% sustained beam uptime over five minutes.
+- Solo and co-op playtests confirm that partial activations solve emergencies, overdrive is worth saving, and the primary cannon remains the dominant weapon.
 
 ## Phase 1 follow-up — Preview more varied enemy waves
 
@@ -421,7 +443,6 @@ Planned commits:
   - damage: +0.25, 5 ranks;
   - fire rate: -0.02 seconds, 5 ranks, minimum delay 0.12 seconds;
   - side shots: unlock, then +0.2 damage, 4 ranks;
-  - beam charge: -12%, 4 ranks;
   - orb attraction: +48 pixels, 4 ranks;
   - repair: +2 energy when applicable;
   - shield: +1 charge, capped at 3;
@@ -474,7 +495,7 @@ Planned commits:
 ## Phase 5 — Improve particles and bonus shaders
 
 - Add impact sparks, colored explosion bursts, orb trails, collection bursts, and a level-up ring.
-- Strengthen feedback for every beam charge tier and make full charge unambiguous.
+- Strengthen feedback for the continuous plasma beam and make full-reserve overdrive unambiguous.
 - Add two GL Compatibility-safe `CanvasItem` shaders:
   - a pulsing halo for experience orbs;
   - an outline and pulse for selected upgrade cards.
@@ -515,12 +536,13 @@ Planned commits:
 
 - Extend `UpgradeDefinition` with display name, description, icon, maximum rank, and repeatable status.
 - Keep stable identifiers independent from display text and file paths for upgrades, enemies, encounters, and movement profiles.
-- Add `BEAM_CHARGE`, `ORB_MAGNET`, and `SCORE` upgrade effects.
-- Track ranks, caps, the beam charge multiplier, and attraction radius in `PlayerLoadout`.
+- Add `ORB_MAGNET` and `SCORE` upgrade effects.
+- Track ranks, caps, and attraction radius in `PlayerLoadout`; plasma reserve remains player combat state rather than an upgrade rank.
 - Add enemy spawn data for threat cost, danger range, selection-weight curve, elite eligibility, and elite modifiers.
 - Add boss data for stable identifier, scene, danger eligibility, selection weight, phase thresholds, attack phases, and allowed reinforcements.
 - Add `xp_value`, `xp_drop_chance`, `movement_profile`, and `rng_seed` to enemies.
 - Add event-bus signals for enemy defeat, elite spawn, boss start, boss health, boss defeat, XP collection, run progression, time/danger updates, and upgrade selection.
+- Keep `plasma_collected` and `beam_charge_changed` separate from XP events so immediate combat energy never changes run-level progression.
 - Keep `powerup_collected` as the notification for a confirmed upgrade choice.
 
 ## Future roadmap — Meta-progression

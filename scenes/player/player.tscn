@@ -10,6 +10,7 @@
 [ext_resource type="AudioStream" uid="uid://bn3y2eil5kh8j" path="res://assets/audio/sfx/player/shot.wav" id="7"]
 [ext_resource type="Script" path="res://scenes/player/player_effects.gd" id="8"]
 [ext_resource type="Resource" path="res://data/player/player_effects_config.tres" id="9"]
+[ext_resource type="PackedScene" path="res://scenes/player/beam/continuous_beam.tscn" id="10"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 
@@ -513,6 +514,9 @@ scale = Vector2(1, 0.752936)
 position = Vector2(-14, -18.4036)
 scale = Vector2(1, 0.752936)
 
+[node name="ContinuousBeam" parent="." instance=ExtResource("10")]
+position = Vector2(0, -18.4036)
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=77219239]
 position = Vector2(0.124329, 2.19885)
 scale = Vector2(1.09504, 0.991978)
@@ -560,7 +564,6 @@ process_material = SubResource("11")
 show_behind_parent = true
 z_as_relative = false
 material = SubResource("13")
-position = Vector2(0, -28)
 amount = 24
 texture = ExtResource("3")
 lifetime = 0.55
@@ -593,11 +596,6 @@ area_mask = 1
 [node name="sound_Shooting" type="AudioStreamPlayer2D" parent="." unique_id=400035419]
 stream = ExtResource("7")
 volume_db = -10.0
-bus = &"Sounds"
-area_mask = 1
-
-[node name="sound_Beam_mini" type="AudioStreamPlayer2D" parent="." unique_id=611751854]
-stream = ExtResource("7")
 bus = &"Sounds"
 area_mask = 1
 
