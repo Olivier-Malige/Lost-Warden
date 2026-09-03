@@ -36,7 +36,7 @@ Committed autoloads: `global` → `core/global.gd`, `Events` → `core/events.gd
 
 ## Architecture
 
-- HUD, combat, and screen flow talk through `Events` (`score_changed`, `wave_changed`, `energy_changed`, `player_died`, `game_over_requested`, `powerup_collected`, `world_requested`, `hiscore_requested`, `start_screen_requested`, `resume_requested`, `restart_requested`, `graphic_changed`). Do not recouple HUD to player nodes. Coop mode lives on `global.coop`.
+- HUD, combat, and screen flow talk through `Events` (`score_changed`, `wave_changed`, `energy_changed`, `player_died`, `game_over_requested`, `powerup_collected`, `world_requested`, `hiscore_requested`, `start_screen_requested`, `resume_requested`, `restart_requested`). Do not recouple HUD to player nodes. Coop mode lives on `global.coop`.
 - Waves: edit `data/waves/*.tres` / `wave_catalog.tres`; runtime is `scenes/waves/wave_spawner.gd`.
 - Weapons and upgrades are resources (`WeaponDefinition`, `UpgradeDefinition`, `PlayerLoadout`). Prefer data over hardcoded stats.
 - Player logic stays split: `player.gd`, `player_weapons.gd`, `player_vitals.gd`, `player_loadout.gd`.

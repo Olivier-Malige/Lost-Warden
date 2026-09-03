@@ -212,7 +212,7 @@ An elite is simply an **Elite** or **Dominion Ace**, depending on the base unit.
 - short warning tone when it enters;
 - unchanged collision shape.
 
-Low graphics mode keeps the outline, altered panel, health bar, and entry tone while reducing the aura.
+The single supported presentation keeps the outline, altered panel, health bar, entry tone, and pulsing aura.
 
 ## Boss: Dread Ark
 

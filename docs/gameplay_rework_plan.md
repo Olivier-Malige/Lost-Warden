@@ -32,8 +32,9 @@ Permanent meta-progression, unlockable ships, profile levels, and account-wide u
 - Phase 1 follow-up — Weapon movement commitment: implementation completed on 2026-08-31; gameplay feel playtests remain before approval.
 - Phase 1 follow-up — Configurable wave duration: implementation completed on 2026-08-31; pacing playtests remain before approval.
 - Phase 1 follow-up — Plasma reserve beam: implementation completed on 2026-09-01; gameplay feel playtests remain before approval.
+- Phase 1 follow-up — Speed and impact feedback: implementation completed on 2026-09-03; automated checks and visual capture pass, while solo and co-op gameplay feel playtests remain.
 - Visual production phase: planned and approved on 2026-08-29; implementation starts only after Phase 1 approval.
-- Next implementation step: playtest the plasma reserve beam on waves 1–3, 6, and 9 in solo and co-op, then approve Phase 1 before starting another feature.
+- Next implementation step: playtest the speed and impact feedback with the plasma reserve beam on waves 1–3, 6, and 9 in solo and co-op before approving Phase 1.
 
 Preparation phase B delivered the direct 1066 by 800 viewport, responsive Web presentation, redesigned menus and HUD, browser-fullscreen recovery, the Lost Warden release identity, the approved 24-color palette, itch.io page art, and a validated release archive. Updated gameplay screenshots remain intentionally deferred until the sprite rework is visible. Candidate replacement music is preserved for later review and is not active in the current build.
 
@@ -133,7 +134,7 @@ Validation:
 - Player projectiles travel 20% faster without changing their damage.
 - Taking damage does not remove any upgrade.
 - Movement, shooting, and collisions remain readable in solo and co-op.
-- Combat feedback never moves collision shapes or the HUD, and low graphics mode reduces shake and flash intensity.
+- Combat feedback never moves collision shapes or the HUD.
 
 Planned commits:
 
@@ -197,6 +198,25 @@ Validation:
 - Normal enemies drop at most one reward, elites guarantee one power-up plus a large plasma cell, and collection safely disables its collision.
 - Seeded balance simulation targets one full reserve every 35 to 50 seconds without exceeding 20% sustained beam uptime over five minutes.
 - Solo and co-op playtests confirm that partial activations solve emergencies, overdrive is worth saving, and the primary cannon remains the dominant weapon.
+
+## Phase 1 follow-up — Strengthen speed and impact feedback
+
+Status: implemented on 2026-09-03. Automated checks and a GL Compatibility visual capture pass; solo and co-op gameplay feel playtests remain. This focused visual pass precedes the broader explosions, trails, and shaders retained for Phase 5.
+
+- Add a bounded foreground `GPUParticles2D` layer of downward light streaks over the playfield and below the HUD.
+- Smoothly adapt streak speed to the average vertical movement intent in solo and co-op without changing gameplay speed or seeded state.
+- Replace frame-random camera offsets with coherent noise, stronger player-hit feedback, proportional enemy-destruction feedback, and capped accumulation for simultaneous impacts.
+- Keep all camera motion on `Camera2D.offset` so the HUD, collision shapes, and world nodes retain their authoritative positions.
+- Remove the obsolete low/high graphics setting and retain one GL Compatibility-safe visual presentation.
+- Preserve authored projectile sprites and animations while adding restrained lateral glows to player and enemy shots, plus layered beam luminance, without trails; broader projectile VFX remain in Phase 5.
+
+Validation:
+
+- Foreground particles remain bounded, non-interactive, and clear of the HUD hierarchy.
+- Opposing co-op movement inputs average the streak speed without either player owning the effect.
+- Player hits, player destruction, and enemy destruction produce distinct strengths; simultaneous impacts never exceed the configured cap.
+- Existing saves keep audio, fullscreen, and controller preferences while discarding the removed graphics key on their next save.
+- Solo and co-op playtests confirm that projectiles and collision cues remain readable during dense waves.
 
 ## Phase 1 follow-up — Preview more varied enemy waves
 
@@ -354,7 +374,7 @@ Validation:
 - Player, enemy-family, projectile, and hazard silhouettes remain readable at gameplay scale in solo and co-op.
 - Every animation keeps its expected frame count, pivot, node path, and callback behavior.
 - Collision shapes remain aligned without being resized to match decorative effects.
-- High and low graphics modes remain legible under the GL Compatibility renderer.
+- The single visual presentation remains legible under the GL Compatibility renderer.
 - Title, gameplay, pause, game-over, solo, co-op, browser fullscreen, and responsive Web flows load without missing resources or distorted sprites.
 - Updated gameplay screenshots are captured only after this phase passes validation.
 
@@ -373,7 +393,7 @@ Planned commits:
 - Prevent either of the previous two encounters from repeating when another eligible encounter exists.
 - Centralize encounter timers and remove obsolete timer nodes and signal connections from the world scene.
 - Generate one internal seed per run and derive four independent random streams for encounters, enemy initialization, orb drops, and upgrade offers.
-- Keep cosmetic randomness separate so graphics quality cannot alter seeded gameplay.
+- Keep cosmetic randomness separate so visual feedback cannot alter seeded gameplay.
 - Use the following danger curve:
   - start: 1.0;
   - 2 minutes: 1.4;
@@ -411,7 +431,7 @@ Validation:
 - A different seed produces a different encounter sequence.
 - Encounter transitions never interrupt the run.
 - Stronger enemy families become measurably more frequent as danger rises while common enemies remain present.
-- Elite promotion follows the configured curve, respects active caps, and is visually unmistakable in both graphics modes.
+- Elite promotion follows the configured curve, respects active caps, and is visually unmistakable in the supported presentation.
 - The first boss starts after five minutes of regular encounters, normal spawning is suspended, and no boss overlap is possible.
 - Boss phase changes occur once at the configured health thresholds and the director resumes after the recovery window.
 - Existing save files load without losing scores.
@@ -499,13 +519,13 @@ Planned commits:
 - Add two GL Compatibility-safe `CanvasItem` shaders:
   - a pulsing halo for experience orbs;
   - an outline and pulse for selected upgrade cards.
-- Reduce particle counts and disable expensive variants in low graphics mode.
+- Keep particle counts bounded and compatible with the GL Compatibility renderer.
 - Preserve the current 8-bit/Pico-8-inspired visual language and reuse existing sounds during this phase.
 
 Validation:
 
 - Shaders compile without errors under GL Compatibility.
-- Bonuses remain recognizable in high and low graphics modes.
+- Bonuses remain recognizable in the supported presentation.
 - Effects and helper nodes do not accumulate without bounds.
 
 Planned commit:
@@ -523,7 +543,7 @@ Planned commit:
   - the full encounter variety at 5–8 minutes;
   - strong pressure at 10–12 minutes.
 - Test enemy and elite caps, boss non-overlap, queued levels, one-player death in co-op, and legacy save loading.
-- Run Godot headless validation, followed by a manual 12-minute run in both modes.
+- Run Godot headless validation, followed by manual 12-minute solo and co-op runs.
 - Update architecture documentation and debug-control documentation.
 
 Planned commits:

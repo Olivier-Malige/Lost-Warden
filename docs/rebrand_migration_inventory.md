@@ -134,7 +134,7 @@ The following systems are not identity-bearing and should be retained unless the
 - projectile pooling and shot damage mechanics;
 - player input and controller assignment;
 - weapon, upgrade, loadout, wave, and spawn resource patterns;
-- save compatibility, score records, graphics settings, and fullscreen preference;
+- save compatibility, score records, and fullscreen preference;
 - debug mode and F1–F6 actions, with only the roadmap's planned reassignment;
 - Pico-8-inspired low-resolution discipline, subject to original asset replacement.
 
