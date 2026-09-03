@@ -24,7 +24,6 @@ var saveData := {
 		fullscreen = true,
 		player1 = "gamepad1",
 		player2 = "keyboard",
-		graphic = "high",
 	}
 }
 var coop := false
@@ -40,8 +39,6 @@ func _process(delta: float) -> void:
 
 func _ready() -> void:
 	saveData = _Save.load_data(saveData)
-	if saveData.config.graphic == "hight":
-		saveData.config.graphic = "high"
 	setSound(saveData.config.sound)
 	setMusic(saveData.config.music)
 

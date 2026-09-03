@@ -29,8 +29,7 @@ func _process(delta: float) -> void:
 
 func _draw() -> void:
 	var pulse := 0.5 + sin(elapsed * 4.0) * 0.5
-	var low_graphics: bool = String(global.saveData.config.graphic) == "low"
-	var aura_alpha := definition.low_graphics_aura_alpha if low_graphics else definition.aura_alpha + pulse * 0.1
+	var aura_alpha := definition.aura_alpha + pulse * 0.1
 	draw_circle(Vector2.ZERO, radius + 4.0 + pulse * 2.0, Color(definition.aura_color, aura_alpha))
 	draw_arc(Vector2.ZERO, radius, 0.0, TAU, 20, definition.outline_color, 1.0, true)
 	var bar_position := Vector2(-definition.health_bar_size.x * 0.5, -radius - 10.0)

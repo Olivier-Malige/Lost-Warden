@@ -145,7 +145,7 @@ func _on_anim_animation_finished(animation: StringName) -> void:
 
 func _destroy() -> void:
 	destroyed = true
-	var shake_strength := clampf(1.25 + sqrt(float(maxi(points, 0))) * 0.08, 1.25, 5.0)
+	var shake_strength := clampf(3.0 + sqrt(float(maxi(points, 0))) * 0.2, 3.0, 14.0)
 	Events.screen_shake_requested.emit(shake_strength, 0.08 + shake_strength * 0.015)
 	if shake_strength >= 4.0:
 		Events.screen_flash_requested.emit(Color(0.88, 0.35, 0.25, 0.08), 0.08)

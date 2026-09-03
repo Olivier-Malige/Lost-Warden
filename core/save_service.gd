@@ -6,13 +6,13 @@ const TEMP_PATH := "user://data.json.tmp"
 const SCHEMA_KEY := "_schema_version"
 const SCHEMA_VERSION := 1
 
-static func load_data(default_data: Dictionary) -> Dictionary:
+static func load_data(default_data: Dictionary, path := PATH, temp_path := TEMP_PATH) -> Dictionary:
 	var defaults := default_data.duplicate(true)
 	defaults[SCHEMA_KEY] = SCHEMA_VERSION
-	if not FileAccess.file_exists(PATH):
-		save_data(defaults)
+	if not FileAccess.file_exists(path):
+		save_data(defaults, path, temp_path)
 		return defaults
-	var f := FileAccess.open(PATH, FileAccess.READ)
+	var f := FileAccess.open(path, FileAccess.READ)
 	if f == null:
 		push_warning("Save data could not be opened; defaults will be used.")
 		return defaults
@@ -22,10 +22,10 @@ static func load_data(default_data: Dictionary) -> Dictionary:
 	push_warning("Save data is invalid; defaults will be used.")
 	return defaults
 
-static func save_data(data: Dictionary) -> void:
+static func save_data(data: Dictionary, path := PATH, temp_path := TEMP_PATH) -> void:
 	var output := data.duplicate(true)
 	output[SCHEMA_KEY] = SCHEMA_VERSION
-	var f := FileAccess.open(TEMP_PATH, FileAccess.WRITE)
+	var f := FileAccess.open(temp_path, FileAccess.WRITE)
 	if f == null:
 		push_error("Save data temporary file could not be opened.")
 		return
@@ -33,8 +33,8 @@ static func save_data(data: Dictionary) -> void:
 	f.flush()
 	f.close()
 	var rename_error := DirAccess.rename_absolute(
-		ProjectSettings.globalize_path(TEMP_PATH),
-		ProjectSettings.globalize_path(PATH)
+		ProjectSettings.globalize_path(temp_path),
+		ProjectSettings.globalize_path(path)
 	)
 	if rename_error != OK:
 		push_error("Save data could not replace the previous file (error %d)." % rename_error)

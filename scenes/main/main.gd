@@ -25,7 +25,6 @@ const PLAYER_INPUT_ACTIONS := [
 
 func _ready() -> void:
 	add_to_group("game")
-	set_Graphic(global.saveData.config.graphic)
 	if OS.has_feature("web"):
 		global.saveData.config.fullscreen = get_window().mode == Window.MODE_FULLSCREEN
 		get_window().size_changed.connect(_on_window_size_changed)
@@ -38,7 +37,6 @@ func _ready() -> void:
 	Events.resume_requested.connect(set_Resume)
 	Events.restart_requested.connect(set_Restart)
 	Events.game_over_requested.connect(go_GameOver_Screen)
-	Events.graphic_changed.connect(set_Graphic)
 
 
 func _input(event: InputEvent) -> void:
@@ -187,6 +185,3 @@ func go_GameOver_Screen() -> void:
 	game_over.name = "Overlay"
 	game_over_layer.add_child(game_over)
 	game_over.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-
-func set_Graphic(level: String) -> void:
-	_set_title_stars(level == "high")

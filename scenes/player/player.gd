@@ -63,7 +63,7 @@ func _setup_player() -> void:
 	id_Player = "player2" if set_Player_2 else "player1"
 	animation_player.play(id_Player + "_idle")
 	var charge_texture := load("res://assets/sprites/player/" + id_Player + "_particle.png") as Texture2D
-	effects.setup(global.saveData.config.graphic == "low", charge_texture)
+	effects.setup(charge_texture)
 	_ship_rest_position = ship_sprite.position
 	update_controller()
 	update_energy()

@@ -18,7 +18,7 @@ func hit(_dmg := 1) -> void:
 		player.malusSpeed = player.STATS.malus_speed
 		player.touched = true
 		player.set_state(Player.State.HIT)
-		Events.screen_shake_requested.emit(12.0, 0.22)
+		Events.screen_shake_requested.emit(18.0, 0.28)
 		Events.screen_flash_requested.emit(Color(0.88, 0.12, 0.16, 0.2), 0.14)
 	else:
 		player.energy = 0
@@ -26,7 +26,7 @@ func hit(_dmg := 1) -> void:
 		player.explosion_audio.playing = true
 		player.update_energy()
 		player.animation_player.play(player.id_Player + "_explode")
-		Events.screen_shake_requested.emit(18.0, 0.4)
+		Events.screen_shake_requested.emit(26.0, 0.45)
 		Events.screen_flash_requested.emit(Color(1.0, 0.35, 0.3, 0.28), 0.25)
 		player.set_state(Player.State.DYING)
 		player.set_process(false)

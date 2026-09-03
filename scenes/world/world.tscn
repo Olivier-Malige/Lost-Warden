@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://scenes/world/combat_feedback.gd" id="8"]
 [ext_resource type="Resource" path="res://data/waves/wave_spawner_config.tres" id="9"]
 [ext_resource type="Resource" path="res://data/waves/wave_catalog.tres" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/world/foreground_speed_particles.tscn" id="11"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxRankPanel"]
 bg_color = Color(0.0470588, 0.0588235, 0.101961, 0.9)
@@ -362,3 +363,5 @@ script = ExtResource("6")
 [node name="background" parent="." unique_id=1458692991 instance=ExtResource("5")]
 scroll_ignore_camera_zoom = true
 speed_Y = 80
+
+[node name="ForegroundSpeedParticles" parent="." instance=ExtResource("11")]
