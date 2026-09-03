@@ -59,7 +59,7 @@ func _run_rule(rule: SpawnRule, generation: int, difficulty: float, timeline_sca
 	if global.coop and rule.formation < 4 and interval < active_duration:
 		interval *= 0.9
 	var cycle := 0
-	var elites_remaining := maxi(rule.elite_count, 0)
+	var elites_remaining := maxi(rule.elite_count + _endless_elite_bonus(rule), 0)
 	var next_spawn_elapsed := 0.0
 	while generation == _wave_generation and active_timer.time_left > 0.0:
 		var elapsed := active_duration - active_timer.time_left
@@ -77,7 +77,7 @@ func _run_rule(rule: SpawnRule, generation: int, difficulty: float, timeline_sca
 			next_spawn_elapsed = elapsed
 
 func _spawn_formation(rule: SpawnRule, generation: int, cycle: int, active_timer: SceneTreeTimer, difficulty: float, can_spawn_elite: bool, timeline_scale: float) -> bool:
-	var count := maxi(rule.formation, 1)
+	var count := maxi(rule.formation + _endless_formation_bonus(rule), 1)
 	if global.coop and count >= 4:
 		count += 1
 	var lanes := _formation_lanes(rule, count, cycle)
@@ -115,6 +115,14 @@ func _formation_lanes(rule: SpawnRule, requested_count: int, cycle: int) -> Arra
 			return available
 		SpawnRule.Pattern.OFFSET_GROUP:
 			return _offset_group_lanes(available, count, maxi(rule.lane_spacing, 1), cycle)
+		SpawnRule.Pattern.CENTER_OUT:
+			return _center_out_lanes(available, count)
+		SpawnRule.Pattern.EDGE_IN:
+			return _edge_in_lanes(available, count)
+		SpawnRule.Pattern.SWEEP:
+			return _sweep_lanes(available, count, cycle)
+		SpawnRule.Pattern.GAP_WALL:
+			return _gap_wall_lanes(available, count, cycle)
 		_:
 			return [available.pick_random()]
 
@@ -173,6 +181,61 @@ func _offset_group_lanes(available: Array[int], count: int, spacing: int, cycle:
 		lanes.append(available[start + i * spacing])
 	return lanes
 
+func _center_out_lanes(available: Array[int], count: int) -> Array[int]:
+	var lanes: Array[int] = []
+	var left := int((available.size() - 1) / 2.0)
+	var right := left + 1
+	lanes.append(available[left])
+	while lanes.size() < count:
+		if right < available.size():
+			lanes.append(available[right])
+			right += 1
+		if left > 0 and lanes.size() < count:
+			left -= 1
+			lanes.append(available[left])
+	return lanes
+
+func _edge_in_lanes(available: Array[int], count: int) -> Array[int]:
+	var lanes: Array[int] = []
+	var left := 0
+	var right := available.size() - 1
+	while lanes.size() < count and left <= right:
+		lanes.append(available[left])
+		left += 1
+		if left <= right and lanes.size() < count:
+			lanes.append(available[right])
+			right -= 1
+	return lanes
+
+func _sweep_lanes(available: Array[int], count: int, cycle: int) -> Array[int]:
+	var maximum_start := available.size() - count
+	var start := _ping_pong_index(maximum_start, cycle)
+	var lanes: Array[int] = []
+	for i in range(count):
+		lanes.append(available[start + i])
+	return lanes
+
+func _gap_wall_lanes(available: Array[int], count: int, cycle: int) -> Array[int]:
+	if available.size() <= 2:
+		return _sweep_lanes(available, count, cycle)
+	var gap_size := 2
+	var spawn_count := mini(count, available.size() - gap_size)
+	var gap_start := _ping_pong_index(available.size() - gap_size, cycle)
+	var lanes: Array[int] = []
+	for i in range(available.size()):
+		if i < gap_start or i >= gap_start + gap_size:
+			lanes.append(available[i])
+			if lanes.size() == spawn_count:
+				break
+	return lanes
+
+func _ping_pong_index(maximum: int, cycle: int) -> int:
+	if maximum <= 0:
+		return 0
+	var period := maximum * 2
+	var phase := cycle % period
+	return phase if phase <= maximum else period - phase
+
 func _active_enemy_count() -> int:
 	return _active_enemies.size()
 
@@ -218,6 +281,19 @@ func _pace_multiplier(difficulty: float) -> float:
 
 func _endless_health_multiplier() -> float:
 	return minf(1.0 + _endless_cycle * config.health_step, config.health_cap)
+
+func _endless_formation_bonus(rule: SpawnRule) -> int:
+	if not _is_endless_finale() or not rule.endless_formation_growth:
+		return 0
+	return mini(floori(float(_endless_cycle) / float(config.formation_step_cycles)), config.formation_bonus_cap)
+
+func _endless_elite_bonus(rule: SpawnRule) -> int:
+	if not _is_endless_finale() or not rule.endless_elite_growth:
+		return 0
+	return mini(floori(float(_endless_cycle) / float(config.elite_step_cycles)), config.elite_bonus_cap)
+
+func _is_endless_finale() -> bool:
+	return catalog != null and wave_index == catalog.waves.size() - 1 and _endless_cycle > 0
 
 func _on_master_timeout() -> void:
 	goto_Next_Wave()

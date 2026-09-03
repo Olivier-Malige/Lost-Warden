@@ -8,6 +8,10 @@ enum Pattern {
 	ALTERNATING_EDGES,
 	SCATTER,
 	OFFSET_GROUP,
+	CENTER_OUT,
+	EDGE_IN,
+	SWEEP,
+	GAP_WALL,
 }
 
 @export var scene: PackedScene
@@ -18,10 +22,14 @@ enum Pattern {
 @export_range(1, 16, 1) var formation: int = 1
 @export_range(0.0, 60.0, 0.05) var start_delay: float = 0.0
 @export_range(0.0, 60.0, 0.05) var active_duration: float = 6.0
-@export_enum("Single", "Line", "V", "Alternating Edges", "Scatter", "Offset Group") var pattern: int = Pattern.SINGLE
+@export_enum("Single", "Line", "V", "Alternating Edges", "Scatter", "Offset Group", "Center Out", "Edge In", "Sweep", "Gap Wall") var pattern: int = Pattern.SINGLE
 @export_range(1, 12, 1) var lane_spacing: int = 1
 @export_range(0.0, 5.0, 0.01) var spawn_gap: float = 0.15
 @export_range(0, 1, 1) var elite_count: int = 0
+
+@export_group("Endless loop")
+@export var endless_formation_growth := false
+@export var endless_elite_growth := false
 
 @export_group("Movement")
 @export_range(0.1, 3.0, 0.05) var speed_multiplier: float = 1.0

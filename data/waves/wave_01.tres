@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="WaveDefinition" format=3 uid="uid://b7phck7h2y6v8"]
+[gd_resource type="Resource" script_class="WaveDefinition" format=3]
 
-[ext_resource type="Script" uid="uid://dpr5rymyr25n2" path="res://data/waves/wave_definition.gd" id="1"]
-[ext_resource type="Script" uid="uid://ctp3qhk1vo1qm" path="res://data/waves/spawn_rule.gd" id="2"]
+[ext_resource type="Script" path="res://data/waves/wave_definition.gd" id="1"]
+[ext_resource type="Script" path="res://data/waves/spawn_rule.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/drone.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/tie.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/asteroid.tscn" id="5"]
@@ -9,69 +9,81 @@
 [sub_resource type="Resource" id="rule_1"]
 script = ExtResource("2")
 scene = ExtResource("3")
-interval = 3.5
+interval = 3.4
 weight = 1.0
-spawn_min = 1
-spawn_max = 10
+spawn_min = 0
+spawn_max = 11
 formation = 4
 start_delay = 0.0
-active_duration = 6.0
+active_duration = 10.0
 pattern = 3
 lane_spacing = 1
-spawn_gap = 0.15
+spawn_gap = 0.12
 elite_count = 0
-speed_multiplier = 0.9
+endless_formation_growth = false
+endless_elite_growth = false
+speed_multiplier = 1.0
+health_multiplier = 1.0
 
 [sub_resource type="Resource" id="rule_2"]
 script = ExtResource("2")
 scene = ExtResource("4")
-interval = 3.0
-weight = 1.0
-spawn_min = 1
-spawn_max = 10
-formation = 1
-start_delay = 8.0
-active_duration = 6.0
-pattern = 0
-lane_spacing = 1
-spawn_gap = 0.15
-elite_count = 0
-speed_multiplier = 1.0
-
-[sub_resource type="Resource" id="rule_3"]
-script = ExtResource("2")
-scene = ExtResource("4")
-interval = 4.0
+interval = 3.2
 weight = 1.0
 spawn_min = 1
 spawn_max = 10
 formation = 3
-start_delay = 16.0
-active_duration = 6.0
-pattern = 1
+start_delay = 9.0
+active_duration = 10.0
+pattern = 7
 lane_spacing = 1
-spawn_gap = 0.15
+spawn_gap = 0.12
 elite_count = 0
+endless_formation_growth = false
+endless_elite_growth = false
 speed_multiplier = 1.0
+health_multiplier = 1.0
+
+[sub_resource type="Resource" id="rule_3"]
+script = ExtResource("2")
+scene = ExtResource("3")
+interval = 3.0
+weight = 1.0
+spawn_min = 0
+spawn_max = 11
+formation = 4
+start_delay = 18.0
+active_duration = 10.0
+pattern = 8
+lane_spacing = 1
+spawn_gap = 0.12
+elite_count = 0
+endless_formation_growth = false
+endless_elite_growth = false
+speed_multiplier = 1.0
+health_multiplier = 1.0
 
 [sub_resource type="Resource" id="rule_4"]
 script = ExtResource("2")
 scene = ExtResource("5")
-interval = 2.5
+interval = 3.0
 weight = 1.0
 spawn_min = 0
 spawn_max = 11
-formation = 3
-start_delay = 16.0
-active_duration = 6.0
-pattern = 4
+formation = 4
+start_delay = 27.0
+active_duration = 10.0
+pattern = 9
 lane_spacing = 1
 spawn_gap = 0.12
 elite_count = 0
+endless_formation_growth = false
+endless_elite_growth = false
 speed_multiplier = 1.0
+health_multiplier = 1.0
 
 [resource]
 script = ExtResource("1")
-duration = 24.0
+duration = 36.0
 difficulty = 1.15
 rules = Array[ExtResource("2")]([SubResource("rule_1"), SubResource("rule_2"), SubResource("rule_3"), SubResource("rule_4")])

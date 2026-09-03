@@ -8,6 +8,6 @@ max_health = 2
 collision_damage = 3
 score = 70
 durability = 2
-plasma_drop_chance = 15
+plasma_drop_chance = 13
 speed = Vector2(0, 300)
 random_speed = Vector2(40, 0)
