@@ -1,5 +1,7 @@
 extends Shot
 
+const _ProjectileGlow := preload("res://scenes/combat/projectile_glow.gd")
+
 @export var damage: float
 @export var damage_Max: float
 @export var power_Small: float
@@ -15,21 +17,17 @@ var _base_speed_y := 0
 var _follow_target: Node2D
 var _follow_offset := Vector2.ZERO
 var _follow_time := 0.0
-var _glow_sources: Array[Sprite2D] = []
-var _glows: Array[Sprite2D] = []
-var _trail: Line2D
+var _source_sprite: Sprite2D
+var _laser_glow: Sprite2D
 
 
 func _ready() -> void:
 	super._ready()
-	if vfx_config == null or not vfx_config.is_valid():
-		push_error("ProjectileVfxConfig is required for %s." % scene_file_path)
 	if _base_damage < 0.0:
 		_base_damage = damage
 		_base_speed_y = speedY
 	damage = minf(damage, damage_Max)
-	_create_glows()
-	_create_trail()
+	_create_laser_glow()
 
 
 func prepare() -> void:
@@ -44,8 +42,7 @@ func set_damage_bonus(extra_damage: float) -> void:
 	setPowerAnim()
 
 func _physics_process(delta: float) -> void:
-	_sync_glows()
-	_sync_trail()
+	_sync_laser_glow()
 	if is_instance_valid(_follow_target) and _follow_time > 0.0:
 		global_position = _follow_target.global_position + _follow_offset
 		_follow_time = maxf(_follow_time - delta, 0.0)
@@ -53,6 +50,36 @@ func _physics_process(delta: float) -> void:
 			ProjectilePool.despawn(self)
 		return
 	super._physics_process(delta)
+
+
+func _create_laser_glow() -> void:
+	if vfx_config == null or not vfx_config.is_valid():
+		return
+	for child in get_children():
+		if child is Sprite2D:
+			_source_sprite = child as Sprite2D
+			break
+	if _source_sprite == null:
+		return
+	_laser_glow = _ProjectileGlow.create(
+		_source_sprite,
+		vfx_config.glow_color(player_Id),
+		vfx_config.core_brightness,
+		_get_glow_size(),
+		vfx_config.glow_material
+	)
+	_laser_glow.name = "LaserGlow"
+	_sync_laser_glow()
+
+
+func _sync_laser_glow() -> void:
+	if _source_sprite == null or _laser_glow == null:
+		return
+	_ProjectileGlow.sync(_source_sprite, _laser_glow, vfx_config.glow_color(player_Id), _get_glow_size())
+
+
+func _get_glow_size() -> Vector2:
+	return vfx_config.glow_spread * vfx_config.glow_scale
 
 func follow_player(target: Node2D, offset: Vector2, duration: float) -> void:
 	_follow_target = target
@@ -67,74 +94,8 @@ func setPowerAnim() -> void:
 	for tier in [[power_Full, "_full"], [power_Large, "_large"], [power_Big, "_big"], [power_Normal, "_normal"], [power_Small, "_small"]]:
 		if damage >= tier[0]:
 			$anim.play(player_Id + tier[1])
-			_apply_player_color()
-			_sync_glows()
 			return
 	$anim.play(player_Id + "_small")
-	_apply_player_color()
-	_sync_glows()
-
-func _apply_player_color() -> void:
-	if vfx_config == null:
-		return
-	var color := vfx_config.player_color(player_Id)
-	for index in range(_glows.size()):
-		_glow_sources[index].modulate = color
-		_glows[index].modulate = vfx_config.glow_color(player_Id)
-	if _trail:
-		var trail_color := vfx_config.trail_color(player_Id)
-		var gradient := Gradient.new()
-		gradient.colors = PackedColorArray([vfx_config.trail_head_color, trail_color, Color(trail_color.r, trail_color.g, trail_color.b, 0.0)])
-		gradient.offsets = PackedFloat32Array([0.0, vfx_config.trail_middle_offset, 1.0])
-		_trail.gradient = gradient
-
-func _create_glows() -> void:
-	if vfx_config == null or global.saveData.config.graphic == "low" or not _glows.is_empty():
-		return
-	for child in get_children():
-		var source := child as Sprite2D
-		if source == null:
-			continue
-		var glow := Sprite2D.new()
-		glow.texture = source.texture
-		glow.hframes = source.hframes
-		glow.vframes = source.vframes
-		glow.position = source.position
-		glow.scale = source.scale * vfx_config.glow_scale
-		glow.modulate = vfx_config.glow_color(player_Id)
-		glow.z_index = -1
-		glow.material = vfx_config.glow_material
-		add_child(glow)
-		_glow_sources.append(source)
-		_glows.append(glow)
-
-func _sync_glows() -> void:
-	for index in _glows.size():
-		var source := _glow_sources[index]
-		var glow := _glows[index]
-		if not is_instance_valid(source) or not is_instance_valid(glow):
-			continue
-		glow.frame = source.frame
-		glow.flip_h = source.flip_h
-		glow.flip_v = source.flip_v
-
-func _create_trail() -> void:
-	if vfx_config == null or piercing or global.saveData.config.graphic == "low":
-		return
-	_trail = Line2D.new()
-	_trail.width = vfx_config.trail_width
-	_trail.antialiased = false
-	_trail.z_index = -2
-	add_child(_trail)
-	_apply_player_color()
-
-func _sync_trail() -> void:
-	if _trail == null:
-		return
-	var velocity := Vector2(speedX, speedY)
-	if velocity.length_squared() <= 0.0:
-		return
-	_trail.points = PackedVector2Array([Vector2.ZERO, -velocity.normalized() * vfx_config.trail_length])
 
 
 func _on_area_entered(area: Area2D) -> void:

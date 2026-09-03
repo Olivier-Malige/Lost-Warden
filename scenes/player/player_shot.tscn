@@ -462,6 +462,7 @@ angular_damp = 1.0
 audio_bus_override = false
 audio_bus_name = "Master"
 script = ExtResource( 1 )
+vfx_config = ExtResource( 3 )
 _sections_unfolded = [ "Transform3D" ]
 speedY = -1200
 speedX = 0
@@ -474,7 +475,6 @@ power_Normal = 1.5
 power_Big = 2.0
 power_Large = 2.25
 power_Full = 2.5
-vfx_config = ExtResource( 3 )
 
 [node name="sprite" type="Sprite2D" parent="." index="0"]
 

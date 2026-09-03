@@ -3,10 +3,12 @@ extends Resource
 
 @export_group("Glow")
 @export var glow_material: Material
-@export_range(1.0, 5.0, 0.05) var glow_scale := 2.15
-@export_range(0.0, 1.0, 0.01) var glow_alpha := 0.58
-@export var player_one_color := Color(0.25, 0.95, 1.0)
-@export var player_two_color := Color(1.0, 0.42, 0.72)
+@export_range(1.0, 3.0, 0.05) var core_brightness := 1.65
+@export_range(1.0, 5.0, 0.05) var glow_scale := 1.25
+@export var glow_spread := Vector2(1.35, 0.68)
+@export_range(0.0, 1.0, 0.01) var glow_alpha := 0.5
+@export var player_one_color := Color(1.0, 0.22, 0.18)
+@export var player_two_color := Color(0.25, 0.42, 1.0)
 
 @export_group("Trail")
 @export_range(0.0, 32.0, 0.5) var trail_width := 6.0

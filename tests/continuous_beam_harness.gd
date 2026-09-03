@@ -37,6 +37,12 @@ func _test_continuous_damage() -> void:
 	var original_life := turret.life
 	player.continuous_beam.damage_interval = 0.1
 	player.continuous_beam.activate(player.id_Player, 3.0, false)
+	var beam_audio := player.continuous_beam.beam_audio
+	_expect(beam_audio.stream is AudioStreamMP3 and (beam_audio.stream as AudioStreamMP3).loop, "The beam sound must use the looping beam MP3.")
+	_expect(beam_audio.bus == &"Sounds", "The beam sound must use the Sounds bus.")
+	_expect(beam_audio.playing, "Activating the beam must start its sound.")
+	player.continuous_beam.set_overdrive(true)
+	_expect(beam_audio.playing, "Switching beam overdrive must not interrupt its sound.")
 	for _frame in range(8):
 		await get_tree().physics_frame
 	_expect(turret.life <= original_life - 3, "A target remaining inside the beam must take its first damage tick.")
@@ -47,6 +53,7 @@ func _test_continuous_damage() -> void:
 	_expect(turret.position == original_position, "Continuous damage must not apply repeated impact recoil.")
 	_expect((player.continuous_beam.collision_mask & Layers.ENEMY_SHOT) == 0, "The beam must never collide with enemy projectiles.")
 	player.continuous_beam.deactivate()
+	_expect(not beam_audio.playing, "Deactivating the beam must stop its sound.")
 	player.queue_free()
 	turret.queue_free()
 	await get_tree().process_frame

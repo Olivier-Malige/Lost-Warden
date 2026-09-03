@@ -5,11 +5,14 @@ const Layers := preload("res://core/collision_layers.gd")
 const TOP_EDGE := 0.0
 const PLAYER_ONE_COLOR := Color(1.0, 0.12, 0.08, 1.0)
 const PLAYER_TWO_COLOR := Color(0.12, 0.48, 1.0, 1.0)
-const GLOW_ALPHA := 0.72
+const HALO_ALPHA := 0.28
+const OUTER_ALPHA := 0.58
 
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
+@onready var halo_line: Line2D = $HaloLine
 @onready var outer_line: Line2D = $OuterLine
 @onready var core_line: Line2D = $CoreLine
+@onready var beam_audio: AudioStreamPlayer2D = $BeamAudio
 
 var active := false
 var overdrive := false
@@ -42,6 +45,8 @@ func activate(p_player_id: String, p_damage: float, p_overdrive: bool) -> void:
 	_update_width()
 	_update_geometry()
 	visible = true
+	if not beam_audio.playing:
+		beam_audio.play()
 	set_physics_process(true)
 	collision_shape.set_deferred("disabled", false)
 	set_deferred("monitoring", true)
@@ -51,6 +56,7 @@ func deactivate() -> void:
 	overdrive = false
 	_damage_accumulator = 0.0
 	visible = false
+	beam_audio.stop()
 	set_physics_process(false)
 	collision_shape.set_deferred("disabled", true)
 	set_deferred("monitoring", false)
@@ -89,15 +95,18 @@ func _update_geometry() -> void:
 	_shape.size = Vector2(width, length)
 	collision_shape.position = Vector2(0.0, -length * 0.5)
 	var points := PackedVector2Array([Vector2.ZERO, Vector2(0.0, -length)])
+	halo_line.points = points
 	outer_line.points = points
 	core_line.points = points
 
 func _update_width() -> void:
 	var width := overdrive_width if overdrive else beam_width
+	halo_line.width = width * 1.35
 	outer_line.width = width
-	core_line.width = width * 0.38
+	core_line.width = width * 0.34
 
 func _apply_player_color() -> void:
 	var color := PLAYER_ONE_COLOR if player_id == "player1" else PLAYER_TWO_COLOR
-	outer_line.modulate = Color(color.r, color.g, color.b, GLOW_ALPHA)
-	core_line.modulate = color.lightened(0.25)
+	halo_line.modulate = Color(color.r, color.g, color.b, HALO_ALPHA)
+	outer_line.modulate = Color(color.r, color.g, color.b, OUTER_ALPHA)
+	core_line.modulate = color
