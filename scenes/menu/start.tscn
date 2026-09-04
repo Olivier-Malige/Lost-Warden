@@ -65,6 +65,17 @@ text = "ARCADE STARFIGHTER"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Version" type="Label" parent="TitleArea/Content"]
+
+custom_minimum_size = Vector2( 0, 22 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.611765, 0.666667, 0.752941, 1 )
+theme_override_fonts/font = ExtResource( 3 )
+theme_override_font_sizes/font_size = 16
+text = "ALPHA-8"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="TitleLine" type="ColorRect" parent="TitleArea/Content"]
 
 custom_minimum_size = Vector2( 0, 3 )

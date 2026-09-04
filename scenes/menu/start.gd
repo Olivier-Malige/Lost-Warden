@@ -4,6 +4,7 @@ extends Control
 func _ready() -> void:
 	if $music.stream:
 		$music.stream.loop = true
+	$TitleArea/Content/Version.text = String(ProjectSettings.get_setting("application/config/release_label", "dev")).to_upper()
 
 	var m = load("res://scenes/menu/menu.tscn").instantiate()
 	add_child(m)
