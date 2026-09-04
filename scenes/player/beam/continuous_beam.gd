@@ -21,6 +21,7 @@ var damage_interval := 0.1
 var player_id := "player1"
 var beam_width := 32.0
 var overdrive_width := 64.0
+var collision_width_multiplier := 1.2
 var overdrive_damage_multiplier := 1.5
 var _damage_accumulator := 0.0
 var _shape := RectangleShape2D.new()
@@ -92,7 +93,7 @@ func _damage_overlaps() -> void:
 func _update_geometry() -> void:
 	var length := maxf(global_position.y - TOP_EDGE, 1.0)
 	var width := overdrive_width if overdrive else beam_width
-	_shape.size = Vector2(width, length)
+	_shape.size = Vector2(width * collision_width_multiplier, length)
 	collision_shape.position = Vector2(0.0, -length * 0.5)
 	var points := PackedVector2Array([Vector2.ZERO, Vector2(0.0, -length)])
 	halo_line.points = points

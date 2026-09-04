@@ -21,5 +21,6 @@ extends Resource
 @export_range(0.1, 100.0, 0.1) var beam_damage := 3.0
 @export_range(1.0, 256.0, 1.0) var beam_width := 32.0
 @export_range(1.0, 256.0, 1.0) var beam_overdrive_width := 64.0
+@export_range(1.0, 2.0, 0.05) var beam_collision_width_multiplier := 1.2
 @export_range(1.0, 10.0, 0.1) var beam_overdrive_damage_multiplier := 1.5
 @export_range(0.0, 10.0, 0.1) var beam_overdrive_duration := 1.0

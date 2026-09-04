@@ -164,6 +164,7 @@ func _start_beam() -> void:
 	continuous_beam.damage_interval = STATS.beam_damage_interval
 	continuous_beam.beam_width = STATS.beam_width
 	continuous_beam.overdrive_width = STATS.beam_overdrive_width
+	continuous_beam.collision_width_multiplier = STATS.beam_collision_width_multiplier
 	continuous_beam.overdrive_damage_multiplier = STATS.beam_overdrive_damage_multiplier
 	continuous_beam.activate(id_Player, STATS.beam_damage + loadout.damage_bonus, overdrive)
 	(full_beam_audio if overdrive else normal_beam_audio).play()

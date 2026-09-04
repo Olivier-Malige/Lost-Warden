@@ -1105,10 +1105,9 @@ stream = ExtResource( 3 )
 volume_db = -10.0
 autoplay = false
 mix_target = 0
-bus = "Master"
+bus = "Sounds"
 
 [connection signal="area_entered" from="." to="." method="_on_shield_area_entered"]
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
-
 
