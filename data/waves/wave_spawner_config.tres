@@ -1,20 +1,10 @@
-[gd_resource type="Resource" script_class="WaveSpawnerConfig" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="WaveSpawnerConfig" format=3 uid="uid://5e58sfsp71n3"]
 
-[ext_resource type="Script" path="res://data/waves/wave_spawner_config.gd" id="1"]
+[ext_resource type="Script" uid="uid://b8o8y28hmjlbn" path="res://data/waves/wave_spawner_config.gd" id="1"]
 [ext_resource type="Resource" path="res://data/enemies/elite_definition.tres" id="2"]
 
 [resource]
 script = ExtResource("1")
-wave_duration = 36.0
-difficulty_start = 1.0
-difficulty_end = 3.55
-loop_start_index = 17
-health_step = 0.08
-health_cap = 1.75
-pace_step = 0.04
-pace_cap = 0.65
-formation_step_cycles = 2
-formation_bonus_cap = 2
-elite_step_cycles = 3
-elite_bonus_cap = 2
+inter_wave_delay = 2.0
+spawn_interval_multiplier = 1.1
 elite_definition = ExtResource("2")

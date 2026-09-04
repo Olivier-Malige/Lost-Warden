@@ -78,7 +78,11 @@ func _spawn_mounted_turrets() -> void:
 	var mounts: Array[Marker2D] = [_left_turret_mount, _right_turret_mount]
 	for index in range(mounts.size()):
 		var turret := MountedTurretScene.instantiate() as TurretEnemy
-		turret.configure_spawn(EnemySpawnContext.new(health_multiplier))
+		var context := EnemySpawnContext.new()
+		context.health_multiplier = health_multiplier
+		context.movement_seed = _derived_seed(_spawn_context.movement_seed, index + 1)
+		context.formation_seed = _spawn_context.formation_seed
+		turret.configure_spawn(context)
 		turret.initial_delay = 0.0 if index == 0 else 1.25
 		add_child(turret)
 		turret.position = mounts[index].position

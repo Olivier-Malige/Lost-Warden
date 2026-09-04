@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="EnemyDefinition" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="EnemyDefinition" format=3 uid="uid://bwiwn7p2qnjpw"]
 
-[ext_resource type="Script" path="res://data/enemies/enemy_definition.gd" id="1"]
+[ext_resource type="Script" uid="uid://bq3xyl864avq8" path="res://data/enemies/enemy_definition.gd" id="1"]
+[ext_resource type="Resource" path="res://data/enemies/movement/asteroid_drift.tres" id="2"]
 
 [resource]
 script = ExtResource("1")
@@ -10,10 +11,5 @@ score = 1
 durability = 0
 power_up_chance = 4
 plasma_drop_chance = 4
-speed = Vector2(0, 204)
-rotates = true
-rotation_speed = 1.0
-random_rotation = true
-random_rotation_min = -2.4
-random_rotation_max = 2.4
+movement_profile = ExtResource("2")
 sprite_variants = 3

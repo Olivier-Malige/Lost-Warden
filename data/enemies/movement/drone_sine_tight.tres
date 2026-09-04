@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="MovementProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/enemies/movement_profile.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"drone_sine_tight"
+mode = 1
+velocity = Vector2(0, 260)
+horizontal_speed = 12.0
+amplitude = 24.0
+period = 6.0
+min_x = 118.0
+max_x = 948.0
+synchronize_formation = true

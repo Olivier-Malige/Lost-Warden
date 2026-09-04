@@ -33,8 +33,9 @@ Permanent meta-progression, unlockable ships, profile levels, and account-wide u
 - Phase 1 follow-up — Configurable wave duration: implementation completed on 2026-08-31; pacing playtests remain before approval.
 - Phase 1 follow-up — Plasma reserve beam: implementation completed on 2026-09-01; gameplay feel playtests remain before approval.
 - Phase 1 follow-up — Speed and impact feedback: implementation completed on 2026-09-03; automated checks and visual capture pass, while solo and co-op gameplay feel playtests remain.
+- Phase 1 follow-up — Existing enemy movement: implementation completed on 2026-09-04; deterministic headless checks pass, while targeted solo and co-op readability playtests remain.
 - Visual production phase: planned and approved on 2026-08-29; implementation starts only after Phase 1 approval.
-- Next implementation step: playtest the speed and impact feedback with the plasma reserve beam on waves 1–3, 6, and 9 in solo and co-op before approving Phase 1.
+- Next implementation step: playtest speed, impact, plasma reserve, and the revised enemy paths on waves 1–3, 6, 9, 12, 15, and 18 in solo and co-op before approving Phase 1.
 
 Preparation phase B delivered the direct 1066 by 800 viewport, responsive Web presentation, redesigned menus and HUD, browser-fullscreen recovery, the Lost Warden release identity, the approved 24-color palette, itch.io page art, and a validated release archive. Updated gameplay screenshots remain intentionally deferred until the sprite rework is visible. Candidate replacement music is preserved for later review and is not active in the current build.
 
@@ -344,6 +345,31 @@ Planned commit:
 
 - `feat(enemies): distinguish turret and mother ship combat`
 
+## Phase 1 follow-up — Improve existing enemy movement
+
+Status: implemented on 2026-09-04. The deterministic movement harness and headless scene loading pass. Solo and co-op readability playtests on waves 1–3, 6, 9, 12, 15, and 18 remain before approval.
+
+- Add data-driven movement profiles with stable identifiers and deterministic per-formation and per-enemy seeds. Keep the fixed wave catalog and defer the procedural encounter seed to Phase 2.
+- Make drones travel as synchronized long sine arcs with a gentle seeded side drift. Use a 24-pixel, 6-second tight path with a 12 px/s drift in the first three waves and a 32-pixel, 7.5-second wide override with a 14 px/s drift for later center-out, sweep, and offset-group rules.
+- Keep every drone rule within lanes 1 through 10 so synchronized paths stay out of the HUD rails.
+- Give fighters their original acceleration-bounded zigzag at 100 px/s horizontally, with a slower 240 px/s descent, interceptors bounded diagonal strafing, and asteroids seeded drift and rotation.
+- Add two seconds of breathing room between waves and increase in-wave spawn intervals by ten percent without changing formations or enemy counts.
+- Let standalone turrets enter the upper playfield, patrol laterally for six seconds, and then resume a controlled downward exit. Keep mounted turrets stationary relative to their hull.
+- Preserve mother-ship anchors and arrival behavior, plus every current combat stat, collision shape, attack, score, reward, formation count, spawn interval, and wave duration.
+- Expose a movement-seed setter on the wave spawner so Phase 2 can inject the future run seed without changing enemy movement resources.
+
+Validation:
+
+- Equal movement seeds reproduce positions and rotations, while a different seed changes the initialized path.
+- Delayed members of one drone formation retain their lane spacing and never enter either HUD rail.
+- Fighter turns remain acceleration-bounded, interceptors remain within their strafe bounds, and asteroid drift stays inside the combat rectangle.
+- A standalone turret completes entry, six seconds of patrol, and downward exit without remaining stuck in the active-enemy tracker.
+- Mother ships retain their center, left, and right anchors and mounted modules remain attached and stationary.
+
+Planned commit:
+
+- `feat(enemies): improve existing enemy movement`
+
 ## Visual production phase — Rebuild the core sprite set
 
 Status: planned and approved on 2026-08-29. Implement this phase after Phase 1 is approved and before Phase 2 begins.
@@ -485,13 +511,7 @@ Planned commits:
 
 ## Phase 4 — Improve movement and add enemy roles
 
-- Add movement-profile resources with stable identifiers for straight, sine, zigzag, patrol, dive, and controlled-exit motion.
-- Improve existing enemies:
-  - asteroids gain seeded drift and rotation;
-  - drones use sinusoidal formations;
-  - TIE fighters turn smoothly instead of reversing abruptly;
-  - interceptors use diagonal strafing paths;
-  - heavy units patrol laterally within bounds.
+- Extend the movement-profile catalog delivered in the existing-enemy follow-up with the dive and controlled-retreat behaviors required by the new roles.
 - Add three enemies with dedicated pixel-art sprite sheets:
   - dive hunter: telegraphs and then charges the player's last known position;
   - bomber: follows a wide zigzag and drops slow projectiles;
@@ -509,7 +529,6 @@ Validation:
 
 Planned commits:
 
-- `feat(enemies): add configurable movement profiles`
 - `feat(enemies): add hunter bomber and sniper archetypes`
 
 ## Phase 5 — Improve particles and bonus shaders

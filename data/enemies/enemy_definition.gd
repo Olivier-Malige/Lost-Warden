@@ -12,15 +12,7 @@ enum Durability { HAZARD, FODDER, FIGHTER, SPECIALIST, HEAVY }
 @export_range(0, 100, 1) var plasma_drop_chance := 0
 
 @export_group("Movement")
-@export var speed := Vector2.ZERO
-@export var random_speed := Vector2.ZERO
-@export_range(0.0, 500.0, 1.0) var lateral_amplitude := 0.0
-@export_range(0.0, 5.0, 0.05) var lateral_frequency := 0.0
-@export var rotates := false
-@export var rotation_speed := 0.0
-@export var random_rotation := false
-@export var random_rotation_min := -1.0
-@export var random_rotation_max := 1.0
+@export var movement_profile: MovementProfile
 
 @export_group("Drops")
 @export var drops_on_destroy := false
@@ -38,7 +30,7 @@ func is_valid() -> bool:
 		and power_up_chance >= 0 \
 		and plasma_drop_chance >= 0 \
 		and power_up_chance + plasma_drop_chance <= 100 \
-		and lateral_amplitude >= 0.0 \
-		and lateral_frequency >= 0.0 \
+		and movement_profile != null \
+		and movement_profile.is_valid() \
 		and sprite_variants > 0 \
 		and (not drops_on_destroy or drop_scene != null)

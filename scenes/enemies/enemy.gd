@@ -8,6 +8,7 @@ const PlasmaCellScene := preload("res://scenes/ui/plasma_cell.tscn")
 const PROJECTILE_SPEED_MULTIPLIER := 1.1
 
 enum RewardDrop { NONE, PLASMA, POWER_UP }
+enum PatrolState { ENTERING, PATROLLING, EXITING }
 
 @export var definition: EnemyDefinition
 @export var shoot_timer_paths: Array[NodePath] = []
@@ -28,8 +29,14 @@ var elite := false
 var _spawn_context := EnemySpawnContext.new()
 var _elite_indicator: EliteIndicator
 var _shoot_timers: Array[Timer] = []
-var _lateral_phase := 0.0
-var _lateral_time := 0.0
+var _movement_profile: MovementProfile
+var _movement_time := 0.0
+var _movement_phase := 0.0
+var _movement_direction := 1.0
+var _target_horizontal_speed := 0.0
+var _sine_wave_offset := 0.0
+var _patrol_state := PatrolState.ENTERING
+var _patrol_elapsed := 0.0
 var fire_delay_multiplier := 1.0
 
 func _ready() -> void:
@@ -44,6 +51,7 @@ func _ready() -> void:
 	_apply_definition()
 	_resolve_shoot_timers()
 	_apply_spawn_context()
+	_initialize_movement()
 	_configure_collision()
 	_play_spawn_animation()
 	if elite:
@@ -53,8 +61,7 @@ func _physics_process(delta: float) -> void:
 	if destroyed:
 		return
 	hitByPlayerShot = false
-	_lateral_time += delta
-	translate(Vector2(_lateral_velocity(), speedY) * delta)
+	_update_movement(delta)
 	if setRotation:
 		rotation += speedRotation * delta
 
@@ -65,26 +72,13 @@ func _apply_definition() -> void:
 	life = definition.max_health
 	hitSomething = definition.collision_damage
 	points = definition.score
-	speedX = definition.speed.x + randf_range(-definition.random_speed.x, definition.random_speed.x)
-	speedY = definition.speed.y + randf_range(-definition.random_speed.y, definition.random_speed.y)
-	_lateral_phase = randf_range(0.0, TAU)
-	setRotation = definition.rotates
-	speedRotation = definition.rotation_speed
-	if definition.random_rotation:
-		rotation = randf_range(-PI, PI)
-		speedRotation = randf_range(definition.random_rotation_min, definition.random_rotation_max)
-
-func _lateral_velocity() -> float:
-	if definition.lateral_amplitude <= 0.0 or definition.lateral_frequency <= 0.0:
-		return speedX
-	var angular_frequency := TAU * definition.lateral_frequency
-	return speedX + cos(_lateral_time * angular_frequency + _lateral_phase) * definition.lateral_amplitude * angular_frequency
 
 func _apply_spawn_context() -> void:
 	var health_multiplier := _spawn_context.health_multiplier * _spawn_context.rule_health_multiplier
+	_movement_profile = _spawn_context.movement_profile if _spawn_context.movement_profile else definition.movement_profile
+	speedX = _movement_profile.velocity.x * _spawn_context.speed_multiplier
+	speedY = _movement_profile.velocity.y * _spawn_context.speed_multiplier
 	elite = _spawn_context.elite
-	speedX *= _spawn_context.speed_multiplier
-	speedY *= _spawn_context.speed_multiplier
 	if elite and _spawn_context.elite_definition:
 		var elite_definition := _spawn_context.elite_definition
 		health_multiplier *= elite_definition.health_multiplier
@@ -99,6 +93,124 @@ func _apply_spawn_context() -> void:
 	add_to_group("enemy")
 	if elite:
 		add_to_group("elite")
+
+func _initialize_movement() -> void:
+	_movement_time = _spawn_context.movement_time_offset
+	var individual_rng := RandomNumberGenerator.new()
+	individual_rng.seed = _spawn_context.movement_seed
+	var formation_rng := RandomNumberGenerator.new()
+	formation_rng.seed = _spawn_context.formation_seed
+	var phase_rng := formation_rng if _movement_profile.synchronize_formation else individual_rng
+	_movement_phase = phase_rng.randf_range(0.0, TAU)
+	_movement_direction = -1.0 if phase_rng.randi_range(0, 1) == 0 else 1.0
+	_target_horizontal_speed = _movement_direction * _movement_profile.horizontal_speed * _movement_speed_scale()
+	global_position.x = clampf(global_position.x, _movement_profile.min_x, _movement_profile.max_x)
+	if _movement_profile.mode == MovementProfile.Mode.SINE:
+		_sine_wave_offset = _current_sine_wave_offset()
+	if _movement_profile.mode == MovementProfile.Mode.DRIFT:
+		var drift_speed := individual_rng.randf_range(_movement_profile.horizontal_speed_min, _movement_profile.horizontal_speed_max)
+		speedX = drift_speed * _movement_direction * _movement_speed_scale()
+	if _movement_profile.random_rotation:
+		rotation = individual_rng.randf_range(-PI, PI)
+		speedRotation = individual_rng.randf_range(_movement_profile.rotation_speed_min, _movement_profile.rotation_speed_max)
+		setRotation = true
+	elif not is_zero_approx(_movement_profile.rotation_speed_max):
+		speedRotation = _movement_profile.rotation_speed_max
+		setRotation = true
+
+func _update_movement(delta: float) -> void:
+	_movement_time += delta
+	match _movement_profile.mode:
+		MovementProfile.Mode.SINE:
+			_update_sine_movement(delta)
+		MovementProfile.Mode.SMOOTH_ZIGZAG:
+			_update_smooth_zigzag(delta)
+		MovementProfile.Mode.STRAFE:
+			_update_strafe(delta)
+		MovementProfile.Mode.DRIFT:
+			_update_drift(delta)
+		MovementProfile.Mode.PATROL_EXIT:
+			_update_patrol_exit(delta)
+		_:
+			translate(Vector2(speedX, speedY) * delta)
+			_apply_horizontal_bounds()
+
+func _update_sine_movement(delta: float) -> void:
+	var speed_scale := maxf(_movement_speed_scale(), 0.01)
+	var wave_offset := _current_sine_wave_offset()
+	var horizontal_delta := (
+		wave_offset - _sine_wave_offset
+		+ _movement_profile.horizontal_speed * speed_scale * delta
+	) * _movement_direction
+	_sine_wave_offset = wave_offset
+	global_position.x += horizontal_delta
+	global_position.y += speedY * delta
+	_apply_horizontal_bounds()
+
+func _current_sine_wave_offset() -> float:
+	var speed_scale := maxf(_movement_speed_scale(), 0.01)
+	var angle := _movement_time * TAU * speed_scale / _movement_profile.period + _movement_phase
+	return sin(angle) * _movement_profile.amplitude
+
+func _update_smooth_zigzag(delta: float) -> void:
+	if _movement_time >= _movement_profile.turn_interval:
+		_movement_time = fmod(_movement_time, _movement_profile.turn_interval)
+		_movement_direction *= -1.0
+		_target_horizontal_speed = _movement_direction * _movement_profile.horizontal_speed * _movement_speed_scale()
+	speedX = move_toward(speedX, _target_horizontal_speed, _movement_profile.acceleration * _movement_speed_scale() * delta)
+	translate(Vector2(speedX, speedY) * delta)
+	_apply_horizontal_bounds()
+
+func _update_strafe(delta: float) -> void:
+	speedX = _movement_direction * _movement_profile.horizontal_speed * _movement_speed_scale()
+	translate(Vector2(speedX, speedY) * delta)
+	_apply_horizontal_bounds()
+
+func _update_drift(delta: float) -> void:
+	translate(Vector2(speedX, speedY) * delta)
+	_apply_horizontal_bounds()
+
+func _update_patrol_exit(delta: float) -> void:
+	match _patrol_state:
+		PatrolState.ENTERING:
+			global_position.y += speedY * delta
+			if global_position.y >= _movement_profile.entry_y:
+				global_position.y = _movement_profile.entry_y
+				_patrol_state = PatrolState.PATROLLING
+		PatrolState.PATROLLING:
+			_patrol_elapsed += delta
+			speedX = _movement_direction * _movement_profile.horizontal_speed * _movement_speed_scale()
+			global_position.x += speedX * delta
+			_apply_horizontal_bounds()
+			if _patrol_elapsed >= _movement_profile.patrol_duration:
+				_patrol_state = PatrolState.EXITING
+				speedX = 0.0
+		PatrolState.EXITING:
+			global_position.y += speedY * delta
+
+func _apply_horizontal_bounds() -> void:
+	var bounced := false
+	if global_position.x < _movement_profile.min_x:
+		global_position.x = _movement_profile.min_x
+		_movement_direction = 1.0
+		speedX = absf(speedX)
+		bounced = true
+	elif global_position.x > _movement_profile.max_x:
+		global_position.x = _movement_profile.max_x
+		_movement_direction = -1.0
+		speedX = -absf(speedX)
+		bounced = true
+	if not bounced:
+		return
+	if _movement_profile.mode == MovementProfile.Mode.SMOOTH_ZIGZAG:
+		_movement_time = 0.0
+	_target_horizontal_speed = _movement_direction * _movement_profile.horizontal_speed * _movement_speed_scale()
+
+func _movement_speed_scale() -> float:
+	var value := _spawn_context.speed_multiplier
+	if elite and _spawn_context.elite_definition:
+		value *= _spawn_context.elite_definition.speed_multiplier
+	return value
 
 func _resolve_shoot_timers() -> void:
 	for path in shoot_timer_paths:
@@ -196,11 +308,19 @@ func _spawn_plasma_cell(amount: float) -> void:
 func _drop_debris() -> void:
 	if definition.drop_scene == null:
 		return
-	for _index in range(definition.drop_count):
+	for index in range(definition.drop_count):
 		var debris := definition.drop_scene.instantiate()
+		if debris is Enemy:
+			var debris_context := EnemySpawnContext.new()
+			debris_context.movement_seed = _derived_seed(_spawn_context.movement_seed, index + 1)
+			debris_context.formation_seed = _spawn_context.formation_seed
+			debris.configure_spawn(debris_context)
 		var drop_position := global_position + Vector2(randf_range(-definition.drop_range, definition.drop_range), randf_range(-definition.drop_range, definition.drop_range))
 		debris.position = get_parent().to_local(drop_position)
 		get_parent().call_deferred("add_child", debris)
+
+func _derived_seed(base_seed: int, salt: int) -> int:
+	return int((base_seed * 1103515245 + salt * 12345 + 1013904223) & 0x7fffffff)
 
 func _setup_elite_indicator() -> void:
 	var sprite := get_node_or_null("Sprite2D") as Sprite2D

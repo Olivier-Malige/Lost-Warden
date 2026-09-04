@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="MovementProfile" format=3 uid="uid://ch3qq0cx5lxkw"]
+
+[ext_resource type="Script" uid="uid://r532snp2nhav" path="res://data/enemies/movement_profile.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"big_asteroid_drift"
+mode = 4
+velocity = Vector2(0, 204)
+horizontal_speed_min = 12.0
+horizontal_speed_max = 32.0
+min_x = 118.0
+max_x = 948.0
+random_rotation = true
+rotation_speed_min = -1.2
+rotation_speed_max = 1.2

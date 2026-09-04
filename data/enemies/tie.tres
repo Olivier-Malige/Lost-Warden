@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="EnemyDefinition" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="EnemyDefinition" format=3 uid="uid://dcvecelpir76s"]
 
-[ext_resource type="Script" path="res://data/enemies/enemy_definition.gd" id="1"]
+[ext_resource type="Script" uid="uid://bq3xyl864avq8" path="res://data/enemies/enemy_definition.gd" id="1"]
+[ext_resource type="Resource" path="res://data/enemies/movement/fighter_smooth_zigzag.tres" id="2"]
 
 [resource]
 script = ExtResource("1")
@@ -10,5 +11,4 @@ score = 70
 durability = 2
 power_up_chance = 10
 plasma_drop_chance = 13
-speed = Vector2(0, 300)
-random_speed = Vector2(40, 0)
+movement_profile = ExtResource("2")

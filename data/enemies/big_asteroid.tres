@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="EnemyDefinition" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="EnemyDefinition" format=3 uid="uid://dsa4gflbutghk"]
 
-[ext_resource type="Script" path="res://data/enemies/enemy_definition.gd" id="1"]
+[ext_resource type="Script" uid="uid://bq3xyl864avq8" path="res://data/enemies/enemy_definition.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/asteroid.tscn" id="2"]
+[ext_resource type="Resource" path="res://data/enemies/movement/big_asteroid_drift.tres" id="3"]
 
 [resource]
 script = ExtResource("1")
@@ -11,12 +12,8 @@ score = 10
 durability = 0
 power_up_chance = 10
 plasma_drop_chance = 9
-speed = Vector2(0, 204)
-rotates = true
+movement_profile = ExtResource("3")
 drops_on_destroy = true
 drop_scene = ExtResource("2")
 drop_count = 5
-random_rotation = true
-random_rotation_min = -1.2
-random_rotation_max = 1.2
 sprite_variants = 4

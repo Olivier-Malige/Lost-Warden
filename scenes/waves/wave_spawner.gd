@@ -9,6 +9,8 @@ var _master: Timer
 var _wave_generation := 0
 var _endless_cycle := 0
 var _active_enemies: Dictionary[int, bool] = {}
+var _movement_seed := 0
+var _movement_seed_overridden := false
 
 func _ready() -> void:
 	if catalog == null or config == null:
@@ -19,6 +21,8 @@ func _ready() -> void:
 		return
 	if not _has_all_spawn_markers():
 		return
+	if not _movement_seed_overridden:
+		_movement_seed = config.movement_seed
 	_master = Timer.new()
 	_master.one_shot = true
 	_master.timeout.connect(_on_master_timeout)
@@ -38,14 +42,19 @@ func _apply_wave(index: int) -> void:
 		push_error("Wave %d contains an invalid definition or spawn rule." % (wave_index + 1))
 		return
 	var timeline_scale := _timeline_scale(wave)
-	for rule in wave.rules:
+	for rule_index in range(wave.rules.size()):
+		var rule: SpawnRule = wave.rules[rule_index]
 		if rule == null or rule.scene == null:
 			continue
-		_run_rule(rule, _wave_generation, wave.difficulty, timeline_scale)
-	_master.wait_time = config.wave_duration
+		_run_rule(rule, rule_index, _wave_generation, wave.difficulty, timeline_scale)
+	_master.wait_time = config.wave_duration + config.inter_wave_delay
 	_master.start()
 
-func _run_rule(rule: SpawnRule, generation: int, difficulty: float, timeline_scale: float) -> void:
+func set_movement_seed(value: int) -> void:
+	_movement_seed = value
+	_movement_seed_overridden = true
+
+func _run_rule(rule: SpawnRule, rule_index: int, generation: int, difficulty: float, timeline_scale: float) -> void:
 	var start_delay := rule.start_delay * timeline_scale
 	if start_delay > 0.0:
 		await get_tree().create_timer(start_delay, false).timeout
@@ -55,7 +64,7 @@ func _run_rule(rule: SpawnRule, generation: int, difficulty: float, timeline_sca
 	if active_duration <= 0.0:
 		return
 	var active_timer := get_tree().create_timer(active_duration, false)
-	var interval := maxf(rule.interval * timeline_scale * _pace_multiplier(difficulty), 0.05)
+	var interval := maxf(rule.interval * timeline_scale * _pace_multiplier(difficulty) * config.spawn_interval_multiplier, 0.05)
 	if global.coop and rule.formation < 4 and interval < active_duration:
 		interval *= 0.9
 	var cycle := 0
@@ -67,7 +76,7 @@ func _run_rule(rule: SpawnRule, generation: int, difficulty: float, timeline_sca
 			await get_tree().create_timer(minf(next_spawn_elapsed - elapsed, active_timer.time_left), false).timeout
 			if generation != _wave_generation or active_timer.time_left <= 0.0:
 				return
-		var elite_spawned := await _spawn_formation(rule, generation, cycle, active_timer, difficulty, elites_remaining > 0, timeline_scale)
+		var elite_spawned := await _spawn_formation(rule, rule_index, generation, cycle, active_timer, difficulty, elites_remaining > 0, timeline_scale)
 		if elite_spawned:
 			elites_remaining -= 1
 		cycle += 1
@@ -76,7 +85,7 @@ func _run_rule(rule: SpawnRule, generation: int, difficulty: float, timeline_sca
 		if next_spawn_elapsed <= elapsed:
 			next_spawn_elapsed = elapsed
 
-func _spawn_formation(rule: SpawnRule, generation: int, cycle: int, active_timer: SceneTreeTimer, difficulty: float, can_spawn_elite: bool, timeline_scale: float) -> bool:
+func _spawn_formation(rule: SpawnRule, rule_index: int, generation: int, cycle: int, active_timer: SceneTreeTimer, difficulty: float, can_spawn_elite: bool, timeline_scale: float) -> bool:
 	var count := maxi(rule.formation + _endless_formation_bonus(rule), 1)
 	if global.coop and count >= 4:
 		count += 1
@@ -87,7 +96,7 @@ func _spawn_formation(rule: SpawnRule, generation: int, cycle: int, active_timer
 			return false
 		if _active_enemy_count() >= _enemy_cap():
 			return false
-		_spawn_at(rule, lanes[i], difficulty, spawn_elite and i == 0)
+		_spawn_at(rule, rule_index, cycle, lanes[i], i, difficulty, spawn_elite and i == 0, i * rule.spawn_gap * timeline_scale)
 		if i < lanes.size() - 1 and rule.spawn_gap > 0.0:
 			await get_tree().create_timer(minf(rule.spawn_gap * timeline_scale, active_timer.time_left), false).timeout
 	return spawn_elite
@@ -249,7 +258,7 @@ func _active_elite_count() -> int:
 func _enemy_cap() -> int:
 	return config.coop_enemy_cap if global.coop else config.solo_enemy_cap
 
-func _spawn_at(rule: SpawnRule, lane: int, difficulty: float, elite: bool) -> void:
+func _spawn_at(rule: SpawnRule, rule_index: int, cycle: int, lane: int, formation_index: int, difficulty: float, elite: bool, movement_time_offset: float) -> void:
 	lane = clampi(lane, 0, config.lane_count - 1)
 	var marker := get_node_or_null("spawnPos" + str(lane)) as Node2D
 	if marker == null:
@@ -257,12 +266,28 @@ func _spawn_at(rule: SpawnRule, lane: int, difficulty: float, elite: bool) -> vo
 	var enemy := rule.scene.instantiate()
 	if enemy is Enemy:
 		var health_multiplier := lerpf(1.0, _durability_health_cap(enemy.definition), _difficulty_progress(difficulty)) * _endless_health_multiplier()
-		enemy.configure_spawn(EnemySpawnContext.new(health_multiplier, elite, config.elite_definition, rule.speed_multiplier, rule.health_multiplier))
+		var context := EnemySpawnContext.new()
+		context.health_multiplier = health_multiplier
+		context.elite = elite
+		context.elite_definition = config.elite_definition
+		context.speed_multiplier = rule.speed_multiplier
+		context.rule_health_multiplier = rule.health_multiplier
+		context.movement_profile = rule.movement_profile_override
+		context.formation_seed = _spawn_seed(rule_index, cycle, -1, -1)
+		context.movement_seed = _spawn_seed(rule_index, cycle, lane, formation_index)
+		context.movement_time_offset = movement_time_offset
+		enemy.configure_spawn(context)
 	enemy.position = marker.position
 	add_child(enemy)
 	if enemy is Enemy:
 		_active_enemies[enemy.get_instance_id()] = elite
 		enemy.tree_exited.connect(_on_enemy_tree_exited.bind(enemy.get_instance_id()), CONNECT_ONE_SHOT)
+
+func _spawn_seed(rule_index: int, cycle: int, lane: int, formation_index: int) -> int:
+	var value := _movement_seed & 0x7fffffff
+	for part in [wave_index, _endless_cycle, rule_index, cycle, lane, formation_index, int(global.coop)]:
+		value = int((value * 1103515245 + int(part) * 12345 + 1013904223) & 0x7fffffff)
+	return value
 
 func _has_all_spawn_markers() -> bool:
 	for lane in range(config.lane_count):

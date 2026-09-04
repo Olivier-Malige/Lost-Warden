@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MovementProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/enemies/movement_profile.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"fighter_smooth_zigzag"
+mode = 2
+velocity = Vector2(0, 240)
+horizontal_speed = 100.0
+acceleration = 220.0
+turn_interval = 1.8
+min_x = 150.0
+max_x = 916.0

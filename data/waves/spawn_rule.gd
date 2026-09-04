@@ -33,6 +33,7 @@ enum Pattern {
 
 @export_group("Movement")
 @export_range(0.1, 3.0, 0.05) var speed_multiplier: float = 1.0
+@export var movement_profile_override: MovementProfile
 
 @export_group("Survivability")
 @export_range(0.1, 5.0, 0.05) var health_multiplier: float = 1.0
@@ -43,6 +44,7 @@ func is_valid(lane_count: int) -> bool:
 		and active_duration > 0.0 \
 		and speed_multiplier > 0.0 \
 		and health_multiplier > 0.0 \
+		and (movement_profile_override == null or movement_profile_override.is_valid()) \
 		and spawn_min >= 0 \
 		and spawn_max >= spawn_min \
 		and spawn_max < lane_count

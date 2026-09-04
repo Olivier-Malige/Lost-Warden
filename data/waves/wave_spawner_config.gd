@@ -5,9 +5,12 @@ extends Resource
 @export_range(1, 32, 1) var lane_count := 12
 @export_range(1, 200, 1) var solo_enemy_cap := 45
 @export_range(1, 200, 1) var coop_enemy_cap := 60
+@export var movement_seed := 0x4D4F5645
 
 @export_group("Timing")
 @export_range(1.0, 180.0, 0.5) var wave_duration := 36.0
+@export_range(0.0, 30.0, 0.5) var inter_wave_delay := 2.0
+@export_range(1.0, 2.0, 0.05) var spawn_interval_multiplier := 1.1
 
 @export_group("Difficulty")
 @export_range(0.1, 10.0, 0.05) var difficulty_start := 1.0
@@ -30,6 +33,8 @@ extends Resource
 
 func is_valid() -> bool:
 	return wave_duration > 0.0 \
+		and inter_wave_delay >= 0.0 \
+		and spawn_interval_multiplier >= 1.0 \
 		and lane_count > 0 \
 		and solo_enemy_cap > 0 \
 		and coop_enemy_cap >= solo_enemy_cap \

@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="EnemyDefinition" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="EnemyDefinition" format=3 uid="uid://chol48rl3ptet"]
 
-[ext_resource type="Script" path="res://data/enemies/enemy_definition.gd" id="1"]
+[ext_resource type="Script" uid="uid://bq3xyl864avq8" path="res://data/enemies/enemy_definition.gd" id="1"]
+[ext_resource type="Resource" path="res://data/enemies/movement/interceptor_strafe.tres" id="2"]
 
 [resource]
 script = ExtResource("1")
@@ -9,6 +10,4 @@ score = 250
 durability = 3
 power_up_chance = 35
 plasma_drop_chance = 63
-speed = Vector2(0, 180)
-lateral_amplitude = 72.0
-lateral_frequency = 0.45
+movement_profile = ExtResource("2")

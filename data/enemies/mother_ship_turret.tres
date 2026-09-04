@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="EnemyDefinition" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="EnemyDefinition" format=3 uid="uid://b8lb85b6tpwr5"]
 
-[ext_resource type="Script" path="res://data/enemies/enemy_definition.gd" id="1"]
+[ext_resource type="Script" uid="uid://bq3xyl864avq8" path="res://data/enemies/enemy_definition.gd" id="1"]
+[ext_resource type="Resource" path="res://data/enemies/movement/stationary.tres" id="2"]
 
 [resource]
 script = ExtResource("1")
@@ -10,4 +11,4 @@ score = 250
 durability = 3
 power_up_chance = 10
 plasma_drop_chance = 30
-speed = Vector2(0, 0)
+movement_profile = ExtResource("2")
