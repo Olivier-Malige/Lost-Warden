@@ -97,7 +97,7 @@ func _on_upgrade_changed(player_id: String, effect: int, rank: int, max_rank: in
 	var label := get_node_or_null(column + "/ranks_" + player_id) as Label
 	if label == null:
 		return
-	var rows: PackedStringArray = label.get_meta("rows", PackedStringArray(["SPD 0/8", "DMG 0/8", "RATE 0/8", "SIDE 0/7"]))
+	var rows: PackedStringArray = label.get_meta("rows", PackedStringArray(["SPD 0/8", "DMG 0/10", "RATE 0/8", "SIDE 0/7"]))
 	var prefix := String(RANK_LABELS[effect])
 	var value := prefix + " MAX" if rank >= max_rank else prefix + " " + str(rank) + "/" + str(max_rank)
 	for index in rows.size():
