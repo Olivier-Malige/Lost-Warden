@@ -10,6 +10,7 @@ var _reactors: Array[GPUParticles2D] = []
 var _charge_particles: GPUParticles2D
 var _charge_material: ParticleProcessMaterial
 var _reactor_amount_ratio := -1.0
+var _reactors_enabled := true
 var _configured := false
 
 func setup(charge_texture: Texture2D) -> void:
@@ -32,15 +33,28 @@ func setup(charge_texture: Texture2D) -> void:
 	for reactor in _reactors:
 		reactor.emitting = true
 		reactor.visible = true
+	_reactors_enabled = true
 
 func update_reactors(vertical_motion: float) -> void:
 	if not _configured:
 		return
+	var reactors_enabled := vertical_motion <= 0.0
+	if reactors_enabled != _reactors_enabled:
+		_reactors_enabled = reactors_enabled
+		for reactor in _reactors:
+			if reactors_enabled:
+				reactor.visible = true
+				reactor.emitting = true
+				reactor.restart()
+			else:
+				reactor.emitting = false
+				reactor.visible = false
+	if not reactors_enabled:
+		_reactor_amount_ratio = -1.0
+		return
 	var amount_ratio := config.idle_amount_ratio
 	if vertical_motion < 0.0:
 		amount_ratio = config.forward_amount_ratio
-	elif vertical_motion > 0.0:
-		amount_ratio = config.reverse_amount_ratio
 	if is_equal_approx(amount_ratio, _reactor_amount_ratio):
 		return
 	for reactor in _reactors:

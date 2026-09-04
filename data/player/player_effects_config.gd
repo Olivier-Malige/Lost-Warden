@@ -4,7 +4,6 @@ extends Resource
 @export_group("Reactors")
 @export_range(0.0, 1.0, 0.05) var idle_amount_ratio := 0.6
 @export_range(0.0, 1.0, 0.05) var forward_amount_ratio := 1.0
-@export_range(0.0, 1.0, 0.05) var reverse_amount_ratio := 0.35
 
 @export_group("Plasma beam")
 @export_range(0.0, 1.0, 0.05) var minimum_amount_ratio := 0.4
