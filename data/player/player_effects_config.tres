@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="PlayerEffectsConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/player/player_effects_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")

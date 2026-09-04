@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MovementProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/enemies/movement_profile.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"turret_patrol_exit"
+mode = 5
+velocity = Vector2(0, 80)
+horizontal_speed = 110.0
+min_x = 170.0
+max_x = 896.0
+entry_y = 150.0
+patrol_duration = 6.0

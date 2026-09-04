@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "godot-master": {
+      "source": "thedivergentai/gd-agentic-skills",
+      "sourceType": "github",
+      "skillPath": "skills/godot-master/SKILL.md",
+      "computedHash": "b89c601dae18af8c3f507b348fb894f4041c5cf4a300dd5847a334bb00f9a774"
+    }
+  }
+}

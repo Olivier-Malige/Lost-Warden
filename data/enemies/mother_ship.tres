@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EnemyDefinition" format=3 uid="uid://blf77i8dhbrjd"]
+
+[ext_resource type="Script" uid="uid://bq3xyl864avq8" path="res://data/enemies/enemy_definition.gd" id="1"]
+[ext_resource type="Resource" path="res://data/enemies/movement/mother_ship_entry.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+max_health = 48
+collision_damage = 10
+score = 1000
+durability = 4
+power_up_chance = 45
+plasma_drop_chance = 55
+movement_profile = ExtResource("2")

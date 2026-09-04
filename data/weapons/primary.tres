@@ -9,4 +9,4 @@ id = &"primary"
 kind = 0
 projectile = ExtResource("2")
 damage = 1.0
-fire_delay = 0.26
+fire_delay = 0.18

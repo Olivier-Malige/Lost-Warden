@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="WaveCatalog" load_steps=15 format=3]
+[gd_resource type="Resource" script_class="WaveCatalog" load_steps=20 format=3]
 
 [ext_resource type="Script" path="res://data/waves/wave_catalog.gd" id="1"]
 [ext_resource type="Resource" path="res://data/waves/wave_00.tres" id="2"]
@@ -14,7 +14,12 @@
 [ext_resource type="Resource" path="res://data/waves/wave_10.tres" id="12"]
 [ext_resource type="Resource" path="res://data/waves/wave_11.tres" id="13"]
 [ext_resource type="Resource" path="res://data/waves/wave_12.tres" id="14"]
+[ext_resource type="Resource" path="res://data/waves/wave_13.tres" id="15"]
+[ext_resource type="Resource" path="res://data/waves/wave_14.tres" id="16"]
+[ext_resource type="Resource" path="res://data/waves/wave_15.tres" id="17"]
+[ext_resource type="Resource" path="res://data/waves/wave_16.tres" id="18"]
+[ext_resource type="Resource" path="res://data/waves/wave_17.tres" id="19"]
 
 [resource]
 script = ExtResource("1")
-waves = Array[WaveDefinition]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10"), ExtResource("11"), ExtResource("12"), ExtResource("13"), ExtResource("14")])
+waves = Array[WaveDefinition]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10"), ExtResource("11"), ExtResource("12"), ExtResource("13"), ExtResource("14"), ExtResource("15"), ExtResource("16"), ExtResource("17"), ExtResource("18"), ExtResource("19")])

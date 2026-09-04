@@ -6,6 +6,7 @@
 [ext_resource path="res://assets/sprites/player/player1_particle.png" type="Texture2D" id=4]
 [ext_resource path="res://assets/audio/sfx/enemies/enemy_hit.wav" type="AudioStream" id=5]
 [ext_resource path="res://assets/audio/sfx/enemies/drone_explode.wav" type="AudioStream" id=6]
+[ext_resource type="Resource" path="res://data/enemies/drone.tres" id=7]
 
 [sub_resource type="Animation" id=1]
 
@@ -86,24 +87,7 @@ angular_damp = 1.0
 audio_bus_override = false
 audio_bus_name = "Master"
 script = ExtResource( 1 )
-dropOnDestroy = false
-dropRange = 64
-objectOnDestroy = null
-nbrObjectOnDestroy = 1
-nbrSprites = 1
-rnd_Roation_Range_Max = 1
-rnd_Roation_Range_Min = -1
-life = 2
-hitSomething = 1
-points = 10
-speedX = 0.0
-speedY = 250.0
-randomX = 0
-randomY = 0
-randPowerUp = 20
-setRotation = false
-speedRotation = 10
-rndRotation = false
+definition = ExtResource( 7 )
 
 [node name="Sprite2D" type="Sprite2D" parent="." index="0"]
 
@@ -169,5 +153,3 @@ area_mask = 1
 [connection signal="animation_finished" from="anim" to="." method="_on_anim_animation_finished"]
 
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_screen_exited"]
-
-

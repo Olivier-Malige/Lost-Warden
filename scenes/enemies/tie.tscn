@@ -5,6 +5,7 @@
 [ext_resource path="res://assets/audio/sfx/enemies/enemy_hit_2.wav" type="AudioStream" id=3]
 [ext_resource path="res://assets/audio/sfx/enemies/tie_explode.wav" type="AudioStream" id=4]
 [ext_resource path="res://assets/audio/sfx/enemies/tie_shoot.wav" type="AudioStream" id=5]
+[ext_resource type="Resource" path="res://data/enemies/tie.tres" id=6]
 
 [sub_resource type="Animation" id=1]
 
@@ -85,24 +86,8 @@ angular_damp = 1.0
 audio_bus_override = false
 audio_bus_name = "Master"
 script = ExtResource( 1 )
-dropOnDestroy = false
-dropRange = 64
-objectOnDestroy = null
-nbrObjectOnDestroy = 1
-nbrSprites = 1
-rnd_Roation_Range_Max = 1
-rnd_Roation_Range_Min = -1
-life = 4
-hitSomething = 3
-points = 70
-speedX = 0
-speedY = 250.0
-randomX = 40.0
-randomY = 0
-randPowerUp = 0
-setRotation = false
-speedRotation = 0
-rndRotation = false
+definition = ExtResource( 6 )
+shoot_timer_paths = [NodePath("shootTimer")]
 
 [node name="Sprite2D" type="Sprite2D" parent="." index="0"]
 
@@ -145,14 +130,7 @@ autostart = true
 
 position = Vector2( -0.237831, 14.5618 )
 
-[node name="dirTimer" type="Timer" parent="." index="6"]
-
-process_mode = 1
-wait_time = 2.0
-one_shot = false
-autostart = true
-
-[node name="sound_Hit" type="AudioStreamPlayer2D" parent="." index="7"]
+[node name="sound_Hit" type="AudioStreamPlayer2D" parent="." index="6"]
 
 stream = ExtResource( 3 )
 volume_db = 0.0
@@ -162,7 +140,7 @@ attenuation = 1.0
 bus = "Sounds"
 area_mask = 1
 
-[node name="sound_Explode" type="AudioStreamPlayer2D" parent="." index="8"]
+[node name="sound_Explode" type="AudioStreamPlayer2D" parent="." index="7"]
 
 stream = ExtResource( 4 )
 volume_db = 0.0
@@ -172,7 +150,7 @@ attenuation = 1.0
 bus = "Sounds"
 area_mask = 1
 
-[node name="sound_Shooting" type="AudioStreamPlayer2D" parent="." index="9"]
+[node name="sound_Shooting" type="AudioStreamPlayer2D" parent="." index="8"]
 
 stream = ExtResource( 5 )
 volume_db = 0.0
@@ -189,7 +167,3 @@ area_mask = 1
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_screen_exited"]
 
 [connection signal="timeout" from="shootTimer" to="." method="_on_shootTimer_timeout"]
-
-[connection signal="timeout" from="dirTimer" to="." method="_on_dirTimer_timeout"]
-
-

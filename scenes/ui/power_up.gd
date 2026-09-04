@@ -12,10 +12,11 @@ func _ready() -> void:
 	_upgrade = TABLE.pick()
 	if _upgrade:
 		$anim.play(String(_upgrade.anim))
+		$Sprite2D.modulate = _pickup_color(_upgrade.effect)
 	else:
 		$anim.play("speedUp")
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	translate(Vector2(0, SPEED) * delta)
 
 func _on_screen_exited() -> void:
@@ -30,20 +31,30 @@ func _on_powerUp_area_entered(area: Area2D) -> void:
 	Events.powerup_collected.emit(_upgrade)
 	$anim.queue_free()
 	$Sprite2D.queue_free()
-	$CollisionShape2D.queue_free()
+	$CollisionShape2D.set_deferred("disabled", true)
+	set_deferred("monitoring", false)
+	set_deferred("monitorable", false)
 
 func _play_pickup_sound() -> void:
 	if _upgrade == null:
 		return
-	var sounds := {
+	var sounds: Dictionary[int, AudioStreamPlayer2D] = {
 		UpgradeDefinition.Effect.SPEED: $sound_Speed_Up,
 		UpgradeDefinition.Effect.ENERGY: $sound_Energy_Up,
 		UpgradeDefinition.Effect.SIDE_SHOT: $sound_Lateral_Shot,
 		UpgradeDefinition.Effect.DAMAGE: $sound_Shot_Up,
 		UpgradeDefinition.Effect.SHIELD: $sound_Shield,
+		UpgradeDefinition.Effect.FIRE_RATE: $sound_Shot_Up,
 	}
 	if sounds.has(_upgrade.effect):
 		sounds[_upgrade.effect].playing = true
+
+func _pickup_color(effect: int) -> Color:
+	match effect:
+		UpgradeDefinition.Effect.FIRE_RATE:
+			return Color(0.9, 0.78, 0.2)
+		_:
+			return Color.WHITE
 
 func _on_audio_finished() -> void:
 	queue_free()

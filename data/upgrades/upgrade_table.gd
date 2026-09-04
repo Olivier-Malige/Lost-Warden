@@ -6,10 +6,14 @@ extends Resource
 func pick() -> UpgradeDefinition:
 	if upgrades.is_empty():
 		return null
-	var roll := randi() % 100 + 1
-	var sorted := upgrades.duplicate()
-	sorted.sort_custom(func(a, b): return a.weight < b.weight)
-	for u in sorted:
-		if roll <= u.weight:
-			return u
-	return sorted.back()
+	var total_weight := 0
+	for upgrade in upgrades:
+		total_weight += maxi(upgrade.weight, 0)
+	if total_weight <= 0:
+		return upgrades.front()
+	var roll := randi_range(1, total_weight)
+	for upgrade in upgrades:
+		roll -= maxi(upgrade.weight, 0)
+		if roll <= 0:
+			return upgrade
+	return upgrades.back()

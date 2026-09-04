@@ -1,0 +1,29 @@
+GIMP Palette
+Name: Lost Warden 24
+Columns: 8
+# Core colors 00-15
+  6   7  12 Void
+ 16  21  34 Deep Space
+ 34  39  53 Hull Shadow
+ 70  74  82 Gunmetal
+116 119 125 Steel
+184 182 174 Pale Steel
+243 235 221 Star White
+ 58  13  20 Oxblood
+156  32  32 Warden Red
+225  90  67 Ember
+ 68  45  24 Dark Bronze
+158 107  45 Amber
+214 214  83 Solar
+ 16  42  74 Deep Ion
+ 45 101 148 Ion Blue
+120 183 207 Ice Blue
+# Emissive accents 16-23
+255  90  77 Neon Red
+255 211  90 Neon Gold
+114 224 209 Plasma Cyan
+185 121 200 Shield Violet
+114 201  92 Pickup Green
+255 157  50 Hazard Orange
+240  90 157 Laser Pink
+255 248 232 Flash White

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="UpgradeTable" load_steps=7 format=3]
+[gd_resource type="Resource" script_class="UpgradeTable" load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://data/upgrades/upgrade_table.gd" id="1"]
 [ext_resource type="Resource" path="res://data/upgrades/speed.tres" id="2"]
@@ -6,7 +6,8 @@
 [ext_resource type="Resource" path="res://data/upgrades/side_shot.tres" id="4"]
 [ext_resource type="Resource" path="res://data/upgrades/shield.tres" id="5"]
 [ext_resource type="Resource" path="res://data/upgrades/energy.tres" id="6"]
+[ext_resource type="Resource" path="res://data/upgrades/fire_rate.tres" id="7"]
 
 [resource]
 script = ExtResource("1")
-upgrades = Array[UpgradeDefinition]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6")])
+upgrades = Array[UpgradeDefinition]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("7"), ExtResource("5"), ExtResource("6")])

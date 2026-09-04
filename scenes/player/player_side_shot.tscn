@@ -1,7 +1,8 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource path="res://scenes/player/player_shot.gd" type="Script" id=1]
 [ext_resource path="res://assets/sprites/player/player_side_shot.png" type="Texture2D" id=2]
+[ext_resource path="res://data/player/projectile_vfx_config.tres" type="Resource" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -462,17 +463,18 @@ angular_damp = 1.0
 audio_bus_override = false
 audio_bus_name = "Master"
 script = ExtResource( 1 )
-speedY = -900
+vfx_config = ExtResource( 3 )
+speedY = -1080
 speedX = 0
 rotate = false
 playerShot = true
 damage = 0.4
-damage_Max = 3.0
-power_Small = 0.8
-power_Normal = 1.2
-power_Big = 1.6
-power_Large = 2.0
-power_Full = 2.4
+damage_Max = 1.0
+power_Small = 0.4
+power_Normal = 0.55
+power_Big = 0.7
+power_Large = 0.85
+power_Full = 1.0
 
 [node name="Sprite2D" type="Sprite2D" parent="." index="0"]
 
@@ -511,5 +513,3 @@ blend_times = [  ]
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_screen_exited"]
-
-

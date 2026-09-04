@@ -1,808 +1,355 @@
-[gd_scene load_steps=31 format=3]
+[gd_scene load_steps=10 format=3]
 
-[ext_resource path="res://scenes/menu/menu.gd" type="Script" id=1]
-[ext_resource path="res://assets/fonts/slkscr.ttf" type="FontFile" id=2]
-[ext_resource path="res://assets/audio/sfx/ui/menu.wav" type="AudioStream" id=3]
-[ext_resource path="res://assets/audio/sfx/ui/menu_select.wav" type="AudioStream" id=4]
-[ext_resource path="res://assets/audio/sfx/ui/menu_start.wav" type="AudioStream" id=5]
+[ext_resource type="Script" path="res://scenes/menu/menu.gd" id="1"]
+[ext_resource type="FontFile" path="res://assets/fonts/slkscr.ttf" id="2"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/ui/menu.wav" id="3"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/ui/menu_select.wav" id="4"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/ui/menu_start.wav" id="5"]
 
-[sub_resource type="StyleBoxEmpty" id=1]
+[sub_resource type="StyleBoxFlat" id="StylePanel"]
+bg_color = Color( 0.0627451, 0.0823529, 0.133333, 0.96 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0.611765, 0.12549, 0.12549, 0.95 )
+shadow_color = Color( 0.611765, 0.12549, 0.12549, 0.4 )
+shadow_size = 7
 
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
+[sub_resource type="StyleBoxFlat" id="StyleButtonNormal"]
+bg_color = Color( 0.133333, 0.152941, 0.207843, 0.82 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.611765, 0.12549, 0.12549, 0.65 )
 
-[sub_resource type="StyleBoxEmpty" id=2]
+[sub_resource type="StyleBoxFlat" id="StyleButtonHover"]
+bg_color = Color( 0.611765, 0.12549, 0.12549, 0.32 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0.882353, 0.352941, 0.262745, 1 )
+shadow_color = Color( 0.611765, 0.12549, 0.12549, 0.6 )
+shadow_size = 5
 
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
+[sub_resource type="StyleBoxFlat" id="StyleButtonPressed"]
+bg_color = Color( 0.611765, 0.12549, 0.12549, 0.5 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 1, 0.352941, 0.301961, 1 )
+shadow_color = Color( 0.611765, 0.12549, 0.12549, 0.5 )
+shadow_size = 4
 
-[sub_resource type="StyleBoxEmpty" id=3]
+[sub_resource type="StyleBoxFlat" id="StyleButtonDisabled"]
+bg_color = Color( 0.0627451, 0.0823529, 0.133333, 0.4 )
 
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=4]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxTexture" id=5]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-offset_left = 0.0
-offset_right = 0.0
-offset_top = 0.0
-offset_bottom = 0.0
-expand_margin_left = 0.0
-expand_margin_right = 0.0
-expand_margin_top = 0.0
-expand_margin_bottom = 0.0
-modulate_color = Color( 1, 1, 1, 1 )
-draw_center = true
-
-[sub_resource type="StyleBoxEmpty" id=6]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=7]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=8]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=9]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=10]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=11]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=12]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=13]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=14]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=15]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=16]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=17]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=18]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=19]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=20]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=21]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=22]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=23]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=24]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[sub_resource type="StyleBoxEmpty" id=25]
-
-content_margin_left = -1.0
-content_margin_right = -1.0
-content_margin_top = -1.0
-content_margin_bottom = -1.0
-
-[node name="menu" type="Control" index="0"]
+[node name="menu" type="Control"]
 
 process_mode = 3
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = -2.0
-offset_right = -2.0
-pivot_offset = Vector2( 0, 0 )
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 2
-size_flags_vertical = 2
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource( 1 )
-_sections_unfolded = [ "Focus", "Grow Direction", "Hint", "Mouse", "Rect", "Size Flags" ]
 
-[node name="buttonGroup" type="VBoxContainer" parent="." index="0"]
+[node name="Center" type="CenterContainer" parent="."]
 
-process_mode = 3
-editor/display_folded = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 2.0
-offset_top = 380.0
-offset_right = 802.0
-offset_bottom = 891.0
-grow_horizontal = 0
-custom_minimum_size = Vector2( 800, 0 )
-pivot_offset = Vector2( 0, 0 )
-clip_contents = true
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 12
-size_flags_vertical = 8
-theme_override_constants/separation = 1
-alignment = 1
-_sections_unfolded = [ "Anchor", "Focus", "Grow Direction", "Hint", "Margin", "Mouse", "Rect", "Size Flags", "Theme", "Visibility", "custom_constants" ]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="return" type="Button" parent="buttonGroup" index="0"]
+[node name="Panel" type="PanelContainer" parent="Center"]
 
-process_mode = 3
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 338.0
-offset_right = 462.0
-offset_bottom = 31.0
-pivot_offset = Vector2( 0, 0 )
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 6
-size_flags_vertical = 2
-theme_override_styles/hover = SubResource( 1 )
-theme_override_styles/pressed = SubResource( 2 )
-theme_override_styles/focus = SubResource( 3 )
-theme_override_styles/disabled = SubResource( 4 )
-theme_override_styles/normal = SubResource( 5 )
+custom_minimum_size = Vector2( 450, 0 )
+layout_mode = 2
+theme_override_styles/panel = SubResource( "StylePanel" )
+
+[node name="Margin" type="MarginContainer" parent="Center/Panel"]
+
+layout_mode = 2
+theme_override_constants/margin_left = 26
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 26
+theme_override_constants/margin_bottom = 24
+
+[node name="Content" type="VBoxContainer" parent="Center/Panel/Margin"]
+
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="MenuTitle" type="Label" parent="Center/Panel/Margin/Content"]
+
+custom_minimum_size = Vector2( 0, 46 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color( 0.721569, 0.721569, 0.25098, 1 )
-toggle_mode = false
-focus_mode = 2
-shortcut = null
-group = null
-text = "return"
-flat = false
+theme_override_font_sizes/font_size = 36
 horizontal_alignment = 1
-_sections_unfolded = [ "Anchor", "Focus", "Grow Direction", "Hint", "Margin", "Mouse", "Rect", "Size Flags", "custom_fonts" ]
+vertical_alignment = 1
 
-[node name="player1" type="Button" parent="buttonGroup" index="1"]
+[node name="MenuLine" type="ColorRect" parent="Center/Panel/Margin/Content"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 311.0
-offset_top = 34.0
-offset_right = 488.0
-offset_bottom = 65.0
-pivot_offset = Vector2( 0, 0 )
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 6
-size_flags_vertical = 2
-theme_override_styles/hover = SubResource( 1 )
-theme_override_styles/pressed = SubResource( 2 )
-theme_override_styles/focus = SubResource( 3 )
-theme_override_styles/disabled = SubResource( 4 )
-theme_override_styles/normal = SubResource( 5 )
+custom_minimum_size = Vector2( 0, 3 )
+layout_mode = 2
+color = Color( 0.611765, 0.12549, 0.12549, 0.95 )
+
+[node name="buttonGroup" type="VBoxContainer" parent="Center/Panel/Margin/Content"]
+
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="return" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
+
+custom_minimum_size = Vector2( 0, 46 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
+theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color( 0.721569, 0.721569, 0.25098, 1 )
-theme_override_colors/font_hover_color = Color( 1, 1, 1, 1 )
-toggle_mode = false
-focus_mode = 2
-shortcut = null
-group = null
-text = "player 1 :"
-flat = false
-horizontal_alignment = 1
-_sections_unfolded = [ "Rect" ]
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource( "StyleButtonNormal" )
+theme_override_styles/hover = SubResource( "StyleButtonHover" )
+theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
+theme_override_styles/focus = SubResource( "StyleButtonHover" )
+theme_override_styles/disabled = SubResource( "StyleButtonDisabled" )
+text = "RETURN"
 
-[node name="player2" type="Button" parent="buttonGroup" index="2"]
+[node name="player1" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 310.0
-offset_top = 68.0
-offset_right = 490.0
-offset_bottom = 99.0
-pivot_offset = Vector2( 0, 0 )
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 6
-size_flags_vertical = 2
-theme_override_styles/hover = SubResource( 1 )
-theme_override_styles/pressed = SubResource( 2 )
-theme_override_styles/focus = SubResource( 3 )
-theme_override_styles/disabled = SubResource( 4 )
-theme_override_styles/normal = SubResource( 5 )
+custom_minimum_size = Vector2( 0, 46 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
+theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color( 0.721569, 0.721569, 0.25098, 1 )
-theme_override_colors/font_hover_color = Color( 1, 1, 1, 1 )
-toggle_mode = false
-focus_mode = 2
-shortcut = null
-group = null
-text = "player 2 :"
-flat = false
-horizontal_alignment = 1
-_sections_unfolded = [ "Rect" ]
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource( "StyleButtonNormal" )
+theme_override_styles/hover = SubResource( "StyleButtonHover" )
+theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
+theme_override_styles/focus = SubResource( "StyleButtonHover" )
+theme_override_styles/disabled = SubResource( "StyleButtonDisabled" )
+text = "PLAYER 1"
 
-[node name="Controller" type="Button" parent="buttonGroup" index="3"]
+[node name="player2" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 299.0
-offset_top = 102.0
-offset_right = 501.0
-offset_bottom = 133.0
-pivot_offset = Vector2( 0, 0 )
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 6
-size_flags_vertical = 2
-theme_override_styles/hover = SubResource( 1 )
-theme_override_styles/pressed = SubResource( 2 )
-theme_override_styles/focus = SubResource( 3 )
-theme_override_styles/disabled = SubResource( 4 )
-theme_override_styles/normal = SubResource( 5 )
+custom_minimum_size = Vector2( 0, 46 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
+theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color( 0.721569, 0.721569, 0.25098, 1 )
-theme_override_colors/font_hover_color = Color( 1, 1, 1, 1 )
-toggle_mode = false
-focus_mode = 2
-shortcut = null
-group = null
-text = "controller"
-flat = false
-horizontal_alignment = 1
-_sections_unfolded = [ "Rect" ]
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource( "StyleButtonNormal" )
+theme_override_styles/hover = SubResource( "StyleButtonHover" )
+theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
+theme_override_styles/focus = SubResource( "StyleButtonHover" )
+theme_override_styles/disabled = SubResource( "StyleButtonDisabled" )
+text = "PLAYER 2"
 
-[node name="music" type="Button" parent="buttonGroup" index="4"]
+[node name="Controller" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 320.0
-offset_top = 136.0
-offset_right = 479.0
-offset_bottom = 167.0
-pivot_offset = Vector2( 0, 0 )
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 6
-size_flags_vertical = 2
-theme_override_styles/hover = SubResource( 1 )
-theme_override_styles/pressed = SubResource( 2 )
-theme_override_styles/focus = SubResource( 3 )
-theme_override_styles/disabled = SubResource( 4 )
-theme_override_styles/normal = SubResource( 5 )
+custom_minimum_size = Vector2( 0, 46 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
+theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color( 0.721569, 0.721569, 0.25098, 1 )
-theme_override_colors/font_hover_color = Color( 1, 1, 1, 1 )
-toggle_mode = false
-focus_mode = 2
-shortcut = null
-group = null
-text = "music on"
-flat = false
-horizontal_alignment = 1
-_sections_unfolded = [ "Rect" ]
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource( "StyleButtonNormal" )
+theme_override_styles/hover = SubResource( "StyleButtonHover" )
+theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
+theme_override_styles/focus = SubResource( "StyleButtonHover" )
+theme_override_styles/disabled = SubResource( "StyleButtonDisabled" )
+text = "CONTROLLERS"
 
-[node name="sound" type="Button" parent="buttonGroup" index="5"]
+[node name="music" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 315.0
-offset_top = 170.0
-offset_right = 484.0
-offset_bottom = 201.0
-pivot_offset = Vector2( 0, 0 )
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 6
-size_flags_vertical = 2
-theme_override_styles/hover = SubResource( 6 )
-theme_override_styles/pressed = SubResource( 7 )
-theme_override_styles/focus = SubResource( 8 )
-theme_override_styles/disabled = SubResource( 9 )
-theme_override_styles/normal = SubResource( 10 )
+custom_minimum_size = Vector2( 0, 46 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
+theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color( 0.721569, 0.721569, 0.25098, 1 )
-theme_override_colors/font_hover_color = Color( 1, 1, 1, 1 )
-toggle_mode = false
-focus_mode = 2
-shortcut = null
-group = null
-text = "sound on"
-flat = false
-horizontal_alignment = 1
-_sections_unfolded = [ "Rect" ]
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource( "StyleButtonNormal" )
+theme_override_styles/hover = SubResource( "StyleButtonHover" )
+theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
+theme_override_styles/focus = SubResource( "StyleButtonHover" )
+theme_override_styles/disabled = SubResource( "StyleButtonDisabled" )
+text = "MUSIC"
 
-[node name="resume" type="Button" parent="buttonGroup" index="6"]
+[node name="sound" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-process_mode = 3
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 338.0
-offset_top = 204.0
-offset_right = 462.0
-offset_bottom = 235.0
-pivot_offset = Vector2( 0, 0 )
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 6
-size_flags_vertical = 2
-theme_override_styles/hover = SubResource( 1 )
-theme_override_styles/pressed = SubResource( 2 )
-theme_override_styles/focus = SubResource( 3 )
-theme_override_styles/disabled = SubResource( 4 )
-theme_override_styles/normal = SubResource( 5 )
+custom_minimum_size = Vector2( 0, 46 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
+theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color( 0.721569, 0.721569, 0.25098, 1 )
-toggle_mode = false
-focus_mode = 2
-shortcut = null
-group = null
-text = "Resume"
-flat = false
-horizontal_alignment = 1
-_sections_unfolded = [ "Rect" ]
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource( "StyleButtonNormal" )
+theme_override_styles/hover = SubResource( "StyleButtonHover" )
+theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
+theme_override_styles/focus = SubResource( "StyleButtonHover" )
+theme_override_styles/disabled = SubResource( "StyleButtonDisabled" )
+text = "SOUND"
 
-[node name="restart" type="Button" parent="buttonGroup" index="7"]
+[node name="resume" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 331.0
-offset_top = 238.0
-offset_right = 469.0
-offset_bottom = 269.0
-pivot_offset = Vector2( 0, 0 )
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 6
-size_flags_vertical = 2
-theme_override_styles/hover = SubResource( 1 )
-theme_override_styles/pressed = SubResource( 2 )
-theme_override_styles/focus = SubResource( 3 )
-theme_override_styles/disabled = SubResource( 4 )
-theme_override_styles/normal = SubResource( 5 )
+custom_minimum_size = Vector2( 0, 46 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
+theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color( 0.721569, 0.721569, 0.25098, 1 )
-theme_override_colors/font_hover_color = Color( 1, 1, 1, 1 )
-toggle_mode = false
-focus_mode = 2
-shortcut = null
-group = null
-text = "restart"
-flat = false
-horizontal_alignment = 1
-_sections_unfolded = [ "Rect" ]
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource( "StyleButtonNormal" )
+theme_override_styles/hover = SubResource( "StyleButtonHover" )
+theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
+theme_override_styles/focus = SubResource( "StyleButtonHover" )
+theme_override_styles/disabled = SubResource( "StyleButtonDisabled" )
+text = "RESUME"
 
-[node name="solo" type="Button" parent="buttonGroup" index="8"]
+[node name="restart" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 359.0
-offset_top = 272.0
-offset_right = 440.0
-offset_bottom = 303.0
-pivot_offset = Vector2( 0, 0 )
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 6
-size_flags_vertical = 2
-theme_override_styles/hover = SubResource( 1 )
-theme_override_styles/pressed = SubResource( 2 )
-theme_override_styles/focus = SubResource( 3 )
-theme_override_styles/disabled = SubResource( 4 )
-theme_override_styles/normal = SubResource( 5 )
+custom_minimum_size = Vector2( 0, 46 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
+theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color( 0.721569, 0.721569, 0.25098, 1 )
-theme_override_colors/font_hover_color = Color( 1, 1, 1, 1 )
-toggle_mode = false
-focus_mode = 2
-shortcut = null
-group = null
-text = "Solo"
-flat = false
-horizontal_alignment = 1
-_sections_unfolded = [ "Rect", "custom_colors" ]
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource( "StyleButtonNormal" )
+theme_override_styles/hover = SubResource( "StyleButtonHover" )
+theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
+theme_override_styles/focus = SubResource( "StyleButtonHover" )
+theme_override_styles/disabled = SubResource( "StyleButtonDisabled" )
+text = "RESTART"
 
-[node name="coop" type="Button" parent="buttonGroup" index="9"]
+[node name="solo" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 358.0
-offset_top = 306.0
-offset_right = 442.0
-offset_bottom = 337.0
-pivot_offset = Vector2( 0, 0 )
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 6
-size_flags_vertical = 2
-theme_override_styles/hover = SubResource( 6 )
-theme_override_styles/pressed = SubResource( 7 )
-theme_override_styles/focus = SubResource( 8 )
-theme_override_styles/disabled = SubResource( 9 )
-theme_override_styles/normal = SubResource( 10 )
+custom_minimum_size = Vector2( 0, 46 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
+theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color( 0.721569, 0.721569, 0.25098, 1 )
-theme_override_colors/font_hover_color = Color( 1, 1, 1, 1 )
-toggle_mode = false
-focus_mode = 2
-shortcut = null
-group = null
-text = "coop"
-flat = false
-horizontal_alignment = 1
-_sections_unfolded = [ "Rect" ]
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource( "StyleButtonNormal" )
+theme_override_styles/hover = SubResource( "StyleButtonHover" )
+theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
+theme_override_styles/focus = SubResource( "StyleButtonHover" )
+theme_override_styles/disabled = SubResource( "StyleButtonDisabled" )
+text = "SOLO RUN"
 
-[node name="options" type="Button" parent="buttonGroup" index="10"]
+[node name="coop" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 331.0
-offset_top = 340.0
-offset_right = 469.0
-offset_bottom = 371.0
-pivot_offset = Vector2( 0, 0 )
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 6
-size_flags_vertical = 2
-theme_override_styles/hover = SubResource( 11 )
-theme_override_styles/pressed = SubResource( 12 )
-theme_override_styles/focus = SubResource( 13 )
-theme_override_styles/disabled = SubResource( 14 )
-theme_override_styles/normal = SubResource( 15 )
+custom_minimum_size = Vector2( 0, 46 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
+theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color( 0.721569, 0.721569, 0.25098, 1 )
-theme_override_colors/font_hover_color = Color( 1, 1, 1, 1 )
-toggle_mode = false
-focus_mode = 2
-shortcut = null
-group = null
-text = "options"
-flat = false
-horizontal_alignment = 1
-_sections_unfolded = [ "Rect", "custom_colors" ]
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource( "StyleButtonNormal" )
+theme_override_styles/hover = SubResource( "StyleButtonHover" )
+theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
+theme_override_styles/focus = SubResource( "StyleButtonHover" )
+theme_override_styles/disabled = SubResource( "StyleButtonDisabled" )
+text = "CO-OP RUN"
 
-[node name="fullscreen" type="Button" parent="buttonGroup" index="11"]
+[node name="options" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 290.0
-offset_top = 374.0
-offset_right = 510.0
-offset_bottom = 405.0
-pivot_offset = Vector2( 0, 0 )
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 6
-size_flags_vertical = 2
-theme_override_styles/hover = SubResource( 11 )
-theme_override_styles/pressed = SubResource( 12 )
-theme_override_styles/focus = SubResource( 13 )
-theme_override_styles/disabled = SubResource( 14 )
-theme_override_styles/normal = SubResource( 15 )
+custom_minimum_size = Vector2( 0, 46 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
+theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color( 0.721569, 0.721569, 0.25098, 1 )
-theme_override_colors/font_hover_color = Color( 1, 1, 1, 1 )
-toggle_mode = false
-focus_mode = 2
-shortcut = null
-group = null
-text = "fullscreen :"
-flat = false
-horizontal_alignment = 1
-_sections_unfolded = [ "Rect" ]
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource( "StyleButtonNormal" )
+theme_override_styles/hover = SubResource( "StyleButtonHover" )
+theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
+theme_override_styles/focus = SubResource( "StyleButtonHover" )
+theme_override_styles/disabled = SubResource( "StyleButtonDisabled" )
+text = "OPTIONS"
 
-[node name="graphic" type="Button" parent="buttonGroup" index="12"]
+[node name="fullscreen" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 321.0
-offset_top = 408.0
-offset_right = 479.0
-offset_bottom = 439.0
-pivot_offset = Vector2( 0, 0 )
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 6
-size_flags_vertical = 2
-theme_override_styles/hover = SubResource( 11 )
-theme_override_styles/pressed = SubResource( 12 )
-theme_override_styles/focus = SubResource( 13 )
-theme_override_styles/disabled = SubResource( 14 )
-theme_override_styles/normal = SubResource( 15 )
+custom_minimum_size = Vector2( 0, 46 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
+theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color( 0.721569, 0.721569, 0.25098, 1 )
-theme_override_colors/font_hover_color = Color( 1, 1, 1, 1 )
-toggle_mode = false
-focus_mode = 2
-shortcut = null
-group = null
-text = "Graphic :"
-flat = false
-horizontal_alignment = 1
-_sections_unfolded = [ "Rect" ]
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource( "StyleButtonNormal" )
+theme_override_styles/hover = SubResource( "StyleButtonHover" )
+theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
+theme_override_styles/focus = SubResource( "StyleButtonHover" )
+theme_override_styles/disabled = SubResource( "StyleButtonDisabled" )
+text = "FULLSCREEN"
 
-[node name="hiscore" type="Button" parent="buttonGroup" index="13"]
+[node name="hiscore" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 333.0
-offset_top = 442.0
-offset_right = 467.0
-offset_bottom = 473.0
-pivot_offset = Vector2( 0, 0 )
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 6
-size_flags_vertical = 2
-theme_override_styles/hover = SubResource( 16 )
-theme_override_styles/pressed = SubResource( 17 )
-theme_override_styles/focus = SubResource( 18 )
-theme_override_styles/disabled = SubResource( 19 )
-theme_override_styles/normal = SubResource( 20 )
+custom_minimum_size = Vector2( 0, 46 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
+theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color( 0.721569, 0.721569, 0.25098, 1 )
-theme_override_colors/font_hover_color = Color( 1, 1, 1, 1 )
-toggle_mode = false
-focus_mode = 2
-shortcut = null
-group = null
-text = "Hiscore"
-flat = false
-horizontal_alignment = 1
-_sections_unfolded = [ "Rect" ]
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource( "StyleButtonNormal" )
+theme_override_styles/hover = SubResource( "StyleButtonHover" )
+theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
+theme_override_styles/focus = SubResource( "StyleButtonHover" )
+theme_override_styles/disabled = SubResource( "StyleButtonDisabled" )
+text = "HISCORE"
 
-[node name="exit" type="Button" parent="buttonGroup" index="14"]
+[node name="exit" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 364.0
-offset_top = 476.0
-offset_right = 436.0
-offset_bottom = 507.0
-pivot_offset = Vector2( 0, 0 )
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 6
-size_flags_vertical = 2
-theme_override_styles/hover = SubResource( 21 )
-theme_override_styles/pressed = SubResource( 22 )
-theme_override_styles/focus = SubResource( 23 )
-theme_override_styles/disabled = SubResource( 24 )
-theme_override_styles/normal = SubResource( 25 )
+custom_minimum_size = Vector2( 0, 46 )
+layout_mode = 2
+theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
+theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color( 0.721569, 0.721569, 0.25098, 1 )
-theme_override_colors/font_hover_color = Color( 1, 1, 1, 1 )
-toggle_mode = false
-focus_mode = 2
-shortcut = null
-group = null
-text = "Exit"
-flat = false
-horizontal_alignment = 1
-_sections_unfolded = [ "Rect" ]
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource( "StyleButtonNormal" )
+theme_override_styles/hover = SubResource( "StyleButtonHover" )
+theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
+theme_override_styles/focus = SubResource( "StyleButtonHover" )
+theme_override_styles/disabled = SubResource( "StyleButtonDisabled" )
+text = "EXIT"
 
-[node name="optionTimer" type="Timer" parent="." index="1"]
-
-process_mode = 3
-wait_time = 0.05
-one_shot = true
-autostart = true
-
-[node name="sound_switch" type="AudioStreamPlayer" parent="." index="2"]
+[node name="sound_switch" type="AudioStreamPlayer" parent="."]
 
 process_mode = 3
 stream = ExtResource( 3 )
 volume_db = -10.0
-autoplay = false
-mix_target = 0
-bus = "Sounds"
+bus = &"Sounds"
 
-[node name="sound_select" type="AudioStreamPlayer" parent="." index="3"]
+[node name="sound_select" type="AudioStreamPlayer" parent="."]
 
 process_mode = 3
 stream = ExtResource( 4 )
 volume_db = -10.0
-autoplay = false
-mix_target = 0
-bus = "Sounds"
+bus = &"Sounds"
 
-[node name="sound_start" type="AudioStreamPlayer" parent="." index="4"]
+[node name="sound_start" type="AudioStreamPlayer" parent="."]
 
 process_mode = 3
 stream = ExtResource( 5 )
 volume_db = -5.0
-autoplay = false
-mix_target = 0
-bus = "Sounds"
+bus = &"Sounds"
 
-[connection signal="button_down" from="buttonGroup/return" to="." method="_on_return_button_down"]
-
-[connection signal="button_down" from="buttonGroup/player1" to="." method="_on_player1_button_down"]
-
-[connection signal="button_down" from="buttonGroup/player2" to="." method="_on_player2_button_down"]
-
-[connection signal="button_down" from="buttonGroup/Controller" to="." method="_on_Controller_button_down"]
-
-[connection signal="button_down" from="buttonGroup/music" to="." method="_on_music_button_down"]
-
-[connection signal="button_down" from="buttonGroup/sound" to="." method="_on_sound_button_down"]
-
-[connection signal="button_down" from="buttonGroup/resume" to="." method="_on_Resume_button_down"]
-
-[connection signal="button_down" from="buttonGroup/restart" to="." method="_on_Restart_button_down"]
-
-[connection signal="button_down" from="buttonGroup/solo" to="." method="_on_Solo_button_down"]
-
-[connection signal="button_down" from="buttonGroup/coop" to="." method="_on_Coop_button_down"]
-
-[connection signal="button_down" from="buttonGroup/options" to="." method="_on_options_button_down"]
-
-[connection signal="button_down" from="buttonGroup/fullscreen" to="." method="_on_fullscreen_button_down"]
-
-[connection signal="button_down" from="buttonGroup/graphic" to="." method="_on_graphic_button_down"]
-
-[connection signal="button_down" from="buttonGroup/hiscore" to="." method="_on_Hiscore_button_down"]
-
-[connection signal="button_down" from="buttonGroup/exit" to="." method="_on_Exit_button_down"]
-
-
+[connection signal="button_down" from="Center/Panel/Margin/Content/buttonGroup/return" to="." method="_on_return_button_down"]
+[connection signal="button_down" from="Center/Panel/Margin/Content/buttonGroup/player1" to="." method="_on_player1_button_down"]
+[connection signal="button_down" from="Center/Panel/Margin/Content/buttonGroup/player2" to="." method="_on_player2_button_down"]
+[connection signal="button_down" from="Center/Panel/Margin/Content/buttonGroup/Controller" to="." method="_on_Controller_button_down"]
+[connection signal="button_down" from="Center/Panel/Margin/Content/buttonGroup/music" to="." method="_on_music_button_down"]
+[connection signal="button_down" from="Center/Panel/Margin/Content/buttonGroup/sound" to="." method="_on_sound_button_down"]
+[connection signal="button_down" from="Center/Panel/Margin/Content/buttonGroup/resume" to="." method="_on_Resume_button_down"]
+[connection signal="button_down" from="Center/Panel/Margin/Content/buttonGroup/restart" to="." method="_on_Restart_button_down"]
+[connection signal="button_down" from="Center/Panel/Margin/Content/buttonGroup/solo" to="." method="_on_Solo_button_down"]
+[connection signal="button_down" from="Center/Panel/Margin/Content/buttonGroup/coop" to="." method="_on_Coop_button_down"]
+[connection signal="button_down" from="Center/Panel/Margin/Content/buttonGroup/options" to="." method="_on_options_button_down"]
+[connection signal="button_down" from="Center/Panel/Margin/Content/buttonGroup/fullscreen" to="." method="_on_fullscreen_button_down"]
+[connection signal="button_down" from="Center/Panel/Margin/Content/buttonGroup/hiscore" to="." method="_on_Hiscore_button_down"]
+[connection signal="button_down" from="Center/Panel/Margin/Content/buttonGroup/exit" to="." method="_on_Exit_button_down"]

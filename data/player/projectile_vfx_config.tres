@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ProjectileVfxConfig" format=3 uid="uid://dswqi82prck30"]
+
+[ext_resource type="Script" uid="uid://dvi3eqmhkagj6" path="res://data/player/projectile_vfx_config.gd" id="1"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_glow"]
+blend_mode = 1
+
+[resource]
+script = ExtResource("1")
+glow_material = SubResource("CanvasItemMaterial_glow")

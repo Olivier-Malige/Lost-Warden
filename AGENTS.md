@@ -4,6 +4,15 @@ Godot **4.7** shmup. Follow this file for layout, naming, and runtime rules. Kee
 
 Reply to the maintainer in **French**. All repo docs, new comments, and `class_name` docs are **English**.
 
+## Active roadmap
+
+The approved dynamic gameplay roadmap lives in [`docs/gameplay_rework_plan.md`](docs/gameplay_rework_plan.md).
+
+- Treat the roadmap as the source of truth for this refactor.
+- Implement only the phase explicitly requested by the maintainer.
+- Finish and verify each phase before starting the next.
+- Keep meta-progression planning-only until its separate roadmap is approved.
+
 ## Layout
 
 Do **not** bring back `src/`, `Scripts/`, `Scenes/`, `Prefabs/`, `Fonts/`, `Sounds/`, or a Unity-style split.
@@ -27,12 +36,12 @@ Committed autoloads: `global` → `core/global.gd`, `Events` → `core/events.gd
 
 ## Architecture
 
-- HUD and combat talk through `Events` (`score_changed`, `wave_changed`, `energy_changed`, `player_died`, `game_over_requested`, `powerup_collected`). Do not recouple HUD to player nodes.
+- HUD, combat, and screen flow talk through `Events` (`score_changed`, `wave_changed`, `energy_changed`, `player_died`, `game_over_requested`, `powerup_collected`, `world_requested`, `hiscore_requested`, `start_screen_requested`, `resume_requested`, `restart_requested`). Do not recouple HUD to player nodes. Coop mode lives on `global.coop`.
 - Waves: edit `data/waves/*.tres` / `wave_catalog.tres`; runtime is `scenes/waves/wave_spawner.gd`.
 - Weapons and upgrades are resources (`WeaponDefinition`, `UpgradeDefinition`, `PlayerLoadout`). Prefer data over hardcoded stats.
 - Player logic stays split: `player.gd`, `player_weapons.gd`, `player_vitals.gd`, `player_loadout.gd`.
 - Shots go through `ProjectilePool` (`scenes/combat/projectile_pool.gd`).
-- Collision layers are named in `project.godot` (`player`, `enemy`, `player_shot`, `enemy_shot`, `pickup`, `asteroid`).
+- Collision layers are named in `project.godot` (`player`, `enemy`, `player_shot`, `enemy_shot`, `pickup`, `asteroid`). Scripts preload `core/collision_layers.gd` instead of raw bitmasks.
 - Keep `global.Debug` and F1–F6 debug actions.
 
 `global.gd` preloads save with `const _Save := preload("res://core/save_service.gd")` — do not put `class_name` on that autoload helper if parse order breaks.

@@ -1,232 +1,367 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=2 format=3 uid="uid://ddy44l041lsts"]
 
-[ext_resource path="res://scenes/world/world.gd" type="Script" id=1]
-[ext_resource path="res://assets/fonts/slkscr.ttf" type="FontFile" id=2]
-[ext_resource path="res://scenes/waves/wave_spawner.gd" type="Script" id=3]
-[ext_resource path="res://assets/audio/music/game.ogg" type="AudioStream" id=4]
-[ext_resource path="res://scenes/world/background.tscn" type="PackedScene" id=5]
-[ext_resource path="res://scenes/combat/projectile_pool.gd" type="Script" id=6]
-[ext_resource path="res://scenes/ui/hud.gd" type="Script" id=7]
+[ext_resource type="Script" uid="uid://bn0cagpwh0y8f" path="res://scenes/world/world.gd" id="1"]
+[ext_resource type="FontFile" uid="uid://cndq06brheuki" path="res://assets/fonts/slkscr.ttf" id="2"]
+[ext_resource type="Script" uid="uid://bmkvcsngm11f3" path="res://scenes/waves/wave_spawner.gd" id="3"]
+[ext_resource type="AudioStream" uid="uid://bmcilejlwrl4y" path="res://assets/audio/music/game.ogg" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/world/background.tscn" id="5"]
+[ext_resource type="Script" uid="uid://ctihglpcctrbp" path="res://scenes/combat/projectile_pool.gd" id="6"]
+[ext_resource type="Script" uid="uid://cq5s6eielhtgt" path="res://scenes/ui/hud.gd" id="7"]
+[ext_resource type="Script" path="res://scenes/world/combat_feedback.gd" id="8"]
+[ext_resource type="Resource" path="res://data/waves/wave_spawner_config.tres" id="9"]
+[ext_resource type="Resource" path="res://data/waves/wave_catalog.tres" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/world/foreground_speed_particles.tscn" id="11"]
 
-[node name="world" type="Node2D"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxRankPanel"]
+bg_color = Color(0.0470588, 0.0588235, 0.101961, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.611765, 0.12549, 0.12549, 0.85)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 3
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxPlasmaBackground"]
+bg_color = Color(0.027451, 0.0313726, 0.0666667, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.42, 0.36, 0.58, 0.9)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxPlasmaFill"]
+bg_color = Color(0.74, 0.59, 0.9, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+
+[node name="world" type="Node2D" unique_id=871126695]
 process_mode = 1
-script = ExtResource( 1 )
+texture_filter = 1
+script = ExtResource("1")
 
-[node name="hud" type="Node2D" parent="." index="0"]
-script = ExtResource( 7 )
+[node name="CombatFeedback" type="Camera2D" parent="."]
+position = Vector2(533, 400)
+enabled = true
+script = ExtResource("8")
 
-process_mode = 1
-editor/display_folded = true
-z_index = 200
-_sections_unfolded = [ "Z Index" ]
+[node name="FeedbackLayer" type="CanvasLayer" parent="."]
+layer = 5
 
-[node name="score" type="Label" parent="hud" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 25.0
-offset_top = 5.0
-offset_right = 162.0
-offset_bottom = 36.0
-pivot_offset = Vector2( 0, 0 )
+[node name="Flash" type="ColorRect" parent="FeedbackLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 2
-size_flags_vertical = 0
-theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 30
-text = "Score : "
-visible_ratio = 1.0
-lines_skipped = 0
-max_lines_visible = -1
+color = Color(1, 1, 1, 0)
 
-[node name="wave" type="Label" parent="hud" index="1"]
+[node name="hud" type="CanvasLayer" parent="." unique_id=1550003814]
+process_mode = 1
+layer = 10
+script = ExtResource("7")
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 595.0
-offset_top = 5.0
-offset_right = 726.0
-offset_bottom = 36.0
-pivot_offset = Vector2( 0, 0 )
+[node name="leftRail" type="ColorRect" parent="hud" unique_id=1705713081]
+offset_right = 100.0
+offset_bottom = 800.0
 mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 2
+color = Color(0.133333, 0.152941, 0.207843, 0.96)
+
+[node name="LeftRankPanel" type="Panel" parent="hud"]
+offset_left = 4.0
+offset_top = 136.0
+offset_right = 96.0
+offset_bottom = 260.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxRankPanel")
+visible = false
+
+[node name="rightRail" type="ColorRect" parent="hud" unique_id=2112126863]
+offset_left = 966.0
+offset_right = 1066.0
+offset_bottom = 800.0
+mouse_filter = 2
+color = Color(0.133333, 0.152941, 0.207843, 0.96)
+
+[node name="RightRankPanel" type="Panel" parent="hud"]
+offset_left = 970.0
+offset_top = 72.0
+offset_right = 1062.0
+offset_bottom = 196.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxRankPanel")
+visible = false
+
+[node name="leftEdge" type="ColorRect" parent="hud" unique_id=1736162054]
+offset_left = 98.0
+offset_right = 100.0
+offset_bottom = 800.0
+mouse_filter = 2
+color = Color(0.9, 0.78, 0.2, 0.95)
+
+[node name="rightEdge" type="ColorRect" parent="hud" unique_id=1777678714]
+offset_left = 966.0
+offset_right = 968.0
+offset_bottom = 800.0
+mouse_filter = 2
+color = Color(0.9, 0.78, 0.2, 0.95)
+
+[node name="LeftOuterGlow" type="ColorRect" parent="hud" unique_id=1322269694]
+offset_left = 94.0
+offset_right = 98.0
+offset_bottom = 800.0
+mouse_filter = 2
+color = Color(0.72, 0.72, 0.25, 0.18)
+
+[node name="LeftInnerGlow" type="ColorRect" parent="hud" unique_id=399674539]
+offset_left = 100.0
+offset_right = 104.0
+offset_bottom = 800.0
+mouse_filter = 2
+color = Color(0.72, 0.72, 0.25, 0.12)
+
+[node name="RightInnerGlow" type="ColorRect" parent="hud" unique_id=2064758257]
+offset_left = 962.0
+offset_right = 966.0
+offset_bottom = 800.0
+mouse_filter = 2
+color = Color(0.72, 0.72, 0.25, 0.12)
+
+[node name="RightOuterGlow" type="ColorRect" parent="hud" unique_id=670318699]
+offset_left = 968.0
+offset_right = 972.0
+offset_bottom = 800.0
+mouse_filter = 2
+color = Color(0.72, 0.72, 0.25, 0.18)
+
+[node name="LeftColumn" type="VBoxContainer" parent="hud" unique_id=691578275]
+offset_right = 100.0
+offset_bottom = 800.0
+theme_override_constants/separation = 0
+
+[node name="score" type="Label" parent="hud/LeftColumn" unique_id=1521622055]
+custom_minimum_size = Vector2(0, 74)
+layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 0
-theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 30
-text = "waves :"
-visible_ratio = 1.0
-lines_skipped = 0
-max_lines_visible = -1
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 20
+text = "Score"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="energy_player1" type="Node2D" parent="hud" index="2"]
+[node name="combo" type="Label" parent="hud/LeftColumn"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 18
+text = "COMBO\n—"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-position = Vector2( 20, 170 )
-_sections_unfolded = [ "Transform3D" ]
+[node name="ranks_player1" type="Label" parent="hud/LeftColumn"]
+custom_minimum_size = Vector2(0, 106)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.952941, 0.921569, 0.866667, 1)
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 14
+text = "UPGRADES\nSPD 0/8\nDMG 0/10\nRATE 0/8\nSIDE 0/7"
+horizontal_alignment = 1
+vertical_alignment = 1
+visible = false
 
-[node name="energy_player2" type="Node2D" parent="hud" index="3"]
+[node name="plasma_holder_player1" type="VBoxContainer" parent="hud/LeftColumn"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_constants/separation = 2
+visible = false
 
-position = Vector2( 765, 170 )
-_sections_unfolded = [ "Transform3D", "Visibility" ]
+[node name="label" type="Label" parent="hud/LeftColumn/plasma_holder_player1"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 14
+text = "PLASMA"
+horizontal_alignment = 1
 
-[node name="waveGenerator" type="Node2D" parent="." index="1"]
+[node name="plasma_player1" type="ProgressBar" parent="hud/LeftColumn/plasma_holder_player1"]
+custom_minimum_size = Vector2(84, 14)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/background = SubResource("StyleBoxPlasmaBackground")
+theme_override_styles/fill = SubResource("StyleBoxPlasmaFill")
+value = 0.0
+show_percentage = false
 
+[node name="LeftSpacer" type="Control" parent="hud/LeftColumn" unique_id=445969611]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="energy_player1" type="VBoxContainer" parent="hud/LeftColumn" unique_id=2129841416]
+custom_minimum_size = Vector2(0, 144)
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 2
+
+[node name="LeftBottomMargin" type="Control" parent="hud/LeftColumn" unique_id=759714424]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+
+[node name="RightColumn" type="VBoxContainer" parent="hud" unique_id=1212893945]
+offset_left = 966.0
+offset_right = 1066.0
+offset_bottom = 800.0
+theme_override_constants/separation = 0
+
+[node name="wave" type="Label" parent="hud/RightColumn" unique_id=11255902]
+custom_minimum_size = Vector2(0, 74)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 20
+text = "waves"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ranks_player2" type="Label" parent="hud/RightColumn"]
+custom_minimum_size = Vector2(0, 106)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.952941, 0.921569, 0.866667, 1)
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 14
+text = "UPGRADES\nSPD 0/8\nDMG 0/10\nRATE 0/8\nSIDE 0/7"
+horizontal_alignment = 1
+vertical_alignment = 1
+visible = false
+
+[node name="plasma_holder_player2" type="VBoxContainer" parent="hud/RightColumn"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_constants/separation = 2
+visible = false
+
+[node name="label" type="Label" parent="hud/RightColumn/plasma_holder_player2"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 14
+text = "PLASMA"
+horizontal_alignment = 1
+
+[node name="plasma_player2" type="ProgressBar" parent="hud/RightColumn/plasma_holder_player2"]
+custom_minimum_size = Vector2(84, 14)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/background = SubResource("StyleBoxPlasmaBackground")
+theme_override_styles/fill = SubResource("StyleBoxPlasmaFill")
+value = 0.0
+show_percentage = false
+
+[node name="RightSpacer" type="Control" parent="hud/RightColumn" unique_id=1455964552]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="energy_player2" type="VBoxContainer" parent="hud/RightColumn" unique_id=101961502]
+custom_minimum_size = Vector2(0, 144)
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 2
+
+[node name="RightBottomMargin" type="Control" parent="hud/RightColumn" unique_id=1502467093]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+
+[node name="Feedback_player1" type="Label" parent="hud"]
+offset_left = 108.0
+offset_top = 144.0
+offset_right = 274.0
+offset_bottom = 172.0
+theme_override_colors/font_shadow_color = Color(0.08, 0.08, 0.12, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 0
+vertical_alignment = 1
+visible = false
+
+[node name="Feedback_player2" type="Label" parent="hud"]
+offset_left = 792.0
+offset_top = 144.0
+offset_right = 958.0
+offset_bottom = 172.0
+theme_override_colors/font_shadow_color = Color(0.08, 0.08, 0.12, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("2")
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 2
+vertical_alignment = 1
+visible = false
+
+[node name="waveGenerator" type="Node2D" parent="." unique_id=927237786]
 process_mode = 1
-editor/display_folded = true
-position = Vector2( 0, 5 )
-script = ExtResource( 3 )
+position = Vector2(0, 5)
+script = ExtResource("3")
+catalog = ExtResource("10")
+config = ExtResource("9")
 
-[node name="masterTimer" type="Timer" parent="waveGenerator" index="0"]
+[node name="spawnPos0" type="Marker2D" parent="waveGenerator" unique_id=294103474]
+position = Vector2(125, -61)
 
-process_mode = 1
-wait_time = 30.0
-one_shot = false
-autostart = true
+[node name="spawnPos1" type="Marker2D" parent="waveGenerator" unique_id=216467032]
+position = Vector2(199, -61)
 
-[node name="asteroidSpawnTimer" type="Timer" parent="waveGenerator" index="1"]
+[node name="spawnPos2" type="Marker2D" parent="waveGenerator" unique_id=1853449959]
+position = Vector2(273, -61)
 
-process_mode = 1
-wait_time = 1.0
-one_shot = false
-autostart = false
+[node name="spawnPos3" type="Marker2D" parent="waveGenerator" unique_id=1970070268]
+position = Vector2(347, -61)
 
-[node name="droneResume" type="Timer" parent="waveGenerator" index="2"]
+[node name="spawnPos4" type="Marker2D" parent="waveGenerator" unique_id=2001696459]
+position = Vector2(421, -61)
 
-process_mode = 1
-wait_time = 0.2
-one_shot = false
-autostart = false
+[node name="spawnPos5" type="Marker2D" parent="waveGenerator" unique_id=97774125]
+position = Vector2(495, -61)
 
-[node name="tieSpawnTimer" type="Timer" parent="waveGenerator" index="3"]
+[node name="spawnPos6" type="Marker2D" parent="waveGenerator" unique_id=1135664924]
+position = Vector2(571, -61)
 
-process_mode = 1
-wait_time = 2.0
-one_shot = false
-autostart = false
+[node name="spawnPos7" type="Marker2D" parent="waveGenerator" unique_id=461131153]
+position = Vector2(645, -61)
 
-[node name="bigAsteroidSpawnTimer" type="Timer" parent="waveGenerator" index="4"]
+[node name="spawnPos8" type="Marker2D" parent="waveGenerator" unique_id=645976199]
+position = Vector2(719, -61)
 
-process_mode = 1
-wait_time = 3.0
-one_shot = false
-autostart = false
+[node name="spawnPos9" type="Marker2D" parent="waveGenerator" unique_id=462550391]
+position = Vector2(793, -61)
 
-[node name="interceptorSpwnTimer" type="Timer" parent="waveGenerator" index="5"]
+[node name="spawnPos10" type="Marker2D" parent="waveGenerator" unique_id=796889200]
+position = Vector2(867, -61)
 
-process_mode = 1
-wait_time = 4.0
-one_shot = false
-autostart = false
+[node name="spawnPos11" type="Marker2D" parent="waveGenerator" unique_id=2055709791]
+position = Vector2(941, -61)
 
-[node name="droneSpawnTimer" type="Timer" parent="waveGenerator" index="6"]
-
-process_mode = 1
-wait_time = 0.5
-one_shot = false
-autostart = false
-
-[node name="motherShipSpawnTimer" type="Timer" parent="waveGenerator" index="7"]
-
-process_mode = 1
-wait_time = 5.0
-one_shot = false
-autostart = false
-
-[node name="turretSpawnTimer" type="Timer" parent="waveGenerator" index="8"]
-
-process_mode = 1
-wait_time = 5.0
-one_shot = false
-autostart = false
-
-[node name="spawnPos0" type="Marker2D" parent="waveGenerator" index="9"]
-
-position = Vector2( 50, -65 )
-
-[node name="spawnPos1" type="Marker2D" parent="waveGenerator" index="10"]
-
-position = Vector2( 114, -61 )
-
-[node name="spawnPos2" type="Marker2D" parent="waveGenerator" index="11"]
-
-position = Vector2( 239, -61 )
-
-[node name="spawnPos3" type="Marker2D" parent="waveGenerator" index="12"]
-
-position = Vector2( 178, -61 )
-
-[node name="spawnPos4" type="Marker2D" parent="waveGenerator" index="13"]
-
-position = Vector2( 302, -61 )
-
-[node name="spawnPos5" type="Marker2D" parent="waveGenerator" index="14"]
-
-position = Vector2( 367, -61 )
-
-[node name="spawnPos6" type="Marker2D" parent="waveGenerator" index="15"]
-
-position = Vector2( 430.36, -61 )
-
-[node name="spawnPos7" type="Marker2D" parent="waveGenerator" index="16"]
-
-position = Vector2( 497, -61.3604 )
-
-[node name="spawnPos8" type="Marker2D" parent="waveGenerator" index="17"]
-
-position = Vector2( 565, -61 )
-
-[node name="spawnPos9" type="Marker2D" parent="waveGenerator" index="18"]
-
-position = Vector2( 627, -62 )
-
-[node name="spawnPos10" type="Marker2D" parent="waveGenerator" index="19"]
-
-position = Vector2( 697, -61 )
-
-[node name="spawnPos11" type="Marker2D" parent="waveGenerator" index="20"]
-
-position = Vector2( 776, -58 )
-
-[node name="music" type="AudioStreamPlayer" parent="." index="2"]
-
-stream = ExtResource( 4 )
-volume_db = 0.0
+[node name="music" type="AudioStreamPlayer" parent="." unique_id=1333018148]
+stream = ExtResource("4")
 autoplay = true
-mix_target = 0
-bus = "Music"
+bus = &"Music"
 
-[node name="playerSpawn" type="Marker2D" parent="." index="3"]
+[node name="playerSpawn" type="Marker2D" parent="." unique_id=1954708876]
+position = Vector2(533, 760)
 
-position = Vector2( 400, 560 )
+[node name="projectilePool" type="Node" parent="." unique_id=2128302741]
+script = ExtResource("6")
 
-[node name="projectilePool" type="Node" parent="." index="4"]
-script = ExtResource( 6 )
-
-[node name="background" parent="." index="5" instance=ExtResource( 5 )]
-
+[node name="background" parent="." unique_id=1458692991 instance=ExtResource("5")]
 scroll_ignore_camera_zoom = true
-speed_Y = 140
+speed_Y = 80
 
-[connection signal="timeout" from="waveGenerator/masterTimer" to="waveGenerator" method="_on_masterTimer_timeout"]
-
-[connection signal="timeout" from="waveGenerator/asteroidSpawnTimer" to="waveGenerator" method="_on_asteroidSpawnTimer_timeout"]
-
-[connection signal="timeout" from="waveGenerator/tieSpawnTimer" to="waveGenerator" method="_on_tieSpawnTimer_timeout"]
-
-[connection signal="timeout" from="waveGenerator/bigAsteroidSpawnTimer" to="waveGenerator" method="_on_bigAsteroidSpawnTimer_timeout"]
-
-[connection signal="timeout" from="waveGenerator/interceptorSpwnTimer" to="waveGenerator" method="_on_interceptorSpwnTimer_timeout"]
-
-[connection signal="timeout" from="waveGenerator/droneSpawnTimer" to="waveGenerator" method="_on_droneSpawnTimer_timeout"]
-
-[connection signal="timeout" from="waveGenerator/motherShipSpawnTimer" to="waveGenerator" method="_on_motherShipSpawnTimer_timeout"]
-
-[connection signal="timeout" from="waveGenerator/turretSpawnTimer" to="waveGenerator" method="_on_turretSpawnTimer_timeout"]
-
-
+[node name="ForegroundSpeedParticles" parent="." instance=ExtResource("11")]

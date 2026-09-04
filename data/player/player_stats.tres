@@ -1,17 +1,9 @@
-[gd_resource type="Resource" script_class="PlayerStats" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="PlayerStats" format=3 uid="uid://lfk57yvfcntd"]
 
-[ext_resource type="Script" path="res://data/player/player_stats.gd" id="1"]
+[ext_resource type="Script" uid="uid://cadcvasvbjk4c" path="res://data/player/player_stats.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
-shoot_delay_base = 0.26
-shoot_delay_min = 0.1
-speed = 300.0
-malus_speed = 100.0
-energy_max = 12
-speed_max = 500.0
-bound_min = Vector2(38, 24)
-bound_max = Vector2(762, 584)
-beam_mini = 0.5
-beam_normal = 1.5
-beam_full = 3.0
+starting_energy = 4
+weapon_speed_multiplier = 0.88
+beam_collision_width_multiplier = 1.2

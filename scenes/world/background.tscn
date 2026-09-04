@@ -24,15 +24,17 @@ speed_X = 0
 
 [node name="b1" type="ParallaxLayer" parent="." index="0"]
 
-motion_scale = Vector2( 1, 1 )
+motion_scale = Vector2( 1.1, 1.1 )
 motion_offset = Vector2( 1, 1 )
-motion_mirroring = Vector2( 1600, 1200 )
+motion_mirroring = Vector2( 1200, 900 )
 _sections_unfolded = [ "Material", "Motion", "Transform3D", "Visibility", "Z" ]
 
 [node name="stars" type="Sprite2D" parent="b1" index="0"]
 
 position = Vector2( 0, -20 )
 texture = ExtResource( 2 )
+texture_filter = 1
+scale = Vector2( 0.75, 0.75 )
 centered = false
 _sections_unfolded = [ "Animation", "Material", "Offset", "Region", "Transform3D", "Visibility", "Z" ]
 
@@ -41,12 +43,14 @@ _sections_unfolded = [ "Animation", "Material", "Offset", "Region", "Transform3D
 modulate = Color( 0.619608, 0.619608, 0.619608, 0.894118 )
 motion_scale = Vector2( 0.8, 0.8 )
 motion_offset = Vector2( 1, 1 )
-motion_mirroring = Vector2( 1600, 1200 )
+motion_mirroring = Vector2( 1200, 900 )
 _sections_unfolded = [ "Material", "Motion", "Transform3D", "Visibility", "Z" ]
 
 [node name="stars2" type="Sprite2D" parent="b2" index="0"]
 
 texture = ExtResource( 3 )
+texture_filter = 1
+scale = Vector2( 0.75, 0.75 )
 centered = false
 _sections_unfolded = [ "Animation", "Material", "Offset", "Region", "Transform3D", "Visibility", "Z" ]
 
@@ -56,14 +60,14 @@ modulate = Color( 0.607843, 0.607843, 0.607843, 1 )
 self_modulate = Color( 1, 1, 1, 0.752941 )
 motion_scale = Vector2( 0.5, 0.5 )
 motion_offset = Vector2( 1, 1 )
-motion_mirroring = Vector2( 1600, 1200 )
+motion_mirroring = Vector2( 1200, 900 )
 _sections_unfolded = [ "Material", "Motion", "Transform3D", "Visibility", "Z" ]
 
 [node name="stars" type="Sprite2D" parent="b3" index="0"]
 
 modulate = Color( 0.423529, 0.423529, 0.423529, 1 )
 texture = ExtResource( 3 )
+texture_filter = 1
+scale = Vector2( 0.75, 0.75 )
 centered = false
 _sections_unfolded = [ "Animation", "Material", "Offset", "Region", "Transform3D", "Visibility", "Z" ]
-
-

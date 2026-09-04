@@ -65,12 +65,13 @@ JSON save via `core/save_service.gd` (`user://data.json`).
 
 **Collision layers** (`project.godot`): `player`, `enemy`, `player_shot`, `enemy_shot`, `pickup`, `asteroid`.
 
-**Debug:** `global.Debug` (default `false`). When `true`, F1–F6 in-game: previous / next wave, speed, damage, side shot, shield.
+**Debug:** enabled automatically in editor and debug builds, disabled in release exports. In game: F1/F2 previous/next wave; F3 speed; F4 damage; F5 side shot; F6 shield; F7 fire rate; F8 beam; F9 max stats, energy, and shield.
 
 ## Controls
 
-Keyboard (AZERTY / QWERTY / arrows) + Space (or keypad `+` / Insert).  
-Gamepad: stick / D-pad + face buttons. Pause: Enter, R, or Start / L1.
+Keyboard (AZERTY / QWERTY / arrows): Space (or keypad `+` / Insert) fires continuously; left Shift charges the plasma beam.
+
+Gamepad: stick / D-pad; A/Cross fires continuously and B/Circle charges the plasma beam. Pause: Enter, R, or Start / L1.
 
 In co-op, P1 is gamepad 0, P2 is keyboard (change in `global.saveData.config`).
 

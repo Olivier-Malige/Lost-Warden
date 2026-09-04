@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MovementProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/enemies/movement_profile.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"interceptor_strafe"
+mode = 3
+velocity = Vector2(0, 180)
+horizontal_speed = 150.0
+min_x = 160.0
+max_x = 906.0
