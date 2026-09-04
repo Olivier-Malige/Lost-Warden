@@ -4,7 +4,7 @@
 
 **Engine:** Godot **4.7** (GL Compatibility)  
 **Main scene:** `res://scenes/main/main.tscn`  
-**Source:** https://github.com/Arknoid/The-lost-jedi
+**Source:** https://github.com/Olivier-Malige/Lost-Warden
 
 ## Run
 
