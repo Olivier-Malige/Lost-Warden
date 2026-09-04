@@ -4,9 +4,10 @@
 
 [resource]
 script = ExtResource("1")
-max_health = 10
+max_health = 12
 collision_damage = 0
 score = 250
 durability = 3
+power_up_chance = 10
 plasma_drop_chance = 30
 speed = Vector2(0, 0)

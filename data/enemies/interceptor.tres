@@ -4,10 +4,10 @@
 
 [resource]
 script = ExtResource("1")
-max_health = 6
+max_health = 8
 score = 250
 durability = 3
-power_up_chance = 25
+power_up_chance = 35
 plasma_drop_chance = 63
 speed = Vector2(0, 180)
 lateral_amplitude = 72.0

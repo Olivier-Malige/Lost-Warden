@@ -1,12 +1,11 @@
-[gd_resource type="Resource" script_class="EnemyDefinition" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="EnemyDefinition" format=3 uid="uid://c4wek4cfwunen"]
 
-[ext_resource type="Script" path="res://data/enemies/enemy_definition.gd" id="1"]
+[ext_resource type="Script" uid="uid://bq3xyl864avq8" path="res://data/enemies/enemy_definition.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
-max_health = 2
+max_health = 3
 score = 10
-durability = 1
-power_up_chance = 4
+power_up_chance = 14
 plasma_drop_chance = 12
-speed = Vector2(0, 300)
+speed = Vector2(0, 260)
