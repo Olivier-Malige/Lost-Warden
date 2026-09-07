@@ -1,4 +1,4 @@
-# The-lost-jedi
+# Lost Warden
 
 8-bit shmup (8×8 sprites, Pico-8 palette) started at the OFFGame 2017 jam. Phaser prototype was dropped; the game was finished in Godot. Survive enemy waves, stack power-ups, chase high scores.
 
