@@ -126,7 +126,7 @@ The player is simply a **lost Warden pilot**. Wardens are independent frontier p
 
 The launch craft is the **Nomad fighter**:
 
-- silhouette: narrow spearhead body with two uneven swept fins and a square engine gap;
+- silhouette: narrow spearhead body with two symmetrical swept fins and a square engine gap;
 - construction: repaired navy armor, exposed dark frame, and bright engine conduits;
 - palette: navy, cyan, warm white, and coral damage accents;
 - propulsion: two cyan exhaust blades of unequal length;
