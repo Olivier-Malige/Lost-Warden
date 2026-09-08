@@ -438,7 +438,7 @@ Planned commits:
   - maximum 25% at 12 minutes and beyond;
   - no more than one elite per formation and three active elites at once.
 - Give elites 2.5x health, 1.1x movement speed, 0.8x firing delays, 3x score, and a guaranteed high-value XP drop once Phase 3 is active.
-- Make elites immediately recognizable with a palette-shifted outline, a pulsing aura, and a compact health bar. Their collision shape must not scale with the visual effect.
+- Make elites immediately recognizable with the accepted dark-space art treatment: localized pale-violet edge markings, an altered armor panel, and a compact health bar. Do not restore continuous outlines or detached red auras when integrating the revised sources. Their collision shape must not scale with the visual effect.
 - Add milestone boss encounters:
   - start the first boss encounter after 5 minutes of regular encounter time;
   - schedule the next boss after another 5 minutes of regular encounter time following the previous boss defeat, so bosses can never overlap;

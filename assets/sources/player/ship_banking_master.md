@@ -13,3 +13,6 @@ Only one team-color layer should be visible during export. `Player Red` is selec
 The master has 13 synchronized frames, 39 cels, five animation tags and the fixed `(16, 16)` `ship` pivot. Team layers differ in 14 pixels in the neutral pose: red uses `#9C2020`/`#3A0D14`; blue uses `#78B7CF`/`#102A4A`. Both are Lost Warden 24 colors.
 
 The neutral pose is bilaterally symmetrical. Each right-bank frame is the exact horizontal mirror of its matching left-bank frame, and return poses reuse their corresponding outbound frames. Red and blue exports were regenerated from this corrected master.
+
+
+The dark-space pass selectively reduces rear-wing highlights and lower outer-hull midtones across all 13 frames. Forward highlights and both team-color layers are unchanged. The two PNG sheets and GIF previews are synchronized with this source; frame layout, duration, pivot, and left/right symmetry remain unchanged.

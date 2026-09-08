@@ -148,7 +148,7 @@ Visual language:
 - common fighters: compact and sharp;
 - heavy ships: broad armored hulls with restrained gothic verticals;
 - palette: charcoal, dark violet, bone highlights, red targeting lights, and amber engines;
-- materials: worn black metal, pale armor plates, recessed machinery, and hot vents;
+- materials: worn black metal, broad charcoal plates, recessed machinery, sparse pale edge highlights, and hot vents;
 - emblem: three downward blades around an empty center;
 - propulsion: rectangular amber flames with a hard on/off rhythm;
 - projectiles: red bolts, amber shells, and magenta telegraph lines.
@@ -184,7 +184,7 @@ The specialist family replaces the turret role and later supports bombers and sn
 The heavy family replaces the mother-ship role. These are old warships kept operational through layers of repair and armor.
 
 - base **Grave Carrier**: broad asymmetric hull that deploys Razor Fighters;
-- heavy sections use bone armor ribs over charcoal machinery;
+- heavy sections use dark structural ribs with selective steel and bone highlights over charcoal machinery;
 - engines burn in several uneven amber blocks;
 - weapons fire in large readable patterns rather than dense visual noise.
 
@@ -205,14 +205,14 @@ These directions borrow only the useful idea of strongly contrasted science-fict
 
 An elite is simply an **Elite** or **Dominion Ace**, depending on the base unit. It is a stronger battlefield variant, not a named character.
 
-- one-pixel bone or pale-violet outline;
-- slow red pulse behind the sprite;
+- interrupted one-pixel pale-violet markings at selected armor edges;
+- dark hull masses without a continuous luminous border or detached red aura;
 - one altered armor panel or brighter engine block;
 - compact health bar;
 - short warning tone when it enters;
 - unchanged collision shape.
 
-The single supported presentation keeps the outline, altered panel, health bar, entry tone, and pulsing aura.
+The dark-space art revision uses localized markings and an altered panel for elite recognition. Health bars, entry tones, and unchanged collision shapes remain gameplay integration requirements. Existing aura source layers are retained but hidden.
 
 ## Boss: Dread Ark
 
@@ -223,7 +223,7 @@ Silhouette:
 - wide armored wedge split by a central engine trench;
 - three tall dorsal spines that create a monumental profile;
 - two side launch bays that visibly open for reinforcements;
-- bone armor ribs over dark machinery;
+- mostly dark armor ribs with sparse steel highlights over recessed machinery;
 - no triangular Star Destroyer outline and no cathedral copied from another setting.
 
 Phases:

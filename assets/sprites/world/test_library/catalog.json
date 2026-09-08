@@ -1,0 +1,179 @@
+{
+  "source": "assets/sources/world/test_library/industrial_wreckage.ase",
+  "sheet": "assets/sprites/world/test_library/industrial_wreckage_sheet.png",
+  "cell_size": [
+    64,
+    64
+  ],
+  "animated": false,
+  "variants": [
+    {
+      "name": "broken_truss",
+      "frame": 0,
+      "region": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        32
+      ]
+    },
+    {
+      "name": "hull_bulkhead",
+      "frame": 1,
+      "region": [
+        64,
+        0,
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        32
+      ]
+    },
+    {
+      "name": "conduit_elbow",
+      "frame": 2,
+      "region": [
+        128,
+        0,
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        32
+      ]
+    },
+    {
+      "name": "orbital_ring",
+      "frame": 3,
+      "region": [
+        192,
+        0,
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        32
+      ]
+    },
+    {
+      "name": "radiator_panel",
+      "frame": 4,
+      "region": [
+        256,
+        0,
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        32
+      ]
+    },
+    {
+      "name": "engine_wreck",
+      "frame": 5,
+      "region": [
+        320,
+        0,
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        32
+      ]
+    },
+    {
+      "name": "cargo_frame",
+      "frame": 6,
+      "region": [
+        384,
+        0,
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        32
+      ]
+    },
+    {
+      "name": "antenna_mast",
+      "frame": 7,
+      "region": [
+        448,
+        0,
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        32
+      ]
+    },
+    {
+      "name": "severed_wing",
+      "frame": 8,
+      "region": [
+        512,
+        0,
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        32
+      ]
+    },
+    {
+      "name": "reactor_cage",
+      "frame": 9,
+      "region": [
+        576,
+        0,
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        32
+      ]
+    },
+    {
+      "name": "docking_arm",
+      "frame": 10,
+      "region": [
+        640,
+        0,
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        32
+      ]
+    },
+    {
+      "name": "armor_cluster",
+      "frame": 11,
+      "region": [
+        704,
+        0,
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        32
+      ]
+    }
+  ]
+}

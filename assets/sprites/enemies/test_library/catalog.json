@@ -1,0 +1,128 @@
+[
+  {
+    "name": "furnace_bomber",
+    "source": "assets/sources/enemies/test_library/furnace_bomber.ase",
+    "sheet": "assets/sprites/enemies/test_library/furnace_bomber_sheet.png",
+    "cell_size": [
+      32,
+      32
+    ],
+    "frames": 14,
+    "frame_ms": 80,
+    "anchor": [
+      16,
+      16
+    ],
+    "forward": "down",
+    "tags": {
+      "idle": [
+        0,
+        2
+      ],
+      "charge": [
+        3,
+        4
+      ],
+      "fire": [
+        5,
+        5
+      ],
+      "hit": [
+        6,
+        6
+      ],
+      "damaged": [
+        7,
+        7
+      ],
+      "explode": [
+        8,
+        13
+      ]
+    }
+  },
+  {
+    "name": "lance_sniper",
+    "source": "assets/sources/enemies/test_library/lance_sniper.ase",
+    "sheet": "assets/sprites/enemies/test_library/lance_sniper_sheet.png",
+    "cell_size": [
+      32,
+      48
+    ],
+    "frames": 14,
+    "frame_ms": 80,
+    "anchor": [
+      16,
+      24
+    ],
+    "forward": "down",
+    "tags": {
+      "idle": [
+        0,
+        2
+      ],
+      "charge": [
+        3,
+        4
+      ],
+      "fire": [
+        5,
+        5
+      ],
+      "hit": [
+        6,
+        6
+      ],
+      "damaged": [
+        7,
+        7
+      ],
+      "explode": [
+        8,
+        13
+      ]
+    }
+  },
+  {
+    "name": "dive_hunter",
+    "source": "assets/sources/enemies/test_library/dive_hunter.ase",
+    "sheet": "assets/sprites/enemies/test_library/dive_hunter_sheet.png",
+    "cell_size": [
+      32,
+      32
+    ],
+    "frames": 14,
+    "frame_ms": 80,
+    "anchor": [
+      16,
+      16
+    ],
+    "forward": "down",
+    "tags": {
+      "idle": [
+        0,
+        2
+      ],
+      "charge": [
+        3,
+        4
+      ],
+      "fire": [
+        5,
+        5
+      ],
+      "hit": [
+        6,
+        6
+      ],
+      "damaged": [
+        7,
+        7
+      ],
+      "explode": [
+        8,
+        13
+      ]
+    }
+  }
+]

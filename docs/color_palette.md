@@ -70,3 +70,12 @@ The importable Aseprite palette lives at `assets/palettes/lost_warden_24.gpl`.
 5. Rework environments and bosses after the gameplay silhouettes are stable.
 
 Do not batch-convert sprites automatically. Each asset should be redrawn or manually indexed so silhouettes, contrast and authored clusters remain intentional.
+
+
+## Dark Space Application — Accepted Benchmark
+
+The 2026-09-07 harmonization retains all 24 palette entries. On Dominion hulls, prioritize Deep Space and Hull Shadow over broad Steel/Pale Steel surfaces. Keep brighter edges short and structural. Elite violet appears in localized markings rather than complete outlines; red aura layers remain hidden in the revised sources.
+
+Asteroids use the original-shape Dark Slate variant with sparse bronze/amber minerals. Scenery uses muted rings, low-alpha blue and Warden-red nebula layers, and restrained warm stars. Preserve bright projectile cores, impacts, and interaction cues instead of darkening every asset uniformly.
+
+The produced Nomad variants retain their existing red/blue team markings and projectile colors. This pass does not implement the separate proposed change to allied-fire color semantics. See `dark_space_art_review.md` for the current scope and validation limits.

@@ -38,16 +38,16 @@ This inventory follows the approved Lost Warden universe bible and the 24-color 
 | `razor_wing_drone` | `assets/sprites/enemies/drone.png` | `assets/sources/enemies/drone.ase` | Razor Wing drone | 11-frame 32×32 sheet with one flight frame, one hit frame, and a nine-frame timed explosion. Compact central pod, paired hooked blades, one red targeting light, and one short amber engine block keep the formation silhouette clearly lighter than the interceptor. |
 | `siege_turret` | `assets/sprites/enemies/turret.png` | `assets/sources/enemies/turret.ase` | Siege Turret | 11-frame 32×32 sheet with idle, hit, and nine explosion frames. Broad armored wedge with bone support ribs, paired amber heat vents, sparse red targeting lights, and one keyed central aperture whose amber notch makes the firing direction readable during rotation. |
 | `grave_carrier` | `assets/sprites/enemies/mother_ship.png` until integration | `assets/sources/enemies/grave_carrier_32x64.ase` | Grave Carrier | Eleven-frame 32×64 heavy carrier with an asymmetric hull, bone armor ribs, central engine trench, and uneven amber engine blocks. Port and starboard turrets use separate layers, destroyed-state references, and named Aseprite slices for later gameplay integration. |
-| `asteroid_small` | `assets/sprites/enemies/asteroid_sheet.png` | `assets/sources/enemies/asteroid_sheet.ase` | Small asteroid sheet | 11-frame 32×32 sheet with three rotations, matching hit flashes, and a five-frame rubble burst. `Finished Variants` keeps the preferred original Earth render active alongside its Dark Slate version and both reworked platework renders; the hidden construction layers remain editable. |
-| `asteroid_large` | `assets/sprites/enemies/big_asteroid_sheet.png` | `assets/sources/enemies/big_asteroid.ase` | Large asteroid sheet | 18-frame 9×2 sheet of 32×32 cells with four rotations, matching hit flashes, a six-frame breakup, and three trailing-rubble cells. `Finished Variants` keeps the preferred original Earth render active alongside its Dark Slate version and both reworked platework renders; the hidden construction layers remain editable. |
+| `asteroid_small` | `assets/sprites/enemies/asteroid_sheet.png` | `assets/sources/enemies/asteroid_sheet.ase` | Small asteroid sheet | 11-frame 32×32 sheet with three rotations, matching hit flashes, and a five-frame rubble burst. `Finished Variants` now selects the original-shape Dark Slate render, with restrained mineral accents and dimmer highlights. The Earth and platework variants and hidden construction layers remain available. |
+| `asteroid_large` | `assets/sprites/enemies/big_asteroid_sheet.png` | `assets/sources/enemies/big_asteroid.ase` | Large asteroid sheet | 18-frame 9×2 sheet of 32×32 cells with four rotations, matching hit flashes, a six-frame breakup, and three trailing-rubble cells. `Finished Variants` now selects the original-shape Dark Slate render, with restrained mineral accents and dimmer highlights. The Earth and platework variants and hidden construction layers remain available. |
 | `enemy_shot_fighter` | `assets/sprites/combat/enemy_shot_fighter_sheet.png` | `assets/sources/combat/enemy_shot_fighter.ase` | Razor Fighter projectile | Four-frame 32×32 flight loop with a compact ivory core, Warden-red body, dark crimson envelope, and a short flickering particle trail. |
 | `enemy_shot_interceptor` | `assets/sprites/combat/enemy_shot_interceptor_sheet.png` | `assets/sources/combat/enemy_shot_interceptor.ase` | Talon Interceptor projectile | Four-frame 32×32 red lance with a narrow ivory core, pointed head, split trail, and a faster 70 ms pulse that remains distinct from the broader fighter shot. |
 | `enemy_shot_interceptor_side` | `assets/sprites/combat/enemy_shot_interceptor_side_sheet.png` | `assets/sources/combat/enemy_shot_interceptor_side.ase` | Talon side projectile | Four-frame 32×32 red dart with a compact ivory core and two animated swept fins forming a recognizable Y silhouette when aligned to a side-volley trajectory. |
 | `enemy_shot_turret` | `assets/sprites/combat/enemy_shot_turret_sheet.png` | `assets/sources/combat/enemy_shot_turret.ase` | Siege Turret projectile | Twelve-frame 32×32 amber siege charge: four-frame radial flight pulse, two-frame hit compression, and six-frame explosion with an expanding broken ring and dispersing fragments. |
 | `space_background_far` | `assets/sprites/world/parallax/far_stars.png` | `assets/sources/world/space_background_parallax.ase` | Far parallax stars | Sparse low-contrast stars with partial transparency for the slowest parallax plane. |
 | `space_background_nebula_blue` | `assets/sprites/world/parallax/nebula_blue_haze.png` | `assets/sources/world/space_background_parallax.ase` | Blue nebula haze | Broad tileable gunmetal-blue currents built on an 8 px logical pixel grid with restrained alpha and no hard contour effects. |
-| `space_background_nebula_mauve` | `assets/sprites/world/parallax/nebula_mauve_haze.png` | `assets/sources/world/space_background_parallax.ase` | Mauve nebula haze | Independent translucent mauve currents built on an 8 px logical pixel grid for a separate parallax speed. |
-| `space_background_nebula_filaments` | `assets/sprites/world/parallax/nebula_filaments.png` | `assets/sources/world/space_background_parallax.ase` | Nebula filaments | Sparse broken blue and mauve highlights with pixel-stepped edges and soft alpha. |
+| `space_background_nebula_mauve` | `assets/sprites/world/parallax/nebula_mauve_haze.png` | `assets/sources/world/space_background_parallax.ase` | Mauve nebula haze | Independent translucent Warden-red currents built on an 8 px logical pixel grid for a separate parallax speed. The existing mauve filename and layer name remain stable. |
+| `space_background_nebula_filaments` | `assets/sprites/world/parallax/nebula_filaments.png` | `assets/sources/world/space_background_parallax.ase` | Nebula filaments | Sparse broken blue and deep-red highlights with pixel-stepped edges and restrained alpha. |
 | `space_background_planets` | `assets/sprites/world/parallax/distant_planets.png` | `assets/sources/world/space_background_parallax.ase` | Distant planets | Two ringed planets and two smaller bodies, shaded with the shared palette and partial transparency. |
 | `space_background_mid` | `assets/sprites/world/parallax/mid_stars.png` | `assets/sources/world/space_background_parallax.ase` | Mid parallax stars | Medium-density ivory and amber stars positioned above the nebula planes. |
 | `space_background_near` | `assets/sprites/world/parallax/near_stars.png` | `assets/sources/world/space_background_parallax.ase` | Near parallax stars | Sparse bright stars and occasional cross-shaped highlights for the fastest star plane. |
@@ -111,8 +111,8 @@ These are visual references for manual Aseprite production. They are enlarged fo
 
 ## Exclusions
 
-- Do not redraw `assets/sprites/pickups/power_up.png`. The legacy direct power-up is removed in Phase 3.
-- `scenes/ui/plasma_cell.tscn` currently reuses that legacy texture. Keep it temporary until its owning gameplay/art decision is explicitly scheduled; do not make the current visual phase depend on a new direct-pickup sprite.
+- The earlier temporary-pickup exclusion was superseded by the maintainer on 2026-09-08. `assets/sprites/pickups/power_up.png` now uses the dark-space eight-cell atlas, with source `assets/sources/pickups/power_up_master.ase`. Direct pickups remain temporary until Phase 3.
+- The plasma cell has a distinct atlas cell; this art revision does not change its gameplay role or charge amount.
 - Do not create art for permanent progression, unlockable ships, currencies, profiles, or a hangar. Those systems are outside this roadmap.
 
 ## Per-Asset Completion Check
@@ -122,3 +122,43 @@ These are visual references for manual Aseprite production. They are enlarged fo
 - Sprite remains readable in solo and co-op at gameplay scale.
 - Collision shape is aligned and has not been resized for decoration.
 - GL Compatibility presentation has no missing texture, animation, or shader error.
+
+## Dark Space Benchmark Update — 2026-09-07
+
+The maintainer accepted the first benchmark and authorized extending it to the remaining produced assets. All five enemy families now use darker armor and selective highlights. All elite sources use interrupted violet markings with their aura layers hidden; this supersedes the continuous outlines, aura pulses, and proposed idle-aura modulation in the production rows above. Dread Ark retains the accepted first-pass treatment. Runtime integration of these presentation choices remains in its owning gameplay phase. See `docs/dark_space_art_review.md` for measurements, comparisons, and validation limits.
+
+
+### Remaining Production Set — Pass 02
+
+- Talon, drone, turret, carrier, and their elites: source-layer retouches preserve attack cues, hit flashes, explosion cels, and anchors.
+- Asteroids: Dark Slate is the active finished variant; ordinary-frame white seams and bright mineral flecks are reduced while rotations and sheet order remain unchanged.
+- Nomad: selective rear-wing shading across every banking frame; red/blue team colors, forward highlights, pivots, GIF timing, and mirror symmetry remain intact.
+- Energy icons: darker lower casings; player colors and luminous cores are unchanged.
+- Siege charge: subdued outer armor; inner charge, core, impacts, and explosion frames remain intact.
+- Boss beam: Deep Ion outer edge around the retained magenta field and warm-white core.
+- Boss destruction: hull debris matches the darker armor; blasts and shockwave remain unchanged.
+- All nine parallax exports: subdued planet rings, warmer sparse stars, darker ruins/debris, and low-alpha blue/red nebula layers.
+- Primary/side player shots, player beam, shield, reactor particles, fighter/interceptor projectiles, and boss projectile families were reviewed and retained: their bright cores already provide the required contrast against dark hulls. Player color semantics are unchanged in this pass.
+- Legacy replacement targets, store identity art, archived reference boards, excluded pickups, and deferred future assets are outside this propagation pass.
+
+The synchronized deliverables are 16 updated production sources, 26 PNG exports, and two player GIFs, in addition to pass 01. Comparison artwork is stored separately with its own editable sources. Static inspection and file-level validation are complete; in-game solo/co-op, collision alignment, and full GL Compatibility validation still belong to integration.
+
+
+## Replacement Readiness and Temporary Pickups — 2026-09-08
+
+See `graphics_replacement_readiness.md` for the current coverage audit and integration checklist. The produced set supports starting integration, but the Nomad destruction sequence is still missing from the new player master. Enemy-projectile mapping, carrier modules, background assembly, and HUD scaling also require integration work.
+
+The temporary pickup replacement is now implemented: eight 16×16 cells at 2× preserve the 32×32 displayed size. Six active direct-upgrade icons, the retained beam slot, and a dedicated plasma-cell icon use dark chamfered casings with pale glyphs and sparse amber, blue, green or cyan accents. Both scenes use eight horizontal frames; fire rate uses its own frame without runtime tinting. Godot headless mapping/collection checks passed. The prior pass-02 pickup exclusion is historical and no longer applies.
+
+
+### Pickup Legibility Revision
+
+After user feedback, the temporary pickup master now uses 16×16 cells, a 128×16 PNG atlas, and 2× scene scale. The previous 8×8 glyph treatment is superseded. Explicit boot, medical cross, shield, battery, and projectile motifs replace the abstract symbols. Both pickup scenes retain their 32×32 displayed size and unchanged collision shapes. This is an intentional local grid exception for small readable icons.
+
+## Stronger Explosion Pass — 2026-09-08
+
+This requested pass supersedes the earlier decision to preserve explosion pixels. Revised the explosion layers of all ten ordinary/elite enemy sources and their sheets, plus the Dread Ark destruction effect, retaining existing frame layouts and timings. Added `assets/sources/effects/nomad_explosion.ase` and `assets/sprites/effects/nomad_explosion_sheet.png`: nine 32×32 frames, 100 ms each, `explode` tag, separate fire and hull-fragment layers, transparent final frame. The Nomad effect is ready for scene integration. See `docs/graphics_replacement_readiness.md` for validation and remaining integration work.
+
+## Gameplay Test Library — 2026-09-08
+
+Added 26 reusable effect variants, 12 industrial wreckage modules inspired by the local itch.io background, and three enemy art prototypes (Furnace Bomber, Lance Sniper, Dive Hunter). This is preparation-only asset production, not implementation of their roadmap gameplay roles. Native sources, transparent PNG sheets, previews and machine-readable catalogs are available. See `docs/gameplay_test_sprite_library.md` for layouts, timing, anchors and validation. All 30 native source files were re-rendered and checked pixel-for-pixel against their exported sheets; catalog frame timing also passed.

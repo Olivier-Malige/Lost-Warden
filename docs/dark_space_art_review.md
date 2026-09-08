@@ -1,10 +1,10 @@
 # Dark Space Art Review
 
-Date: 2026-09-07. Status: proposal, not an approved replacement for the existing roadmap or palette.
+Date: 2026-09-07. Status: benchmark accepted; production harmonization passes 01 and 02 implemented. Runtime integration and combat playtesting remain pending.
 
 ## Scope and evidence
 
-Reviewed local itch.io banner v2, page background v3, cover, selected exported gameplay sheets, palette, production inventory, universe bible, and scene references. The published itch.io page was not checked. No gameplay session was captured; motion, combined transparency, and combat readability still require runtime validation. No art or runtime files were changed.
+Reviewed local itch.io banner v2, page background v3, cover, selected exported gameplay sheets, palette, production inventory, universe bible, and scene references. The published itch.io page was not checked. No gameplay session was captured; motion, combined transparency, and combat readability still require runtime validation. The initial review changed no art or runtime files. The authorized implementation passes are recorded below.
 
 Pixel measurements below use the first frame only, counting RGB values of pixels with alpha greater than zero, without alpha weighting. They exclude later hit/explosion frames and are composition indicators, not perceived brightness measurements. Samples: Razor Fighter, its elite, Siege Turret, Grave Carrier, Dread Ark, red Nomad, and small asteroid.
 
@@ -77,3 +77,68 @@ Do not judge the completed production set from the current runtime alone. Conver
 5. Once the benchmark is accepted, align the bible, palette usage guide, and production inventory, then propagate the treatment through editable sources and matching exports.
 
 Acceptance: ships retain recognizable silhouettes; hostile shots stand out immediately from hulls and scenery; allied fire remains distinguishable; elite identity survives without a complete luminous border; the boss reads as a dark mass with a focal trench; background lights never resemble urgent combat signals.
+
+## Implemented benchmark — pass 01
+
+The maintainer authorized the start of the graphical rework after the baseline commits `f2d74fc`, `13b4802`, and `cdf14ed`.
+
+- Razor Fighter: darker wing planes and shorter Steel highlights on frames 1–4 and 6. The hit frame and seven explosion frames remain pixel-identical to the saved export.
+- Fighter elite: matching hull treatment, interrupted violet markings, and a hidden aura layer to avoid detached red fragments resembling hostile shots. The editable aura remains available. Explosion frames remain pixel-identical.
+- Dread Ark: darker wing ribs and recessed bay grooves across all twelve phase frames; darker engine housings retain amber outlets. Trench, phase accents, and weapon-state layers remain intact.
+- First-frame Steel coverage: fighter 13.0% to 4.5%; boss 22.3% to 2.0%. Elite violet coverage: 25.2% to 5.8% of visible pixels.
+
+Validation: all exported visible RGB values remain in Lost Warden 24; PNG dimensions are unchanged; normal fighter and boss alpha masks are identical across their full sheets. Source dimensions, frame counts, durations, tags, layer names, and slice bounds are preserved. No runtime code or scene changes were made. Runtime combat readability has not yet been validated.
+
+Comparison: `assets/art/sprite_references/dark_space_pass_01.png`, before on the left and after on the right. Its editable composition is `assets/sources/art/dark_space_pass_01.ase`. These are first-frame comparisons over Void, not gameplay screenshots.
+
+
+## Production Propagation — Pass 02
+
+The maintainer accepted pass 01 and requested the same treatment for the remaining produced set. Sixteen production sources now supply 26 updated PNG exports and two synchronized player GIFs. The original first-pass assets remain intact.
+
+| Family | Treatment |
+|---|---|
+| Talon, drone, turret | Darker lower planes and selective edge highlights; targeting and engine cues remain luminous. |
+| Grave Carrier | Most repeated pale ribs recede into the hull; selected top ribs and turret edges remain visible. Amber outlets retain their color inside darker engine housings. |
+| Four remaining elites | Interrupted violet marks and selective plate accents; aura layers hidden, with editable data retained. |
+| Small/large asteroids | Original-shape Dark Slate selected; bright seams and mineral hotspots subdued on ordinary frames. Earth and platework alternatives remain available. |
+| Nomad and energy icons | Restrained lower/rear metal highlights; player markings and energy cores retained. Both player exports updated. |
+| Siege projectile | Outer armor dimmed independently of its bright inner charge, core, and impact/explosion sequence. |
+| Boss beam/destruction | Deep Ion beam fringe and darker hull debris; luminous core, magenta body, blasts, and shockwave retained. |
+| Parallax | Subdued rings and ruins, less prominent debris, restrained warm stars, and faint blue/red haze. Existing layer/export names remain stable. |
+
+Other produced player weapons, shields, reactors, fighter/interceptor shots, and boss projectiles already satisfy the emissive hierarchy and remain unchanged. The legacy pickup remains excluded by the production inventory. Store art, historical files, and future reference boards remain reference material rather than runtime replacement targets.
+
+First-frame measurements use visible pixels without alpha weighting, as in the initial audit:
+
+| Asset | Steel or brighter, before → after | Elite violet, before → after |
+|---|---|---|
+| Talon | 12.3% → 2.1% | — |
+| Drone | 11.9% → 5.0% | — |
+| Turret | 16.7% → 8.0% | — |
+| Carrier | 11.8% → 4.5% | — |
+| Elite Talon | — | 24.9% → 6.1% |
+| Elite drone | — | 28.5% → 3.2% |
+| Elite turret | — | 17.1% → 1.9% |
+| Elite carrier | — | 12.8% → 1.3% |
+
+Here, “Steel or brighter” counts Steel, Pale Steel, Star White, and Flash White; it is a palette-group measurement, not luminance or a ranking of all hues.
+
+### Validation
+
+- All 26 changed PNG exports retain their dimensions and use only Lost Warden 24 RGB colors on visible pixels.
+- Non-elite foreground alpha masks remain unchanged. Background occupied-pixel masks remain unchanged; haze, planet, and debris alpha values were intentionally reduced. Elite aura/outline coverage was intentionally reduced.
+- All 16 updated sources preserve canvas dimensions, color modes, palette entries, frame counts/durations, animation tags, layer names, cel positions, and named slice bounds/pivots.
+- Eight enemy explosion sequences and four normal-enemy hit flashes remain visually pixel-identical after normalizing invisible RGB values. Protected source core, explosion, impact-flash, and reference layers remain intact.
+- Both Nomad GIFs match their PNG frames, retain their durations, and preserve left/right banking symmetry.
+- Static before/after and composed-background inspection completed. No gameplay scenes, scripts, or resource definitions were changed. The composition is illustrative and does not verify runtime collisions, animation playback, solo/co-op readability, or shader behavior.
+
+### Review Artifacts
+
+All comparison PNGs have layered `.ase` counterparts under `assets/sources/art/`:
+
+- `assets/art/sprite_references/dark_space_pass_02.png`: before left / after right; ordinary enemies, elites, asteroids/player/icons, then projectile samples.
+- `assets/art/sprite_references/dark_space_background_comparison.png`: before left / after right, with both backgrounds composited over Void.
+- `assets/art/sprite_references/dark_space_composition.png`: illustrative 1066×800 composition with sprites displayed at 4×, using the accepted boss and revised production set. This is not a gameplay capture.
+
+The current live elite effect described in the historical Phase 1 follow-up may still differ from these exported sources. The future elite integration requirement in the roadmap now refers to the accepted localized markings; runtime integration remains separate.
