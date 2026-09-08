@@ -1,6 +1,7 @@
 class_name PlasmaCell
 extends Area2D
 
+const _Feedback := preload("res://scenes/effects/combat_feedback.gd")
 const SPEED := 100.0
 const Layers := preload("res://core/collision_layers.gd")
 
@@ -20,6 +21,7 @@ func _on_area_entered(area: Area2D) -> void:
 	if _collected or not area.is_in_group(&"player"):
 		return
 	_collected = true
+	_Feedback.spawn(get_parent(), global_position, Color("72e0d1"), area)
 	Events.plasma_collected.emit(charge_amount)
 	$PickupSound.play()
 	$Sprite2D.visible = false

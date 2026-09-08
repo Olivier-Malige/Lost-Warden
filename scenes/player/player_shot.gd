@@ -1,5 +1,6 @@
 extends Shot
 
+const _Feedback := preload("res://scenes/effects/combat_feedback.gd")
 const _ProjectileGlow := preload("res://scenes/combat/projectile_glow.gd")
 
 @export var damage: float
@@ -99,7 +100,10 @@ func setPowerAnim() -> void:
 
 
 func _on_area_entered(area: Area2D) -> void:
+	if get_meta("pooled", false):
+		return
 	if area.is_in_group("enemy") or area.is_in_group("asteroid") or area.is_in_group("turret"):
+		_Feedback.spawn(get_parent(), global_position)
 		area.hitByPlayerShot = true
 		area._hit_something(damage)
 		if not piercing:

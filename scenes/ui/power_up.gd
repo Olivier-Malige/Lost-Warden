@@ -1,8 +1,10 @@
 extends Area2D
+const _Feedback := preload("res://scenes/effects/combat_feedback.gd")
 const SPEED = 100
 const TABLE: UpgradeTable = preload("res://data/upgrades/upgrade_table.tres")
 const Layers := preload("res://core/collision_layers.gd")
 
+var _collected := false
 var _upgrade: UpgradeDefinition
 
 func _ready() -> void:
@@ -12,7 +14,6 @@ func _ready() -> void:
 	_upgrade = TABLE.pick()
 	if _upgrade:
 		$anim.play(String(_upgrade.anim))
-		$Sprite2D.modulate = _pickup_color(_upgrade.effect)
 	else:
 		$anim.play("speedUp")
 
@@ -20,11 +21,21 @@ func _physics_process(delta: float) -> void:
 	translate(Vector2(0, SPEED) * delta)
 
 func _on_screen_exited() -> void:
-	queue_free()
+	if not _collected:
+		queue_free()
 
 func _on_powerUp_area_entered(area: Area2D) -> void:
-	if not area.is_in_group("player"):
+	if _collected or not area.is_in_group("player"):
 		return
+	_collected = true
+	set_physics_process(false)
+	var accent := Color("ffd35a")
+	if _upgrade != null:
+		if _upgrade.effect in [UpgradeDefinition.Effect.SPEED, UpgradeDefinition.Effect.SHIELD]:
+			accent = Color("78b7cf")
+		elif _upgrade.effect == UpgradeDefinition.Effect.ENERGY:
+			accent = Color("72c95c")
+	_Feedback.spawn(get_parent(), global_position, accent, area)
 	if area.has_method("apply_upgrade"):
 		area.apply_upgrade(_upgrade)
 	_play_pickup_sound()
@@ -48,13 +59,6 @@ func _play_pickup_sound() -> void:
 	}
 	if sounds.has(_upgrade.effect):
 		sounds[_upgrade.effect].playing = true
-
-func _pickup_color(effect: int) -> Color:
-	match effect:
-		UpgradeDefinition.Effect.FIRE_RATE:
-			return Color(0.9, 0.78, 0.2)
-		_:
-			return Color.WHITE
 
 func _on_audio_finished() -> void:
 	queue_free()

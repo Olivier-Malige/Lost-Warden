@@ -124,11 +124,28 @@ tracks/0/keys = {
 "values": [1]
 }
 
+[sub_resource type="Animation" id="Animation_fire_rate"]
+resource_name = "fireRate"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [6]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1"]
 _data = {
 &"RESET": SubResource("Animation_4klvv"),
 &"beam": SubResource("Animation_e15ka"),
 &"energieUp": SubResource("2"),
+&"fireRate": SubResource("Animation_fire_rate"),
 &"laserUp": SubResource("3"),
 &"lateralShot": SubResource("4"),
 &"shieldUp": SubResource("5"),
@@ -140,9 +157,9 @@ gravity = 98.0
 script = ExtResource("1")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=674438003]
-scale = Vector2(4, 4)
+scale = Vector2(2, 2)
 texture = ExtResource("2")
-hframes = 6
+hframes = 8
 frame = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1441660611]
