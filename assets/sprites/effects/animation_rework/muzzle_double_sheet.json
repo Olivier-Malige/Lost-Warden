@@ -1,0 +1,70 @@
+{ "frames": [
+   {
+    "filename": "muzzle_double 0.ase",
+    "frame": { "x": 0, "y": 0, "w": 24, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 32 },
+    "sourceSize": { "w": 24, "h": 32 },
+    "duration": 25
+   },
+   {
+    "filename": "muzzle_double 1.ase",
+    "frame": { "x": 24, "y": 0, "w": 24, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 32 },
+    "sourceSize": { "w": 24, "h": 32 },
+    "duration": 30
+   },
+   {
+    "filename": "muzzle_double 2.ase",
+    "frame": { "x": 48, "y": 0, "w": 24, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 32 },
+    "sourceSize": { "w": 24, "h": 32 },
+    "duration": 40
+   },
+   {
+    "filename": "muzzle_double 3.ase",
+    "frame": { "x": 72, "y": 0, "w": 24, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 32 },
+    "sourceSize": { "w": 24, "h": 32 },
+    "duration": 50
+   },
+   {
+    "filename": "muzzle_double 4.ase",
+    "frame": { "x": 96, "y": 0, "w": 24, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 32 },
+    "sourceSize": { "w": 24, "h": 32 },
+    "duration": 65
+   },
+   {
+    "filename": "muzzle_double 5.ase",
+    "frame": { "x": 120, "y": 0, "w": 24, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 32 },
+    "sourceSize": { "w": 24, "h": 32 },
+    "duration": 110
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.3.18.3-dev",
+  "image": "muzzle_double_sheet.png",
+  "format": "RGBA8888",
+  "size": { "w": 144, "h": 32 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "burst", "from": 0, "to": 5, "direction": "forward", "color": "#000000ff" }
+  ],
+  "slices": [
+  ]
+ }
+}

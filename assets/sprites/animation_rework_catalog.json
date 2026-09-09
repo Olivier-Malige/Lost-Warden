@@ -1,0 +1,2773 @@
+[
+  {
+    "name": "asteroid_sheet",
+    "domain": "enemies",
+    "source": "assets/sources/enemies/animation_rework/asteroid_sheet.ase",
+    "sheet": "assets/sprites/enemies/animation_rework/asteroid_sheet_sheet.png",
+    "metadata": "assets/sprites/enemies/animation_rework/asteroid_sheet_sheet.json",
+    "original": "assets/sources/enemies/asteroid_sheet.ase",
+    "original_frames": 11,
+    "frames": 11,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "rotation_1",
+        "from": 0,
+        "to": 0,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit_1",
+        "from": 1,
+        "to": 1,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "rotation_2",
+        "from": 2,
+        "to": 2,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit_2",
+        "from": 3,
+        "to": 3,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "rotation_3",
+        "from": 4,
+        "to": 4,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit_3",
+        "from": 5,
+        "to": 5,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "breakup",
+        "from": 6,
+        "to": 10,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "big_asteroid",
+    "domain": "enemies",
+    "source": "assets/sources/enemies/animation_rework/big_asteroid.ase",
+    "sheet": "assets/sprites/enemies/animation_rework/big_asteroid_sheet.png",
+    "metadata": "assets/sprites/enemies/animation_rework/big_asteroid_sheet.json",
+    "original": "assets/sources/enemies/big_asteroid.ase",
+    "original_frames": 18,
+    "frames": 18,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "rotation_1",
+        "from": 0,
+        "to": 0,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit_1",
+        "from": 1,
+        "to": 1,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "breakup",
+        "from": 3,
+        "to": 8,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "rotation_2",
+        "from": 9,
+        "to": 9,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit_2",
+        "from": 10,
+        "to": 10,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "rotation_3",
+        "from": 11,
+        "to": 11,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit_3",
+        "from": 12,
+        "to": 12,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "rotation_4",
+        "from": 13,
+        "to": 13,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit_4",
+        "from": 14,
+        "to": 14,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "debris_tail",
+        "from": 15,
+        "to": 17,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "dive_hunter",
+    "domain": "enemies",
+    "source": "assets/sources/enemies/animation_rework/dive_hunter.ase",
+    "sheet": "assets/sprites/enemies/animation_rework/dive_hunter_sheet.png",
+    "metadata": "assets/sprites/enemies/animation_rework/dive_hunter_sheet.json",
+    "original": "assets/sources/enemies/test_library/dive_hunter.ase",
+    "original_frames": 14,
+    "frames": 32,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "idle",
+        "from": 0,
+        "to": 2,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "charge",
+        "from": 3,
+        "to": 4,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "fire",
+        "from": 5,
+        "to": 5,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit",
+        "from": 6,
+        "to": 6,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "damaged",
+        "from": 7,
+        "to": 7,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "explode",
+        "from": 8,
+        "to": 13,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hunt_ready",
+        "from": 14,
+        "to": 16,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "dive_windup",
+        "from": 17,
+        "to": 22,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "dive_commit",
+        "from": 23,
+        "to": 26,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "dive_recover",
+        "from": 27,
+        "to": 31,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [
+      {
+        "tag": "dive_commit",
+        "frame": 23,
+        "kind": "movement_commit",
+        "status": "proposed integration marker"
+      }
+    ]
+  },
+  {
+    "name": "furnace_bomber",
+    "domain": "enemies",
+    "source": "assets/sources/enemies/animation_rework/furnace_bomber.ase",
+    "sheet": "assets/sprites/enemies/animation_rework/furnace_bomber_sheet.png",
+    "metadata": "assets/sprites/enemies/animation_rework/furnace_bomber_sheet.json",
+    "original": "assets/sources/enemies/test_library/furnace_bomber.ase",
+    "original_frames": 14,
+    "frames": 31,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "idle",
+        "from": 0,
+        "to": 2,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "charge",
+        "from": 3,
+        "to": 4,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "fire",
+        "from": 5,
+        "to": 5,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit",
+        "from": 6,
+        "to": 6,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "damaged",
+        "from": 7,
+        "to": 7,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "explode",
+        "from": 8,
+        "to": 13,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "payload_ready",
+        "from": 14,
+        "to": 16,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "bay_open",
+        "from": 17,
+        "to": 22,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "payload_release",
+        "from": 23,
+        "to": 25,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "bay_close",
+        "from": 26,
+        "to": 30,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [
+      {
+        "x": 9,
+        "y": 27
+      },
+      {
+        "x": 24,
+        "y": 27
+      }
+    ],
+    "events": [
+      {
+        "tag": "payload_release",
+        "frame": 25,
+        "kind": "payload_spawn",
+        "status": "proposed integration marker"
+      }
+    ]
+  },
+  {
+    "name": "grave_carrier",
+    "domain": "enemies",
+    "source": "assets/sources/enemies/animation_rework/grave_carrier.ase",
+    "sheet": "assets/sprites/enemies/animation_rework/grave_carrier_sheet.png",
+    "metadata": "assets/sprites/enemies/animation_rework/grave_carrier_sheet.json",
+    "original": "assets/sources/enemies/grave_carrier_32x64.ase",
+    "original_frames": 11,
+    "frames": 52,
+    "width": 32,
+    "height": 64,
+    "tags": [
+      {
+        "name": "idle",
+        "from": 0,
+        "to": 2,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit",
+        "from": 3,
+        "to": 3,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "damaged",
+        "from": 4,
+        "to": 4,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "explode",
+        "from": 5,
+        "to": 10,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "weapons_ready",
+        "from": 11,
+        "to": 13,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "port_charge",
+        "from": 14,
+        "to": 18,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "port_fire",
+        "from": 19,
+        "to": 21,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "port_recover",
+        "from": 22,
+        "to": 25,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "starboard_charge",
+        "from": 26,
+        "to": 30,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "starboard_fire",
+        "from": 31,
+        "to": 33,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "starboard_recover",
+        "from": 34,
+        "to": 37,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hull_charge",
+        "from": 38,
+        "to": 43,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hull_fire",
+        "from": 44,
+        "to": 46,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hull_recover",
+        "from": 47,
+        "to": 51,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [
+      {
+        "x": 8,
+        "y": 29
+      },
+      {
+        "x": 23,
+        "y": 27
+      },
+      {
+        "x": 16,
+        "y": 54
+      }
+    ],
+    "events": [
+      {
+        "tag": "port_fire",
+        "frame": 19,
+        "kind": "projectile_spawn",
+        "status": "proposed integration marker"
+      },
+      {
+        "tag": "starboard_fire",
+        "frame": 31,
+        "kind": "projectile_spawn",
+        "status": "proposed integration marker"
+      },
+      {
+        "tag": "hull_fire",
+        "frame": 44,
+        "kind": "projectile_spawn",
+        "status": "proposed integration marker"
+      }
+    ]
+  },
+  {
+    "name": "grave_carrier_elite",
+    "domain": "enemies",
+    "source": "assets/sources/enemies/animation_rework/grave_carrier_elite.ase",
+    "sheet": "assets/sprites/enemies/animation_rework/grave_carrier_elite_sheet.png",
+    "metadata": "assets/sprites/enemies/animation_rework/grave_carrier_elite_sheet.json",
+    "original": "assets/sources/enemies/grave_carrier_elite_32x64.ase",
+    "original_frames": 11,
+    "frames": 52,
+    "width": 32,
+    "height": 64,
+    "tags": [
+      {
+        "name": "idle",
+        "from": 0,
+        "to": 2,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit",
+        "from": 3,
+        "to": 3,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "damaged",
+        "from": 4,
+        "to": 4,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "explode",
+        "from": 5,
+        "to": 10,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "weapons_ready",
+        "from": 11,
+        "to": 13,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "port_charge",
+        "from": 14,
+        "to": 18,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "port_fire",
+        "from": 19,
+        "to": 21,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "port_recover",
+        "from": 22,
+        "to": 25,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "starboard_charge",
+        "from": 26,
+        "to": 30,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "starboard_fire",
+        "from": 31,
+        "to": 33,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "starboard_recover",
+        "from": 34,
+        "to": 37,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hull_charge",
+        "from": 38,
+        "to": 43,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hull_fire",
+        "from": 44,
+        "to": 46,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hull_recover",
+        "from": 47,
+        "to": 51,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [
+      {
+        "x": 8,
+        "y": 29
+      },
+      {
+        "x": 23,
+        "y": 27
+      },
+      {
+        "x": 16,
+        "y": 54
+      }
+    ],
+    "events": [
+      {
+        "tag": "port_fire",
+        "frame": 19,
+        "kind": "projectile_spawn",
+        "status": "proposed integration marker"
+      },
+      {
+        "tag": "starboard_fire",
+        "frame": 31,
+        "kind": "projectile_spawn",
+        "status": "proposed integration marker"
+      },
+      {
+        "tag": "hull_fire",
+        "frame": 44,
+        "kind": "projectile_spawn",
+        "status": "proposed integration marker"
+      }
+    ]
+  },
+  {
+    "name": "lance_sniper",
+    "domain": "enemies",
+    "source": "assets/sources/enemies/animation_rework/lance_sniper.ase",
+    "sheet": "assets/sprites/enemies/animation_rework/lance_sniper_sheet.png",
+    "metadata": "assets/sprites/enemies/animation_rework/lance_sniper_sheet.json",
+    "original": "assets/sources/enemies/test_library/lance_sniper.ase",
+    "original_frames": 14,
+    "frames": 34,
+    "width": 32,
+    "height": 48,
+    "tags": [
+      {
+        "name": "idle",
+        "from": 0,
+        "to": 2,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "charge",
+        "from": 3,
+        "to": 4,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "fire",
+        "from": 5,
+        "to": 5,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit",
+        "from": 6,
+        "to": 6,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "damaged",
+        "from": 7,
+        "to": 7,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "explode",
+        "from": 8,
+        "to": 13,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "sight_ready",
+        "from": 14,
+        "to": 16,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "lock_charge",
+        "from": 17,
+        "to": 24,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "lance_fire",
+        "from": 25,
+        "to": 27,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "vent_recover",
+        "from": 28,
+        "to": 33,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [
+      {
+        "x": 16,
+        "y": 43
+      }
+    ],
+    "events": [
+      {
+        "tag": "lance_fire",
+        "frame": 25,
+        "kind": "projectile_spawn",
+        "status": "proposed integration marker"
+      }
+    ]
+  },
+  {
+    "name": "razor_fighter",
+    "domain": "enemies",
+    "source": "assets/sources/enemies/animation_rework/razor_fighter.ase",
+    "sheet": "assets/sprites/enemies/animation_rework/razor_fighter_sheet.png",
+    "metadata": "assets/sprites/enemies/animation_rework/razor_fighter_sheet.json",
+    "original": "assets/sources/enemies/tie_sheet.ase",
+    "original_frames": 13,
+    "frames": 28,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "idle",
+        "from": 1,
+        "to": 3,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit",
+        "from": 4,
+        "to": 4,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "damaged",
+        "from": 5,
+        "to": 5,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "explode",
+        "from": 6,
+        "to": 12,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "weapons_ready",
+        "from": 13,
+        "to": 15,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "attack_charge",
+        "from": 16,
+        "to": 20,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "attack_fire",
+        "from": 21,
+        "to": 23,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "attack_recover",
+        "from": 24,
+        "to": 27,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [
+      {
+        "x": 11,
+        "y": 24
+      },
+      {
+        "x": 21,
+        "y": 24
+      }
+    ],
+    "events": [
+      {
+        "tag": "attack_fire",
+        "frame": 21,
+        "kind": "projectile_spawn",
+        "status": "proposed integration marker"
+      }
+    ]
+  },
+  {
+    "name": "razor_fighter_elite",
+    "domain": "enemies",
+    "source": "assets/sources/enemies/animation_rework/razor_fighter_elite.ase",
+    "sheet": "assets/sprites/enemies/animation_rework/razor_fighter_elite_sheet.png",
+    "metadata": "assets/sprites/enemies/animation_rework/razor_fighter_elite_sheet.json",
+    "original": "assets/sources/enemies/razor_fighter_elite.ase",
+    "original_frames": 13,
+    "frames": 28,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "idle",
+        "from": 1,
+        "to": 3,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit",
+        "from": 4,
+        "to": 4,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "damaged",
+        "from": 5,
+        "to": 5,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "explode",
+        "from": 6,
+        "to": 12,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "weapons_ready",
+        "from": 13,
+        "to": 15,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "attack_charge",
+        "from": 16,
+        "to": 20,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "attack_fire",
+        "from": 21,
+        "to": 23,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "attack_recover",
+        "from": 24,
+        "to": 27,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [
+      {
+        "x": 11,
+        "y": 24
+      },
+      {
+        "x": 21,
+        "y": 24
+      }
+    ],
+    "events": [
+      {
+        "tag": "attack_fire",
+        "frame": 21,
+        "kind": "projectile_spawn",
+        "status": "proposed integration marker"
+      }
+    ]
+  },
+  {
+    "name": "razor_wing_drone",
+    "domain": "enemies",
+    "source": "assets/sources/enemies/animation_rework/razor_wing_drone.ase",
+    "sheet": "assets/sprites/enemies/animation_rework/razor_wing_drone_sheet.png",
+    "metadata": "assets/sprites/enemies/animation_rework/razor_wing_drone_sheet.json",
+    "original": "assets/sources/enemies/drone.ase",
+    "original_frames": 11,
+    "frames": 26,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "idle",
+        "from": 0,
+        "to": 0,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit",
+        "from": 1,
+        "to": 1,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "explode",
+        "from": 2,
+        "to": 10,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "flight_ready",
+        "from": 11,
+        "to": 13,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "brake_open",
+        "from": 14,
+        "to": 18,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "boost_commit",
+        "from": 19,
+        "to": 21,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "flight_recover",
+        "from": 22,
+        "to": 25,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [
+      {
+        "tag": "boost_commit",
+        "frame": 19,
+        "kind": "movement_commit",
+        "status": "proposed integration marker"
+      }
+    ]
+  },
+  {
+    "name": "razor_wing_drone_elite",
+    "domain": "enemies",
+    "source": "assets/sources/enemies/animation_rework/razor_wing_drone_elite.ase",
+    "sheet": "assets/sprites/enemies/animation_rework/razor_wing_drone_elite_sheet.png",
+    "metadata": "assets/sprites/enemies/animation_rework/razor_wing_drone_elite_sheet.json",
+    "original": "assets/sources/enemies/razor_wing_drone_elite.ase",
+    "original_frames": 11,
+    "frames": 26,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "idle",
+        "from": 0,
+        "to": 0,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit",
+        "from": 1,
+        "to": 1,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "explode",
+        "from": 2,
+        "to": 10,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "flight_ready",
+        "from": 11,
+        "to": 13,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "brake_open",
+        "from": 14,
+        "to": 18,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "boost_commit",
+        "from": 19,
+        "to": 21,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "flight_recover",
+        "from": 22,
+        "to": 25,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [
+      {
+        "tag": "boost_commit",
+        "frame": 19,
+        "kind": "movement_commit",
+        "status": "proposed integration marker"
+      }
+    ]
+  },
+  {
+    "name": "siege_turret",
+    "domain": "enemies",
+    "source": "assets/sources/enemies/animation_rework/siege_turret.ase",
+    "sheet": "assets/sprites/enemies/animation_rework/siege_turret_sheet.png",
+    "metadata": "assets/sprites/enemies/animation_rework/siege_turret_sheet.json",
+    "original": "assets/sources/enemies/turret.ase",
+    "original_frames": 11,
+    "frames": 42,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "idle",
+        "from": 0,
+        "to": 0,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit",
+        "from": 1,
+        "to": 1,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "explode",
+        "from": 2,
+        "to": 10,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "aperture_ready",
+        "from": 11,
+        "to": 13,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "aim_charge",
+        "from": 14,
+        "to": 19,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "aim_fire",
+        "from": 20,
+        "to": 22,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "aim_recover",
+        "from": 23,
+        "to": 26,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "ring_charge",
+        "from": 27,
+        "to": 33,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "ring_fire",
+        "from": 34,
+        "to": 36,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "ring_recover",
+        "from": 37,
+        "to": 41,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [
+      {
+        "x": 16,
+        "y": 22
+      }
+    ],
+    "events": [
+      {
+        "tag": "aim_fire",
+        "frame": 20,
+        "kind": "projectile_spawn",
+        "status": "proposed integration marker"
+      },
+      {
+        "tag": "ring_fire",
+        "frame": 34,
+        "kind": "projectile_spawn",
+        "status": "proposed integration marker"
+      }
+    ]
+  },
+  {
+    "name": "siege_turret_elite",
+    "domain": "enemies",
+    "source": "assets/sources/enemies/animation_rework/siege_turret_elite.ase",
+    "sheet": "assets/sprites/enemies/animation_rework/siege_turret_elite_sheet.png",
+    "metadata": "assets/sprites/enemies/animation_rework/siege_turret_elite_sheet.json",
+    "original": "assets/sources/enemies/siege_turret_elite.ase",
+    "original_frames": 11,
+    "frames": 42,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "idle",
+        "from": 0,
+        "to": 0,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit",
+        "from": 1,
+        "to": 1,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "explode",
+        "from": 2,
+        "to": 10,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "aperture_ready",
+        "from": 11,
+        "to": 13,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "aim_charge",
+        "from": 14,
+        "to": 19,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "aim_fire",
+        "from": 20,
+        "to": 22,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "aim_recover",
+        "from": 23,
+        "to": 26,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "ring_charge",
+        "from": 27,
+        "to": 33,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "ring_fire",
+        "from": 34,
+        "to": 36,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "ring_recover",
+        "from": 37,
+        "to": 41,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [
+      {
+        "x": 16,
+        "y": 22
+      }
+    ],
+    "events": [
+      {
+        "tag": "aim_fire",
+        "frame": 20,
+        "kind": "projectile_spawn",
+        "status": "proposed integration marker"
+      },
+      {
+        "tag": "ring_fire",
+        "frame": 34,
+        "kind": "projectile_spawn",
+        "status": "proposed integration marker"
+      }
+    ]
+  },
+  {
+    "name": "talon_interceptor",
+    "domain": "enemies",
+    "source": "assets/sources/enemies/animation_rework/talon_interceptor.ase",
+    "sheet": "assets/sprites/enemies/animation_rework/talon_interceptor_sheet.png",
+    "metadata": "assets/sprites/enemies/animation_rework/talon_interceptor_sheet.json",
+    "original": "assets/sources/enemies/interceptor.ase",
+    "original_frames": 11,
+    "frames": 26,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "idle",
+        "from": 0,
+        "to": 2,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit",
+        "from": 3,
+        "to": 3,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "damaged",
+        "from": 4,
+        "to": 4,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "explode",
+        "from": 5,
+        "to": 10,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "weapons_ready",
+        "from": 11,
+        "to": 13,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "attack_charge",
+        "from": 14,
+        "to": 18,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "attack_fire",
+        "from": 19,
+        "to": 21,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "attack_recover",
+        "from": 22,
+        "to": 25,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [
+      {
+        "x": 8,
+        "y": 25
+      },
+      {
+        "x": 16,
+        "y": 24
+      },
+      {
+        "x": 24,
+        "y": 25
+      }
+    ],
+    "events": [
+      {
+        "tag": "attack_fire",
+        "frame": 19,
+        "kind": "projectile_spawn",
+        "status": "proposed integration marker"
+      }
+    ]
+  },
+  {
+    "name": "talon_interceptor_elite",
+    "domain": "enemies",
+    "source": "assets/sources/enemies/animation_rework/talon_interceptor_elite.ase",
+    "sheet": "assets/sprites/enemies/animation_rework/talon_interceptor_elite_sheet.png",
+    "metadata": "assets/sprites/enemies/animation_rework/talon_interceptor_elite_sheet.json",
+    "original": "assets/sources/enemies/talon_interceptor_elite.ase",
+    "original_frames": 11,
+    "frames": 26,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "idle",
+        "from": 0,
+        "to": 2,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit",
+        "from": 3,
+        "to": 3,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "damaged",
+        "from": 4,
+        "to": 4,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "explode",
+        "from": 5,
+        "to": 10,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "weapons_ready",
+        "from": 11,
+        "to": 13,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "attack_charge",
+        "from": 14,
+        "to": 18,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "attack_fire",
+        "from": 19,
+        "to": 21,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "attack_recover",
+        "from": 22,
+        "to": 25,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [
+      {
+        "x": 8,
+        "y": 25
+      },
+      {
+        "x": 16,
+        "y": 24
+      },
+      {
+        "x": 24,
+        "y": 25
+      }
+    ],
+    "events": [
+      {
+        "tag": "attack_fire",
+        "frame": 19,
+        "kind": "projectile_spawn",
+        "status": "proposed integration marker"
+      }
+    ]
+  },
+  {
+    "name": "nomad",
+    "domain": "player",
+    "source": "assets/sources/player/animation_rework/nomad.ase",
+    "sheet": "assets/sprites/player/animation_rework/nomad_sheet.png",
+    "metadata": "assets/sprites/player/animation_rework/nomad_sheet.json",
+    "original": "assets/sources/player/ship_banking_master.aseprite",
+    "original_frames": 13,
+    "frames": 41,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "idle",
+        "from": 0,
+        "to": 0,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "bank_left",
+        "from": 1,
+        "to": 3,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "return_left",
+        "from": 4,
+        "to": 6,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "bank_right",
+        "from": 7,
+        "to": 9,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "return_right",
+        "from": 10,
+        "to": 12,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "primary_fire",
+        "from": 13,
+        "to": 15,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "primary_recover",
+        "from": 16,
+        "to": 19,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "beam_charge",
+        "from": 20,
+        "to": 25,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "beam_release",
+        "from": 26,
+        "to": 28,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "boost",
+        "from": 29,
+        "to": 34,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "damage_warning",
+        "from": 35,
+        "to": 40,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [
+      {
+        "x": 10,
+        "y": 14
+      },
+      {
+        "x": 21,
+        "y": 14
+      },
+      {
+        "x": 16,
+        "y": 4
+      }
+    ],
+    "events": [
+      {
+        "tag": "primary_fire",
+        "frame": 13,
+        "kind": "projectile_spawn",
+        "status": "proposed integration marker"
+      },
+      {
+        "tag": "beam_release",
+        "frame": 26,
+        "kind": "projectile_spawn",
+        "status": "proposed integration marker"
+      }
+    ],
+    "team_exports": {
+      "red": "assets/sprites/player/animation_rework/nomad_sheet.png",
+      "blue": "assets/sprites/player/animation_rework/nomad_blue_sheet.png"
+    }
+  },
+  {
+    "name": "nomad_shield",
+    "domain": "player",
+    "source": "assets/sources/player/animation_rework/nomad_shield.ase",
+    "sheet": "assets/sprites/player/animation_rework/nomad_shield_sheet.png",
+    "metadata": "assets/sprites/player/animation_rework/nomad_shield_sheet.json",
+    "original": "assets/sources/player/nomad_shield_master.ase",
+    "original_frames": 24,
+    "frames": 72,
+    "width": 16,
+    "height": 10,
+    "tags": [
+      {
+        "name": "player1_idle",
+        "from": 0,
+        "to": 5,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "player1_reflect",
+        "from": 6,
+        "to": 11,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "player2_idle",
+        "from": 12,
+        "to": 17,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "player2_reflect",
+        "from": 18,
+        "to": 23,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "player1_reflect_level_1",
+        "from": 24,
+        "to": 27,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "player1_reflect_level_2",
+        "from": 28,
+        "to": 31,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "player1_reflect_level_3",
+        "from": 32,
+        "to": 35,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "player1_reflect_level_4",
+        "from": 36,
+        "to": 39,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "player1_reflect_level_5",
+        "from": 40,
+        "to": 43,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "player1_reflect_level_6",
+        "from": 44,
+        "to": 47,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "player2_reflect_level_1",
+        "from": 48,
+        "to": 51,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "player2_reflect_level_2",
+        "from": 52,
+        "to": 55,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "player2_reflect_level_3",
+        "from": 56,
+        "to": 59,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "player2_reflect_level_4",
+        "from": 60,
+        "to": 63,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "player2_reflect_level_5",
+        "from": 64,
+        "to": 67,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "player2_reflect_level_6",
+        "from": 68,
+        "to": 71,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "plasma_beam",
+    "domain": "player",
+    "source": "assets/sources/player/animation_rework/plasma_beam.ase",
+    "sheet": "assets/sprites/player/animation_rework/plasma_beam_sheet.png",
+    "metadata": "assets/sprites/player/animation_rework/plasma_beam_sheet.json",
+    "original": "assets/sources/player/plasma_beam_master.ase",
+    "original_frames": 20,
+    "frames": 20,
+    "width": 16,
+    "height": 16,
+    "tags": [
+      {
+        "name": "small",
+        "from": 0,
+        "to": 3,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "normal",
+        "from": 4,
+        "to": 7,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "big",
+        "from": 8,
+        "to": 11,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "large",
+        "from": 12,
+        "to": 15,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "full",
+        "from": 16,
+        "to": 19,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "pulse_shot_primary",
+    "domain": "player",
+    "source": "assets/sources/player/animation_rework/pulse_shot_primary.ase",
+    "sheet": "assets/sprites/player/animation_rework/pulse_shot_primary_sheet.png",
+    "metadata": "assets/sprites/player/animation_rework/pulse_shot_primary_sheet.json",
+    "original": "assets/sources/player/pulse_shot_primary_master.ase",
+    "original_frames": 5,
+    "frames": 25,
+    "width": 8,
+    "height": 16,
+    "tags": [
+      {
+        "name": "small",
+        "from": 0,
+        "to": 0,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "normal",
+        "from": 1,
+        "to": 1,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "big",
+        "from": 2,
+        "to": 2,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "large",
+        "from": 3,
+        "to": 3,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "full",
+        "from": 4,
+        "to": 4,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "small_flow",
+        "from": 5,
+        "to": 8,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "normal_flow",
+        "from": 9,
+        "to": 12,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "big_flow",
+        "from": 13,
+        "to": 16,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "large_flow",
+        "from": 17,
+        "to": 20,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "full_flow",
+        "from": 21,
+        "to": 24,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "pulse_shot_side",
+    "domain": "player",
+    "source": "assets/sources/player/animation_rework/pulse_shot_side.ase",
+    "sheet": "assets/sprites/player/animation_rework/pulse_shot_side_sheet.png",
+    "metadata": "assets/sprites/player/animation_rework/pulse_shot_side_sheet.json",
+    "original": "assets/sources/player/pulse_shot_side_master.ase",
+    "original_frames": 5,
+    "frames": 25,
+    "width": 4,
+    "height": 16,
+    "tags": [
+      {
+        "name": "small",
+        "from": 0,
+        "to": 0,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "normal",
+        "from": 1,
+        "to": 1,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "big",
+        "from": 2,
+        "to": 2,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "large",
+        "from": 3,
+        "to": 3,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "full",
+        "from": 4,
+        "to": 4,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "small_flow",
+        "from": 5,
+        "to": 8,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "normal_flow",
+        "from": 9,
+        "to": 12,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "big_flow",
+        "from": 13,
+        "to": 16,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "large_flow",
+        "from": 17,
+        "to": 20,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "full_flow",
+        "from": 21,
+        "to": 24,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "dread_ark_beam",
+    "domain": "combat",
+    "source": "assets/sources/combat/animation_rework/dread_ark_beam.ase",
+    "sheet": "assets/sprites/combat/animation_rework/dread_ark_beam_sheet.png",
+    "metadata": "assets/sprites/combat/animation_rework/dread_ark_beam_sheet.json",
+    "original": "assets/sources/combat/dread_ark_beam.ase",
+    "original_frames": 4,
+    "frames": 4,
+    "width": 32,
+    "height": 64,
+    "tags": [
+      {
+        "name": "flow",
+        "from": 0,
+        "to": 3,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "dread_ark_projectiles",
+    "domain": "combat",
+    "source": "assets/sources/combat/animation_rework/dread_ark_projectiles.ase",
+    "sheet": "assets/sprites/combat/animation_rework/dread_ark_projectiles_sheet.png",
+    "metadata": "assets/sprites/combat/animation_rework/dread_ark_projectiles_sheet.json",
+    "original": "assets/sources/combat/dread_ark_projectiles.ase",
+    "original_frames": 18,
+    "frames": 18,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "aimed_red",
+        "from": 0,
+        "to": 3,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "broadside_amber",
+        "from": 4,
+        "to": 7,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hunter_magenta",
+        "from": 8,
+        "to": 11,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "impact_red",
+        "from": 12,
+        "to": 13,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "impact_amber",
+        "from": 14,
+        "to": 15,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "impact_magenta",
+        "from": 16,
+        "to": 17,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "enemy_shot_fighter",
+    "domain": "combat",
+    "source": "assets/sources/combat/animation_rework/enemy_shot_fighter.ase",
+    "sheet": "assets/sprites/combat/animation_rework/enemy_shot_fighter_sheet.png",
+    "metadata": "assets/sprites/combat/animation_rework/enemy_shot_fighter_sheet.json",
+    "original": "assets/sources/combat/enemy_shot_fighter.ase",
+    "original_frames": 4,
+    "frames": 4,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "flight",
+        "from": 0,
+        "to": 3,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "enemy_shot_interceptor",
+    "domain": "combat",
+    "source": "assets/sources/combat/animation_rework/enemy_shot_interceptor.ase",
+    "sheet": "assets/sprites/combat/animation_rework/enemy_shot_interceptor_sheet.png",
+    "metadata": "assets/sprites/combat/animation_rework/enemy_shot_interceptor_sheet.json",
+    "original": "assets/sources/combat/enemy_shot_interceptor.ase",
+    "original_frames": 4,
+    "frames": 4,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "flight",
+        "from": 0,
+        "to": 3,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "enemy_shot_interceptor_side",
+    "domain": "combat",
+    "source": "assets/sources/combat/animation_rework/enemy_shot_interceptor_side.ase",
+    "sheet": "assets/sprites/combat/animation_rework/enemy_shot_interceptor_side_sheet.png",
+    "metadata": "assets/sprites/combat/animation_rework/enemy_shot_interceptor_side_sheet.json",
+    "original": "assets/sources/combat/enemy_shot_interceptor_side.ase",
+    "original_frames": 4,
+    "frames": 4,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "flight",
+        "from": 0,
+        "to": 3,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "enemy_shot_turret",
+    "domain": "combat",
+    "source": "assets/sources/combat/animation_rework/enemy_shot_turret.ase",
+    "sheet": "assets/sprites/combat/animation_rework/enemy_shot_turret_sheet.png",
+    "metadata": "assets/sprites/combat/animation_rework/enemy_shot_turret_sheet.json",
+    "original": "assets/sources/combat/enemy_shot_turret.ase",
+    "original_frames": 12,
+    "frames": 12,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "pulse",
+        "from": 0,
+        "to": 3,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "hit",
+        "from": 4,
+        "to": 5,
+        "direction": "forward",
+        "color": "#000000ff"
+      },
+      {
+        "name": "explosion",
+        "from": 6,
+        "to": 11,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "charge_heavy",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/charge_heavy.ase",
+    "sheet": "assets/sprites/effects/animation_rework/charge_heavy_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/charge_heavy_sheet.json",
+    "original": "assets/sources/effects/test_library/charge_heavy.ase",
+    "original_frames": 10,
+    "frames": 10,
+    "width": 48,
+    "height": 48,
+    "tags": [
+      {
+        "name": "burst",
+        "from": 0,
+        "to": 9,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [],
+    "ending": "hold last frame until gameplay transition"
+  },
+  {
+    "name": "charge_overload",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/charge_overload.ase",
+    "sheet": "assets/sprites/effects/animation_rework/charge_overload_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/charge_overload_sheet.json",
+    "original": "assets/sources/effects/test_library/charge_overload.ase",
+    "original_frames": 10,
+    "frames": 10,
+    "width": 48,
+    "height": 48,
+    "tags": [
+      {
+        "name": "burst",
+        "from": 0,
+        "to": 9,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [],
+    "ending": "hold last frame until gameplay transition"
+  },
+  {
+    "name": "charge_small",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/charge_small.ase",
+    "sheet": "assets/sprites/effects/animation_rework/charge_small_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/charge_small_sheet.json",
+    "original": "assets/sources/effects/test_library/charge_small.ase",
+    "original_frames": 10,
+    "frames": 10,
+    "width": 48,
+    "height": 48,
+    "tags": [
+      {
+        "name": "burst",
+        "from": 0,
+        "to": 9,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [],
+    "ending": "hold last frame until gameplay transition"
+  },
+  {
+    "name": "damage_electric",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/damage_electric.ase",
+    "sheet": "assets/sprites/effects/animation_rework/damage_electric_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/damage_electric_sheet.json",
+    "original": "assets/sources/effects/test_library/damage_electric.ase",
+    "original_frames": 8,
+    "frames": 8,
+    "width": 32,
+    "height": 40,
+    "tags": [
+      {
+        "name": "loop",
+        "from": 0,
+        "to": 7,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "damage_embers",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/damage_embers.ase",
+    "sheet": "assets/sprites/effects/animation_rework/damage_embers_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/damage_embers_sheet.json",
+    "original": "assets/sources/effects/test_library/damage_embers.ase",
+    "original_frames": 8,
+    "frames": 8,
+    "width": 32,
+    "height": 40,
+    "tags": [
+      {
+        "name": "loop",
+        "from": 0,
+        "to": 7,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "damage_reactor_leak",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/damage_reactor_leak.ase",
+    "sheet": "assets/sprites/effects/animation_rework/damage_reactor_leak_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/damage_reactor_leak_sheet.json",
+    "original": "assets/sources/effects/test_library/damage_reactor_leak.ase",
+    "original_frames": 8,
+    "frames": 8,
+    "width": 32,
+    "height": 40,
+    "tags": [
+      {
+        "name": "loop",
+        "from": 0,
+        "to": 7,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "debris_hull",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/debris_hull.ase",
+    "sheet": "assets/sprites/effects/animation_rework/debris_hull_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/debris_hull_sheet.json",
+    "original": "assets/sources/effects/test_library/debris_hull.ase",
+    "original_frames": 8,
+    "frames": 8,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "loop",
+        "from": 0,
+        "to": 7,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "debris_mechanical",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/debris_mechanical.ase",
+    "sheet": "assets/sprites/effects/animation_rework/debris_mechanical_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/debris_mechanical_sheet.json",
+    "original": "assets/sources/effects/test_library/debris_mechanical.ase",
+    "original_frames": 8,
+    "frames": 8,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "loop",
+        "from": 0,
+        "to": 7,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "debris_wing",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/debris_wing.ase",
+    "sheet": "assets/sprites/effects/animation_rework/debris_wing_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/debris_wing_sheet.json",
+    "original": "assets/sources/effects/test_library/debris_wing.ase",
+    "original_frames": 8,
+    "frames": 8,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "loop",
+        "from": 0,
+        "to": 7,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "dread_ark_explosion",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/dread_ark_explosion.ase",
+    "sheet": "assets/sprites/effects/animation_rework/dread_ark_explosion_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/dread_ark_explosion_sheet.json",
+    "original": "assets/sources/effects/dread_ark_explosion.ase",
+    "original_frames": 14,
+    "frames": 14,
+    "width": 128,
+    "height": 96,
+    "tags": [
+      {
+        "name": "destroy",
+        "from": 0,
+        "to": 13,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "impact_armor",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/impact_armor.ase",
+    "sheet": "assets/sprites/effects/animation_rework/impact_armor_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/impact_armor_sheet.json",
+    "original": "assets/sources/effects/test_library/impact_armor.ase",
+    "original_frames": 7,
+    "frames": 7,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "burst",
+        "from": 0,
+        "to": 6,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [],
+    "ending": "transparent; one shot"
+  },
+  {
+    "name": "impact_asteroid",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/impact_asteroid.ase",
+    "sheet": "assets/sprites/effects/animation_rework/impact_asteroid_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/impact_asteroid_sheet.json",
+    "original": "assets/sources/effects/test_library/impact_asteroid.ase",
+    "original_frames": 7,
+    "frames": 7,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "burst",
+        "from": 0,
+        "to": 6,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [],
+    "ending": "transparent; one shot"
+  },
+  {
+    "name": "impact_energy",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/impact_energy.ase",
+    "sheet": "assets/sprites/effects/animation_rework/impact_energy_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/impact_energy_sheet.json",
+    "original": "assets/sources/effects/test_library/impact_energy.ase",
+    "original_frames": 7,
+    "frames": 7,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "burst",
+        "from": 0,
+        "to": 6,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [],
+    "ending": "transparent; one shot"
+  },
+  {
+    "name": "impact_metal",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/impact_metal.ase",
+    "sheet": "assets/sprites/effects/animation_rework/impact_metal_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/impact_metal_sheet.json",
+    "original": "assets/sources/effects/test_library/impact_metal.ase",
+    "original_frames": 7,
+    "frames": 7,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "burst",
+        "from": 0,
+        "to": 6,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [],
+    "ending": "transparent; one shot"
+  },
+  {
+    "name": "muzzle_double",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/muzzle_double.ase",
+    "sheet": "assets/sprites/effects/animation_rework/muzzle_double_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/muzzle_double_sheet.json",
+    "original": "assets/sources/effects/test_library/muzzle_double.ase",
+    "original_frames": 6,
+    "frames": 6,
+    "width": 24,
+    "height": 32,
+    "tags": [
+      {
+        "name": "burst",
+        "from": 0,
+        "to": 5,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [],
+    "ending": "transparent; one shot"
+  },
+  {
+    "name": "muzzle_plasma",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/muzzle_plasma.ase",
+    "sheet": "assets/sprites/effects/animation_rework/muzzle_plasma_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/muzzle_plasma_sheet.json",
+    "original": "assets/sources/effects/test_library/muzzle_plasma.ase",
+    "original_frames": 6,
+    "frames": 6,
+    "width": 24,
+    "height": 32,
+    "tags": [
+      {
+        "name": "burst",
+        "from": 0,
+        "to": 5,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [],
+    "ending": "transparent; one shot"
+  },
+  {
+    "name": "muzzle_single",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/muzzle_single.ase",
+    "sheet": "assets/sprites/effects/animation_rework/muzzle_single_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/muzzle_single_sheet.json",
+    "original": "assets/sources/effects/test_library/muzzle_single.ase",
+    "original_frames": 6,
+    "frames": 6,
+    "width": 24,
+    "height": 32,
+    "tags": [
+      {
+        "name": "burst",
+        "from": 0,
+        "to": 5,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [],
+    "ending": "transparent; one shot"
+  },
+  {
+    "name": "nomad_explosion",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/nomad_explosion.ase",
+    "sheet": "assets/sprites/effects/animation_rework/nomad_explosion_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/nomad_explosion_sheet.json",
+    "original": "assets/sources/effects/nomad_explosion.ase",
+    "original_frames": 9,
+    "frames": 9,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "explode",
+        "from": 0,
+        "to": 8,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [],
+    "ending": "transparent; one shot"
+  },
+  {
+    "name": "pickup_blue",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/pickup_blue.ase",
+    "sheet": "assets/sprites/effects/animation_rework/pickup_blue_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/pickup_blue_sheet.json",
+    "original": "assets/sources/effects/test_library/pickup_blue.ase",
+    "original_frames": 8,
+    "frames": 8,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "burst",
+        "from": 0,
+        "to": 7,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [],
+    "ending": "transparent; one shot"
+  },
+  {
+    "name": "pickup_cyan",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/pickup_cyan.ase",
+    "sheet": "assets/sprites/effects/animation_rework/pickup_cyan_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/pickup_cyan_sheet.json",
+    "original": "assets/sources/effects/test_library/pickup_cyan.ase",
+    "original_frames": 8,
+    "frames": 8,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "burst",
+        "from": 0,
+        "to": 7,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [],
+    "ending": "transparent; one shot"
+  },
+  {
+    "name": "pickup_gold",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/pickup_gold.ase",
+    "sheet": "assets/sprites/effects/animation_rework/pickup_gold_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/pickup_gold_sheet.json",
+    "original": "assets/sources/effects/test_library/pickup_gold.ase",
+    "original_frames": 8,
+    "frames": 8,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "burst",
+        "from": 0,
+        "to": 7,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [],
+    "ending": "transparent; one shot"
+  },
+  {
+    "name": "pickup_green",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/pickup_green.ase",
+    "sheet": "assets/sprites/effects/animation_rework/pickup_green_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/pickup_green_sheet.json",
+    "original": "assets/sources/effects/test_library/pickup_green.ase",
+    "original_frames": 8,
+    "frames": 8,
+    "width": 32,
+    "height": 32,
+    "tags": [
+      {
+        "name": "burst",
+        "from": 0,
+        "to": 7,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [],
+    "ending": "transparent; one shot"
+  },
+  {
+    "name": "shield_activate",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/shield_activate.ase",
+    "sheet": "assets/sprites/effects/animation_rework/shield_activate_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/shield_activate_sheet.json",
+    "original": "assets/sources/effects/test_library/shield_activate.ase",
+    "original_frames": 8,
+    "frames": 8,
+    "width": 48,
+    "height": 48,
+    "tags": [
+      {
+        "name": "burst",
+        "from": 0,
+        "to": 7,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [],
+    "ending": "hold last frame until gameplay transition"
+  },
+  {
+    "name": "shield_break",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/shield_break.ase",
+    "sheet": "assets/sprites/effects/animation_rework/shield_break_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/shield_break_sheet.json",
+    "original": "assets/sources/effects/test_library/shield_break.ase",
+    "original_frames": 9,
+    "frames": 9,
+    "width": 48,
+    "height": 48,
+    "tags": [
+      {
+        "name": "burst",
+        "from": 0,
+        "to": 8,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [],
+    "ending": "transparent; one shot"
+  },
+  {
+    "name": "shield_hit",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/shield_hit.ase",
+    "sheet": "assets/sprites/effects/animation_rework/shield_hit_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/shield_hit_sheet.json",
+    "original": "assets/sources/effects/test_library/shield_hit.ase",
+    "original_frames": 7,
+    "frames": 7,
+    "width": 48,
+    "height": 48,
+    "tags": [
+      {
+        "name": "burst",
+        "from": 0,
+        "to": 6,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": [],
+    "ending": "transparent; one shot"
+  },
+  {
+    "name": "thruster_boost",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/thruster_boost.ase",
+    "sheet": "assets/sprites/effects/animation_rework/thruster_boost_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/thruster_boost_sheet.json",
+    "original": "assets/sources/effects/test_library/thruster_boost.ase",
+    "original_frames": 8,
+    "frames": 8,
+    "width": 24,
+    "height": 40,
+    "tags": [
+      {
+        "name": "loop",
+        "from": 0,
+        "to": 7,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "thruster_damaged",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/thruster_damaged.ase",
+    "sheet": "assets/sprites/effects/animation_rework/thruster_damaged_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/thruster_damaged_sheet.json",
+    "original": "assets/sources/effects/test_library/thruster_damaged.ase",
+    "original_frames": 8,
+    "frames": 8,
+    "width": 24,
+    "height": 40,
+    "tags": [
+      {
+        "name": "loop",
+        "from": 0,
+        "to": 7,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  },
+  {
+    "name": "thruster_idle",
+    "domain": "effects",
+    "source": "assets/sources/effects/animation_rework/thruster_idle.ase",
+    "sheet": "assets/sprites/effects/animation_rework/thruster_idle_sheet.png",
+    "metadata": "assets/sprites/effects/animation_rework/thruster_idle_sheet.json",
+    "original": "assets/sources/effects/test_library/thruster_idle.ase",
+    "original_frames": 8,
+    "frames": 8,
+    "width": 24,
+    "height": 40,
+    "tags": [
+      {
+        "name": "loop",
+        "from": 0,
+        "to": 7,
+        "direction": "forward",
+        "color": "#000000ff"
+      }
+    ],
+    "anchors": [],
+    "events": []
+  }
+]
