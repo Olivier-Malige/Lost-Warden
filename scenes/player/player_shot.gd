@@ -32,6 +32,7 @@ func _ready() -> void:
 
 
 func prepare() -> void:
+	$anim.stop()
 	damage = _base_damage
 	speedX = 0
 	speedY = _base_speed_y
@@ -70,6 +71,8 @@ func _create_laser_glow() -> void:
 		vfx_config.glow_material
 	)
 	_laser_glow.name = "LaserGlow"
+	if vfx_config.glow_behind_sprite:
+		_laser_glow.z_index = _source_sprite.z_index - 1
 	_sync_laser_glow()
 
 
@@ -95,8 +98,10 @@ func setPowerAnim() -> void:
 	for tier in [[power_Full, "_full"], [power_Large, "_large"], [power_Big, "_big"], [power_Normal, "_normal"], [power_Small, "_small"]]:
 		if damage >= tier[0]:
 			$anim.play(player_Id + tier[1])
+			$anim.advance(0.0)
 			return
 	$anim.play(player_Id + "_small")
+	$anim.advance(0.0)
 
 
 func _on_area_entered(area: Area2D) -> void:

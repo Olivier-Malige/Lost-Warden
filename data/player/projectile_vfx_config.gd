@@ -3,6 +3,7 @@ extends Resource
 
 @export_group("Glow")
 @export var glow_material: Material
+@export var glow_behind_sprite := false
 @export_range(1.0, 3.0, 0.05) var core_brightness := 1.65
 @export_range(1.0, 5.0, 0.05) var glow_scale := 1.25
 @export var glow_spread := Vector2(1.35, 0.68)

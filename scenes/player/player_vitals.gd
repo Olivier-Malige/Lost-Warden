@@ -25,7 +25,8 @@ func hit(_dmg := 1) -> void:
 		player.reset_weapon_input()
 		player.explosion_audio.playing = true
 		player.update_energy()
-		player.animation_player.play(player.id_Player + "_explode")
+		player.play_death_effect()
+		player.animation_player.play(Player.EXPLODE_ANIMATION)
 		Events.screen_shake_requested.emit(26.0, 0.45)
 		Events.screen_flash_requested.emit(Color(1.0, 0.35, 0.3, 0.28), 0.25)
 		player.set_state(Player.State.DYING)

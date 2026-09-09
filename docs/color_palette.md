@@ -1,76 +1,127 @@
-# Lost Warden 24 color palette
+# Lost Warden 64 color palette
 
-`Lost Warden 24` is the visual source of truth for future UI and sprite work. It combines a restrained Atari-inspired core with a small bank of bright PICO-8-inspired effects.
+`Lost Warden 64` is the shared source of truth for new UI and sprite work as of 2026-09-12. It extends the original palette with intermediate material shades and complete energy ramps. The first 24 entries keep their exact RGB values and indices; `lost_warden_24.gpl` remains a historical reference.
 
-The importable Aseprite palette lives at `assets/palettes/lost_warden_24.gpl`.
+- Importable palette: `assets/palettes/lost_warden_64.gpl`.
+- Plain hex list: `assets/palettes/lost_warden_64.hex`.
+- Labeled swatches: `assets/palettes/lost_warden_64.svg`.
+- Current export audit and remaining exceptions: `docs/palette_audit.md`.
 
-## Core colors
+## Shared colors
 
-| ID | Name | Hex | Primary role |
-|---:|---|---|---|
-| 00 | Void | `#06070C` | Space background and deepest outline |
-| 01 | Deep Space | `#101522` | Secondary background and UI panels |
-| 02 | Hull Shadow | `#222735` | Ship and environment shadows |
-| 03 | Gunmetal | `#464A52` | Dark metal and mid-volume shading |
-| 04 | Steel | `#74777D` | Exposed metal and mechanical details |
-| 05 | Pale Steel | `#B8B6AE` | Metal highlights and secondary text |
-| 06 | Star White | `#F3EBDD` | Stars, highlights and primary text |
-| 07 | Oxblood | `#3A0D14` | Red shadows and hostile surfaces |
-| 08 | Warden Red | `#9C2020` | Identity color, menus and enemies |
-| 09 | Ember | `#E15A43` | Red highlights, damage and heat |
-| 10 | Dark Bronze | `#442D18` | Warm shadows, rock and aged metal |
-| 11 | Amber | `#9E6B2D` | Warm metal and interface borders |
-| 12 | Solar | `#D6D653` | Title, selection and energy |
-| 13 | Deep Ion | `#102A4A` | Player-side blue shadows |
-| 14 | Ion Blue | `#2D6594` | Allied hulls and cool depth |
-| 15 | Ice Blue | `#78B7CF` | Allied highlights and cool UI accents |
+Transparency is separate from the 64 RGB colors. Different sprites use different subsets of this library; consistency means shared material ramps and color roles, not identical subsets everywhere.
 
-## Emissive accents
+| ID | Name | Hex |
+|---:|---|---|
+| 00 | Void | `#06070C` |
+| 01 | Deep Space | `#101522` |
+| 02 | Hull Shadow | `#222735` |
+| 03 | Gunmetal | `#464A52` |
+| 04 | Steel | `#74777D` |
+| 05 | Pale Steel | `#B8B6AE` |
+| 06 | Star White | `#F3EBDD` |
+| 07 | Oxblood | `#3A0D14` |
+| 08 | Warden Red | `#9C2020` |
+| 09 | Ember | `#E15A43` |
+| 10 | Dark Bronze | `#442D18` |
+| 11 | Amber | `#9E6B2D` |
+| 12 | Solar | `#D6D653` |
+| 13 | Deep Ion | `#102A4A` |
+| 14 | Ion Blue | `#2D6594` |
+| 15 | Ice Blue | `#78B7CF` |
+| 16 | Neon Red | `#FF5A4D` |
+| 17 | Neon Gold | `#FFD35A` |
+| 18 | Plasma Cyan | `#72E0D1` |
+| 19 | Shield Violet | `#B979C8` |
+| 20 | Pickup Green | `#72C95C` |
+| 21 | Hazard Orange | `#FF9D32` |
+| 22 | Laser Pink | `#F05A9D` |
+| 23 | Flash White | `#FFF8E8` |
+| 24 | Recess | `#171C2A` |
+| 25 | Dark Plate | `#323846` |
+| 26 | Brushed Steel | `#5D626D` |
+| 27 | Silver Plate | `#92969C` |
+| 28 | Ivory Edge | `#D6D1C5` |
+| 29 | Crimson Depth | `#621521` |
+| 30 | Pulse Red Shadow | `#8F1625` |
+| 31 | Pulse Red | `#C82436` |
+| 32 | Pulse Red Light | `#FF3D45` |
+| 33 | Pulse Coral | `#FF6842` |
+| 34 | Umber Depth | `#2C211B` |
+| 35 | Aged Bronze | `#654325` |
+| 36 | Warm Copper | `#BF883D` |
+| 37 | Hot Amber | `#EDB64B` |
+| 38 | Pale Gold | `#FFE6A0` |
+| 39 | Cobalt Hull | `#1D466D` |
+| 40 | Pulse Blue Shadow | `#113A75` |
+| 41 | Pulse Blue | `#216BC2` |
+| 42 | Pulse Blue Light | `#42B8FF` |
+| 43 | Pulse Ice | `#7AD9FF` |
+| 44 | Abyss Teal | `#0D3039` |
+| 45 | Reactor Teal | `#185460` |
+| 46 | Oxidized Teal | `#287F88` |
+| 47 | Ion Teal | `#48ADB0` |
+| 48 | Pale Cyan | `#B4F1DF` |
+| 49 | Void Violet | `#21182E` |
+| 50 | Violet Shadow | `#3C2A4D` |
+| 51 | Violet Plate | `#60436E` |
+| 52 | Violet Midlight | `#8C619B` |
+| 53 | Pale Violet | `#D8A5DC` |
+| 54 | Forest Shadow | `#172B24` |
+| 55 | Moss Plate | `#2C4B35` |
+| 56 | Muted Green | `#476F43` |
+| 57 | Leaf Green | `#5B984C` |
+| 58 | Pale Green | `#B2E58B` |
+| 59 | Wine Shadow | `#35182C` |
+| 60 | Wine Plate | `#61263F` |
+| 61 | Magenta Midtone | `#963758` |
+| 62 | Rose Light | `#C9477B` |
+| 63 | Pale Pink | `#FFA5C6` |
 
-| ID | Name | Hex | Primary role |
-|---:|---|---|---|
-| 16 | Neon Red | `#FF5A4D` | Enemy lasers and alerts |
-| 17 | Neon Gold | `#FFD35A` | Strong selection, rare rewards and impacts |
-| 18 | Plasma Cyan | `#72E0D1` | Allied lasers, reactors and overloads |
-| 19 | Shield Violet | `#B979C8` | Shields and special energy |
-| 20 | Pickup Green | `#72C95C` | Healing and positive upgrades |
-| 21 | Hazard Orange | `#FF9D32` | Mechanical danger and explosions |
-| 22 | Laser Pink | `#F05A9D` | Exotic weapons and boss attacks |
-| 23 | Flash White | `#FFF8E8` | Explosion cores and maximum highlights |
+## Shading ramps
 
-## Usage rules
+Read each row from shadow to highlight. Select adjacent shades as needed; do not use every shade in every sprite.
 
-- Use colors 00-15 for normal surfaces, shadows, text and interface structure.
-- Reserve colors 16-23 for light-emitting effects, interaction feedback and short-lived highlights.
-- Keep a regular sprite near six colors: one shadow, two body tones, one highlight and up to two accents.
-- Do not use pure black or pure white for regular surfaces. Void and Star White preserve visible detail at both ends of the range.
-- Keep emissive colors below roughly ten percent of a normal sprite surface.
-- Prefer hard color transitions and authored dithering over gradients on gameplay sprites.
-- UI glow should reuse the same hue with reduced opacity; it must not introduce a new color.
-
-## Family mapping
-
-| Family | Recommended colors |
+| Material or effect | Palette IDs, dark to light |
 |---|---|
-| UI and menus | 00, 01, 06, 08, 11, 12 |
-| Player ships | 02-06, 13-15, 18 |
-| Regular enemies | 02-05, 07-09, 16 |
-| Dread Ark and bosses | 00-05, 07-09, 11, 22 |
-| Asteroids and debris | 02-05, 10-11 |
-| Shields | 05, 15, 19, 23 |
-| Pickups | 12, 17, 20, 23 |
-| Explosions | 08-09, 17, 21, 23 |
+| Neutral hull | 00, 01, 24, 02, 25, 03, 26, 04, 27, 05, 28, 06 |
+| Red hull | 07, 29, 08, 09, 06 |
+| Red pulse | 30, 31, 32, 33, 23 |
+| Bronze / rock | 34, 10, 35, 11, 36, 37, 38 |
+| Blue hull | 13, 39, 14, 15, 06 |
+| Blue pulse | 40, 41, 42, 43, 23 |
+| Teal / reactor | 44, 45, 46, 47, 18, 48, 23 |
+| Violet / shield | 49, 50, 51, 52, 19, 53, 23 |
+| Green / pickup | 54, 55, 56, 57, 20, 58 |
+| Pink / exotic energy | 59, 60, 61, 62, 22, 63, 23 |
+| Explosion | 07, 08, 09, 21, 17, 38, 23 |
 
-## Migration order
+## Production rules
 
-1. Apply the palette to menus, HUD and screen transitions.
-2. Rework the player ship and its weapons to establish the allied ramp.
-3. Rework one regular enemy family to validate hostile readability.
-4. Rework projectiles, pickups and explosions with the emissive bank.
-5. Rework environments and bosses after the gameplay silhouettes are stable.
+- Use about 8-16 colors for a standard ship, selected from the shared ramps. Smaller effects can use 3-6; larger bosses and scenery can use more when their materials need it. These are working ranges, not hard limits.
+- Use at least a shadow, a midtone and a highlight for a readable material. Keep deeper recesses and narrow structural edges distinct.
+- Keep bright emissive accents localized, generally under ten percent of a normal hull. Preserve dark hulls against the space background.
+- Use hard pixel clusters and deliberate dithering. Do not add arbitrary RGB shades through antialiasing or smooth gradients.
+- Keep combat sprite alpha binary. Background layers may use partial alpha; their visible source RGB must still come from the palette. Runtime blending, lighting and modulation can produce other screen colors and are not assessed by an export RGB audit.
+- Keep the current red/blue Nomad team markings. Red and blue pulse colors 30-33 and 40-43 are taken exactly from the current player projectile exports, making those existing effects part of the common library.
+- Palette membership does not by itself guarantee faction readability. Compare the player, enemies, projectiles and background together at gameplay scale.
+- Load the shared palette in each editable source and verify its matching PNG after export. Merely loading a palette does not recolor existing RGB pixels.
+- Do not batch-quantize existing artwork. Correct a source and its matching export together, preserving clusters, alpha, frame layout, tags and pivots.
 
-Do not batch-convert sprites automatically. Each asset should be redrawn or manually indexed so silhouettes, contrast and authored clusters remain intentional.
+## Export validation
 
+Requires Python and Pillow. Run from the repository root:
+
+```sh
+python scripts/art/audit_palette.py assets/sprites/player/nomad-red.png assets/sprites/player/nomad-blue.png assets/sprites/player/player_shot.png assets/sprites/player/player_side_shot.png
+python scripts/art/audit_palette.py
+```
+
+Exit code 0 means every visible RGB value belongs to the palette; 1 reports exceptions. Fully transparent pixels are ignored. The checker does not modify files or validate editable sources, animation, alpha rules, scene reachability, or visual quality.
+
+## Historical benchmark
+
+The following records the earlier 24-color pass. The 64-color specification above supersedes its palette-size constraint.
 
 ## Dark Space Application — Accepted Benchmark
 

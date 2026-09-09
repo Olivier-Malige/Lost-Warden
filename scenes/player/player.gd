@@ -9,23 +9,30 @@ const UPGRADE_DAMAGE: UpgradeDefinition = preload("res://data/upgrades/damage.tr
 const UPGRADE_SIDE: UpgradeDefinition = preload("res://data/upgrades/side_shot.tres")
 const UPGRADE_FIRE_RATE: UpgradeDefinition = preload("res://data/upgrades/fire_rate.tres")
 const Layers := preload("res://core/collision_layers.gd")
+const PLAYER_ONE_TEXTURE: Texture2D = preload("res://assets/sprites/player/nomad-red.png")
+const PLAYER_TWO_TEXTURE: Texture2D = preload("res://assets/sprites/player/nomad-blue.png")
+const IDLE_ANIMATION := &"idle"
+const LEFT_ANIMATION := &"left"
+const RIGHT_ANIMATION := &"right"
+const EXPLODE_ANIMATION := &"explode"
 
-@onready var effects: PlayerEffects = $Effects
-@onready var ship_sprite: Sprite2D = $xWing
-@onready var animation_player: AnimationPlayer = $anim
-@onready var touched_reset_timer: Timer = $touchedReset
-@onready var shooting_delay_timer: Timer = $ShootingDelay
+@onready var effects: PlayerEffects = $Runtime/Effects
+@onready var ship_sprite: Sprite2D = $Visuals/sprite
+@onready var explosion_sprite: Sprite2D = $Visuals/ExplosionSprite
+@onready var animation_player: AnimationPlayer = $Runtime/anim
+@onready var touched_reset_timer: Timer = $Runtime/touchedReset
+@onready var shooting_delay_timer: Timer = $Runtime/ShootingDelay
 @onready var shield: Variant = $shield
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
-@onready var primary_origin: Marker2D = $shootFrom
-@onready var left_origin: Marker2D = $shootFromLeft
-@onready var right_origin: Marker2D = $shootFromRight
-@onready var continuous_beam: ContinuousBeam = $ContinuousBeam
-@onready var hit_audio: AudioStreamPlayer2D = $sound_Hit
-@onready var explosion_audio: AudioStreamPlayer2D = $sound_Explode
-@onready var shooting_audio: AudioStreamPlayer2D = $sound_Shooting
-@onready var normal_beam_audio: AudioStreamPlayer2D = $sound_Beam_normal
-@onready var full_beam_audio: AudioStreamPlayer2D = $sound_Beam_full
+@onready var primary_origin: Marker2D = $Weapons/shootFrom
+@onready var left_origin: Marker2D = $Weapons/shootFromLeft
+@onready var right_origin: Marker2D = $Weapons/shootFromRight
+@onready var continuous_beam: ContinuousBeam = $Weapons/ContinuousBeam
+@onready var hit_audio: AudioStreamPlayer2D = $Audio/sound_Hit
+@onready var explosion_audio: AudioStreamPlayer2D = $Audio/sound_Explode
+@onready var shooting_audio: AudioStreamPlayer2D = $Audio/sound_Shooting
+@onready var normal_beam_audio: AudioStreamPlayer2D = $Audio/sound_Beam_normal
+@onready var full_beam_audio: AudioStreamPlayer2D = $Audio/sound_Beam_full
 
 enum State { ACTIVE, HIT, DYING, DEAD }
 
@@ -47,6 +54,7 @@ var _recoil_tween: Tween
 var _ship_rest_position := Vector2.ZERO
 var _motion := Vector2.ZERO
 var _beam_overdrive_left := 0.0
+var _movement_animation := StringName()
 
 func _ready() -> void:
 	energy = mini(STATS.starting_energy, STATS.energy_max)
@@ -61,9 +69,11 @@ func _setup_components() -> void:
 
 func _setup_player() -> void:
 	id_Player = "player2" if set_Player_2 else "player1"
-	animation_player.play(id_Player + "_idle")
+	ship_sprite.texture = PLAYER_TWO_TEXTURE if set_Player_2 else PLAYER_ONE_TEXTURE
+	_movement_animation = IDLE_ANIMATION
+	animation_player.play(_movement_animation)
 	var charge_texture := load("res://assets/sprites/player/" + id_Player + "_particle.png") as Texture2D
-	effects.setup(charge_texture)
+	effects.setup(charge_texture, set_Player_2)
 	_ship_rest_position = ship_sprite.position
 	update_controller()
 	update_energy()
@@ -88,7 +98,7 @@ func _process(delta: float) -> void:
 	if state == State.DYING or state == State.DEAD:
 		return
 	energy = min(energy, STATS.energy_max)
-	_update_effects(_motion)
+	_update_effects(_motion, delta)
 
 func _physics_process(delta: float) -> void:
 	if state == State.DYING or state == State.DEAD:
@@ -123,12 +133,13 @@ func _movement_input() -> Vector2:
 	return motion
 
 func _update_movement_animation(horizontal_motion: float) -> void:
-	var animation := id_Player + "_idle"
+	var animation := IDLE_ANIMATION
 	if horizontal_motion < 0.0:
-		animation = id_Player + "_left"
+		animation = LEFT_ANIMATION
 	elif horizontal_motion > 0.0:
-		animation = id_Player + "_right"
-	if animation_player.current_animation != animation:
+		animation = RIGHT_ANIMATION
+	if _movement_animation != animation:
+		_movement_animation = animation
 		animation_player.play(animation)
 
 func _update_weapons(delta: float) -> void:
@@ -183,8 +194,8 @@ func reset_weapon_input() -> void:
 	shooting = false
 	_stop_beam()
 
-func _update_effects(motion: Vector2) -> void:
-	effects.update_reactors(motion.y)
+func _update_effects(motion: Vector2, delta: float) -> void:
+	effects.update_reactor(motion.y, delta)
 
 func add_beam_charge(amount: float) -> void:
 	if state == State.DYING or state == State.DEAD:
@@ -303,10 +314,15 @@ func debug_max_stats() -> void:
 	Events.upgrade_feedback_requested.emit(id_Player, "DEBUG MAX", false)
 
 func _on_anim_animation_finished(n: StringName) -> void:
-	if n == id_Player + "_explode":
+	if n == EXPLODE_ANIMATION:
 		state = State.DEAD
 		Events.player_died.emit()
 		queue_free()
+
+func play_death_effect() -> void:
+	ship_sprite.visible = false
+	explosion_sprite.visible = true
+	explosion_sprite.frame = 0
 
 func _on_player_area_entered(area: Area2D) -> void:
 	if state != State.ACTIVE and state != State.HIT:

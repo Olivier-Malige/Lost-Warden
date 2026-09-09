@@ -11,3 +11,6 @@
 # Local AIDD tooling
 /.agents/skills/aidd-*/
 /.codex/
+
+# GDSkills agent vision scratch (do not commit)
+.gdskills/
