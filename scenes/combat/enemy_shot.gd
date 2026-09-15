@@ -1,6 +1,6 @@
 extends Shot
 
-const SPEED_Y := 550.0
+const SPEED_Y := 275.0
 const _ProjectileGlow := preload("res://scenes/combat/projectile_glow.gd")
 
 @export var damage := 10

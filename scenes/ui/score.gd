@@ -1,7 +1,6 @@
 extends Node2D
 
 const DESTROY_DELAY = 1
-const SCALE_TIERS := [[1000, 1.25], [500, 1.2], [200, 1.15], [100, 1.1], [50, 1.05]]
 var setScore := 0
 var combo := 1
 var multiplier := 1.0
@@ -23,19 +22,15 @@ func add_score(points: int, current_combo: int, current_multiplier: float, targe
 
 func _refresh_display() -> void:
 	$Label.scale = Vector2.ONE
-	for tier in SCALE_TIERS:
-		if setScore >= tier[0]:
-			$Label.set_scale(Vector2(tier[1], tier[1]))
-			break
 	$Label.set_text("+" + str(setScore))
 	if combo >= 2:
 		$MultiplierLabel.set_text("x" + str(snapped(multiplier, 0.1)))
 		$MultiplierLabel.show()
-		$Label.offset_left = 2.0
+		$Label.offset_left = 1.0
 		$Label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	else:
 		$MultiplierLabel.hide()
-		$Label.offset_left = -90.0
+		$Label.offset_left = -45.0
 		$Label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
 func _on_destroyDelay_timeout() -> void:

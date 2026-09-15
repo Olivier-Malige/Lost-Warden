@@ -8,7 +8,7 @@
 enabled = true
 editor_only = false
 texture = ExtResource( 1 )
-offset = Vector2( 0, 0 )
+offset = Vector2(0, 0)
 texture_scale = 1.0
 color = Color( 1, 1, 1, 1 )
 energy = 1.0
@@ -34,7 +34,7 @@ delay = 0.08
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." index="0"]
 
-rect = Rect2( -10, -10, 20, 20 )
+rect = Rect2(-5, -5, 10, 10)
 
 [connection signal="screen_entered" from="VisibleOnScreenNotifier2D" to="." method="_on_screen_entered"]
 

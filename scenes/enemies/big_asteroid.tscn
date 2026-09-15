@@ -8,8 +8,7 @@
 [ext_resource type="Resource" path="res://data/enemies/big_asteroid.tres" id=6]
 
 [sub_resource type="CircleShape2D" id=1]
-
-radius = 10.0
+radius = 13
 
 [sub_resource type="Animation" id=2]
 
@@ -33,9 +32,9 @@ tracks/0/keys = {
 [sub_resource type="Animation" id=3]
 
 resource_name = "hit1"
-length = 0.5
+length = 0.12
 loop_mode = 0
-step = 0.1
+step = 0.01
 tracks/0/type = "value"
 tracks/0/path = NodePath("SpriteAsteroid:frame")
 tracks/0/interp = 1
@@ -43,18 +42,18 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PackedFloat32Array( 0, 0.1, 0.2, 0.3 ),
-"transitions": PackedFloat32Array( 1, 1, 1, 1 ),
+"times": PackedFloat32Array(0, 0.05),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ 1, 0, 1, 0 ]
+"values": [1, 0]
 }
 
 [sub_resource type="Animation" id=4]
 
 resource_name = "hit2"
-length = 0.5
+length = 0.12
 loop_mode = 0
-step = 0.1
+step = 0.01
 tracks/0/type = "value"
 tracks/0/path = NodePath("SpriteAsteroid:frame")
 tracks/0/interp = 1
@@ -62,18 +61,18 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PackedFloat32Array( 0, 0.1, 0.2, 0.3 ),
-"transitions": PackedFloat32Array( 1, 1, 1, 1 ),
+"times": PackedFloat32Array(0, 0.05),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ 10, 9, 10, 9 ]
+"values": [10, 9]
 }
 
 [sub_resource type="Animation" id=5]
 
 resource_name = "hit3"
-length = 0.5
+length = 0.12
 loop_mode = 0
-step = 0.1
+step = 0.01
 tracks/0/type = "value"
 tracks/0/path = NodePath("SpriteAsteroid:frame")
 tracks/0/interp = 1
@@ -81,18 +80,18 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PackedFloat32Array( 0, 0.1, 0.2, 0.3 ),
-"transitions": PackedFloat32Array( 1, 1, 1, 1 ),
+"times": PackedFloat32Array(0, 0.05),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ 12, 11, 12, 11 ]
+"values": [12, 11]
 }
 
 [sub_resource type="Animation" id=6]
 
 resource_name = "hit4"
-length = 0.5
+length = 0.12
 loop_mode = 0
-step = 0.1
+step = 0.01
 tracks/0/type = "value"
 tracks/0/path = NodePath("SpriteAsteroid:frame")
 tracks/0/interp = 1
@@ -100,10 +99,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PackedFloat32Array( 0, 0.1, 0.2, 0.3 ),
-"transitions": PackedFloat32Array( 1, 1, 1, 1 ),
+"times": PackedFloat32Array(0, 0.05),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ 14, 13, 14, 13 ]
+"values": [14, 13]
 }
 
 [sub_resource type="Animation" id=7]
@@ -196,6 +195,7 @@ _data = {
 "asteroid",
 ]]
 
+scale = Vector2(2, 2)
 input_pickable = true
 gravity_direction = Vector2( 0, 1 )
 gravity = 98.0
@@ -208,7 +208,7 @@ definition = ExtResource( 6 )
 
 [node name="SpriteAsteroid" type="Sprite2D" parent="." index="0"]
 
-scale = Vector2( 4, 4 )
+scale = Vector2(1, 1)
 texture = ExtResource( 3 )
 vframes = 2
 hframes = 9
@@ -217,8 +217,8 @@ _sections_unfolded = [ "Animation", "Transform3D", "Visibility" ]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1"]
 
-position = Vector2( -0.090275, -1.35961 )
-scale = Vector2( 2.72887, 2.53009 )
+position = Vector2(0, 0)
+scale = Vector2(1, 1)
 shape = SubResource( 1 )
 _sections_unfolded = [ "Transform3D" ]
 
@@ -237,7 +237,7 @@ autoplay = ""
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." index="3"]
 
-rect = Rect2( -10, -10, 20, 20 )
+rect = Rect2(-2.5, -2.5, 5, 5)
 
 [node name="sound_Hit" type="AudioStreamPlayer2D" parent="." index="4"]
 
@@ -251,7 +251,7 @@ area_mask = 1
 
 [node name="sound_Explode" type="AudioStreamPlayer2D" parent="." index="5"]
 
-position = Vector2( -0.409225, 3.9239 )
+position = Vector2(-0.10230625, 0.980975)
 scale = Vector2( 1, 1.08546 )
 stream = ExtResource( 5 )
 volume_db = 0.0

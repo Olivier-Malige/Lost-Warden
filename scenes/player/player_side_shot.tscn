@@ -5,8 +5,8 @@
 [ext_resource path="res://data/player/side_projectile_vfx_config.tres" type="Resource" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
-
-size = Vector2( 38.7178, 20 )
+size = Vector2(2, 3)
+resource_local_to_scene = true
 
 [sub_resource type="Animation" id=2]
 
@@ -36,10 +36,10 @@ tracks/1/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( -1.9806, 0.0311905 ) ]
+"values": [ Vector2(0, -1.1666667) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("CollisionShape2D:scale")
+tracks/2/path = NodePath("CollisionShape2D:shape:size")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -48,7 +48,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( 0.109206, 0.9935 ) ]
+"values": [ Vector2(4, 5) ]
 }
 
 [sub_resource type="Animation" id=3]
@@ -70,7 +70,7 @@ tracks/0/keys = {
 "values": [ 4 ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("CollisionShape2D:scale")
+tracks/1/path = NodePath("CollisionShape2D:shape:size")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -79,7 +79,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( 0.212665, 1.22087 ) ]
+"values": [ Vector2(6, 8) ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("CollisionShape2D:position")
@@ -91,7 +91,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( -0.181429, -2.15352 ) ]
+"values": [ Vector2(0, -0.66666669) ]
 }
 
 [sub_resource type="Animation" id=4]
@@ -122,10 +122,10 @@ tracks/1/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( 0.204107, -0.0330657 ) ]
+"values": [ Vector2(0, -0.66666669) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("CollisionShape2D:scale")
+tracks/2/path = NodePath("CollisionShape2D:shape:size")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -134,7 +134,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( 0.218413, 1.00833 ) ]
+"values": [ Vector2(6, 6) ]
 }
 
 [sub_resource type="Animation" id=5]
@@ -165,10 +165,10 @@ tracks/1/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( -1.92659, 1.98915 ) ]
+"values": [ Vector2(0, -1.6666667) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("CollisionShape2D:scale")
+tracks/2/path = NodePath("CollisionShape2D:shape:size")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -177,7 +177,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( 0.110016, 0.817264 ) ]
+"values": [ Vector2(4, 4) ]
 }
 
 [sub_resource type="Animation" id=6]
@@ -208,10 +208,10 @@ tracks/1/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( -1.97892, 6.07144 ) ]
+"values": [ Vector2(0, -2.1666667) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("CollisionShape2D:scale")
+tracks/2/path = NodePath("CollisionShape2D:shape:size")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -220,7 +220,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( 0.107675, 0.422723 ) ]
+"values": [ Vector2(2, 3) ]
 }
 
 [sub_resource type="Animation" id=7]
@@ -251,10 +251,10 @@ tracks/1/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( -2.13593, -0.156674 ) ]
+"values": [ Vector2(0, -1.1666667) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("CollisionShape2D:scale")
+tracks/2/path = NodePath("CollisionShape2D:shape:size")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -263,7 +263,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( 0.105335, 0.99843 ) ]
+"values": [ Vector2(4, 5) ]
 }
 
 [sub_resource type="Animation" id=8]
@@ -285,7 +285,7 @@ tracks/0/keys = {
 "values": [ 9 ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("CollisionShape2D:scale")
+tracks/1/path = NodePath("CollisionShape2D:shape:size")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -294,7 +294,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( 0.210669, 1.2118 ) ]
+"values": [ Vector2(6, 8) ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("CollisionShape2D:position")
@@ -306,7 +306,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( 0.00988564, -1.8838 ) ]
+"values": [ Vector2(0, -0.66666669) ]
 }
 
 [sub_resource type="Animation" id=9]
@@ -337,10 +337,10 @@ tracks/1/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( 0.00988594, 0.0526758 ) ]
+"values": [ Vector2(0, -0.66666669) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("CollisionShape2D:scale")
+tracks/2/path = NodePath("CollisionShape2D:shape:size")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -349,7 +349,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( 0.215351, 1.01453 ) ]
+"values": [ Vector2(6, 6) ]
 }
 
 [sub_resource type="Animation" id=10]
@@ -380,10 +380,10 @@ tracks/1/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( -1.97892, 1.88447 ) ]
+"values": [ Vector2(0, -1.6666667) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("CollisionShape2D:scale")
+tracks/2/path = NodePath("CollisionShape2D:shape:size")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -392,7 +392,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( 0.102994, 0.80116 ) ]
+"values": [ Vector2(4, 4) ]
 }
 
 [sub_resource type="Animation" id=11]
@@ -423,10 +423,10 @@ tracks/1/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( -2.18827, 6.0191 ) ]
+"values": [ Vector2(0, -2.1666667) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("CollisionShape2D:scale")
+tracks/2/path = NodePath("CollisionShape2D:shape:size")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -435,7 +435,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array( 0 ),
 "transitions": PackedFloat32Array( 1 ),
 "update": 0,
-"values": [ Vector2( 0.102994, 0.410645 ) ]
+"values": [ Vector2(2, 3) ]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1"]
@@ -454,7 +454,7 @@ _data = {
 
 [node name="playerSideShot" type="Area2D"]
 
-position = Vector2( 0, -10 )
+position = Vector2(0, -3.3333333)
 input_pickable = true
 gravity_direction = Vector2( 0, 1 )
 gravity = 98.0
@@ -464,7 +464,7 @@ audio_bus_override = false
 audio_bus_name = "Master"
 script = ExtResource( 1 )
 vfx_config = ExtResource( 3 )
-speedY = -1080
+speedY = -540
 speedX = 0
 rotate = false
 playerShot = true
@@ -478,8 +478,8 @@ power_Full = 1.0
 
 [node name="Sprite2D" type="Sprite2D" parent="." index="0"]
 
-position = Vector2( 0, -2 )
-scale = Vector2( 3, 3 )
+position = Vector2(0, -0.66666667)
+scale = Vector2(1, 1)
 texture = ExtResource( 2 )
 vframes = 2
 hframes = 5
@@ -487,14 +487,14 @@ _sections_unfolded = [ "Animation", "Region", "Transform3D", "Visibility", "Z" ]
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." index="1"]
 
-position = Vector2( -1.87426, 6.01053 )
+position = Vector2(-0.62475333, 2.00351)
 scale = Vector2( 0.209348, 0.417841 )
-rect = Rect2( -10, -10, 20, 20 )
+rect = Rect2(-3.3333333, -3.3333333, 6.6666667, 6.6666667)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="2"]
 
-position = Vector2( -1.97892, 6.07144 )
-scale = Vector2( 0.107675, 0.422723 )
+position = Vector2(0, -2.1666667)
+scale = Vector2(1, 1)
 shape = SubResource( 1 )
 _sections_unfolded = [ "Transform3D" ]
 

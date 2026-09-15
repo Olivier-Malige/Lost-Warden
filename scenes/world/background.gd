@@ -1,9 +1,9 @@
 extends ParallaxBackground
 
-const BASE_SPEED_Y := 80.0
-const MIN_SPEED_Y := 60.0
-const MAX_SPEED_Y := 100.0
-const SPEED_RESPONSE := 130.0
+const BASE_SPEED_Y := 40.0
+const MIN_SPEED_Y := 30.0
+const MAX_SPEED_Y := 50.0
+const SPEED_RESPONSE := 65.0
 
 @export var speed_Y: float = BASE_SPEED_Y
 @export var speed_X: float = 0.0

@@ -20,15 +20,22 @@ func _on_shield_area_entered(shot: Shot) -> void:
 		shot.trowbackByShield = true
 		shot.speedY = -shot.speedY
 		shot.speedX = -shot.speedX
+		if $ChargeUseTimer.is_stopped():
+			$ChargeUseTimer.start()
 		if $AnimationPlayer.current_animation != get_parent().id_Player + animPower + "_Hit":
 			$AnimationPlayer.play(get_parent().id_Player + animPower + "_Hit")
 
 func _set_AnimPower() -> void:
 	visible = power > 0
+	$CollisionShape2D.set_deferred("disabled", power <= 0)
+	set_deferred("monitoring", power > 0)
 	if power > 0:
 		animPower = POWER_ANIMS[power]
 
 func _set_Power(up: int) -> void:
+	$ChargeUseTimer.stop()
+	$AnimationPlayer.stop()
+	$ThrowbackEcho.self_modulate.a = 0.0
 	power = clampi(power + up, 0, 6)
 	_set_AnimPower()
 	if power > 0:
@@ -37,4 +44,10 @@ func _set_Power(up: int) -> void:
 
 func _on_AnimationPlayer_animation_finished(n: StringName) -> void:
 	if n == get_parent().id_Player + animPower + "_Hit":
-		self.power = -1
+		$ThrowbackEcho.self_modulate.a = 0.0
+		if power > 0:
+			$AnimationPlayer.play(get_parent().id_Player + animPower)
+
+# Keep the original charge-use window independent of the shorter visual response.
+func _on_charge_use_timer_timeout() -> void:
+	self.power = -1

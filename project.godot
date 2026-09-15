@@ -12,10 +12,10 @@ config_version=5
 
 config/name="Lost Warden"
 config/version="0.8.0"
-config/release_label="alpha-8"
 run/main_scene="res://scenes/main/main.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://assets/ui/icon.png"
+config/release_label="alpha-8"
 
 [autoload]
 
@@ -25,10 +25,14 @@ _mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 
 [display]
 
-window/size/viewport_width=1066
-window/size/viewport_height=800
+window/size/viewport_width=640
+window/size/viewport_height=400
 window/size/mode=3
+window/size/window_width_override=1280
+window/size/window_height_override=800
 window/stretch/mode="viewport"
+window/stretch/aspect="keep"
+window/stretch/scale_mode="fractional"
 
 [editor_plugins]
 

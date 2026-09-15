@@ -23,7 +23,7 @@ enum Mode {
 @export_range(0.0, 500.0, 1.0) var amplitude := 0.0
 @export_range(0.05, 20.0, 0.05) var period := 1.0
 @export_range(0.0, 2000.0, 1.0) var min_x := 0.0
-@export_range(0.0, 2000.0, 1.0) var max_x := 1066.0
+@export_range(0.0, 2000.0, 1.0) var max_x := 640.0
 @export var synchronize_formation := false
 
 @export_group("Patrol")

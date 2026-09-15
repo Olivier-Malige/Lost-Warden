@@ -1,13 +1,12 @@
-[gd_resource type="Resource" script_class="UpgradeDefinition" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="UpgradeDefinition" format=3 uid="uid://cakufa0whqwco"]
 
-[ext_resource type="Script" path="res://data/upgrades/upgrade_definition.gd" id="1"]
+[ext_resource type="Script" uid="uid://drb0t8u1hmjjh" path="res://data/upgrades/upgrade_definition.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = &"speed"
-effect = 0
 anim = &"speedUp"
 weight = 14
-value = 11.25
+value = 5.625
 max_rank = 8
 hud_label = &"SPD"

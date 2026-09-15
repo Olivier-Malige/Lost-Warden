@@ -27,58 +27,58 @@ speed_X = -60
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 100.0
-offset_top = 60.0
-offset_right = -100.0
-offset_bottom = 460.0
+offset_left = 50
+offset_top = 30
+offset_right = -50
+offset_bottom = 230
 grow_horizontal = 2
 mouse_filter = 2
 
 [node name="Content" type="VBoxContainer" parent="TitleArea"]
 
-custom_minimum_size = Vector2( 560, 180 )
+custom_minimum_size = Vector2(280, 90)
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 4
 
 [node name="LostWarden" type="Label" parent="TitleArea/Content"]
 
-custom_minimum_size = Vector2( 0, 110 )
+custom_minimum_size = Vector2(0, 55)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
 theme_override_colors/font_shadow_color = Color( 0.611765, 0.12549, 0.12549, 1 )
-theme_override_constants/shadow_offset_x = 6
-theme_override_constants/shadow_offset_y = 4
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 2
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 96
+theme_override_font_sizes/font_size = 48
 text = "LOST WARDEN"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Tagline" type="Label" parent="TitleArea/Content"]
 
-custom_minimum_size = Vector2( 0, 40 )
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 3 )
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 14
 text = "ARCADE STARFIGHTER"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Version" type="Label" parent="TitleArea/Content"]
 
-custom_minimum_size = Vector2( 0, 22 )
+custom_minimum_size = Vector2(0, 11)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.611765, 0.666667, 0.752941, 1 )
 theme_override_fonts/font = ExtResource( 3 )
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 8
 text = "ALPHA-8"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="TitleLine" type="ColorRect" parent="TitleArea/Content"]
 
-custom_minimum_size = Vector2( 0, 3 )
+custom_minimum_size = Vector2(0, 1.5)
 layout_mode = 2
 color = Color( 0.611765, 0.12549, 0.12549, 0.95 )
 

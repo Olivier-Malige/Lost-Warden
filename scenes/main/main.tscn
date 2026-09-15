@@ -10,13 +10,13 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxLoader"]
 bg_color = Color( 0.0627451, 0.0823529, 0.133333, 0.96 )
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
 border_color = Color( 0.611765, 0.12549, 0.12549, 1 )
 shadow_color = Color( 0.611765, 0.12549, 0.12549, 0.45 )
-shadow_size = 9
+shadow_size = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxProgressBackground"]
 bg_color = Color( 0.133333, 0.152941, 0.207843, 0.95 )
@@ -34,7 +34,7 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color( 0.882353, 0.352941, 0.262745, 1 )
 shadow_color = Color( 0.611765, 0.12549, 0.12549, 0.6 )
-shadow_size = 5
+shadow_size = 2
 
 [sub_resource type="Animation" id="AnimationLoader"]
 resource_name = "start"
@@ -94,7 +94,7 @@ script = ExtResource( 1 )
 
 show_behind_parent = true
 z_index = -5
-position = Vector2( 533, 400 )
+position = Vector2(320, 200)
 script = ExtResource( 7 )
 
 [node name="loader" type="Control" parent="."]
@@ -142,108 +142,108 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 100.0
-offset_right = -100.0
+offset_left = 50
+offset_right = -50
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
 [node name="Panel" type="PanelContainer" parent="loader/Center"]
 
-custom_minimum_size = Vector2( 680, 470 )
+custom_minimum_size = Vector2(340, 235)
 layout_mode = 2
 theme_override_styles/panel = SubResource( "StyleBoxLoader" )
 
 [node name="Margin" type="MarginContainer" parent="loader/Center/Panel"]
 
 layout_mode = 2
-theme_override_constants/margin_left = 36
-theme_override_constants/margin_top = 28
-theme_override_constants/margin_right = 36
-theme_override_constants/margin_bottom = 28
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 14
 
 [node name="Content" type="VBoxContainer" parent="loader/Center/Panel/Margin"]
 
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 6
 
 [node name="Studio" type="Label" parent="loader/Center/Panel/Margin/Content"]
 
-custom_minimum_size = Vector2( 0, 76 )
+custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.721569, 0.713725, 0.682353, 1 )
 theme_override_colors/font_shadow_color = Color( 0.611765, 0.12549, 0.12549, 1 )
-theme_override_constants/shadow_offset_x = 6
-theme_override_constants/shadow_offset_y = 4
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 2
 theme_override_fonts/font = ExtResource( 5 )
-theme_override_font_sizes/font_size = 68
+theme_override_font_sizes/font_size = 32
 text = "ARKNOID"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Presents" type="Label" parent="loader/Center/Panel/Margin/Content"]
 
-custom_minimum_size = Vector2( 0, 28 )
+custom_minimum_size = Vector2(0, 14)
 layout_mode = 2
 modulate = Color( 1, 1, 1, 0 )
 theme_override_colors/font_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 6 )
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 8
 text = "PRESENTS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="CyanLine" type="ColorRect" parent="loader/Center/Panel/Margin/Content"]
 
-custom_minimum_size = Vector2( 0, 5 )
+custom_minimum_size = Vector2(0, 2.5)
 layout_mode = 2
 color = Color( 0.611765, 0.12549, 0.12549, 1 )
 
 [node name="LostWarden" type="Label" parent="loader/Center/Panel/Margin/Content"]
 
-custom_minimum_size = Vector2( 0, 88 )
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
 theme_override_colors/font_shadow_color = Color( 0.611765, 0.12549, 0.12549, 1 )
-theme_override_constants/shadow_offset_x = 6
-theme_override_constants/shadow_offset_y = 4
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 2
 theme_override_fonts/font = ExtResource( 5 )
-theme_override_font_sizes/font_size = 72
+theme_override_font_sizes/font_size = 32
 text = "LOST WARDEN"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MagentaLine" type="ColorRect" parent="loader/Center/Panel/Margin/Content"]
 
-custom_minimum_size = Vector2( 0, 5 )
+custom_minimum_size = Vector2(0, 2.5)
 layout_mode = 2
 color = Color( 0.611765, 0.12549, 0.12549, 1 )
 
 [node name="Tagline" type="Label" parent="loader/Center/Panel/Margin/Content"]
 
-custom_minimum_size = Vector2( 0, 36 )
+custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 6 )
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 14
 text = "ARCADE STARFIGHTER"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="BootStatus" type="Label" parent="loader/Center/Panel/Margin/Content"]
 
-custom_minimum_size = Vector2( 0, 24 )
+custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.882353, 0.352941, 0.262745, 1 )
 theme_override_fonts/font = ExtResource( 6 )
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 8
 text = "INITIALIZING FLIGHT SYSTEMS..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Progress" type="ProgressBar" parent="loader/Center/Panel/Margin/Content"]
 
-custom_minimum_size = Vector2( 0, 18 )
+custom_minimum_size = Vector2(0, 9)
 layout_mode = 2
 step = 5.0
 theme_override_styles/background = SubResource( "StyleBoxProgressBackground" )
@@ -252,11 +252,11 @@ show_percentage = false
 
 [node name="SkipHint" type="Label" parent="loader/Center/Panel/Margin/Content"]
 
-custom_minimum_size = Vector2( 0, 24 )
+custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
 theme_override_fonts/font = ExtResource( 6 )
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 8
 text = "PRESS START TO SKIP"
 horizontal_alignment = 1
 vertical_alignment = 1

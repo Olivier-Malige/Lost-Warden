@@ -1,16 +1,15 @@
 [gd_scene load_steps=4 format=3]
 
 [ext_resource path="res://scenes/combat/enemy_shot.gd" type="Script" id=1]
-[ext_resource path="res://assets/sprites/combat/interceptor_side_laser.png" type="Texture2D" id=2]
+[ext_resource path="res://assets/sprites/combat/enemy_side_laser.svg" type="Texture2D" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-
-size = Vector2( 22.18, 20 )
+size = Vector2(3, 10)
 
 [node name="interceptorSideShot" type="Area2D"]
 
-position = Vector2( 2.1485, 14 )
-scale = Vector2( 1.00608, 1 )
+position = Vector2(0.537125, 3.5)
+scale = Vector2(1, 1)
 input_pickable = true
 gravity_direction = Vector2( 0, 1 )
 gravity = 98.0
@@ -29,24 +28,21 @@ noDamageToGroup = ""
 
 [node name="Sprite2D" type="Sprite2D" parent="." index="0"]
 
-position = Vector2( 0, -2 )
-scale = Vector2( 4, 4 )
+position = Vector2(0, 0)
+scale = Vector2(1, 1)
 texture = ExtResource( 2 )
 _sections_unfolded = [ "Transform3D" ]
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." index="1"]
 
-position = Vector2( -1.96389, -2.87489 )
-scale = Vector2( 0.210662, 1 )
-rect = Rect2( -10, -10, 20, 20 )
+rect = Rect2(-1.5, -5, 3, 10)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="2"]
 
-position = Vector2( -1.84745, 3.55901 )
-scale = Vector2( 0.234321, 0.453461 )
+position = Vector2(0, 0)
+scale = Vector2(1, 1)
 shape = SubResource( 1 )
 
 [connection signal="area_entered" from="." to="." method="_on_shot_area_entered"]
 
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_screen_exited"]
-

@@ -7,20 +7,20 @@
 
 [sub_resource type="StyleBoxFlat" id="StylePanel"]
 bg_color = Color(0.0627451, 0.0823529, 0.133333, 0.96)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.611765, 0.12549, 0.12549, 0.95)
-shadow_color = Color(0.611765, 0.12549, 0.12549, 0.4)
-shadow_size = 8
-
-[sub_resource type="StyleBoxFlat" id="StyleCard"]
-bg_color = Color(0.133333, 0.152941, 0.207843, 0.86)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
+border_color = Color(0.611765, 0.12549, 0.12549, 0.95)
+shadow_color = Color(0.611765, 0.12549, 0.12549, 0.4)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleCard"]
+bg_color = Color(0.133333, 0.152941, 0.207843, 0.86)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
 border_color = Color(0.611765, 0.12549, 0.12549, 0.7)
 
 [node name="hiscore" type="Control"]
@@ -52,68 +52,68 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 100.0
-offset_right = -100.0
+offset_left = 50
+offset_right = -50
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
 [node name="Panel" type="PanelContainer" parent="Center"]
-custom_minimum_size = Vector2(720, 520)
+custom_minimum_size = Vector2(360, 260)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StylePanel")
 
 [node name="Margin" type="MarginContainer" parent="Center/Panel"]
 layout_mode = 2
-theme_override_constants/margin_left = 34
-theme_override_constants/margin_top = 28
-theme_override_constants/margin_right = 34
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_left = 17
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 17
+theme_override_constants/margin_bottom = 12
 
 [node name="Content" type="VBoxContainer" parent="Center/Panel/Margin"]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 7
 
 [node name="Title" type="Label" parent="Center/Panel/Margin/Content"]
-custom_minimum_size = Vector2(0, 78)
+custom_minimum_size = Vector2(0, 39)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.839216, 0.839216, 0.32549, 1)
 theme_override_colors/font_shadow_color = Color(0.611765, 0.12549, 0.12549, 1)
-theme_override_constants/shadow_offset_x = 5
-theme_override_constants/shadow_offset_y = 3
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
 theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 62
+theme_override_font_sizes/font_size = 32
 text = "HISCORES"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Line" type="ColorRect" parent="Center/Panel/Margin/Content"]
-custom_minimum_size = Vector2(0, 3)
+custom_minimum_size = Vector2(0, 1.5)
 layout_mode = 2
 color = Color(0.611765, 0.12549, 0.12549, 0.95)
 
 [node name="Records" type="HBoxContainer" parent="Center/Panel/Margin/Content"]
-custom_minimum_size = Vector2(0, 300)
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 10
 alignment = 1
 
 [node name="Solo" type="PanelContainer" parent="Center/Panel/Margin/Content/Records"]
-custom_minimum_size = Vector2(305, 280)
+custom_minimum_size = Vector2(152.5, 140)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleCard")
 
 [node name="Card" type="VBoxContainer" parent="Center/Panel/Margin/Content/Records/Solo"]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 4
 alignment = 1
 
 [node name="Mode" type="Label" parent="Center/Panel/Margin/Content/Records/Solo/Card"]
-custom_minimum_size = Vector2(0, 56)
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.839216, 0.839216, 0.32549, 1)
 theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 38
+theme_override_font_sizes/font_size = 16
 text = "SOLO"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -122,16 +122,16 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.952941, 0.921569, 0.866667, 1)
 theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 12
 text = "BEST SCORE"
 horizontal_alignment = 1
 
 [node name="ScoreValue" type="Label" parent="Center/Panel/Margin/Content/Records/Solo/Card"]
-custom_minimum_size = Vector2(0, 48)
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.882353, 0.352941, 0.262745, 1)
 theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 12
 text = "000000"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -140,36 +140,36 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.952941, 0.921569, 0.866667, 1)
 theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 12
 text = "HIGHEST WAVE"
 horizontal_alignment = 1
 
 [node name="WaveValue" type="Label" parent="Center/Panel/Margin/Content/Records/Solo/Card"]
-custom_minimum_size = Vector2(0, 48)
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.839216, 0.839216, 0.32549, 1)
 theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 34
+theme_override_font_sizes/font_size = 12
 text = "00"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Coop" type="PanelContainer" parent="Center/Panel/Margin/Content/Records"]
-custom_minimum_size = Vector2(305, 280)
+custom_minimum_size = Vector2(152.5, 140)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleCard")
 
 [node name="Card" type="VBoxContainer" parent="Center/Panel/Margin/Content/Records/Coop"]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 4
 alignment = 1
 
 [node name="Mode" type="Label" parent="Center/Panel/Margin/Content/Records/Coop/Card"]
-custom_minimum_size = Vector2(0, 56)
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.839216, 0.839216, 0.32549, 1)
 theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 38
+theme_override_font_sizes/font_size = 16
 text = "CO-OP"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -178,16 +178,16 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.952941, 0.921569, 0.866667, 1)
 theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 12
 text = "BEST SCORE"
 horizontal_alignment = 1
 
 [node name="ScoreValue" type="Label" parent="Center/Panel/Margin/Content/Records/Coop/Card"]
-custom_minimum_size = Vector2(0, 48)
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.882353, 0.352941, 0.262745, 1)
 theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 12
 text = "000000"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -196,26 +196,26 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.952941, 0.921569, 0.866667, 1)
 theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 12
 text = "HIGHEST WAVE"
 horizontal_alignment = 1
 
 [node name="WaveValue" type="Label" parent="Center/Panel/Margin/Content/Records/Coop/Card"]
-custom_minimum_size = Vector2(0, 48)
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.839216, 0.839216, 0.32549, 1)
 theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 34
+theme_override_font_sizes/font_size = 12
 text = "00"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ReturnHint" type="Label" parent="Center/Panel/Margin/Content"]
-custom_minimum_size = Vector2(0, 32)
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.952941, 0.921569, 0.866667, 1)
 theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 12
 text = "PRESS START TO RETURN"
 horizontal_alignment = 1
 vertical_alignment = 1

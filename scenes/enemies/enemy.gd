@@ -6,6 +6,7 @@ const EliteIndicatorScene := preload("res://scenes/enemies/elite_indicator.gd")
 const PowerUpScene := preload("res://scenes/ui/power_up.tscn")
 const PlasmaCellScene := preload("res://scenes/ui/plasma_cell.tscn")
 const PROJECTILE_SPEED_MULTIPLIER := 1.1
+const HIT_FLASH_MATERIAL := preload("res://scenes/effects/enemy_hit_flash.tres")
 
 enum RewardDrop { NONE, PLASMA, POWER_UP }
 enum PatrolState { ENTERING, PATROLLING, EXITING }
@@ -38,6 +39,8 @@ var _sine_wave_offset := 0.0
 var _patrol_state := PatrolState.ENTERING
 var _patrol_elapsed := 0.0
 var fire_delay_multiplier := 1.0
+var _hit_sprite: Sprite2D
+var _hit_flash_tween: Tween
 
 func _ready() -> void:
 	if definition == null:
@@ -54,6 +57,11 @@ func _ready() -> void:
 	_initialize_movement()
 	_configure_collision()
 	_play_spawn_animation()
+	_hit_sprite = get_node_or_null("Sprite2D") as Sprite2D
+	if _hit_sprite == null:
+		_hit_sprite = get_node_or_null("SpriteAsteroid") as Sprite2D
+	if _hit_sprite:
+		_hit_sprite.material = HIT_FLASH_MATERIAL
 	if elite:
 		_setup_elite_indicator()
 
@@ -230,6 +238,8 @@ func _hit_something(dmg := 0, impact_feedback := true) -> void:
 	if destroyed:
 		return
 	life -= dmg
+	if dmg > 0:
+		_flash_hit()
 	if _elite_indicator:
 		_elite_indicator.set_health(life)
 	if impact_feedback:
@@ -239,6 +249,20 @@ func _hit_something(dmg := 0, impact_feedback := true) -> void:
 		_destroy()
 	elif impact_feedback:
 		$anim.play("hit" + str(indexSprites))
+		$anim.seek(0.0)
+
+func _flash_hit() -> void:
+	if _hit_sprite == null:
+		return
+	if _hit_flash_tween and _hit_flash_tween.is_valid():
+		_hit_flash_tween.kill()
+	_set_hit_flash(1.0)
+	_hit_flash_tween = create_tween()
+	_hit_flash_tween.tween_interval(0.04)
+	_hit_flash_tween.tween_method(_set_hit_flash, 1.0, 0.0, 0.08).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+func _set_hit_flash(amount: float) -> void:
+	_hit_sprite.set_instance_shader_parameter(&"hit_flash", amount)
 
 func _on_area_entered(area: Area2D) -> void:
 	if not destroyed and area.has_method("_hit_something"):

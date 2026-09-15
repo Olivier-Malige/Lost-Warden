@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="MovementProfile" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="MovementProfile" format=3 uid="uid://gaevi1a3j04"]
 
-[ext_resource type="Script" path="res://data/enemies/movement_profile.gd" id="1"]
+[ext_resource type="Script" uid="uid://r532snp2nhav" path="res://data/enemies/movement_profile.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = &"mother_ship_entry"
-velocity = Vector2(0, 60)
+velocity = Vector2(0, 30)

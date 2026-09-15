@@ -39,6 +39,19 @@ Permanent meta-progression, unlockable ships, profile levels, and account-wide u
 
 Preparation phase B delivered the direct 1066 by 800 viewport, responsive Web presentation, redesigned menus and HUD, browser-fullscreen recovery, the Lost Warden release identity, the approved 24-color palette, itch.io page art, and a validated release archive. Updated gameplay screenshots remain intentionally deferred until the sprite rework is visible. Candidate replacement music is preserved for later review and is not active in the current build.
 
+## Native pixel presentation follow-up — 2026-09-15
+
+Maintainer-requested presentation revision, independent of later gameplay phases:
+
+- Render at 640 × 400 logical pixels, with a 1280 × 800 default window, preserved aspect ratio and nearest sampling. Display scaling fits the available screen fractionally, following the maintainer's fullscreen feedback, instead of leaving large margins between integer scale steps. Camera zoom remains 1. Source pixels remain native in the logical viewport, though physical pixel blocks can differ by one screen pixel at fractional display scales.
+- Use native sprite scale 1 for player, enemies, projectiles, shields and pickups. Beam tiles use one source pixel per logical pixel: 8-pixel normal width and 16-pixel overdrive width.
+- Reserve 104 pixels on each side for the HUD; the central combat area is 432 pixels wide. Center the camera, player spawn and wave lanes within it. Increase rank-label sizes and plasma-bar widths to use the extra interface space.
+- Convert world distances and speeds to the smaller coordinate system while preserving time-based cadence, damage and wave timing. Resize local collision shapes and weapon markers with their associated sprites. Formerly enlarged enemies and projectiles have smaller relative silhouettes at native scale; this is an intentional consequence of the shared art grid and needs gameplay feel review.
+- Use 600 × 450 native background exports with matching parallax repeat distances. Keep original artwork. Reproduce each export with `aseprite --batch INPUT.png --scale 0.375 --save-as OUTPUT_native.png` from the original 1600 × 1200 texture.
+- Procedural glows and transient interface animations remain effects rather than sprite-resolution overrides. Pause controls render above combat effects.
+
+Validation: `tests/test_native_scale.gd`, `tests/player/test_fire_input.gd`, and `tests/player/test_beam_effect.gd`, run with `godot --headless --path . --script <path>`. Native-resolution title, co-op HUD, beams and pause have been inspected in the Compatibility renderer. Full-run balance and Web export validation remain separate checks.
+
 ## Phase 0 — Track and commit the roadmap
 
 - Create `codex/dynamic-gameplay-rework` from the current HEAD.
@@ -145,6 +158,8 @@ Planned commits:
 ## Phase 1 follow-up — Dedicated weapon inputs
 
 Status: implemented on 2026-08-30. This control pass separates sustained primary fire from plasma-beam charging and slightly shortens its charge cadence for the dedicated input.
+
+Maintainer-requested revision (2026-09-14): primary fire remains immediate and repeats while held, including equipped side cannons. The base interval is now 0.30 seconds (previously 0.18 seconds), configured in `data/player/player_stats.tres`. Existing fire-rate upgrade reductions remain unchanged. Releasing stops fire; pressing again during cooldown cannot bypass the interval. Regression check: `godot --headless --path . --script tests/player/test_fire_input.gd`.
 
 - Keep primary fire on Space, Insert, keypad `+`, and A/Cross. Fire immediately and continue at the loadout's current fire delay while held.
 - Charge the plasma beam independently with left Shift or B/Circle, then release it at the highest reached tier.

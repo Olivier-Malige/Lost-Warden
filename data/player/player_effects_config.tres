@@ -1,6 +1,14 @@
-[gd_resource type="Resource" script_class="PlayerEffectsConfig" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="PlayerEffectsConfig" format=3 uid="uid://b4fq5kf6ir56t"]
 
-[ext_resource type="Script" path="res://data/player/player_effects_config.gd" id="1"]
+[ext_resource type="Script" uid="uid://b7ri3nokegflu" path="res://data/player/player_effects_config.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
+minimum_amount_ratio = 0.35
+maximum_amount_ratio = 0.8
+minimum_speed_scale = 0.6
+maximum_speed_scale = 1.0
+minimum_emission_radius = 8.0
+maximum_emission_radius = 21.0
+minimum_particle_scale = 0.65
+maximum_particle_scale = 1.0

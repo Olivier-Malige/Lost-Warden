@@ -21,8 +21,8 @@ extends Resource
 @export_range(0.0, 1.0, 0.05) var maximum_amount_ratio := 1.0
 @export_range(0.0, 4.0, 0.05) var minimum_speed_scale := 0.7
 @export_range(0.0, 4.0, 0.05) var maximum_speed_scale := 1.2
-@export_range(1.0, 128.0, 1.0) var minimum_emission_radius := 18.0
-@export_range(1.0, 128.0, 1.0) var maximum_emission_radius := 58.0
+@export_range(1.0, 128.0, 1.0) var minimum_emission_radius := 9.0
+@export_range(1.0, 128.0, 1.0) var maximum_emission_radius := 29.0
 @export_range(0.1, 4.0, 0.05) var minimum_particle_scale := 0.8
 @export_range(0.1, 4.0, 0.05) var maximum_particle_scale := 2.0
 

@@ -2,7 +2,7 @@ class_name PlasmaCell
 extends Area2D
 
 const _Feedback := preload("res://scenes/effects/combat_feedback.gd")
-const SPEED := 100.0
+const SPEED := 50.0
 const Layers := preload("res://core/collision_layers.gd")
 
 @export_range(0.5, 100.0, 0.5) var charge_amount := 12.5

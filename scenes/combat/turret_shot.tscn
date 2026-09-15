@@ -4,8 +4,7 @@
 [ext_resource path="res://assets/sprites/combat/turret_shot.png" type="Texture2D" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-
-size = Vector2( 20, 20.548 )
+size = Vector2(4, 4)
 
 [node name="turretShot" type="Area2D"]
 
@@ -27,18 +26,18 @@ glow_color = Color(1, 0.88, 0.2, 0.4)
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." index="0"]
 
-rect = Rect2( -10, -10, 20, 20 )
+rect = Rect2(-2.5, -2.5, 5, 5)
 
 [node name="Sprite2D" type="Sprite2D" parent="." index="1"]
 
-scale = Vector2( 4, 4 )
+scale = Vector2(1, 1)
 texture = ExtResource( 2 )
 _sections_unfolded = [ "Transform3D" ]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="2"]
 
-position = Vector2( -0.528129, 0.242607 )
-scale = Vector2( 0.711526, 0.79708 )
+position = Vector2(0, 0)
+scale = Vector2(1, 1)
 shape = SubResource( 1 )
 
 [connection signal="area_entered" from="." to="." method="_on_shot_area_entered"]

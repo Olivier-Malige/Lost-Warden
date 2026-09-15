@@ -5,13 +5,13 @@ const Layers := preload("res://core/collision_layers.gd")
 const TOP_EDGE := 0.0
 const PLAYER_ONE_COLOR := Color(1.0, 0.12, 0.08, 1.0)
 const PLAYER_TWO_COLOR := Color(0.12, 0.48, 1.0, 1.0)
-const HALO_ALPHA := 0.28
-const OUTER_ALPHA := 0.58
+const HALO_ALPHA := 0.14
+const FLOW_FRAME_DURATION := 0.16
 
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var halo_line: Line2D = $HaloLine
 @onready var outer_line: Line2D = $OuterLine
-@onready var core_line: Line2D = $CoreLine
+@onready var flow_material: ShaderMaterial = $OuterLine.material
 @onready var beam_audio: AudioStreamPlayer2D = $BeamAudio
 
 var active := false
@@ -19,11 +19,12 @@ var overdrive := false
 var damage := 3.0
 var damage_interval := 0.1
 var player_id := "player1"
-var beam_width := 32.0
-var overdrive_width := 64.0
+var beam_width := 8.0
+var overdrive_width := 16.0
 var collision_width_multiplier := 1.2
 var overdrive_damage_multiplier := 1.5
 var _damage_accumulator := 0.0
+var _flow_time := 0.0
 var _shape := RectangleShape2D.new()
 
 func _ready() -> void:
@@ -42,6 +43,8 @@ func activate(p_player_id: String, p_damage: float, p_overdrive: bool) -> void:
 	overdrive = p_overdrive
 	_damage_accumulator = 0.0
 	active = true
+	_flow_time = 0.0
+	flow_material.set_shader_parameter("frame_index", 0.0)
 	_apply_player_color()
 	_update_width()
 	_update_geometry()
@@ -76,6 +79,8 @@ func _physics_process(delta: float) -> void:
 	if not active:
 		return
 	_update_geometry()
+	_flow_time = fmod(_flow_time + delta, FLOW_FRAME_DURATION * 4.0)
+	flow_material.set_shader_parameter("frame_index", floorf(_flow_time / FLOW_FRAME_DURATION))
 	_damage_accumulator += delta
 	while _damage_accumulator >= damage_interval:
 		_damage_accumulator -= damage_interval
@@ -93,21 +98,20 @@ func _damage_overlaps() -> void:
 func _update_geometry() -> void:
 	var length := maxf(global_position.y - TOP_EDGE, 1.0)
 	var width := overdrive_width if overdrive else beam_width
+	flow_material.set_shader_parameter("flow_length", length * (16.0 if overdrive else 8.0) / width)
 	_shape.size = Vector2(width * collision_width_multiplier, length)
 	collision_shape.position = Vector2(0.0, -length * 0.5)
 	var points := PackedVector2Array([Vector2.ZERO, Vector2(0.0, -length)])
 	halo_line.points = points
 	outer_line.points = points
-	core_line.points = points
 
 func _update_width() -> void:
 	var width := overdrive_width if overdrive else beam_width
 	halo_line.width = width * 1.35
 	outer_line.width = width
-	core_line.width = width * 0.34
+	flow_material.set_shader_parameter("overdrive", overdrive)
 
 func _apply_player_color() -> void:
 	var color := PLAYER_ONE_COLOR if player_id == "player1" else PLAYER_TWO_COLOR
 	halo_line.modulate = Color(color.r, color.g, color.b, HALO_ALPHA)
-	outer_line.modulate = Color(color.r, color.g, color.b, OUTER_ALPHA)
-	core_line.modulate = color
+	flow_material.set_shader_parameter("team_row", 0.0 if player_id == "player1" else 1.0)

@@ -13,7 +13,7 @@ dest_files=["res://.godot/imported/slkscr.ttf-e2ab88759afcb36d0607690a2e6ace57.f
 [params]
 
 Rendering=null
-antialiasing=1
+antialiasing=0
 generate_mipmaps=false
 disable_embedded_bitmaps=true
 multichannel_signed_distance_field=false
@@ -22,10 +22,10 @@ msdf_size=48
 allow_system_fallback=true
 force_autohinter=false
 modulate_color_glyphs=false
-hinting=3
-subpixel_positioning=4
-keep_rounding_remainders=true
-oversampling=0.0
+hinting=0
+subpixel_positioning=0
+keep_rounding_remainders=false
+oversampling=1.0
 Fallbacks=null
 fallbacks=[]
 Compress=null

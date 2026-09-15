@@ -1,6 +1,6 @@
 extends Area2D
 const _Feedback := preload("res://scenes/effects/combat_feedback.gd")
-const SPEED = 100
+const SPEED = 50
 const TABLE: UpgradeTable = preload("res://data/upgrades/upgrade_table.tres")
 const Layers := preload("res://core/collision_layers.gd")
 

@@ -1,6 +1,8 @@
 class_name PlayerEffects
 extends Node
 
+const BLUE_CHARGE_PALETTE := preload("res://scenes/player/beam/charge_blue_palette.gdshader")
+
 @export var config: PlayerEffectsConfig
 @export var player_two_core_ramp: GradientTexture1D
 @export var player_two_ember_ramp: GradientTexture1D
@@ -37,6 +39,10 @@ func setup(charge_texture: Texture2D, use_player_two_palette: bool) -> void:
 	_charge_particles.process_material = _charge_material
 	_configured = true
 	_charge_particles.texture = charge_texture
+	if use_player_two_palette:
+		var charge_canvas_material := ShaderMaterial.new()
+		charge_canvas_material.shader = BLUE_CHARGE_PALETTE
+		_charge_particles.material = charge_canvas_material
 	_charge_particles.scale = Vector2.ONE
 	_reactor_amount_ratio = config.idle_amount_ratio
 	_reactor_speed_scale = config.idle_speed_scale

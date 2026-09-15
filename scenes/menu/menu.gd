@@ -87,26 +87,26 @@ func _enable_visible_options() -> void:
 
 func _set_presentation(menu_mode: int) -> void:
 	var title := ""
-	var top := 100.0
-	var bottom := -100.0
+	var top := 50.0
+	var bottom := -50.0
 	var exit_label := "EXIT"
 	if OS.has_feature("web"):
 		exit_label = "RETURN TO TITLE" if menu_mode == MENU_PAUSE else "RETURN TO ITCH.IO"
 	get_node(BUTTON_GROUP + "/exit").text = exit_label
 	match menu_mode:
 		MENU_START:
-			top = 410.0
-			bottom = -35.0
+			top = 205.0
+			bottom = -17.5
 		MENU_PAUSE:
-			top = 320.0
-			bottom = -60.0
-		MENU_OPTIONS:
-			top = 320.0
+			top = 160.0
 			bottom = -30.0
+		MENU_OPTIONS:
+			top = 160.0
+			bottom = -15.0
 			title = "OPTIONS"
 		MENU_CONTROLLER:
-			top = 320.0
-			bottom = -30.0
+			top = 160.0
+			bottom = -15.0
 			title = "CONTROLS"
 	$Center.offset_top = top
 	$Center.offset_bottom = bottom

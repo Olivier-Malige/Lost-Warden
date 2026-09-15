@@ -49,16 +49,16 @@ func _draw() -> void:
 	if collecting:
 		for i in range(6):
 			var direction := Vector2.from_angle(TAU * float(i) / 6.0)
-			var start := direction * (9.0 + 7.0 * sin(progress * PI))
+			var start := direction * (4.5 + 3.5 * sin(progress * PI))
 			var point := start.lerp(destination, progress * progress)
-			draw_rect(Rect2(point.round(), Vector2(3, 3)), tint)
+			draw_rect(Rect2(point.round(), Vector2(1, 1)), tint)
 			if progress < 0.7:
-				draw_rect(Rect2((point + direction * 4.0).round(), Vector2(2, 2)), tint.darkened(0.35))
+				draw_rect(Rect2((point + direction * 2.0).round(), Vector2(1, 1)), tint.darkened(0.35))
 	else:
 		for i in range(7):
 			var direction := Vector2.from_angle(TAU * float(i) / 7.0)
-			var point := direction * (2.0 + 15.0 * progress)
-			draw_line(point.round(), (point + direction * (4.0 * (1.0 - progress))).round(), tint, 2.0)
+			var point := direction * (1.0 + 7.5 * progress)
+			draw_line(point.round(), (point + direction * (2.0 * (1.0 - progress))).round(), tint, 1.0)
 	if progress < 0.24:
-		draw_rect(Rect2(Vector2(-3, -1), Vector2(6, 2)), IVORY)
-		draw_rect(Rect2(Vector2(-1, -3), Vector2(2, 6)), IVORY)
+		draw_rect(Rect2(Vector2(-1, 0), Vector2(3, 1)), IVORY)
+		draw_rect(Rect2(Vector2(0, -1), Vector2(1, 3)), IVORY)

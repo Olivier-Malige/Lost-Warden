@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="MovementProfile" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="MovementProfile" format=3 uid="uid://1ujywcuf3gl6"]
 
-[ext_resource type="Script" path="res://data/enemies/movement_profile.gd" id="1"]
+[ext_resource type="Script" uid="uid://r532snp2nhav" path="res://data/enemies/movement_profile.gd" id="1"]
 
 [resource]
 script = ExtResource("1")

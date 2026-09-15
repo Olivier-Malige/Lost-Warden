@@ -1,21 +1,21 @@
 [gd_scene load_steps=4 format=3]
 
 [ext_resource path="res://scenes/world/background.gd" type="Script" id=1]
-[ext_resource path="res://assets/sprites/world/background.png" type="Texture2D" id=2]
-[ext_resource path="res://assets/sprites/world/background_2.png" type="Texture2D" id=3]
+[ext_resource path="res://assets/sprites/world/background_native.png" type="Texture2D" id=2]
+[ext_resource path="res://assets/sprites/world/background_2_native.png" type="Texture2D" id=3]
 
 [node name="background" type="ParallaxBackground"]
 
 layer = -1
-offset = Vector2( 0, 0 )
+offset = Vector2(0, 0)
 rotation = 0.0
 scale = Vector2( 1, 1 )
 transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-scroll_offset = Vector2( 0, 0 )
-scroll_base_offset = Vector2( 0, 0 )
+scroll_offset = Vector2(0, 0)
+scroll_base_offset = Vector2(0, 0)
 scroll_base_scale = Vector2( 1, 1 )
-scroll_limit_begin = Vector2( 0, 0 )
-scroll_limit_end = Vector2( 0, 0 )
+scroll_limit_begin = Vector2(0, 0)
+scroll_limit_end = Vector2(0, 0)
 scroll_ignore_camera_zoom = false
 script = ExtResource( 1 )
 _sections_unfolded = [ "Pause", "Scroll" ]
@@ -25,16 +25,16 @@ speed_X = 0
 [node name="b1" type="ParallaxLayer" parent="." index="0"]
 
 motion_scale = Vector2( 1.1, 1.1 )
-motion_offset = Vector2( 1, 1 )
-motion_mirroring = Vector2( 1200, 900 )
+motion_offset = Vector2(0.5, 0.5)
+motion_mirroring = Vector2(600, 450)
 _sections_unfolded = [ "Material", "Motion", "Transform3D", "Visibility", "Z" ]
 
 [node name="stars" type="Sprite2D" parent="b1" index="0"]
 
-position = Vector2( 0, -20 )
+position = Vector2(0, -10)
 texture = ExtResource( 2 )
 texture_filter = 1
-scale = Vector2( 0.75, 0.75 )
+scale = Vector2(1, 1)
 centered = false
 _sections_unfolded = [ "Animation", "Material", "Offset", "Region", "Transform3D", "Visibility", "Z" ]
 
@@ -42,15 +42,15 @@ _sections_unfolded = [ "Animation", "Material", "Offset", "Region", "Transform3D
 
 modulate = Color( 0.619608, 0.619608, 0.619608, 0.894118 )
 motion_scale = Vector2( 0.8, 0.8 )
-motion_offset = Vector2( 1, 1 )
-motion_mirroring = Vector2( 1200, 900 )
+motion_offset = Vector2(0.5, 0.5)
+motion_mirroring = Vector2(600, 450)
 _sections_unfolded = [ "Material", "Motion", "Transform3D", "Visibility", "Z" ]
 
 [node name="stars2" type="Sprite2D" parent="b2" index="0"]
 
 texture = ExtResource( 3 )
 texture_filter = 1
-scale = Vector2( 0.75, 0.75 )
+scale = Vector2(1, 1)
 centered = false
 _sections_unfolded = [ "Animation", "Material", "Offset", "Region", "Transform3D", "Visibility", "Z" ]
 
@@ -59,8 +59,8 @@ _sections_unfolded = [ "Animation", "Material", "Offset", "Region", "Transform3D
 modulate = Color( 0.607843, 0.607843, 0.607843, 1 )
 self_modulate = Color( 1, 1, 1, 0.752941 )
 motion_scale = Vector2( 0.5, 0.5 )
-motion_offset = Vector2( 1, 1 )
-motion_mirroring = Vector2( 1200, 900 )
+motion_offset = Vector2(0.5, 0.5)
+motion_mirroring = Vector2(600, 450)
 _sections_unfolded = [ "Material", "Motion", "Transform3D", "Visibility", "Z" ]
 
 [node name="stars" type="Sprite2D" parent="b3" index="0"]
@@ -68,6 +68,6 @@ _sections_unfolded = [ "Material", "Motion", "Transform3D", "Visibility", "Z" ]
 modulate = Color( 0.423529, 0.423529, 0.423529, 1 )
 texture = ExtResource( 3 )
 texture_filter = 1
-scale = Vector2( 0.75, 0.75 )
+scale = Vector2(1, 1)
 centered = false
 _sections_unfolded = [ "Animation", "Material", "Offset", "Region", "Transform3D", "Visibility", "Z" ]

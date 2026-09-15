@@ -8,13 +8,13 @@
 
 [sub_resource type="StyleBoxFlat" id="StylePanel"]
 bg_color = Color( 0.0627451, 0.0823529, 0.133333, 0.96 )
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
 border_color = Color( 0.611765, 0.12549, 0.12549, 0.95 )
 shadow_color = Color( 0.611765, 0.12549, 0.12549, 0.4 )
-shadow_size = 7
+shadow_size = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleButtonNormal"]
 bg_color = Color( 0.133333, 0.152941, 0.207843, 0.82 )
@@ -26,28 +26,29 @@ border_color = Color( 0.611765, 0.12549, 0.12549, 0.65 )
 
 [sub_resource type="StyleBoxFlat" id="StyleButtonHover"]
 bg_color = Color( 0.611765, 0.12549, 0.12549, 0.32 )
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
 border_color = Color( 0.882353, 0.352941, 0.262745, 1 )
 shadow_color = Color( 0.611765, 0.12549, 0.12549, 0.6 )
-shadow_size = 5
+shadow_size = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleButtonPressed"]
 bg_color = Color( 0.611765, 0.12549, 0.12549, 0.5 )
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
 border_color = Color( 1, 0.352941, 0.301961, 1 )
 shadow_color = Color( 0.611765, 0.12549, 0.12549, 0.5 )
-shadow_size = 4
+shadow_size = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleButtonDisabled"]
 bg_color = Color( 0.0627451, 0.0823529, 0.133333, 0.4 )
 
 [node name="menu" type="Control"]
+z_index = 101
 
 process_mode = 3
 layout_mode = 3
@@ -70,52 +71,52 @@ mouse_filter = 2
 
 [node name="Panel" type="PanelContainer" parent="Center"]
 
-custom_minimum_size = Vector2( 450, 0 )
+custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource( "StylePanel" )
 
 [node name="Margin" type="MarginContainer" parent="Center/Panel"]
 
 layout_mode = 2
-theme_override_constants/margin_left = 26
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 26
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_left = 13
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 13
+theme_override_constants/margin_bottom = 12
 
 [node name="Content" type="VBoxContainer" parent="Center/Panel/Margin"]
 
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 6
 
 [node name="MenuTitle" type="Label" parent="Center/Panel/Margin/Content"]
 
-custom_minimum_size = Vector2( 0, 46 )
+custom_minimum_size = Vector2(0, 23)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 14
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MenuLine" type="ColorRect" parent="Center/Panel/Margin/Content"]
 
-custom_minimum_size = Vector2( 0, 3 )
+custom_minimum_size = Vector2(0, 1.5)
 layout_mode = 2
 color = Color( 0.611765, 0.12549, 0.12549, 0.95 )
 
 [node name="buttonGroup" type="VBoxContainer" parent="Center/Panel/Margin/Content"]
 
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 3
 
 [node name="return" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-custom_minimum_size = Vector2( 0, 46 )
+custom_minimum_size = Vector2(0, 23)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
 theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource( "StyleButtonNormal" )
 theme_override_styles/hover = SubResource( "StyleButtonHover" )
 theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
@@ -125,12 +126,12 @@ text = "RETURN"
 
 [node name="player1" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-custom_minimum_size = Vector2( 0, 46 )
+custom_minimum_size = Vector2(0, 23)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
 theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource( "StyleButtonNormal" )
 theme_override_styles/hover = SubResource( "StyleButtonHover" )
 theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
@@ -140,12 +141,12 @@ text = "PLAYER 1"
 
 [node name="player2" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-custom_minimum_size = Vector2( 0, 46 )
+custom_minimum_size = Vector2(0, 23)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
 theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource( "StyleButtonNormal" )
 theme_override_styles/hover = SubResource( "StyleButtonHover" )
 theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
@@ -155,12 +156,12 @@ text = "PLAYER 2"
 
 [node name="Controller" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-custom_minimum_size = Vector2( 0, 46 )
+custom_minimum_size = Vector2(0, 23)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
 theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource( "StyleButtonNormal" )
 theme_override_styles/hover = SubResource( "StyleButtonHover" )
 theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
@@ -170,12 +171,12 @@ text = "CONTROLLERS"
 
 [node name="music" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-custom_minimum_size = Vector2( 0, 46 )
+custom_minimum_size = Vector2(0, 23)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
 theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource( "StyleButtonNormal" )
 theme_override_styles/hover = SubResource( "StyleButtonHover" )
 theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
@@ -185,12 +186,12 @@ text = "MUSIC"
 
 [node name="sound" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-custom_minimum_size = Vector2( 0, 46 )
+custom_minimum_size = Vector2(0, 23)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
 theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource( "StyleButtonNormal" )
 theme_override_styles/hover = SubResource( "StyleButtonHover" )
 theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
@@ -200,12 +201,12 @@ text = "SOUND"
 
 [node name="resume" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-custom_minimum_size = Vector2( 0, 46 )
+custom_minimum_size = Vector2(0, 23)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
 theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource( "StyleButtonNormal" )
 theme_override_styles/hover = SubResource( "StyleButtonHover" )
 theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
@@ -215,12 +216,12 @@ text = "RESUME"
 
 [node name="restart" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-custom_minimum_size = Vector2( 0, 46 )
+custom_minimum_size = Vector2(0, 23)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
 theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource( "StyleButtonNormal" )
 theme_override_styles/hover = SubResource( "StyleButtonHover" )
 theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
@@ -230,12 +231,12 @@ text = "RESTART"
 
 [node name="solo" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-custom_minimum_size = Vector2( 0, 46 )
+custom_minimum_size = Vector2(0, 23)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
 theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource( "StyleButtonNormal" )
 theme_override_styles/hover = SubResource( "StyleButtonHover" )
 theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
@@ -245,12 +246,12 @@ text = "SOLO RUN"
 
 [node name="coop" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-custom_minimum_size = Vector2( 0, 46 )
+custom_minimum_size = Vector2(0, 23)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
 theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource( "StyleButtonNormal" )
 theme_override_styles/hover = SubResource( "StyleButtonHover" )
 theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
@@ -260,12 +261,12 @@ text = "CO-OP RUN"
 
 [node name="options" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-custom_minimum_size = Vector2( 0, 46 )
+custom_minimum_size = Vector2(0, 23)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
 theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource( "StyleButtonNormal" )
 theme_override_styles/hover = SubResource( "StyleButtonHover" )
 theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
@@ -275,12 +276,12 @@ text = "OPTIONS"
 
 [node name="fullscreen" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-custom_minimum_size = Vector2( 0, 46 )
+custom_minimum_size = Vector2(0, 23)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
 theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource( "StyleButtonNormal" )
 theme_override_styles/hover = SubResource( "StyleButtonHover" )
 theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
@@ -290,12 +291,12 @@ text = "FULLSCREEN"
 
 [node name="hiscore" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-custom_minimum_size = Vector2( 0, 46 )
+custom_minimum_size = Vector2(0, 23)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
 theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource( "StyleButtonNormal" )
 theme_override_styles/hover = SubResource( "StyleButtonHover" )
 theme_override_styles/pressed = SubResource( "StyleButtonPressed" )
@@ -305,12 +306,12 @@ text = "HISCORE"
 
 [node name="exit" type="Button" parent="Center/Panel/Margin/Content/buttonGroup"]
 
-custom_minimum_size = Vector2( 0, 46 )
+custom_minimum_size = Vector2(0, 23)
 layout_mode = 2
 theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
 theme_override_colors/font_hover_color = Color( 0.952941, 0.921569, 0.866667, 1 )
 theme_override_fonts/font = ExtResource( 2 )
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource( "StyleButtonNormal" )
 theme_override_styles/hover = SubResource( "StyleButtonHover" )
 theme_override_styles/pressed = SubResource( "StyleButtonPressed" )

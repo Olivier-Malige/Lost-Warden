@@ -208,7 +208,7 @@ func update_beam_charge() -> void:
 	Events.beam_charge_changed.emit(id_Player, beam_charge, STATS.beam_charge_max, is_equal_approx(beam_charge, STATS.beam_charge_max))
 
 
-func play_shot_recoil(amount := 2.0, duration := 0.07) -> void:
+func play_shot_recoil(amount := 1.0, duration := 0.07) -> void:
 	if _recoil_tween:
 		_recoil_tween.kill()
 	ship_sprite.position = _ship_rest_position + Vector2(0, amount)

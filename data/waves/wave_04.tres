@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://ctp3qhk1vo1qm" path="res://data/waves/spawn_rule.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/drone.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/interceptor.tscn" id="4"]
-[ext_resource type="Resource" path="res://data/enemies/movement/drone_sine_wide.tres" id="movement_wide"]
+[ext_resource type="Resource" uid="uid://cl741v0b4uw3i" path="res://data/enemies/movement/drone_sine_wide.tres" id="movement_wide"]
 
 [sub_resource type="Resource" id="rule_1"]
 script = ExtResource("2")

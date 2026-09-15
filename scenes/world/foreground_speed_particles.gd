@@ -36,8 +36,8 @@ func _create_streak_texture() -> GradientTexture2D:
 	])
 	var streak := GradientTexture2D.new()
 	streak.gradient = gradient
-	streak.width = 2
-	streak.height = 24
+	streak.width = 1
+	streak.height = 12
 	streak.fill_from = Vector2(0.5, 0.0)
 	streak.fill_to = Vector2(0.5, 1.0)
 	return streak
