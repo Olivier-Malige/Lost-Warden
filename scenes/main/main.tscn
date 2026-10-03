@@ -1,104 +1,109 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene format=3 uid="uid://cknigfdfxlmnp"]
 
-[ext_resource type="Script" path="res://scenes/main/main.gd" id="1"]
-[ext_resource type="Script" path="res://scenes/main/loader.gd" id="2"]
-[ext_resource type="AudioStream" path="res://assets/audio/music/loader.ogg" id="3"]
+[ext_resource type="Script" uid="uid://e0n6ifs2b32b" path="res://scenes/main/main.gd" id="1"]
+[ext_resource type="Script" uid="uid://cuq04wtnfqdja" path="res://scenes/main/loader.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/world/background.tscn" id="4"]
-[ext_resource type="FontFile" path="res://assets/fonts/vermin_vibes_1989.ttf" id="5"]
-[ext_resource type="FontFile" path="res://assets/fonts/slkscr.ttf" id="6"]
-[ext_resource type="Script" path="res://scenes/main/star_field.gd" id="7"]
+[ext_resource type="AudioStream" uid="uid://n1qaeapratsf" path="res://assets/audio/music/loader.ogg" id="4_hujxm"]
+[ext_resource type="FontFile" uid="uid://b2lht0aff7caj" path="res://assets/fonts/vermin_vibes_1989.ttf" id="5"]
+[ext_resource type="FontFile" uid="uid://cndq06brheuki" path="res://assets/fonts/slkscr.ttf" id="6"]
+[ext_resource type="Script" uid="uid://bhluujrkasv84" path="res://scenes/main/star_field.gd" id="7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxLoader"]
-bg_color = Color( 0.0627451, 0.0823529, 0.133333, 0.96 )
+bg_color = Color(0.0627451, 0.0823529, 0.133333, 0.96)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color( 0.611765, 0.12549, 0.12549, 1 )
-shadow_color = Color( 0.611765, 0.12549, 0.12549, 0.45 )
+border_color = Color(0.611765, 0.12549, 0.12549, 1)
+shadow_color = Color(0.611765, 0.12549, 0.12549, 0.45)
 shadow_size = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxProgressBackground"]
-bg_color = Color( 0.133333, 0.152941, 0.207843, 0.95 )
+bg_color = Color(0.133333, 0.152941, 0.207843, 0.95)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color( 0.227451, 0.0509804, 0.0784314, 0.8 )
+border_color = Color(0.227451, 0.0509804, 0.0784314, 0.8)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxProgressFill"]
-bg_color = Color( 0.611765, 0.12549, 0.12549, 1 )
+bg_color = Color(0.611765, 0.12549, 0.12549, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color( 0.882353, 0.352941, 0.262745, 1 )
-shadow_color = Color( 0.611765, 0.12549, 0.12549, 0.6 )
+border_color = Color(0.882353, 0.352941, 0.262745, 1)
+shadow_color = Color(0.611765, 0.12549, 0.12549, 0.6)
 shadow_size = 2
 
 [sub_resource type="Animation" id="AnimationLoader"]
 resource_name = "start"
 length = 9.0
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("Center/Panel/Margin/Content/Studio:modulate:a")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array( 0, 0.5, 3, 4 ),
-"transitions": PackedFloat32Array( 1, 1, 1, 1 ),
+"times": PackedFloat32Array(0, 0.5, 3, 4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [ 0.0, 1.0, 1.0, 0.0 ]
+"values": [0.0, 1.0, 1.0, 0.0]
 }
 tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/path = NodePath("Center/Panel/Margin/Content/LostWarden:modulate:a")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array( 0, 2.5, 3.5, 8.5, 9 ),
-"transitions": PackedFloat32Array( 1, 1, 1, 1, 1 ),
+"times": PackedFloat32Array(0, 2.5, 3.5, 8.5, 9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [ 0.0, 0.0, 1.0, 1.0, 0.0 ]
+"values": [0.0, 0.0, 1.0, 1.0, 0.0]
 }
 tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
 tracks/2/path = NodePath("Center/Panel/Margin/Content/Tagline:modulate:a")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array( 0, 3.5, 4.5, 8.5, 9 ),
-"transitions": PackedFloat32Array( 1, 1, 1, 1, 1 ),
+"times": PackedFloat32Array(0, 3.5, 4.5, 8.5, 9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [ 0.0, 0.0, 0.8, 0.8, 0.0 ]
+"values": [0.0, 0.0, 0.8, 0.8, 0.0]
 }
 tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
 tracks/3/path = NodePath("Center/Panel/Margin/Content/Presents:modulate:a")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array( 0, 0.5, 3, 4 ),
-"transitions": PackedFloat32Array( 1, 1, 1, 1 ),
+"times": PackedFloat32Array(0, 0.5, 3, 4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [ 0.0, 1.0, 1.0, 0.0 ]
+"values": [0.0, 1.0, 1.0, 0.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibraryLoader"]
 _data = {
-&"start": SubResource( "AnimationLoader" )
+&"start": SubResource("AnimationLoader")
 }
 
-[node name="main" type="Node"]
-
+[node name="main" type="Node" unique_id=613514248]
 process_mode = 1
-script = ExtResource( 1 )
+script = ExtResource("1")
 
-[node name="Stars" type="CPUParticles2D" parent="."]
-
+[node name="Stars" type="CPUParticles2D" parent="." unique_id=10840754]
 show_behind_parent = true
 z_index = -5
 position = Vector2(320, 200)
-script = ExtResource( 7 )
+script = ExtResource("7")
 
-[node name="loader" type="Control" parent="."]
-
+[node name="loader" type="Control" parent="." unique_id=1594542034]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -106,28 +111,25 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource( 2 )
+script = ExtResource("2")
 
-[node name="Timer" type="Timer" parent="loader"]
-
+[node name="Timer" type="Timer" parent="loader" unique_id=70473965]
 wait_time = 9.0
 one_shot = true
 autostart = true
 
-[node name="music" type="AudioStreamPlayer" parent="loader"]
-
-stream = ExtResource( 3 )
+[node name="music" type="AudioStreamPlayer" parent="loader" unique_id=2061209573]
+stream = ExtResource("4_hujxm")
 volume_db = -10.0
 autoplay = true
 bus = &"Music"
 
-[node name="background" parent="loader" instance=ExtResource( 4 )]
-
+[node name="background" parent="loader" unique_id=1955553073 instance=ExtResource("4")]
 speed_Y = 0.0
+speed_X = 0.0
 lock_scroll_speed = true
 
-[node name="Dim" type="ColorRect" parent="loader"]
-
+[node name="Dim" type="ColorRect" parent="loader" unique_id=772123253]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -135,139 +137,137 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color( 0.0235294, 0.027451, 0.0470588, 0.6 )
+color = Color(0.0235294, 0.027451, 0.0470588, 0.6)
 
-[node name="Center" type="CenterContainer" parent="loader"]
-
+[node name="Center" type="CenterContainer" parent="loader" unique_id=117433932]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 50
-offset_right = -50
+offset_left = 50.0
+offset_right = -50.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Panel" type="PanelContainer" parent="loader/Center"]
-
+[node name="Panel" type="PanelContainer" parent="loader/Center" unique_id=5822229]
 custom_minimum_size = Vector2(340, 235)
 layout_mode = 2
-theme_override_styles/panel = SubResource( "StyleBoxLoader" )
+theme_override_styles/panel = SubResource("StyleBoxLoader")
 
-[node name="Margin" type="MarginContainer" parent="loader/Center/Panel"]
-
+[node name="Margin" type="MarginContainer" parent="loader/Center/Panel" unique_id=1635522630]
 layout_mode = 2
 theme_override_constants/margin_left = 18
 theme_override_constants/margin_top = 14
 theme_override_constants/margin_right = 18
 theme_override_constants/margin_bottom = 14
 
-[node name="Content" type="VBoxContainer" parent="loader/Center/Panel/Margin"]
-
+[node name="Content" type="VBoxContainer" parent="loader/Center/Panel/Margin" unique_id=1939956058]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="Studio" type="Label" parent="loader/Center/Panel/Margin/Content"]
-
+[node name="Studio" type="Label" parent="loader/Center/Panel/Margin/Content" unique_id=765475378]
+modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
-theme_override_colors/font_color = Color( 0.721569, 0.713725, 0.682353, 1 )
-theme_override_colors/font_shadow_color = Color( 0.611765, 0.12549, 0.12549, 1 )
+theme_override_colors/font_color = Color(0.721569, 0.713725, 0.682353, 1)
+theme_override_colors/font_shadow_color = Color(0.611765, 0.12549, 0.12549, 1)
 theme_override_constants/shadow_offset_x = 3
 theme_override_constants/shadow_offset_y = 2
-theme_override_fonts/font = ExtResource( 5 )
+theme_override_fonts/font = ExtResource("5")
 theme_override_font_sizes/font_size = 32
 text = "ARKNOID"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Presents" type="Label" parent="loader/Center/Panel/Margin/Content"]
-
+[node name="Presents" type="Label" parent="loader/Center/Panel/Margin/Content" unique_id=388003588]
+modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(0, 14)
 layout_mode = 2
-modulate = Color( 1, 1, 1, 0 )
-theme_override_colors/font_color = Color( 0.952941, 0.921569, 0.866667, 1 )
-theme_override_fonts/font = ExtResource( 6 )
+theme_override_colors/font_color = Color(0.952941, 0.921569, 0.866667, 1)
+theme_override_fonts/font = ExtResource("6")
 theme_override_font_sizes/font_size = 8
 text = "PRESENTS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CyanLine" type="ColorRect" parent="loader/Center/Panel/Margin/Content"]
-
+[node name="CyanLine" type="ColorRect" parent="loader/Center/Panel/Margin/Content" unique_id=1975578350]
 custom_minimum_size = Vector2(0, 2.5)
 layout_mode = 2
-color = Color( 0.611765, 0.12549, 0.12549, 1 )
+color = Color(0.611765, 0.12549, 0.12549, 1)
 
-[node name="LostWarden" type="Label" parent="loader/Center/Panel/Margin/Content"]
-
+[node name="LostWarden" type="Label" parent="loader/Center/Panel/Margin/Content" unique_id=217316107]
+modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
-theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
-theme_override_colors/font_shadow_color = Color( 0.611765, 0.12549, 0.12549, 1 )
+theme_override_colors/font_color = Color(0.839216, 0.839216, 0.32549, 1)
+theme_override_colors/font_shadow_color = Color(0.611765, 0.12549, 0.12549, 1)
 theme_override_constants/shadow_offset_x = 3
 theme_override_constants/shadow_offset_y = 2
-theme_override_fonts/font = ExtResource( 5 )
+theme_override_fonts/font = ExtResource("5")
 theme_override_font_sizes/font_size = 32
 text = "LOST WARDEN"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MagentaLine" type="ColorRect" parent="loader/Center/Panel/Margin/Content"]
-
+[node name="MagentaLine" type="ColorRect" parent="loader/Center/Panel/Margin/Content" unique_id=1193427897]
 custom_minimum_size = Vector2(0, 2.5)
 layout_mode = 2
-color = Color( 0.611765, 0.12549, 0.12549, 1 )
+color = Color(0.611765, 0.12549, 0.12549, 1)
 
-[node name="Tagline" type="Label" parent="loader/Center/Panel/Margin/Content"]
-
+[node name="Tagline" type="Label" parent="loader/Center/Panel/Margin/Content" unique_id=1261490876]
+modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
-theme_override_colors/font_color = Color( 0.952941, 0.921569, 0.866667, 1 )
-theme_override_fonts/font = ExtResource( 6 )
+theme_override_colors/font_color = Color(0.952941, 0.921569, 0.866667, 1)
+theme_override_fonts/font = ExtResource("6")
 theme_override_font_sizes/font_size = 14
 text = "ARCADE STARFIGHTER"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BootStatus" type="Label" parent="loader/Center/Panel/Margin/Content"]
-
+[node name="BootStatus" type="Label" parent="loader/Center/Panel/Margin/Content" unique_id=2020540038]
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
-theme_override_colors/font_color = Color( 0.882353, 0.352941, 0.262745, 1 )
-theme_override_fonts/font = ExtResource( 6 )
+theme_override_colors/font_color = Color(0.882353, 0.352941, 0.262745, 1)
+theme_override_fonts/font = ExtResource("6")
 theme_override_font_sizes/font_size = 8
 text = "INITIALIZING FLIGHT SYSTEMS..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Progress" type="ProgressBar" parent="loader/Center/Panel/Margin/Content"]
-
+[node name="Progress" type="ProgressBar" parent="loader/Center/Panel/Margin/Content" unique_id=1270034748]
 custom_minimum_size = Vector2(0, 9)
 layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxProgressBackground")
+theme_override_styles/fill = SubResource("StyleBoxProgressFill")
 step = 5.0
-theme_override_styles/background = SubResource( "StyleBoxProgressBackground" )
-theme_override_styles/fill = SubResource( "StyleBoxProgressFill" )
 show_percentage = false
 
-[node name="SkipHint" type="Label" parent="loader/Center/Panel/Margin/Content"]
-
+[node name="SkipHint" type="Label" parent="loader/Center/Panel/Margin/Content" unique_id=1159754736]
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
-theme_override_colors/font_color = Color( 0.839216, 0.839216, 0.32549, 1 )
-theme_override_fonts/font = ExtResource( 6 )
+theme_override_colors/font_color = Color(0.839216, 0.839216, 0.32549, 1)
+theme_override_fonts/font = ExtResource("6")
 theme_override_font_sizes/font_size = 8
 text = "PRESS START TO SKIP"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="loader"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="loader" unique_id=141453901]
+libraries/ = SubResource("AnimationLibraryLoader")
+autoplay = &"start"
 
-libraries = {
-"": SubResource( "AnimationLibraryLoader" )
-}
-autoplay = "start"
-root_node = NodePath( ".." )
+[node name="ScreenFade" type="CanvasLayer" parent="." unique_id=2132846510]
+layer = 100
+
+[node name="Black" type="ColorRect" parent="ScreenFade" unique_id=257597310]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
 
 [connection signal="timeout" from="loader/Timer" to="." method="_on_Timer_timeout"]

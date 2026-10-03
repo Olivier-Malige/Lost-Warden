@@ -269,7 +269,7 @@ area_mask = 1
 
 [node name="sound_Shooting" type="AudioStreamPlayer2D" parent="Audio" unique_id=400035419]
 stream = ExtResource("7")
-volume_db = -10.0
+volume_db = -7.0
 bus = &"Sounds"
 area_mask = 1
 

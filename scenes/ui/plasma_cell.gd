@@ -2,6 +2,7 @@ class_name PlasmaCell
 extends Area2D
 
 const _Feedback := preload("res://scenes/effects/combat_feedback.gd")
+const _PickupAudio := preload("res://scenes/ui/pickup_audio_queue.gd")
 const SPEED := 50.0
 const Layers := preload("res://core/collision_layers.gd")
 
@@ -23,7 +24,7 @@ func _on_area_entered(area: Area2D) -> void:
 	_collected = true
 	_Feedback.spawn(get_parent(), global_position, Color("72e0d1"), area)
 	Events.plasma_collected.emit(charge_amount)
-	$PickupSound.play()
+	_PickupAudio.enqueue($PickupSound)
 	$Sprite2D.visible = false
 	$CollisionShape2D.set_deferred("disabled", true)
 	set_deferred("monitoring", false)

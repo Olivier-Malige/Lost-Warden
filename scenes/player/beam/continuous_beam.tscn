@@ -36,7 +36,7 @@ default_color = Color(1, 1, 1, 1)
 
 [node name="BeamAudio" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3")
-volume_db = -8.0
+volume_db = -17.28
 bus = &"Sounds"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
