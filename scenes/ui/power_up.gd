@@ -1,5 +1,6 @@
 extends Area2D
 const _Feedback := preload("res://scenes/effects/combat_feedback.gd")
+const _PickupAudio := preload("res://scenes/ui/pickup_audio_queue.gd")
 const SPEED = 50
 const TABLE: UpgradeTable = preload("res://data/upgrades/upgrade_table.tres")
 const Layers := preload("res://core/collision_layers.gd")
@@ -58,7 +59,7 @@ func _play_pickup_sound() -> void:
 		UpgradeDefinition.Effect.FIRE_RATE: $sound_Shot_Up,
 	}
 	if sounds.has(_upgrade.effect):
-		sounds[_upgrade.effect].playing = true
+		_PickupAudio.enqueue(sounds[_upgrade.effect])
 
 func _on_audio_finished() -> void:
 	queue_free()
