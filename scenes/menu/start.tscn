@@ -4,7 +4,7 @@
 [ext_resource type="FontFile" uid="uid://b2lht0aff7caj" path="res://assets/fonts/vermin_vibes_1989.ttf" id="2"]
 [ext_resource type="FontFile" uid="uid://cndq06brheuki" path="res://assets/fonts/slkscr.ttf" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/world/background.tscn" id="5"]
-[ext_resource type="AudioStream" uid="uid://bvtb7u2je7xlq" path="res://assets/audio/music/Final Drive.mp3" id="5_h0mnl"]
+[ext_resource type="AudioStream" path="res://assets/audio/music/title.mp3" id="5_h0mnl"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxTitleFrame"]
 bg_color = Color(0.0235294, 0.027451, 0.0470588, 0.36)

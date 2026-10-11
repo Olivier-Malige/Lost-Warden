@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://e0n6ifs2b32b" path="res://scenes/main/main.gd" id="1"]
 [ext_resource type="Script" uid="uid://cuq04wtnfqdja" path="res://scenes/main/loader.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/world/background.tscn" id="4"]
-[ext_resource type="AudioStream" uid="uid://enebk5r24jsc" path="res://assets/audio/music/loaderv2.mp3" id="4_hujxm"]
+[ext_resource type="AudioStream" uid="uid://n1qaeapratsf" path="res://assets/audio/music/loader.ogg" id="4_hujxm"]
 [ext_resource type="FontFile" uid="uid://b2lht0aff7caj" path="res://assets/fonts/vermin_vibes_1989.ttf" id="5"]
 [ext_resource type="FontFile" uid="uid://cndq06brheuki" path="res://assets/fonts/slkscr.ttf" id="6"]
 [ext_resource type="Script" uid="uid://bhluujrkasv84" path="res://scenes/main/star_field.gd" id="7"]

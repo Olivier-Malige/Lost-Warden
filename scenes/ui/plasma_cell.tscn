@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/ui/plasma_cell.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/sprites/pickups/power_up.png" id="2"]
-[ext_resource type="AudioStream" path="res://assets/audio/sfx/pickups/energy.wav" id="3"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/pickups/powers_plasma_energy_up.wav" id="3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cell"]
 size = Vector2(14, 14)
@@ -26,6 +26,7 @@ rect = Rect2(-5, -5, 10, 10)
 
 [node name="PickupSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3")
+volume_db = 3.0
 bus = &"Sounds"
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]

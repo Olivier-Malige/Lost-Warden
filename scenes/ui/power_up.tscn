@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" uid="uid://bg65kg7x8wyx4" path="res://scenes/ui/power_up.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://dxt6q2mq15odh" path="res://assets/sprites/pickups/power_up.png" id="2"]
-[ext_resource type="AudioStream" uid="uid://ysoujuvnicbi" path="res://assets/audio/sfx/pickups/speed.wav" id="3"]
-[ext_resource type="AudioStream" uid="uid://5guldj3ybi2f" path="res://assets/audio/sfx/pickups/energy.wav" id="4"]
-[ext_resource type="AudioStream" uid="uid://dj0owkcs0lyw4" path="res://assets/audio/sfx/pickups/side_shot.wav" id="5"]
-[ext_resource type="AudioStream" uid="uid://cmtad4y7b28js" path="res://assets/audio/sfx/pickups/damage.wav" id="6"]
-[ext_resource type="AudioStream" uid="uid://7i8k56wrn36x" path="res://assets/audio/sfx/pickups/shield.wav" id="7"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/pickups/powers-speed_up.wav" id="3"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/pickups/powers_health_up.wav" id="4"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/pickups/powers-side_shots_up.wav" id="5"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/pickups/powers-lazer_up.wav" id="6"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/pickups/powers-shield_up.wav" id="7"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 
@@ -171,26 +171,31 @@ libraries/ = SubResource("AnimationLibrary_1")
 
 [node name="sound_Speed_Up" type="AudioStreamPlayer2D" parent="." unique_id=1378628849]
 stream = ExtResource("3")
+volume_db = 3.0
 bus = &"Sounds"
 area_mask = 1
 
 [node name="sound_Energy_Up" type="AudioStreamPlayer2D" parent="." unique_id=1240006784]
 stream = ExtResource("4")
+volume_db = 3.0
 bus = &"Sounds"
 area_mask = 1
 
 [node name="sound_Lateral_Shot" type="AudioStreamPlayer2D" parent="." unique_id=20597373]
 stream = ExtResource("5")
+volume_db = 3.0
 bus = &"Sounds"
 area_mask = 1
 
 [node name="sound_Shot_Up" type="AudioStreamPlayer2D" parent="." unique_id=1553648518]
 stream = ExtResource("6")
+volume_db = 3.0
 bus = &"Sounds"
 area_mask = 1
 
 [node name="sound_Shield" type="AudioStreamPlayer2D" parent="." unique_id=1035635731]
 stream = ExtResource("7")
+volume_db = 3.0
 bus = &"Sounds"
 area_mask = 1
 

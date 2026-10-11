@@ -3,7 +3,7 @@
 [ext_resource path="res://scenes/menu/game_over.gd" type="Script" id="1"]
 [ext_resource path="res://assets/fonts/vermin_vibes_1989.ttf" type="FontFile" id="2"]
 [ext_resource path="res://assets/fonts/slkscr.ttf" type="FontFile" id="3"]
-[ext_resource path="res://assets/audio/music/imperial.ogg" type="AudioStream" id="4"]
+[ext_resource path="res://assets/audio/music/gameover.mp3" type="AudioStream" id="4"]
 [ext_resource path="res://scenes/world/background.tscn" type="PackedScene" id="5"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxGameOver"]
