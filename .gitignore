@@ -14,3 +14,8 @@
 
 # GDSkills agent vision scratch (do not commit)
 .gdskills/
+
+# Local Godot AI MCP installation and activation
+/addons/godot_ai/
+/addons/.godot_ai_update/
+/override.cfg

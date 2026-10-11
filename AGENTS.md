@@ -88,6 +88,6 @@ Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`.
 - Subject: English, imperative, lowercase after the colon, no trailing period
 - Body: explain why when it is not obvious, still English
 - License is MIT ([LICENSE.txt](LICENSE.txt)). Do not relicense. Keep the copyright year range current when doing substantial work
-- The Godot AI MCP addon is part of the repo (`addons/godot_ai/`, autoload `_mcp_game_helper`, editor plugin in `project.godot`)
+- The Godot AI MCP addon is local and ignored (`addons/godot_ai/`, updater `addons/.godot_ai_update/`). Keep its `_mcp_game_helper` autoload and editor plugin activation in the ignored root `override.cfg`, not `project.godot`.
 - Do not squash or merge this work to `master` until the maintainer says so
 - Do not commit unless asked. Never force-push `master`
