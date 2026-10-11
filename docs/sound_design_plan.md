@@ -4,17 +4,17 @@
 
 Plan revised: 2026-09-29. Phase 1 prompt catalog prepared; Suno generation and Godot implementation have not started. This is the dedicated Sound Design phase of the [gameplay roadmap](gameplay_rework_plan.md); complete and verify each requested subphase before starting the next.
 
-The maintainer uploads `assets/audio/music/game.mp3` to Suno as the reference and selects the generated results. The agent prepares English prompts and handles technical preparation and Godot integration. No preliminary listening report, tempo analysis, or key analysis is required before writing prompts. Check timing and loop boundaries after generation, using the selected exports.
+The maintainer uploads an audio reference to Suno and selects the generated results. The agent prepares English prompts and handles technical preparation and Godot integration. No preliminary listening report, tempo analysis, or key analysis is required before writing prompts. Check timing and loop boundaries after generation, using the selected exports.
 
 The maintainer has an active Suno Pro subscription. Prompt preparation and music generation can proceed.
 
 ## Phase 1 — Prepare the prompts
 
-The copy-ready English prompt catalog is in [suno_prompt_catalog.md](suno_prompt_catalog.md). It covers gameplay, menu, and game-over music; screen bridges; existing sound-effect families; and all six upgrade announcements. Use the catalog prompts directly and adjust them through listening iterations in Suno.
+The generation prompt catalog was retired during the audio cleanup on 2026-10-11. The retained runtime music is `Retro-Futurist Drive.mp3` for gameplay, `loader.ogg` for loading, `title.mp3` for the title screen, and `gameover.mp3` for game over. Temporary generation tools and unused source tracks were also removed.
 
 | Asset | Direction |
 | --- | --- |
-| Gameplay | Extend the preferred `game.mp3` remix to 6–8 minutes, preserving its style and the original `game.ogg` melody: retro synthwave / 8-bit, several synth and electric guitar solos, developments and breathing sections |
+| Gameplay | Retro synthwave / 8-bit, several synth and electric guitar solos, developments and breathing sections |
 | Loader and title | A separate shared atmospheric theme, less rhythmically dense, with pads, spacious arpeggios, and discreet percussion |
 | High scores | A brighter, relaxed variation of the atmospheric theme |
 | Game over | Immediate defeat punctuation followed by a melancholic variation of the gameplay theme |
@@ -24,16 +24,16 @@ The copy-ready English prompt catalog is in [suno_prompt_catalog.md](suno_prompt
 
 Use a hybrid arcade sound-effect palette. Announcements share one clear, lightly vocoded robotic voice, spoken rather than sung, approximately one second long, without background music. Each prompt states its purpose, desired character, approximate duration, and whether it should loop. Request distinct musical sections and short transitions without requiring measured BPM or key at this stage.
 
-Done: the catalog covers the music, transitions, existing effects, and six announcements.
+Done: prompts were prepared for the music, transitions, existing effects, and six announcements.
 
 ## Phase 2 — Generate and select in Suno
 
-- The maintainer supplies `game.mp3` as the example, requests the planned modifications, and iterates on the results using the prompts in the catalog.
+- The maintainer supplies an audio reference, requests the planned modifications, and iterates on the results using the approved musical direction.
 - Start with the extended gameplay remix, the atmospheric theme, and one robotic announcement. Once their direction works, produce the remaining variations, bridges, effects, and voices.
 - Keep the gameplay melody recognizable, with synth and guitar solos and alternating intensity. Keep menu music atmospheric while retaining a compatible sound palette.
 - Export the chosen results as WAV, keeping stems when available and useful for editing. The maintainer validates the musical choices by listening.
 
-Done when: the selected music and sound library cover the catalog. Exact loops and final joins are prepared next, rather than assumed to be perfect from generation alone.
+Done when: the selected music and sound library cover the requested assets. Exact loops and final joins are prepared next, rather than assumed to be perfect from generation alone.
 
 ## Phase 3 — Prepare the game audio
 
