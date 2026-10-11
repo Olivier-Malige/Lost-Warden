@@ -7,6 +7,11 @@ var paused = load("res://scenes/ui/paused.tscn")
 
 var menuShow := false
 var _game_over_input_ready_at := 0
+var _transitioning := false
+var _fade_audio_volume_db := 0.0
+var _fade_audio_modes: Dictionary[int, int] = {}
+const FADE_DURATION := 0.3
+@onready var _screen_fade: ColorRect = $ScreenFade/Black
 const PLAYER_CHEATS := {
 	"debug_Key3": "increase_Speed",
 	"debug_Key4": "increase_Shot",
@@ -40,6 +45,9 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if _transitioning:
+		get_viewport().set_input_as_handled()
+		return
 	if worldScreen:
 		if not menuShow and event.is_action_pressed("start") and not event.is_echo():
 			set_Pause()
@@ -73,6 +81,8 @@ func _on_Timer_timeout() -> void:
 	go_Start_Screen()
 
 func set_Pause() -> void:
+	if _transitioning:
+		return
 	if not menuShow:
 		get_tree().paused = true
 		var p = paused.instantiate()
@@ -85,12 +95,16 @@ func set_Pause() -> void:
 		_set_world_background(false)
 
 func set_Restart() -> void:
+	if _transitioning:
+		return
 	menuShow = false
 	release_gameplay_input()
 	get_tree().paused = false
 	get_tree().reload_current_scene()
 
 func set_Resume() -> void:
+	if _transitioning:
+		return
 	if worldScreen and menuShow:
 		menuShow = false
 		release_gameplay_input()
@@ -102,10 +116,18 @@ func set_Resume() -> void:
 		_call_players("update_controller")
 
 func go_Start_Screen() -> void:
+	if _transitioning or (startScreen and has_node("start")):
+		return
+	if worldScreen or gameOverScreen or has_node("hiscore"):
+		await _fade_to(_show_start_screen)
+	else:
+		_show_start_screen()
+
+func _show_start_screen() -> void:
 	menuShow = false
 	get_tree().paused = false
 	release_gameplay_input()
-	for node_name in ["world", "paused", "gameOver"]:
+	for node_name in ["world", "paused", "gameOver", "hiscore"]:
 		var current_screen := get_node_or_null(node_name)
 		if current_screen:
 			current_screen.queue_free()
@@ -128,6 +150,8 @@ func _on_window_size_changed() -> void:
 
 
 func go_Hiscore_Screen() -> void:
+	if _transitioning:
+		return
 	startScreen = false
 	var hiscore = preload("res://scenes/menu/hi_score.tscn").instantiate()
 	add_child(hiscore)
@@ -135,6 +159,11 @@ func go_Hiscore_Screen() -> void:
 
 
 func go_World_Screen() -> void:
+	if _transitioning or worldScreen:
+		return
+	await _fade_to(_show_world_screen)
+
+func _show_world_screen() -> void:
 	_set_title_stars(false)
 	var world = preload("res://scenes/world/world.tscn").instantiate()
 	add_child(world)
@@ -156,8 +185,11 @@ func _set_world_background(on: bool) -> void:
 		layer.visible = on
 
 func go_GameOver_Screen() -> void:
-	if gameOverScreen and has_node("gameOver"):
+	if _transitioning or (gameOverScreen and has_node("gameOver")):
 		return
+	await _fade_to(_show_game_over_screen)
+
+func _show_game_over_screen() -> void:
 	get_tree().paused = false
 	menuShow = false
 	release_gameplay_input()
@@ -185,3 +217,55 @@ func go_GameOver_Screen() -> void:
 	game_over.name = "Overlay"
 	game_over_layer.add_child(game_over)
 	game_over.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+# Swap screens only under an opaque cover, and keep combat stopped until the reveal ends.
+func _fade_to(show_screen: Callable) -> void:
+	_transitioning = true
+	_fade_audio_volume_db = AudioServer.get_bus_volume_db(0)
+	_keep_transition_audio_running()
+	release_gameplay_input()
+	get_viewport().gui_release_focus()
+	get_tree().paused = true
+	_screen_fade.show()
+	var fade_out := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_parallel(true)
+	fade_out.tween_property(_screen_fade, "color:a", 1.0, FADE_DURATION).set_trans(Tween.TRANS_SINE)
+	fade_out.tween_method(_set_fade_audio_volume, 1.0, 0.0, FADE_DURATION).set_trans(Tween.TRANS_SINE)
+	await fade_out.finished
+	show_screen.call()
+	_keep_transition_audio_running()
+	get_tree().paused = true
+	await get_tree().process_frame
+	var fade_in := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_parallel(true)
+	fade_in.tween_property(_screen_fade, "color:a", 0.0, FADE_DURATION).set_trans(Tween.TRANS_SINE)
+	fade_in.tween_method(_set_fade_audio_volume, 0.0, 1.0, FADE_DURATION).set_trans(Tween.TRANS_SINE)
+	await fade_in.finished
+	_screen_fade.hide()
+	release_gameplay_input()
+	get_tree().paused = false
+	_restore_transition_audio()
+	_transitioning = false
+
+# Audio must keep playing while combat is paused so it can fade instead of cutting off.
+func _keep_transition_audio_running() -> void:
+	var players := find_children("*", "AudioStreamPlayer", true, false)
+	players.append_array(find_children("*", "AudioStreamPlayer2D", true, false))
+	for player in players:
+		var id := player.get_instance_id()
+		if not _fade_audio_modes.has(id):
+			_fade_audio_modes[id] = player.process_mode
+			player.process_mode = Node.PROCESS_MODE_ALWAYS
+
+func _set_fade_audio_volume(level: float) -> void:
+	AudioServer.set_bus_volume_db(0, _fade_audio_volume_db + linear_to_db(maxf(level, 0.0001)))
+
+func _restore_transition_audio() -> void:
+	AudioServer.set_bus_volume_db(0, _fade_audio_volume_db)
+	for id in _fade_audio_modes:
+		var player := instance_from_id(id) as Node
+		if is_instance_valid(player):
+			player.process_mode = _fade_audio_modes[id]
+	_fade_audio_modes.clear()
+
+func _exit_tree() -> void:
+	if _transitioning:
+		_restore_transition_audio()

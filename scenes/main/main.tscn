@@ -167,6 +167,7 @@ layout_mode = 2
 theme_override_constants/separation = 6
 
 [node name="Studio" type="Label" parent="loader/Center/Panel/Margin/Content" unique_id=765475378]
+modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.721569, 0.713725, 0.682353, 1)
@@ -196,6 +197,7 @@ layout_mode = 2
 color = Color(0.611765, 0.12549, 0.12549, 1)
 
 [node name="LostWarden" type="Label" parent="loader/Center/Panel/Margin/Content" unique_id=217316107]
+modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.839216, 0.839216, 0.32549, 1)
@@ -214,6 +216,7 @@ layout_mode = 2
 color = Color(0.611765, 0.12549, 0.12549, 1)
 
 [node name="Tagline" type="Label" parent="loader/Center/Panel/Margin/Content" unique_id=1261490876]
+modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.952941, 0.921569, 0.866667, 1)
@@ -254,5 +257,17 @@ vertical_alignment = 1
 [node name="AnimationPlayer" type="AnimationPlayer" parent="loader" unique_id=141453901]
 libraries/ = SubResource("AnimationLibraryLoader")
 autoplay = &"start"
+
+[node name="ScreenFade" type="CanvasLayer" parent="." unique_id=2132846510]
+layer = 100
+
+[node name="Black" type="ColorRect" parent="ScreenFade" unique_id=257597310]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
 
 [connection signal="timeout" from="loader/Timer" to="." method="_on_Timer_timeout"]
