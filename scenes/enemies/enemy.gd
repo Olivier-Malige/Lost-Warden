@@ -16,8 +16,8 @@ enum PatrolState { ENTERING, PATROLLING, EXITING }
 
 var destroyed := false
 var hitByPlayerShot := false
-var life := 0
-var max_life := 0
+var life := 0.0
+var max_life := 0.0
 var hitSomething := 1
 var points := 0
 var speedX := 0.0
@@ -98,7 +98,7 @@ func _apply_spawn_context() -> void:
 		fire_delay_multiplier = elite_definition.fire_delay_multiplier
 		for timer in _shoot_timers:
 			timer.wait_time *= fire_delay_multiplier
-	life = ceili(float(life) * health_multiplier)
+	life *= health_multiplier
 	max_life = life
 	add_to_group("enemy")
 	if elite:
@@ -264,7 +264,7 @@ func _play_spawn_animation() -> void:
 	indexSprites = randi() % definition.sprite_variants + 1 if definition.sprite_variants > 1 else ""
 	$anim.play("start" + str(indexSprites))
 
-func _hit_something(dmg := 0, impact_feedback := true) -> void:
+func _hit_something(dmg: float = 0.0, impact_feedback := true) -> void:
 	if destroyed:
 		return
 	life -= dmg

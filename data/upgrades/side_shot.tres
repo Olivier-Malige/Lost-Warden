@@ -9,5 +9,5 @@ effect = 3
 anim = &"lateralShot"
 weight = 24
 value = 0.08
-max_rank = 7
+max_rank = 10
 hud_label = &"SIDE"

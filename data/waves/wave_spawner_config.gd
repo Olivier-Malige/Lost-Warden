@@ -17,10 +17,22 @@ extends Resource
 @export_range(0.1, 10.0, 0.05) var difficulty_end := 3.55
 @export_range(0.1, 1.0, 0.01) var max_wave_pace_multiplier := 0.82
 
+@export_group("Common enemy density")
+@export_range(0.1, 1.0, 0.01) var common_mid_interval_multiplier := 0.95
+@export_range(0.1, 1.0, 0.01) var common_late_interval_multiplier := 0.90
+@export_range(1.0, 2.0, 0.05) var coop_common_density_multiplier := 1.10
+
+@export_group("Durability")
+@export_range(1.0, 5.0, 0.05) var specialist_health_cap := 1.15
+@export_range(1.0, 5.0, 0.05) var heavy_health_cap := 1.20
+@export_range(1.0, 5.0, 0.05) var coop_common_health_multiplier := 1.25
+@export_range(1.0, 5.0, 0.05) var coop_specialist_health_multiplier := 1.45
+@export_range(1.0, 5.0, 0.05) var coop_heavy_health_multiplier := 1.60
+
 @export_group("Endless loop")
 @export_range(0, 99, 1) var loop_start_index := 17
-@export_range(0.0, 1.0, 0.01) var health_step := 0.08
-@export_range(1.0, 5.0, 0.05) var health_cap := 1.75
+@export_range(0.0, 1.0, 0.01) var health_step := 0.03
+@export_range(1.0, 5.0, 0.05) var health_cap := 1.20
 @export_range(0.0, 1.0, 0.01) var pace_step := 0.04
 @export_range(0.1, 1.0, 0.01) var pace_cap := 0.65
 @export_range(1, 20, 1) var formation_step_cycles := 2
@@ -39,6 +51,14 @@ func is_valid() -> bool:
 		and solo_enemy_cap > 0 \
 		and coop_enemy_cap >= solo_enemy_cap \
 		and difficulty_end > difficulty_start \
+		and common_mid_interval_multiplier > 0.0 and common_mid_interval_multiplier <= 1.0 \
+		and common_late_interval_multiplier > 0.0 and common_late_interval_multiplier <= common_mid_interval_multiplier \
+		and coop_common_density_multiplier >= 1.0 \
+		and specialist_health_cap >= 1.0 and heavy_health_cap >= 1.0 \
+		and coop_common_health_multiplier >= 1.0 \
+		and coop_specialist_health_multiplier >= 1.0 \
+		and coop_heavy_health_multiplier >= 1.0 \
+		and health_step >= 0.0 \
 		and health_cap >= 1.0 \
 		and formation_step_cycles > 0 \
 		and elite_step_cycles > 0 \

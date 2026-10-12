@@ -3,15 +3,15 @@ extends Node2D
 
 var target: Enemy
 var definition: EliteDefinition
-var max_health := 1
-var current_health := 1
+var max_health := 1.0
+var current_health := 1.0
 var radius := 9.0
 var elapsed := 0.0
 
-func setup(p_target: Enemy, p_max_health: int, p_definition: EliteDefinition) -> void:
+func setup(p_target: Enemy, p_max_health: float, p_definition: EliteDefinition) -> void:
 	target = p_target
 	definition = p_definition
-	max_health = maxi(p_max_health, 1)
+	max_health = maxf(p_max_health, 1.0)
 	current_health = max_health
 	var sprite := target.get_node_or_null("Sprite2D") as Sprite2D
 	if sprite and sprite.texture:
@@ -19,8 +19,8 @@ func setup(p_target: Enemy, p_max_health: int, p_definition: EliteDefinition) ->
 	show_behind_parent = true
 	queue_redraw()
 
-func set_health(value: int) -> void:
-	current_health = clampi(value, 0, max_health)
+func set_health(value: float) -> void:
+	current_health = clampf(value, 0.0, max_health)
 	queue_redraw()
 
 func _process(delta: float) -> void:

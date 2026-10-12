@@ -64,9 +64,7 @@ func _run_rule(rule: SpawnRule, rule_index: int, generation: int, difficulty: fl
 	if active_duration <= 0.0:
 		return
 	var active_timer := get_tree().create_timer(active_duration, false)
-	var interval := maxf(rule.interval * timeline_scale * _pace_multiplier(difficulty) * config.spawn_interval_multiplier, 0.05)
-	if global.coop and rule.formation < 4 and interval < active_duration:
-		interval *= 0.9
+	var interval := _spawn_interval(rule, difficulty, timeline_scale)
 	var cycle := 0
 	var elites_remaining := maxi(rule.elite_count + _endless_elite_bonus(rule), 0)
 	var next_spawn_elapsed := 0.0
@@ -87,8 +85,6 @@ func _run_rule(rule: SpawnRule, rule_index: int, generation: int, difficulty: fl
 
 func _spawn_formation(rule: SpawnRule, rule_index: int, generation: int, cycle: int, active_timer: SceneTreeTimer, difficulty: float, can_spawn_elite: bool, timeline_scale: float) -> bool:
 	var count := maxi(rule.formation + _endless_formation_bonus(rule), 1)
-	if global.coop and count >= 4:
-		count += 1
 	var lanes := _formation_lanes(rule, count, cycle)
 	var spawn_elite := can_spawn_elite and _active_elite_count() < 3
 	for i in range(lanes.size()):
@@ -103,6 +99,28 @@ func _spawn_formation(rule: SpawnRule, rule_index: int, generation: int, cycle: 
 
 func _timeline_scale(wave: WaveDefinition) -> float:
 	return config.wave_duration / wave.duration
+
+func _spawn_interval(rule: SpawnRule, difficulty: float, timeline_scale: float) -> float:
+	var multiplier := 1.0
+	var definition := _rule_definition(rule)
+	if definition and _is_common(definition):
+		if wave_index >= 8:
+			multiplier = config.common_late_interval_multiplier
+		elif wave_index >= 3:
+			multiplier = config.common_mid_interval_multiplier
+		if global.coop:
+			multiplier /= config.coop_common_density_multiplier
+	return maxf(rule.interval * timeline_scale * _pace_multiplier(difficulty) * config.spawn_interval_multiplier * multiplier, 0.05)
+
+func _rule_definition(rule: SpawnRule) -> EnemyDefinition:
+	var state := rule.scene.get_state()
+	for property in state.get_node_property_count(0):
+		if state.get_node_property_name(0, property) == &"definition":
+			return state.get_node_property_value(0, property) as EnemyDefinition
+	return null
+
+func _is_common(definition: EnemyDefinition) -> bool:
+	return definition.durability in [EnemyDefinition.Durability.FODDER, EnemyDefinition.Durability.FIGHTER]
 
 func _formation_lanes(rule: SpawnRule, requested_count: int, cycle: int) -> Array[int]:
 	var minimum := clampi(mini(rule.spawn_min, rule.spawn_max), 0, config.lane_count - 1)
@@ -265,9 +283,8 @@ func _spawn_at(rule: SpawnRule, rule_index: int, cycle: int, lane: int, formatio
 		return
 	var enemy := rule.scene.instantiate()
 	if enemy is Enemy:
-		var health_multiplier := lerpf(1.0, _durability_health_cap(enemy.definition), _difficulty_progress(difficulty)) * _endless_health_multiplier()
 		var context := EnemySpawnContext.new()
-		context.health_multiplier = health_multiplier
+		context.health_multiplier = _health_multiplier(enemy.definition, difficulty)
 		context.elite = elite
 		context.elite_definition = config.elite_definition
 		context.speed_multiplier = rule.speed_multiplier
@@ -304,8 +321,20 @@ func _pace_multiplier(difficulty: float) -> float:
 	var endless_pace := maxf(1.0 - _endless_cycle * config.pace_step, config.pace_cap)
 	return wave_pace * endless_pace
 
-func _endless_health_multiplier() -> float:
-	return minf(1.0 + _endless_cycle * config.health_step, config.health_cap)
+func _health_multiplier(definition: EnemyDefinition, difficulty: float) -> float:
+	var multiplier := 1.0
+	match definition.durability:
+		EnemyDefinition.Durability.FODDER, EnemyDefinition.Durability.FIGHTER:
+			return config.coop_common_health_multiplier if global.coop else 1.0
+		EnemyDefinition.Durability.SPECIALIST:
+			multiplier = config.coop_specialist_health_multiplier if global.coop else 1.0
+		EnemyDefinition.Durability.HEAVY:
+			multiplier = config.coop_heavy_health_multiplier if global.coop else 1.0
+		_:
+			return 1.0
+	var wave_health := lerpf(1.0, _durability_health_cap(definition), _difficulty_progress(difficulty))
+	var endless_health := minf(1.0 + _endless_cycle * config.health_step, config.health_cap)
+	return multiplier * wave_health * endless_health
 
 func _endless_formation_bonus(rule: SpawnRule) -> int:
 	if not _is_endless_finale() or not rule.endless_formation_growth:
@@ -341,13 +370,9 @@ func _on_enemy_tree_exited(instance_id: int) -> void:
 
 func _durability_health_cap(definition: EnemyDefinition) -> float:
 	match definition.durability:
-		EnemyDefinition.Durability.FODDER:
-			return 1.15
-		EnemyDefinition.Durability.FIGHTER:
-			return 1.25
 		EnemyDefinition.Durability.SPECIALIST:
-			return 1.3
+			return config.specialist_health_cap
 		EnemyDefinition.Durability.HEAVY:
-			return 1.3
+			return config.heavy_health_cap
 		_:
 			return 1.0

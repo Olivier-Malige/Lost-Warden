@@ -2,7 +2,7 @@ class_name PlayerWeapons
 extends RefCounted
 
 const SIDE_SPREAD_SPEED := 51.0
-const EXTRA_SIDE_MIN_RANK := 6
+const EXTRA_SIDE_MIN_RANK := 8
 const EXTRA_SIDE_SPREAD_SPEED := 110.5
 const EXTRA_SIDE_DAMAGE_MULTIPLIER := 0.6
 

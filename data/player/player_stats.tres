@@ -5,6 +5,6 @@
 [resource]
 script = ExtResource("1")
 shoot_delay_base = 0.2
-starting_energy = 4
+starting_energy = 3
 weapon_speed_multiplier = 0.88
 beam_collision_width_multiplier = 1.2

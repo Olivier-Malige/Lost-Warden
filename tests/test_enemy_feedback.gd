@@ -142,13 +142,13 @@ func run() -> void:
 		await process_frame
 	var mounted: Variant = make_mounted_turret()
 	var mounted_sprite: Sprite2D = mounted.get_node("Sprite2D")
-	mounted._attack_state = TurretEnemy.AttackState.RING_TELEGRAPH
+	mounted._attack_state = mounted.AttackState.RING_TELEGRAPH
 	mounted._physics_process(0.2)
 	check(is_zero_approx(mounted_sprite.rotation), "mounted turret: radial telegraph must not spin its housing")
 	mounted._patterns_started = true
-	mounted._attack_state = TurretEnemy.AttackState.AIM_COOLDOWN
+	mounted._attack_state = mounted.AttackState.AIM_COOLDOWN
 	mounted._on_attack_timer_timeout()
-	check(mounted._attack_state == TurretEnemy.AttackState.AIM_TELEGRAPH, "mounted turret: aimed bursts must repeat without a radial ring")
+	check(mounted._attack_state == mounted.AttackState.AIM_TELEGRAPH, "mounted turret: aimed bursts must repeat without a radial ring")
 	mounted.stop_patterns()
 	var mounted_origin: Vector2 = mounted.position
 	mounted._hit_something(1)

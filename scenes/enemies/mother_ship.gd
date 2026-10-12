@@ -141,7 +141,7 @@ func _destroy() -> void:
 			turret.shutdown_from_parent()
 	super._destroy()
 
-func _hit_something(dmg := 0, impact_feedback := true) -> void:
+func _hit_something(dmg: float = 0.0, impact_feedback := true) -> void:
 	var anchor_position := position
 	super._hit_something(dmg, impact_feedback)
 	position = anchor_position

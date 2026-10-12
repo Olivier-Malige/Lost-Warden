@@ -23,7 +23,7 @@ func _run() -> void:
 	player.set_physics_process(false)
 	player.shooting_delay_timer.stop()
 	player.shooting_audio.stream = null
-	_check(is_equal_approx(player.loadout.fire_delay, 0.3), "base fire interval must be 0.30 seconds")
+	_check(is_equal_approx(player.loadout.fire_delay, 0.2), "base fire interval must be 0.20 seconds")
 	await process_frame
 	for action in ["all_fire", "keyboard_fire", "gamepad1_fire", "gamepad2_fire"]:
 		player.controller = action.trim_suffix("_fire")

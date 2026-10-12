@@ -5,10 +5,10 @@
 
 [resource]
 script = ExtResource("1")
-max_health = 36
+max_health = 56
 collision_damage = 10
 score = 2000
 durability = 4
-power_up_chance = 41
+power_up_chance = 15
 plasma_drop_chance = 59
 movement_profile = ExtResource("2")

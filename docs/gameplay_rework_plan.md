@@ -34,6 +34,7 @@ Permanent meta-progression, unlockable ships, profile levels, and account-wide u
 - Phase 1 follow-up — Plasma reserve beam: implementation completed on 2026-09-01; gameplay feel playtests remain before approval.
 - Phase 1 follow-up — Speed and impact feedback: implementation completed on 2026-09-03; automated checks and visual capture pass, while solo and co-op gameplay feel playtests remain.
 - Phase 1 follow-up — Existing enemy movement: implementation completed on 2026-09-04; deterministic headless checks pass, while targeted solo and co-op readability playtests remain.
+- Phase 1 follow-up — Alpha 9 balance: implemented on 2026-10-12; the approved profile is documented below. Automated balance checks pass; comparative solo/co-op feel and pressure playtests remain before release approval.
 - Visual production phase: planned and approved on 2026-08-29; implementation starts only after Phase 1 approval.
 - Next implementation step: playtest speed, impact, plasma reserve, and the revised enemy paths on waves 1–3, 6, 9, 12, 15, and 18 in solo and co-op before approving Phase 1.
 
@@ -428,6 +429,55 @@ Planned commits:
 - `feat(art): replace player and weapon sprites`
 - `feat(art): replace enemy and hazard sprites`
 - `feat(art): replace space backgrounds`
+
+## Phase 1 follow-up — Alpha 9 gameplay balance
+
+Status: maintainer-approved profile implemented on 2026-10-12. This follow-up balances the existing 18-wave/direct-pickup game and does not start Phases 2–6 or meta-progression.
+
+Playtest revision on 2026-10-12: the maintainer found the opening satisfactory, upgrade progression too fast and higher-tier enemies too fragile. The current values below supersede the initial profile. Keep opening health/density and pickup probabilities; spread the same maximum offensive power over more ranks and increase specialist/heavy base health.
+
+A subsequent maintainer-requested revision on 2026-10-12 reduces normal power-up probabilities by approximately 30% and player starting health from four to three. This supersedes the previous instruction to retain pickup probabilities. Keep plasma probabilities, guaranteed elite rewards and the 12-health repair cap.
+
+Latest playtest revision on 2026-10-12: power-ups still arrive too frequently and superior enemies still need more health. Reduce normal power-up probabilities by roughly another half and increase specialist/heavy base health by about 25%. The current table and probabilities below supersede the earlier iterations; common-enemy health, upgrade ranks, density, scaling and player starting health stay unchanged.
+
+### Durability
+
+| Enemy | Base health | Co-op multiplier |
+| --- | ---: | ---: |
+| Drone | 2 | 1.25 |
+| Fighter (`tie`) | 2 | 1.25 |
+| Interceptor | 10 | 1.45 |
+| Standalone turret | 56 | 1.60 |
+| Mother ship | 76 | 1.60 |
+| Mounted turret | 19 | Inherit the complete hull multiplier once |
+| Asteroids | 2 / 8, unchanged | 1.00 |
+
+- Preserve fractional damage and health, including turret overrides and elite indicators; do not round spawn health upward.
+- Common enemy health stays constant throughout the catalog and endless loop. Hazards receive no wave, endless or co-op health scaling.
+- Specialist and heavy wave multipliers reach 1.15 and 1.20 respectively at difficulty 3.55. Their additional endless multiplier grows by 0.03 per cycle, capped at 1.20.
+- Elite health uses a 2.00 multiplier; attack behavior, identification, score multiplier and guaranteed rewards remain unchanged.
+- Mounted turrets inherit wave, endless, co-op, rule and elite hull modifiers through the hull/base-health ratio, without applying them again.
+- Co-op remains a run-level setting after one player's death, including future enemy spawns.
+
+### Density and progression
+
+- Keep 36-second waves, 2-second transitions, existing wave pace, movements, spacing, gap-wall openings, 45/60 enemy caps and the three-elite cap.
+- Multiply common-enemy spawn intervals by 1.00 on waves 1–3, 0.95 on waves 4–8 and 0.90 on waves 9–18. In co-op divide these intervals by 1.10 and remove both legacy formation-size and short-formation interval bonuses.
+- Leave specialist, heavy and hazard intervals unchanged; preserve existing endless formation/elite growth.
+- Target strong pressure around displayed waves 9–13 (approximately 5–8 minutes). This is a playtest target, not a measured difficulty result.
+- Keep initial primary damage at 1.00 and delay at 0.20 seconds. Damage upgrades grant 0.15 for ten ranks (2.50 maximum); fire-rate upgrades subtract 0.007 for ten ranks (0.13 minimum).
+- Side shots have ten ranks and unlock the extra pair at rank eight; each rank after unlock grants 0.08 damage (same maximum 0.72 bonus). Keep speed, energy, shield, upgrade weights, capped-pickup score conversion and plasma parameters unchanged.
+- Normal power-up probabilities are drone 5%, fighter 3%, interceptor 12%, standalone turret 15%, mother ship 16%, mounted turret 3%, asteroid 1% and big asteroid 3%. Plasma probabilities remain unchanged and elite kills still guarantee a power-up. No timed pickup guarantee is introduced.
+- Players start at three health in solo and co-op; repairs can still reach the existing 12-health cap.
+- Solo common targets require two initial primary hits and one at damage rank seven; co-op common targets require one hit at maximum damage rank ten.
+
+Validation and release gate:
+
+- `tests/test_alpha_9_balance.gd` covers all wave definitions in solo/co-op, damage ranks, repeated endless cycles, fractional damage, mounted inheritance, interval eligibility, formation openings, runtime caps, pickup probabilities, pooled-shot reset and one-player death.
+- Run firing, beam and native-scale regressions alongside the balance suite. Record pre-existing presentation failures separately in `docs/phase_1_playtest.md`.
+- Complete at least three solo and three co-op runs through 12 minutes or death, compare the previous profile at waves 1–3, 6, 9, 12, 15 and 18, and repeat the finale. Include unequal pickup allocation and partner death.
+- Record destruction times, escaped targets, upgrades per player, plasma availability, death causes, readability and heavy-enemy accumulation. Approval requires perceptible upgrade gains and readable pressure around 5–8 minutes.
+- Any further tuning requires a recorded observation and targeted revalidation. This implementation does not approve the alpha release or authorize publishing/committing.
 
 ## Phase 2 — Add the seeded encounter director, elites, and bosses
 
