@@ -1,5 +1,11 @@
 # Sound Design — Suno Production and Godot Integration
 
+## Pickup announcement shortening — 2026-10-12
+
+Maintainer-requested edit of the six current pickup WAVs: remove the final "up" by cutting at the preceding low-energy word boundary, apply an 8 ms fade and append 25 ms of silence. Preserve existing resource paths, stereo 44.1 kHz float32 encoding, import settings and queue behavior. Current durations: laser 0.675 s, shield 0.640 s, side shots 0.985 s, speed 0.600 s, health 0.545 s and plasma energy 1.210 s.
+
+Godot imports and the pickup-audio routing/queue regression pass. Cuts were located from waveform activity; subjective listening confirmation of each word ending remains pending because audio input is unavailable in this agent session. Original files are retained locally under the ignored `.godot/pickup_audio_originals/` directory for adjustment.
+
 ## Direction and workflow
 
 Plan revised: 2026-09-29. Phase 1 prompt catalog prepared; Suno generation and Godot implementation have not started. This is the dedicated Sound Design phase of the [gameplay roadmap](gameplay_rework_plan.md); complete and verify each requested subphase before starting the next.
