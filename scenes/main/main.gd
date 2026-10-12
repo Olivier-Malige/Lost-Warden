@@ -121,7 +121,7 @@ func go_Start_Screen() -> void:
 	if _transitioning or (startScreen and has_node("start")):
 		return
 	if worldScreen or gameOverScreen or has_node("hiscore"):
-		await _fade_to(_show_start_screen)
+		await _fade_to(_show_start_screen, not has_node("hiscore"))
 	else:
 		_show_start_screen()
 
@@ -224,7 +224,7 @@ func _show_game_over_screen() -> void:
 	game_over.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 # Swap screens only under an opaque cover, and keep combat stopped until the reveal ends.
-func _fade_to(show_screen: Callable) -> void:
+func _fade_to(show_screen: Callable, fade_audio := true) -> void:
 	_transitioning = true
 	_fade_audio_volume_db = AudioServer.get_bus_volume_db(0)
 	_keep_transition_audio_running()
@@ -234,7 +234,8 @@ func _fade_to(show_screen: Callable) -> void:
 	_screen_fade.show()
 	var fade_out := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_parallel(true)
 	fade_out.tween_property(_screen_fade, "color:a", 1.0, FADE_DURATION).set_trans(Tween.TRANS_SINE)
-	fade_out.tween_method(_set_fade_audio_volume, 1.0, 0.0, FADE_DURATION).set_trans(Tween.TRANS_SINE)
+	if fade_audio:
+		fade_out.tween_method(_set_fade_audio_volume, 1.0, 0.0, FADE_DURATION).set_trans(Tween.TRANS_SINE)
 	await fade_out.finished
 	show_screen.call()
 	_keep_transition_audio_running()
@@ -242,7 +243,8 @@ func _fade_to(show_screen: Callable) -> void:
 	await get_tree().process_frame
 	var fade_in := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_parallel(true)
 	fade_in.tween_property(_screen_fade, "color:a", 0.0, FADE_DURATION).set_trans(Tween.TRANS_SINE)
-	fade_in.tween_method(_set_fade_audio_volume, 0.0, 1.0, FADE_DURATION).set_trans(Tween.TRANS_SINE)
+	if fade_audio:
+		fade_in.tween_method(_set_fade_audio_volume, 0.0, 1.0, FADE_DURATION).set_trans(Tween.TRANS_SINE)
 	await fade_in.finished
 	_screen_fade.hide()
 	release_gameplay_input()

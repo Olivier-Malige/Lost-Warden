@@ -2,7 +2,7 @@
 
 ## Continuous title and hiscore music — 2026-10-12
 
-The main screen controller owns one `TitleMusic` player on the `Music` bus. Opening hiscores or returning to the title keeps its current playback position; starting gameplay stops it during the existing screen fade. The title scene no longer owns an autoplay player. `tests/test_screen_fades.gd` verifies uninterrupted hiscore playback, return continuity and gameplay handoff; both that suite and `tests/test_start_screen.gd` pass in Godot 4.7.2 headless.
+The main screen controller owns one `TitleMusic` player on the `Music` bus. Opening hiscores or returning to the title keeps its current playback position and audio volume. The return retains its visual fade without an audio fade; other screen transitions retain their audio fades, and starting gameplay stops title music during the existing screen fade. The title scene no longer owns an autoplay player. `tests/test_screen_fades.gd` verifies uninterrupted hiscore playback, stable volume throughout the return, visual fade completion and gameplay handoff; both that suite and `tests/test_start_screen.gd` pass in Godot 4.7.2 headless.
 
 ## Pickup announcement shortening — 2026-10-12
 

@@ -46,7 +46,15 @@ func _check_hiscore_music() -> void:
 	_check(_main.has_node("hiscore") and not _main.has_node("start"), "hiscores must replace the title screen")
 	_check(music.playing and music.get_playback_position() > position, "title music must advance without restarting on hiscores")
 	position = music.get_playback_position()
-	await _main.go_Start_Screen()
+	var master_volume := AudioServer.get_bus_volume_db(0)
+	_main.go_Start_Screen()
+	_check(_main._transitioning, "returning from hiscores must retain the visual fade")
+	var deadline := Time.get_ticks_msec() + 3000
+	while _main._transitioning and Time.get_ticks_msec() < deadline:
+		_check(is_equal_approx(AudioServer.get_bus_volume_db(0), master_volume), "hiscore return must preserve audio volume throughout the visual fade")
+		_check(music.playing, "hiscore return must keep title music playing throughout the visual fade")
+		await process_frame
+	_check(not _main._transitioning, "hiscore return must complete its visual fade")
 	await process_frame
 	_check(_main.get_node("TitleMusic") == music and music.playing, "returning to the title must retain the same music player")
 	_check(music.get_playback_position() > position, "returning from hiscores must not restart title music")
