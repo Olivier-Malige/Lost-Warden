@@ -12,6 +12,7 @@ var _fade_audio_volume_db := 0.0
 var _fade_audio_modes: Dictionary[int, int] = {}
 const FADE_DURATION := 0.3
 @onready var _screen_fade: ColorRect = $ScreenFade/Black
+@onready var _title_music: AudioStreamPlayer = $TitleMusic
 const PLAYER_CHEATS := {
 	"debug_Key3": "increase_Speed",
 	"debug_Key4": "increase_Shot",
@@ -30,6 +31,7 @@ const PLAYER_INPUT_ACTIONS := [
 
 func _ready() -> void:
 	add_to_group("game")
+	_title_music.stream.loop = true
 	if OS.has_feature("web"):
 		global.saveData.config.fullscreen = get_window().mode == Window.MODE_FULLSCREEN
 		get_window().size_changed.connect(_on_window_size_changed)
@@ -137,6 +139,8 @@ func _show_start_screen() -> void:
 	_set_title_stars(true)
 	var start = preload("res://scenes/menu/start.tscn").instantiate()
 	add_child(start)
+	if not _title_music.playing:
+		_title_music.play()
 
 
 func release_gameplay_input() -> void:
@@ -150,7 +154,7 @@ func _on_window_size_changed() -> void:
 
 
 func go_Hiscore_Screen() -> void:
-	if _transitioning:
+	if _transitioning or not startScreen:
 		return
 	startScreen = false
 	var hiscore = preload("res://scenes/menu/hi_score.tscn").instantiate()
@@ -164,6 +168,7 @@ func go_World_Screen() -> void:
 	await _fade_to(_show_world_screen)
 
 func _show_world_screen() -> void:
+	_title_music.stop()
 	_set_title_stars(false)
 	var world = preload("res://scenes/world/world.tscn").instantiate()
 	add_child(world)

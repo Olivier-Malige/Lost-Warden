@@ -1,5 +1,9 @@
 # Sound Design — Suno Production and Godot Integration
 
+## Continuous title and hiscore music — 2026-10-12
+
+The main screen controller owns one `TitleMusic` player on the `Music` bus. Opening hiscores or returning to the title keeps its current playback position; starting gameplay stops it during the existing screen fade. The title scene no longer owns an autoplay player. `tests/test_screen_fades.gd` verifies uninterrupted hiscore playback, return continuity and gameplay handoff; both that suite and `tests/test_start_screen.gd` pass in Godot 4.7.2 headless.
+
 ## Pickup announcement shortening — 2026-10-12
 
 Maintainer-requested edit of the six current pickup WAVs: remove the final "up" by cutting at the preceding low-energy word boundary, apply an 8 ms fade and append 25 ms of silence. Preserve existing resource paths, stereo 44.1 kHz float32 encoding, import settings and queue behavior. Current durations: laser 0.675 s, shield 0.640 s, side shots 0.985 s, speed 0.600 s, health 0.545 s and plasma energy 1.210 s.

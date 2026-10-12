@@ -7,6 +7,7 @@
 [ext_resource type="FontFile" uid="uid://b2lht0aff7caj" path="res://assets/fonts/vermin_vibes_1989.ttf" id="5"]
 [ext_resource type="FontFile" uid="uid://cndq06brheuki" path="res://assets/fonts/slkscr.ttf" id="6"]
 [ext_resource type="Script" uid="uid://bhluujrkasv84" path="res://scenes/main/star_field.gd" id="7"]
+[ext_resource type="AudioStream" path="res://assets/audio/music/title.mp3" id="8_title_music"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxLoader"]
 bg_color = Color(0.0627451, 0.0823529, 0.133333, 0.96)
@@ -96,6 +97,10 @@ _data = {
 [node name="main" type="Node" unique_id=613514248]
 process_mode = 1
 script = ExtResource("1")
+
+[node name="TitleMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_title_music")
+bus = &"Music"
 
 [node name="Stars" type="CPUParticles2D" parent="." unique_id=10840754]
 show_behind_parent = true

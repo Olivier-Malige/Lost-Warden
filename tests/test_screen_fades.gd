@@ -25,13 +25,31 @@ func _run() -> void:
 		root.size = Vector2i(960, 600)
 		await create_timer(0.9).timeout
 	await _capture("title")
+	await _check_hiscore_music()
 	await _check_transition("world", _main.go_World_Screen, "start", "game")
+	_check(not _main.get_node("TitleMusic").playing, "title music must stop when gameplay starts")
 	await _check_transition("gameOver", _main.go_GameOver_Screen, "world", "game_over")
 	await _check_transition("start", _main.go_Start_Screen, "gameOver", "return_title")
 	_main.queue_free()
 	await process_frame
 	print("Screen fades: ", "PASS" if _failures == 0 else "FAIL")
 	quit(0 if _failures == 0 else 1)
+
+func _check_hiscore_music() -> void:
+	var music: AudioStreamPlayer = _main.get_node("TitleMusic")
+	await create_timer(0.1).timeout
+	var position := music.get_playback_position()
+	_check(music.playing and music.stream.loop, "title music must play in a loop")
+	_main.go_Hiscore_Screen()
+	_main.go_Hiscore_Screen()
+	await create_timer(0.1).timeout
+	_check(_main.has_node("hiscore") and not _main.has_node("start"), "hiscores must replace the title screen")
+	_check(music.playing and music.get_playback_position() > position, "title music must advance without restarting on hiscores")
+	position = music.get_playback_position()
+	await _main.go_Start_Screen()
+	await process_frame
+	_check(_main.get_node("TitleMusic") == music and music.playing, "returning to the title must retain the same music player")
+	_check(music.get_playback_position() > position, "returning from hiscores must not restart title music")
 
 func _check_transition(destination: String, request: Callable, source: String, label: String) -> void:
 	var master_volume := AudioServer.get_bus_volume_db(0)
