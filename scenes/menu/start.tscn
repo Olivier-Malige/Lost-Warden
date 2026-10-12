@@ -106,7 +106,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.611765, 0.666667, 0.752941, 1)
 theme_override_fonts/font = ExtResource("3")
 theme_override_font_sizes/font_size = 8
-text = "ALPHA-8"
+text = "ALPHA-9"
 horizontal_alignment = 1
 vertical_alignment = 1
 
