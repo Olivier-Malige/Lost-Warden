@@ -35,7 +35,9 @@ func _apply_wave(index: int) -> void:
 	_wave_generation += 1
 	_master.stop()
 	wave_index = clampi(index, 0, catalog.waves.size() - 1)
-	global.wave = wave_index + 1
+	var loop_start := mini(config.loop_start_index, catalog.waves.size() - 1)
+	var loop_length := catalog.waves.size() - loop_start
+	global.wave = wave_index + 1 + _endless_cycle * loop_length
 	Events.wave_changed.emit(global.wave)
 	var wave: WaveDefinition = catalog.waves[wave_index]
 	if wave == null or not wave.is_valid(config.lane_count):
@@ -353,9 +355,11 @@ func _on_master_timeout() -> void:
 	goto_Next_Wave()
 
 func goto_Previous_Wave() -> void:
-	if wave_index > 0:
-		if wave_index <= config.loop_start_index:
-			_endless_cycle = 0
+	var loop_start := mini(config.loop_start_index, catalog.waves.size() - 1)
+	if _endless_cycle > 0 and wave_index == loop_start:
+		_endless_cycle -= 1
+		_apply_wave(catalog.waves.size() - 1)
+	elif wave_index > 0:
 		_apply_wave(wave_index - 1)
 
 func goto_Next_Wave() -> void:
