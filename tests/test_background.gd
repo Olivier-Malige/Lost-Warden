@@ -14,12 +14,13 @@ func run() -> void:
 	var background = load("res://scenes/world/background.tscn").instantiate()
 	root.add_child(background)
 	check(is_zero_approx(background.speed_Y), "loader background must start stationary")
+	var repeat_width := ceilf(root.get_visible_rect().size.x / 640.0) * 640.0
 	for layer_name in ["b3", "b2", "b1"]:
 		var layer: ParallaxLayer = background.get_node(layer_name)
 		var sprite: Sprite2D = layer.get_child(0)
 		check(sprite.texture.get_size() == Vector2(640, 450), layer_name + ": texture must use the native 640 by 450 canvas")
 		check(sprite.scale == Vector2.ONE, layer_name + ": texture must retain native pixel scale")
-		check(layer.motion_mirroring == Vector2(640, 450), layer_name + ": repeat distance must match the texture")
+		check(layer.motion_mirroring == Vector2(repeat_width, 450), layer_name + ": repeat distance must cover the viewport with complete texture tiles")
 		check(sprite.modulate == Color.WHITE and layer.modulate == Color.WHITE, layer_name + ": authored alpha must not be attenuated by a historical tint")
 	check(background.get_node("b1/stars").material is ShaderMaterial, "near debris must use the opaque-object material")
 	check(background.get_node("PlanetsLayer/Planets").material is ShaderMaterial, "mid planets must have an independent opaque pass")
@@ -30,7 +31,7 @@ func run() -> void:
 	var debris: Sprite2D = background.get_node("b1/stars")
 	var planets_layer: ParallaxLayer = background.get_node("PlanetsLayer")
 	check(planets_layer.motion_scale.y < background.get_node("b2").motion_scale.y and planets_layer.motion_scale.y > background.get_node("b3").motion_scale.y, "planets must drift more slowly than the mid clouds")
-	check(planets_layer.motion_mirroring == Vector2(640, 450), "planet layer must repeat with the source texture")
+	check(planets_layer.motion_mirroring == Vector2(repeat_width, 450), "planet layer must repeat with complete texture tiles across the viewport")
 	check(far_stars.z_index < mid_cloud.z_index and mid_cloud.z_index < near_stars.z_index and near_stars.z_index < planets.z_index and planets.z_index < debris.z_index, "stars must draw behind planets and debris")
 	check(not far_stars.z_as_relative and not mid_cloud.z_as_relative and not near_stars.z_as_relative and not planets.z_as_relative and not debris.z_as_relative, "background draw order must be independent of parallax layer order")
 	check((near_stars.material as ShaderMaterial).get_shader_parameter("draw_mode") == 3 and (debris.material as ShaderMaterial).get_shader_parameter("draw_mode") == 4, "near stars and debris must use separate opaque passes")
@@ -77,6 +78,23 @@ func run() -> void:
 	themed_background._process(8.0)
 	check(themed_background.get_node("b3/stars").texture.resource_path.ends_with("gameplay_background/red_rift/far.png"), "wave 13 onward must use the red rift")
 	themed_background.queue_free()
+	await process_frame
+	var wide_viewport := SubViewport.new()
+	wide_viewport.size = Vector2i(960, 400)
+	root.add_child(wide_viewport)
+	var wide_background = load("res://scenes/world/background.tscn").instantiate()
+	wide_viewport.add_child(wide_background)
+	wide_background.set_process(false)
+	for width in [960, 640, 1424, 960]:
+		wide_viewport.size.x = width
+		await process_frame
+		var expected_width := ceilf(width / 640.0) * 640.0
+		for layer in wide_background.get_children():
+			check(layer.motion_mirroring == Vector2(expected_width, 450), "%s: resizing to %d must update the repeat interval" % [layer.name, width])
+			for sprite in layer.get_children():
+				check(sprite.texture_repeat == CanvasItem.TEXTURE_REPEAT_ENABLED, sprite.name + ": horizontal regions must repeat rather than stretch the texture")
+				check(sprite.region_enabled and sprite.region_rect == Rect2(0, 0, expected_width, 450), sprite.name + ": the repeated region must cover the resized viewport")
+	wide_viewport.queue_free()
 	await process_frame
 	print("Background: ", "PASS" if failures == 0 else "FAIL")
 	quit(0 if failures == 0 else 1)

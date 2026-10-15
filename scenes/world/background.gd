@@ -36,10 +36,27 @@ var _theme_index := -1
 var _theme_fade_elapsed := THEME_FADE_SECONDS
 
 func _ready() -> void:
+	get_viewport().size_changed.connect(_update_horizontal_repeat)
+	_update_horizontal_repeat()
 	Events.player_motion_changed.connect(_on_player_motion_changed)
 	if wave_theme_enabled:
 		Events.wave_changed.connect(_on_wave_changed)
 		_apply_theme_for_wave(maxi(global.wave, 1))
+
+
+# ParallaxLayer draws only two copies, so each repeat must cover the viewport width.
+func _update_horizontal_repeat() -> void:
+	var tile_size: Vector2 = $"b3/stars".texture.get_size()
+	var repeat_width := ceilf(get_viewport().get_visible_rect().size.x / tile_size.x) * tile_size.x
+	for layer in get_children():
+		if layer is not ParallaxLayer:
+			continue
+		layer.motion_mirroring.x = repeat_width
+		for sprite in layer.get_children():
+			if sprite is Sprite2D:
+				sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+				sprite.region_enabled = true
+				sprite.region_rect = Rect2(Vector2.ZERO, Vector2(repeat_width, tile_size.y))
 
 
 func _process(delta: float) -> void:

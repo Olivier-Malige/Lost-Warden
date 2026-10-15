@@ -9,6 +9,7 @@
 [sub_resource type="ShaderMaterial" id="MidCloud"]
 shader = ExtResource( 5 )
 shader_parameter/draw_mode = 1
+shader_parameter/horizontal_blend_width = 32.0
 
 [sub_resource type="ShaderMaterial" id="MidPlanets"]
 shader = ExtResource( 5 )
@@ -25,6 +26,7 @@ shader_parameter/draw_mode = 3
 [sub_resource type="ShaderMaterial" id="FarCloud"]
 shader = ExtResource( 5 )
 shader_parameter/draw_mode = 5
+shader_parameter/horizontal_blend_width = 32.0
 
 [node name="background" type="ParallaxBackground"]
 
