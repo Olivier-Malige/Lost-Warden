@@ -42,6 +42,7 @@ var fire_delay_multiplier := 1.0
 var _hit_sprite: Sprite2D
 var _hit_flash_tween: Tween
 var _movement_animation := &"start"
+var _debug_removal_reported := false
 
 func _ready() -> void:
 	if definition == null:
@@ -89,18 +90,21 @@ func _apply_spawn_context() -> void:
 	speedX = _movement_profile.velocity.x * _spawn_context.speed_multiplier
 	speedY = _movement_profile.velocity.y * _spawn_context.speed_multiplier
 	elite = _spawn_context.elite
+	fire_delay_multiplier = _spawn_context.fire_delay_multiplier
 	if elite and _spawn_context.elite_definition:
 		var elite_definition := _spawn_context.elite_definition
 		health_multiplier *= elite_definition.health_multiplier
 		speedX *= elite_definition.speed_multiplier
 		speedY *= elite_definition.speed_multiplier
 		points *= elite_definition.score_multiplier
-		fire_delay_multiplier = elite_definition.fire_delay_multiplier
-		for timer in _shoot_timers:
-			timer.wait_time *= fire_delay_multiplier
+		fire_delay_multiplier *= elite_definition.fire_delay_multiplier
+	for timer in _shoot_timers:
+		timer.wait_time *= fire_delay_multiplier
 	life *= health_multiplier
 	max_life = life
 	add_to_group("enemy")
+	if definition.id != &"":
+		add_to_group(StringName("family_" + String(definition.id)))
 	if elite:
 		add_to_group("elite")
 
@@ -296,8 +300,15 @@ func _on_area_entered(area: Area2D) -> void:
 		area._hit_something(hitSomething)
 
 func _on_screen_exited() -> void:
+	if not destroyed:
+		_report_debug_removal("escaped")
 	set_physics_process(false)
 	queue_free()
+
+func _report_debug_removal(reason: String) -> void:
+	if global.Debug and not _debug_removal_reported:
+		_debug_removal_reported = true
+		Events.debug_enemy_removed.emit(definition.id, reason)
 
 func _on_anim_animation_finished(animation: StringName) -> void:
 	if animation == "explode":
@@ -306,6 +317,7 @@ func _on_anim_animation_finished(animation: StringName) -> void:
 
 func _destroy() -> void:
 	destroyed = true
+	_report_debug_removal("killed" if hitByPlayerShot else "other")
 	var shake_strength := clampf(3.0 + sqrt(float(maxi(points, 0))) * 0.2, 3.0, 14.0)
 	Events.screen_shake_requested.emit(shake_strength, 0.08 + shake_strength * 0.015)
 	if shake_strength >= 4.0:
@@ -330,7 +342,7 @@ func _award_player_kill() -> void:
 		_spawn_power_up()
 		_spawn_plasma_cell(25.0)
 		return
-	match _reward_for_roll(randi_range(0, 99)):
+	match _reward_for_roll(global.run_random.drops.randi_range(0, 99)):
 		RewardDrop.PLASMA:
 			_spawn_plasma_cell(12.5)
 		RewardDrop.POWER_UP:
@@ -357,6 +369,8 @@ func _spawn_plasma_cell(amount: float) -> void:
 func _drop_debris() -> void:
 	if definition.drop_scene == null:
 		return
+	var debris_rng := RandomNumberGenerator.new()
+	debris_rng.seed = _derived_seed(_spawn_context.movement_seed, 701)
 	for index in range(definition.drop_count):
 		var debris := definition.drop_scene.instantiate()
 		if debris is Enemy:
@@ -364,9 +378,12 @@ func _drop_debris() -> void:
 			debris_context.movement_seed = _derived_seed(_spawn_context.movement_seed, index + 1)
 			debris_context.formation_seed = _spawn_context.formation_seed
 			debris.configure_spawn(debris_context)
-		var drop_position := global_position + Vector2(randf_range(-definition.drop_range, definition.drop_range), randf_range(-definition.drop_range, definition.drop_range))
+		var drop_position := global_position + Vector2(debris_rng.randf_range(-definition.drop_range, definition.drop_range), debris_rng.randf_range(-definition.drop_range, definition.drop_range))
 		debris.position = get_parent().to_local(drop_position)
-		get_parent().call_deferred("add_child", debris)
+		if debris is Enemy and get_parent().has_method("queue_enemy"):
+			get_parent().queue_enemy(debris)
+		else:
+			get_parent().call_deferred("add_child", debris)
 
 func _derived_seed(base_seed: int, salt: int) -> int:
 	return int((base_seed * 1103515245 + salt * 12345 + 1013904223) & 0x7fffffff)

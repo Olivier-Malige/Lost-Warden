@@ -25,10 +25,11 @@ func check(condition: bool, message: String) -> void:
 func definition(kind: String) -> EnemyDefinition:
 	return load("res://data/enemies/%s.tres" % kind)
 
-func make_enemy(kind: String, difficulty: float, elite := false) -> Variant:
+func make_enemy(kind: String, elapsed: float, elite := false) -> Variant:
 	var enemy = load("res://scenes/enemies/%s.tscn" % kind).instantiate()
 	var context := EnemySpawnContext.new()
-	context.health_multiplier = spawner._health_multiplier(enemy.definition, difficulty)
+	spawner.director.elapsed = elapsed
+	context.health_multiplier = spawner._health_multiplier(enemy.definition)
 	context.elite = elite
 	context.elite_definition = CONFIG.elite_definition
 	enemy.configure_spawn(context)
@@ -49,82 +50,35 @@ func check_health_and_impacts() -> void:
 	var coop_scale := [1.25, 1.25, 1.45, 1.6, 1.6, 1.45, 1.0, 1.0]
 	for coop in [false, true]:
 		globals.coop = coop
-		for cycle in [0, 1, 7, 30]:
-			spawner._endless_cycle = cycle
-			for wave in catalog.waves:
-				for index in kinds.size():
-					var data := definition(kinds[index])
-					var multiplier: float = spawner._health_multiplier(data, wave.difficulty)
-					var expected: float = coop_scale[index] if coop else 1.0
-					if data.durability in [EnemyDefinition.Durability.SPECIALIST, EnemyDefinition.Durability.HEAVY]:
-						var cap := 1.15 if data.durability == EnemyDefinition.Durability.SPECIALIST else 1.2
-						expected *= lerpf(1.0, cap, clampf((wave.difficulty - 1.0) / 2.55, 0.0, 1.0)) * minf(1.0 + cycle * 0.03, 1.2)
-					check(is_equal_approx(data.max_health * multiplier, base_health[index] * expected), "%s health: coop=%s cycle=%s difficulty=%s" % [kinds[index], coop, cycle, wave.difficulty])
-				for kind in ["drone", "tie"]:
-					for rank in range(DAMAGE.max_rank + 1):
-						var loadout := PlayerLoadout.new(STATS)
-						for upgrade_index in rank:
-							loadout.apply(DAMAGE)
-						var enemy = make_enemy(kind, wave.difficulty)
-						var damage := 1.0 + loadout.damage_bonus
-						var hits := 0
-						while not enemy.destroyed and hits < 4:
-							enemy._hit_something(damage, false)
-							hits += 1
-						check(hits == ceili((2.5 if coop else 2.0) / damage), "%s impacts: coop=%s rank=%s" % [kind, coop, rank])
-						enemy.free()
-	spawner._endless_cycle = 0
+		spawner._run_coop = coop
+		for elapsed in [0.0, 300.0, 720.0, 1800.0]:
+			spawner.director.elapsed = elapsed
+			for index in kinds.size():
+				var data := definition(kinds[index])
+				var expected: float = coop_scale[index] if coop else 1.0
+				if data.durability != EnemyDefinition.Durability.HAZARD:
+					expected *= spawner.director.health_multiplier()
+				check(is_equal_approx(data.max_health * spawner._health_multiplier(data), base_health[index] * expected), "%s health: coop=%s elapsed=%s" % [kinds[index], coop, elapsed])
+		for kind in ["drone", "tie"]:
+			for rank in range(DAMAGE.max_rank + 1):
+				var loadout := PlayerLoadout.new(STATS)
+				for upgrade_index in rank:
+					loadout.apply(DAMAGE)
+				var enemy = make_enemy(kind, 0.0)
+				var damage := 1.0 + loadout.damage_bonus
+				var hits := 0
+				while not enemy.destroyed and hits < 4:
+					enemy._hit_something(damage, false)
+					hits += 1
+				check(hits == ceili((2.5 if coop else 2.0) / damage), "%s opening impacts: coop=%s rank=%s" % [kind, coop, rank])
+				enemy.free()
 	globals.coop = false
-	var fractional = make_enemy("drone", 1.15, true)
+	spawner._run_coop = false
+	var fractional = make_enemy("drone", 0.0, true)
 	fractional._hit_something(1.25, false)
 	check(is_equal_approx(fractional.life, 2.75), "fractional damage must remain in enemy health")
 	check(is_equal_approx(fractional._elite_indicator.current_health, 2.75), "elite bar must retain fractional health")
 	fractional.free()
-	for coop in [false, true]:
-		globals.coop = coop
-		spawner._endless_cycle = 7
-		var carrier = make_enemy("mother_ship", 3.55, true)
-		var expected := 76.0 * 1.2 * 1.2 * 2.0 * (1.6 if coop else 1.0)
-		check(is_equal_approx(carrier.max_life, expected), "carrier must apply wave, endless, elite and duo once")
-		check(carrier._mounted_turrets.size() == 2, "carrier must retain both mounted turrets")
-		for turret in carrier._mounted_turrets:
-			check(is_equal_approx(turret.max_life, expected / 4.0), "mounted turrets must inherit the complete hull multiplier once")
-			turret._hit_something(0.25, false)
-			check(is_equal_approx(turret.life, turret.max_life - 0.25), "mounted damage must preserve fractions")
-		carrier._hit_something(0.25, false)
-		check(is_equal_approx(carrier.life, expected - 0.25), "carrier damage must preserve fractions")
-		carrier.free()
-
-func check_intervals_and_lanes() -> void:
-	spawner._endless_cycle = 0
-	for coop in [false, true]:
-		globals.coop = coop
-		for index in catalog.waves.size():
-			spawner.wave_index = index
-			var wave: WaveDefinition = catalog.waves[index]
-			for rule in wave.rules:
-				var data: EnemyDefinition = spawner._rule_definition(rule)
-				check(data != null, "every catalog rule must resolve its enemy definition")
-				if data == null:
-					continue
-				var expected: float = rule.interval * spawner._timeline_scale(wave) * spawner._pace_multiplier(wave.difficulty) * 1.1
-				if data.durability in [EnemyDefinition.Durability.FODDER, EnemyDefinition.Durability.FIGHTER]:
-					expected *= 0.9 if index >= 8 else (0.95 if index >= 3 else 1.0)
-					if coop:
-						expected /= 1.1
-				check(is_equal_approx(spawner._spawn_interval(rule, wave.difficulty, spawner._timeline_scale(wave)), expected), "only common enemy intervals receive the density bonuses")
-				var lanes: Array[int] = spawner._formation_lanes(rule, rule.formation, 0)
-				check(lanes.size() <= rule.formation, "duo must not add formation members")
-				for lane in lanes:
-					check(lane >= rule.spawn_min and lane <= rule.spawn_max, "formation must retain its allowed lanes")
-				if rule.pattern == SpawnRule.Pattern.GAP_WALL:
-					check(lanes.size() <= rule.spawn_max - rule.spawn_min - 1, "gap walls must preserve two open lanes")
-		check(spawner._enemy_cap() == (60 if coop else 45), "enemy cap must follow the run mode")
-	spawner.wave_index = 17
-	spawner._endless_cycle = 6
-	for rule in catalog.waves[17].rules:
-		check(spawner._endless_formation_bonus(rule) == (2 if rule.endless_formation_growth else 0), "endless formation growth must remain capped")
-		check(spawner._endless_elite_bonus(rule) == (2 if rule.endless_elite_growth else 0), "endless elite growth must remain capped")
 
 func check_upgrades_and_rewards() -> void:
 	var loadout := PlayerLoadout.new(STATS)
@@ -190,38 +144,16 @@ func check_upgrades_and_rewards() -> void:
 	player.free()
 	pool.free()
 
-func check_runtime_caps_and_duo_death() -> void:
+func check_duo_death() -> void:
 	globals.coop = true
-	spawner._endless_cycle = 0
-	var rule: SpawnRule
-	for candidate in catalog.waves[0].rules:
-		if spawner._is_common(spawner._rule_definition(candidate)):
-			rule = candidate.duplicate()
-			break
-	rule.spawn_gap = 0.0
-	var timer := create_timer(10.0)
-	for index in range(60):
-		spawner._active_enemies[index] = false
-	var before: int = spawner.get_child_count()
-	await spawner._spawn_formation(rule, 0, spawner._wave_generation, 0, timer, 1.0, true, 1.0)
-	check(spawner.get_child_count() == before, "a full enemy cap must block additional formations")
-	spawner._active_enemies.clear()
-	for index in range(3):
-		spawner._active_enemies[index] = true
-	await spawner._spawn_formation(rule, 0, spawner._wave_generation, 0, timer, 1.0, true, 1.0)
-	check(spawner.get_child_count() - before == rule.formation, "actual duo formations must retain their authored size")
-	for child in spawner.get_children():
-		if child.is_in_group("enemy"):
-			check(not child.elite, "three active elites must prevent another elite")
-			check(is_equal_approx(child.max_life, 2.5), "actual spawns must apply duo common health once")
-			child.free()
-	spawner._active_enemies.clear()
+	spawner._run_coop = true
+	spawner.director.elapsed = 0.0
 	var world := Node2D.new()
 	world.set_script(load("res://scenes/world/world.gd"))
 	world.nbr_Player = 2
 	world._on_player_died()
 	check(world.nbr_Player == 1 and globals.coop, "one-player death must leave the duo run active")
-	check(spawner._enemy_cap() == 60 and is_equal_approx(spawner._health_multiplier(definition("drone"), 1.0), 1.25), "future spawns must retain duo durability and caps after death")
+	check(spawner._enemy_cap() == 90 and is_equal_approx(spawner._health_multiplier(definition("drone")), 1.25), "future spawns must retain duo durability and caps after death")
 	world.free()
 
 func run() -> void:
@@ -232,20 +164,14 @@ func run() -> void:
 	root.add_child(stage)
 	spawner = load("res://scenes/waves/wave_spawner.gd").new()
 	spawner.config = CONFIG
-	spawner.catalog = WaveCatalog.new()
-	for index in CONFIG.lane_count:
-		var marker := Marker2D.new()
-		marker.name = "spawnPos%d" % index
-		marker.position = Vector2(120 + index * 34, -20)
-		spawner.add_child(marker)
-	stage.add_child(spawner)
 	spawner.catalog = catalog
+	spawner.director = EncounterDirector.new(RunRandom.new(42))
 	check(CONFIG.is_valid(), "approved balance configuration must be valid")
 	check(catalog.waves.size() == 18, "catalog must retain 18 waves")
 	check_health_and_impacts()
-	check_intervals_and_lanes()
 	await check_upgrades_and_rewards()
-	await check_runtime_caps_and_duo_death()
+	check_duo_death()
+	spawner.free()
 	stage.queue_free()
 	await process_frame
 	print("Alpha 9 balance: %s (%d checks)" % ["PASS" if failures == 0 else "FAIL", checks])

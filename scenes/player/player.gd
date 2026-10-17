@@ -88,6 +88,23 @@ func _configure_collision() -> void:
 	collision_layer = Layers.PLAYER
 	collision_mask = Layers.ENEMY | Layers.ENEMY_SHOT | Layers.PICKUP | Layers.ASTEROID
 
+func get_debug_snapshot() -> Dictionary:
+	var upgrade_ranks := {}
+	for effect in loadout.ranks:
+		upgrade_ranks[UpgradeDefinition.Effect.keys()[effect]] = loadout.ranks[effect]
+	return {
+		"id": id_Player, "controller": controller, "state": State.keys()[state],
+		"position": global_position, "energy": energy, "energy_max": STATS.energy_max,
+		"shield": shield.power, "touched": touched, "hit_slowdown": malusSpeed,
+		"move_speed": loadout.move_speed(), "weapon_speed_multiplier": STATS.weapon_speed_multiplier,
+		"fire_delay": loadout.fire_delay, "can_fire": canShooting,
+		"primary_damage": WEAPON_PRIMARY.damage + loadout.damage_bonus,
+		"side_shot": loadout.side_shot, "side_damage": WEAPON_SIDE.damage + loadout.side_damage_bonus,
+		"plasma": beam_charge, "plasma_max": STATS.beam_charge_max,
+		"beam_active": beam_active, "overdrive_left": _beam_overdrive_left,
+		"ranks": upgrade_ranks,
+	}
+
 func update_controller() -> void:
 	if global.coop:
 		controller = global.saveData.config.player2 if set_Player_2 else global.saveData.config.player1

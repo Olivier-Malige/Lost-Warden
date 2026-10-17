@@ -5,16 +5,11 @@
 
 [resource]
 script = ExtResource("1")
-inter_wave_delay = 2.0
-spawn_interval_multiplier = 1.1
-common_mid_interval_multiplier = 0.95
-common_late_interval_multiplier = 0.90
-coop_common_density_multiplier = 1.10
-specialist_health_cap = 1.15
-heavy_health_cap = 1.20
+solo_enemy_cap = 70
+coop_enemy_cap = 90
+coop_budget_multiplier = 1.2
+v_formation_depth = 6.0
 coop_common_health_multiplier = 1.25
 coop_specialist_health_multiplier = 1.45
 coop_heavy_health_multiplier = 1.60
-health_step = 0.03
-health_cap = 1.20
 elite_definition = ExtResource("2")

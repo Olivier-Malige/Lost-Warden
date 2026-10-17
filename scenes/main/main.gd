@@ -10,6 +10,10 @@ var _game_over_input_ready_at := 0
 var _transitioning := false
 var _fade_audio_volume_db := 0.0
 var _fade_audio_modes: Dictionary[int, int] = {}
+var _debug_screen: CanvasLayer
+var _debug_full_open := false
+var _debug_compact_enabled := true
+var _debug_pause_owned := false
 const FADE_DURATION := 0.3
 @onready var _screen_fade: ColorRect = $ScreenFade/Black
 @onready var _title_music: AudioStreamPlayer = $TitleMusic
@@ -51,6 +55,24 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		return
 	if worldScreen:
+		if global.Debug and event.is_action_pressed("debug_screen") and not event.is_echo():
+			_set_debug_full(not _debug_full_open)
+			get_viewport().set_input_as_handled()
+			return
+		if global.Debug and event.is_action_pressed("debug_compact") and not event.is_echo():
+			_debug_compact_enabled = not _debug_compact_enabled
+			_update_debug_view()
+			get_viewport().set_input_as_handled()
+			return
+		if _debug_full_open:
+			if event is InputEventMouse:
+				return
+			if event is InputEventKey:
+				_debug_screen.handle_key(event)
+			if _debug_full_open and event.is_action_pressed("start") and not event.is_echo():
+				_set_debug_full(false)
+			get_viewport().set_input_as_handled()
+			return
 		if not menuShow and event.is_action_pressed("start") and not event.is_echo():
 			set_Pause()
 			get_viewport().set_input_as_handled()
@@ -60,6 +82,35 @@ func _input(event: InputEvent) -> void:
 		if Time.get_ticks_msec() >= _game_over_input_ready_at and event.is_action_pressed("start") and not event.is_echo():
 			go_Start_Screen()
 
+func _update_debug_view() -> void:
+	if not is_instance_valid(_debug_screen):
+		if not global.Debug or not worldScreen:
+			return
+		_debug_screen = load("res://scenes/debug/debug_screen.tscn").instantiate()
+		add_child(_debug_screen)
+		_debug_screen.close_requested.connect(func(): _set_debug_full(false))
+		_debug_screen.debug_disabled.connect(_hide_debug)
+	_debug_screen.set_view(_debug_compact_enabled and worldScreen, _debug_full_open)
+
+# Only release a pause acquired by the inspector; an existing menu pause belongs to screen flow.
+func _set_debug_full(open: bool) -> void:
+	if open == _debug_full_open:
+		return
+	release_gameplay_input()
+	if open:
+		_debug_pause_owned = not get_tree().paused
+		get_tree().paused = true
+	elif _debug_pause_owned:
+		get_tree().paused = false
+		_debug_pause_owned = false
+	_debug_full_open = open
+	_update_debug_view()
+
+func _hide_debug() -> void:
+	_set_debug_full(false)
+	if is_instance_valid(_debug_screen):
+		_debug_screen.set_view(false, false)
+
 func _debug_cheats(event: InputEvent) -> void:
 	if event.is_echo():
 		return
@@ -67,6 +118,8 @@ func _debug_cheats(event: InputEvent) -> void:
 		$world/waveGenerator.goto_Previous_Wave()
 	elif event.is_action_pressed("debug_Key2"):
 		$world/waveGenerator.goto_Next_Wave()
+	elif event.is_action_pressed("debug_next_wave"):
+		$world/waveGenerator.debug_skip_encounter()
 	else:
 		for action in PLAYER_CHEATS:
 			if event.is_action_pressed(action):
@@ -86,6 +139,7 @@ func set_Pause() -> void:
 	if _transitioning:
 		return
 	if not menuShow:
+		_set_debug_full(false)
 		get_tree().paused = true
 		var p = paused.instantiate()
 		add_child(p)
@@ -108,6 +162,7 @@ func set_Resume() -> void:
 	if _transitioning:
 		return
 	if worldScreen and menuShow:
+		_set_debug_full(false)
 		menuShow = false
 		release_gameplay_input()
 		var pause_overlay := get_node_or_null("paused")
@@ -177,6 +232,7 @@ func _show_world_screen() -> void:
 	gameOverScreen = false
 	if has_node("start"):
 		$start.queue_free()
+	_update_debug_view()
 
 
 func _set_title_stars(on: bool) -> void:
@@ -225,6 +281,7 @@ func _show_game_over_screen() -> void:
 
 # Swap screens only under an opaque cover, and keep combat stopped until the reveal ends.
 func _fade_to(show_screen: Callable, fade_audio := true) -> void:
+	_hide_debug()
 	_transitioning = true
 	_fade_audio_volume_db = AudioServer.get_bus_volume_db(0)
 	_keep_transition_audio_running()
@@ -274,5 +331,7 @@ func _restore_transition_audio() -> void:
 	_fade_audio_modes.clear()
 
 func _exit_tree() -> void:
+	if _debug_pause_owned:
+		get_tree().paused = false
 	if _transitioning:
 		_restore_transition_audio()

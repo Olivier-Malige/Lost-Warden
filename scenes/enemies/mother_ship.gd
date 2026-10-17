@@ -87,6 +87,7 @@ func _spawn_mounted_turrets() -> void:
 			turret.get_node("Sprite2D").texture = STARBOARD_TURRET_TEXTURE
 		var context := EnemySpawnContext.new()
 		context.health_multiplier = health_multiplier
+		context.fire_delay_multiplier = fire_delay_multiplier
 		context.movement_seed = _derived_seed(_spawn_context.movement_seed, index + 1)
 		context.formation_seed = _spawn_context.formation_seed
 		turret.configure_spawn(context)
@@ -124,6 +125,7 @@ func _set_hull_combat_enabled(enabled: bool) -> void:
 	set_deferred("monitorable", enabled)
 
 func _discard_without_reward() -> void:
+	_report_debug_removal("other")
 	destroyed = true
 	set_physics_process(false)
 	_shoot_timer.stop()

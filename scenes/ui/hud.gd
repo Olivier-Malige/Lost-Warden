@@ -17,7 +17,7 @@ const RANK_LABELS := {
 func _ready() -> void:
 	Events.score_changed.connect(_on_score_changed)
 	Events.combo_changed.connect(_on_combo_changed)
-	Events.wave_changed.connect(_on_wave_changed)
+	Events.run_time_changed.connect(_on_run_time_changed)
 	Events.energy_changed.connect(_on_energy_changed)
 	Events.beam_charge_changed.connect(_on_beam_charge_changed)
 	Events.upgrade_changed.connect(_on_upgrade_changed)
@@ -38,8 +38,10 @@ func _on_combo_changed(combo: int, multiplier: float, _time_left: float) -> void
 		_combo_tween = create_tween()
 		_combo_tween.tween_property($LeftColumn/combo, "modulate", Color(0.86, 0.79, 0.42), 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
-func _on_wave_changed(wave: int) -> void:
-	$RightColumn/wave.set_text("WAVE\n" + str(wave))
+func _on_run_time_changed(survival_seconds: float) -> void:
+	var text := "SURVIVAL\n" + global.format_survival_time(survival_seconds)
+	if $RightColumn/wave.text != text:
+		$RightColumn/wave.text = text
 
 func _on_energy_changed(player_id: String, energy: int) -> void:
 	var column := "LeftColumn" if player_id == "player1" else "RightColumn"

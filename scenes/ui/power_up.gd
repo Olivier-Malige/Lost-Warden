@@ -12,7 +12,7 @@ func _ready() -> void:
 	add_to_group("powersUp")
 	collision_layer = Layers.PICKUP
 	collision_mask = Layers.PLAYER
-	_upgrade = TABLE.pick()
+	_upgrade = TABLE.pick(global.run_random.upgrades)
 	if _upgrade:
 		$anim.play(String(_upgrade.anim))
 	else:
