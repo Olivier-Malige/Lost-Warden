@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1")
-health_multiplier = 2.5
+health_multiplier = 3.0
 speed_multiplier = 1.1
-fire_delay_multiplier = 0.8
+fire_delay_multiplier = 0.7
 score_multiplier = 3

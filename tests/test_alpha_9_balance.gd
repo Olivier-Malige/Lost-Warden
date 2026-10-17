@@ -1,6 +1,6 @@
 extends SceneTree
 
-const CONFIG: WaveSpawnerConfig = preload("res://data/waves/wave_spawner_config.tres")
+var CONFIG: WaveSpawnerConfig
 var catalog: WaveCatalog
 const STATS: PlayerStats = preload("res://data/player/player_stats.tres")
 const DAMAGE: UpgradeDefinition = preload("res://data/upgrades/damage.tres")
@@ -76,8 +76,8 @@ func check_health_and_impacts() -> void:
 	spawner._run_coop = false
 	var fractional = make_enemy("drone", 0.0, true)
 	fractional._hit_something(1.25, false)
-	check(is_equal_approx(fractional.life, 3.75), "fractional damage must remain in enemy health")
-	check(is_equal_approx(fractional._elite_indicator.current_health, 3.75), "elite bar must retain fractional health")
+	check(is_equal_approx(fractional.life, 4.75), "fractional damage must remain in enemy health")
+	check(is_equal_approx(fractional._elite_indicator.current_health, 4.75), "elite bar must retain fractional health")
 	fractional.free()
 
 func check_upgrades_and_rewards() -> void:
@@ -157,6 +157,7 @@ func check_duo_death() -> void:
 	world.free()
 
 func run() -> void:
+	CONFIG = load("res://data/waves/wave_spawner_config.tres")
 	globals = root.get_node("global")
 	catalog = load("res://data/waves/wave_catalog.tres")
 	globals.Debug = false
