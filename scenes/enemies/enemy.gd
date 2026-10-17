@@ -317,6 +317,8 @@ func _on_anim_animation_finished(animation: StringName) -> void:
 
 func _destroy() -> void:
 	destroyed = true
+	if _elite_indicator:
+		_elite_indicator.hide()
 	_report_debug_removal("killed" if hitByPlayerShot else "other")
 	var shake_strength := clampf(3.0 + sqrt(float(maxi(points, 0))) * 0.2, 3.0, 14.0)
 	Events.screen_shake_requested.emit(shake_strength, 0.08 + shake_strength * 0.015)
@@ -390,8 +392,10 @@ func _derived_seed(base_seed: int, salt: int) -> int:
 
 func _setup_elite_indicator() -> void:
 	var sprite := get_node_or_null("Sprite2D") as Sprite2D
-	if sprite and _spawn_context.elite_definition:
-		sprite.self_modulate = _spawn_context.elite_definition.outline_color
+	if sprite and definition.elite_texture:
+		sprite.texture = definition.elite_texture
+		sprite.hframes = definition.elite_frame_grid.x
+		sprite.vframes = definition.elite_frame_grid.y
 	_elite_indicator = EliteIndicatorScene.new()
 	_elite_indicator.name = "EliteIndicator"
 	add_child(_elite_indicator)

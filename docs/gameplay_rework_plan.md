@@ -4,7 +4,7 @@ Updated: 2026-10-17.
 
 **Goal:** a continuous survival shmup with varied builds, enemies and formations, increasing pressure over time, solo and local co-op.
 
-**Next implementation step:** Phase 2 — deterministic elites, when requested.
+**Next implementation step:** Phase 2 — first boss, when requested.
 
 ## Progress and delivery order
 
@@ -19,15 +19,14 @@ Updated: 2026-10-17.
 
 ## Phase 2 — Finish the survival foundation
 
-Done: continuous seeded encounters, threat budgets, formations, enemy caps, survival timer, solo/co-op duration records, game-over and hiscore screens. Danger stays internal. F1/F2 adjust danger; N skips a regular encounter in debug mode.
+Done: continuous seeded encounters, threat budgets, formations, enemy caps, survival timer, solo/co-op duration records, game-over and hiscore screens. Deterministic elites now have approved markings, a small health bar and a three-elite cap. Danger stays internal. F1/F2 adjust danger; N skips a regular encounter in debug mode.
 
 Debug tools: **F11** toggles compact live metrics; **F10** opens the [paused full inspector](debug_screen.md) for run, enemy, player and performance data, plus an event journal.
 
 Remaining, one step at a time:
 
-1. Deterministic elites with distinct visuals and a small health bar.
-2. One Command Carrier / Dread Ark boss, with aimed volleys, drone reinforcements and three combat phases.
-3. Boss health display and complete solo/co-op validation.
+1. One Command Carrier / Dread Ark boss, with aimed volleys, drone reinforcements and three combat phases.
+2. Boss health display and complete solo/co-op validation.
 
 ## Phase 3 — Create varied survival builds
 

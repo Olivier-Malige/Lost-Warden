@@ -13,6 +13,7 @@ var _generation := 0
 var _pending: Array[Dictionary] = []
 var _secondary_pending: Array[Enemy] = []
 var _reserved_slots := 0
+var _reserved_elites := 0
 var _reserved_families: Dictionary[StringName, int] = {}
 var _definitions: Dictionary[PackedScene, EnemyDefinition] = {}
 var _next_formation_at := 0.0
@@ -157,7 +158,8 @@ func get_debug_snapshot() -> Dictionary:
 		"next_formation": maxf(_next_formation_at - director.elapsed, 0.0), "formation_cycle": _formation_cycle,
 		"bodies": _active_enemy_count() - _reserved_slots, "reserved": _reserved_slots,
 		"pending": pending_entries, "cap": _enemy_cap(),
-		"alive": live, "elites": elites, "families": families, "rules": rules,
+		"alive": live, "elites": elites, "reserved_elites": _reserved_elites,
+		"elite_cap": config.elite_cap, "families": families, "rules": rules,
 		"health_scale": director.health_multiplier(), "speed_scale": director.speed_multiplier(),
 		"fire_scale": director.fire_delay_multiplier(), "elite_chance": director.elite_chance(),
 		"boss_in": maxf(director.next_boss_at - director.regular_elapsed, 0.0),
@@ -182,10 +184,19 @@ func _schedule_formation() -> void:
 	count = mini(count, _available_members(definition))
 	var lanes := _formation_lanes(rule, count, _formation_cycle)
 	var formation_seed := director.random.enemies.randi()
+	var elite_index := -1
+	var promotion_chance := director.elite_chance()
+	if definition.elite_eligible and promotion_chance > 0.0 and _active_elite_count() < config.elite_cap:
+		for index in lanes.size():
+			if director.random.enemies.randf() < promotion_chance:
+				elite_index = index
+				break
 	for index in lanes.size():
 		var lane := lanes[index]
 		var marker := get_node("spawnPos%d" % lane) as Node2D
 		var context := EnemySpawnContext.new()
+		context.elite = index == elite_index
+		context.elite_definition = config.elite_definition if context.elite else null
 		context.health_multiplier = _health_multiplier(definition)
 		context.speed_multiplier = rule.speed_multiplier * (1.0 if definition.durability == EnemyDefinition.Durability.HAZARD else director.speed_multiplier())
 		context.fire_delay_multiplier = director.fire_delay_multiplier()
@@ -201,6 +212,7 @@ func _schedule_formation() -> void:
 			"scene": rule.scene, "position": marker.position + offset,
 			"context": context, "at": director.elapsed + index * rule.spawn_gap,
 			"slots": definition.spawn_slots, "family": definition.id,
+			"elite": context.elite,
 			"generation": _generation,
 		}
 		_reserve(item)
@@ -252,14 +264,25 @@ func _add_secondary_enemy(enemy: Enemy, item: Dictionary) -> void:
 
 func _reserve(item: Dictionary) -> void:
 	_reserved_slots += int(item.slots)
+	if item.get("elite", false):
+		_reserved_elites += 1
 	_reserved_families[item.family] = _reserved_families.get(item.family, 0) + 1
 
 func _release_reservation(item: Dictionary) -> void:
 	_reserved_slots -= int(item.slots)
+	if item.get("elite", false):
+		_reserved_elites -= 1
 	_reserved_families[item.family] = _reserved_families.get(item.family, 0) - 1
 
 func _active_enemy_count() -> int:
 	return get_tree().get_node_count_in_group(&"enemy") + _reserved_slots
+
+func _active_elite_count() -> int:
+	var count := _reserved_elites
+	for enemy in get_tree().get_nodes_in_group(&"elite"):
+		if enemy is Enemy and not enemy.destroyed:
+			count += 1
+	return count
 
 func _available_members(definition: EnemyDefinition) -> int:
 	var count := maxi((_enemy_cap() - _active_enemy_count()) / definition.spawn_slots, 0)

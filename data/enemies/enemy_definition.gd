@@ -12,6 +12,7 @@ enum Durability { HAZARD, FODDER, FIGHTER, SPECIALIST, HEAVY }
 @export var danger_weight_growth := 0.0
 @export var elite_eligible := true
 @export var elite_texture: Texture2D
+@export var elite_frame_grid := Vector2i.ONE
 @export_range(1, 8, 1) var spawn_slots := 1
 @export_range(0, 100, 1) var active_limit := 0
 
@@ -54,4 +55,5 @@ func is_valid() -> bool:
 		and movement_profile != null \
 		and movement_profile.is_valid() \
 		and sprite_variants > 0 \
+		and elite_frame_grid.x > 0 and elite_frame_grid.y > 0 \
 		and (not drops_on_destroy or drop_scene != null)

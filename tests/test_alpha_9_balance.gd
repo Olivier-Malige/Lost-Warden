@@ -76,8 +76,8 @@ func check_health_and_impacts() -> void:
 	spawner._run_coop = false
 	var fractional = make_enemy("drone", 0.0, true)
 	fractional._hit_something(1.25, false)
-	check(is_equal_approx(fractional.life, 2.75), "fractional damage must remain in enemy health")
-	check(is_equal_approx(fractional._elite_indicator.current_health, 2.75), "elite bar must retain fractional health")
+	check(is_equal_approx(fractional.life, 3.75), "fractional damage must remain in enemy health")
+	check(is_equal_approx(fractional._elite_indicator.current_health, 3.75), "elite bar must retain fractional health")
 	fractional.free()
 
 func check_upgrades_and_rewards() -> void:

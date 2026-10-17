@@ -13,3 +13,4 @@ coop_common_health_multiplier = 1.25
 coop_specialist_health_multiplier = 1.45
 coop_heavy_health_multiplier = 1.60
 elite_definition = ExtResource("2")
+elite_cap = 3

@@ -125,9 +125,10 @@ func _run_text(data: Dictionary) -> String:
 		"Recent encounters: " + ", ".join(d.recent),
 		"", "[color=#d6d653]DIFFICULTY MODEL[/color]",
 		"Health x%.3f   Movement x%.3f   Fire delay x%.3f" % [d.health_scale, d.speed_scale, d.fire_scale],
-		"Elite model: %.1f%%   Recovery left: %.2fs" % [d.elite_chance * 100.0, d.recovery_left],
+		"Elite chance: %.1f%%   Elites: %d + %d reserved / %d" % [d.elite_chance * 100.0, d.elites, d.reserved_elites, d.elite_cap],
+		"Recovery left: %.2fs" % d.recovery_left,
 		"Boss model due in %s regular time" % global.format_survival_time(d.boss_in),
-		"Elite promotion, boss combat and XP are not integrated yet.",
+		"Boss combat and XP are not integrated yet.",
 	]
 	return "\n".join(lines)
 
