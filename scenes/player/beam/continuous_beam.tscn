@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scenes/player/beam/continuous_beam.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/sprites/player/beam.png" id="2"]
@@ -11,6 +11,10 @@ shader = ExtResource("4")
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_additive"]
 blend_mode = 1
+
+[sub_resource type="RectangleShape2D" id="BeamProbe"]
+resource_local_to_scene = true
+size = Vector2(9.6, 0.1)
 
 [node name="ContinuousBeam" type="Area2D"]
 z_index = 1
@@ -41,3 +45,9 @@ bus = &"Sounds"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 disabled = true
+
+[node name="ImpactCast" type="ShapeCast2D" parent="."]
+enabled = false
+shape = SubResource("BeamProbe")
+collide_with_areas = true
+collide_with_bodies = false

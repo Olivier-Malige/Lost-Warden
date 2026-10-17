@@ -27,6 +27,8 @@ Two optional destructible cannons have independent health, local shader hit feed
 
 Six regular encounter types now mix formation drones with recognizable magenta hunters. Hunters track the player, then commit to a straight trajectory 64 pixels before reaching the player's height; boss reinforcements share this behavior and appearance.
 
+Player beams stop at the first impact, damage only that obstacle and extend to the next target when it is destroyed. Boss armor, core and cannons use their own collision surfaces.
+
 Debug tools: **F11** toggles compact metrics; **F10** opens the [paused full inspector](debug_screen.md); **F12** starts a boss immediately during active gameplay.
 
 Remaining, one step at a time:
