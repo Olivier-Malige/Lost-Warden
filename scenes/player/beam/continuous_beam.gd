@@ -89,11 +89,10 @@ func _physics_process(delta: float) -> void:
 func _damage_overlaps() -> void:
 	var tick_damage := damage * (overdrive_damage_multiplier if overdrive else 1.0)
 	for area in get_overlapping_areas():
-		var enemy := area as Enemy
-		if enemy == null or enemy.destroyed:
+		if not (area is Enemy or area.is_in_group("boss_hit_zone")) or area.destroyed:
 			continue
-		enemy.hitByPlayerShot = true
-		enemy._hit_something(tick_damage, false)
+		area.hitByPlayerShot = true
+		area._hit_something(tick_damage, false)
 
 func _update_geometry() -> void:
 	var length := maxf(global_position.y - TOP_EDGE, 1.0)

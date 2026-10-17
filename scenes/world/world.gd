@@ -7,12 +7,16 @@ var _debug_events: Array[String] = []
 var _debug_spawn_buckets: Dictionary[int, int] = {}
 var _debug_spawn_total := 0
 var _debug_removed := {"killed": 0, "escaped": 0, "other": 0}
+var _debug_boss_phase := 0
 
 
 func _ready() -> void:
 	Events.player_died.connect(_on_player_died)
 	Events.debug_snapshot_requested.connect(_on_debug_snapshot_requested)
 	Events.encounter_started.connect(_on_debug_encounter_started)
+	Events.boss_started.connect(func(_id, title, health): _debug_log("Boss started / %s / %.0f HP" % [title, health]))
+	Events.boss_health_changed.connect(_on_debug_boss_health_changed)
+	Events.boss_defeated.connect(func(id): _debug_log("Boss defeated / %s / recovery 8s" % id))
 	Events.upgrade_changed.connect(_on_debug_upgrade_changed)
 	Events.debug_enemy_removed.connect(_on_debug_enemy_removed)
 	Events.plasma_collected.connect(_on_debug_plasma_collected)
@@ -70,6 +74,12 @@ func _debug_log(message: String) -> void:
 
 func _on_debug_encounter_started(id: StringName, number: int) -> void:
 	_debug_log("Encounter %d / %s" % [number, id])
+
+func _on_debug_boss_health_changed(health: float, maximum: float, phase: int) -> void:
+	if health > 0.0 and phase != _debug_boss_phase:
+		_debug_boss_phase = phase
+		if phase > 1:
+			_debug_log("Boss phase %d / %.1f/%.1f HP" % [phase, health, maximum])
 
 func _on_debug_upgrade_changed(player_id: String, effect: int, rank: int, maximum: int) -> void:
 	if rank > 0:

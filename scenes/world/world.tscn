@@ -11,6 +11,7 @@
 [ext_resource type="Resource" uid="uid://5e58sfsp71n3" path="res://data/waves/wave_spawner_config.tres" id="9"]
 [ext_resource type="Resource" path="res://data/waves/wave_catalog.tres" id="10"]
 [ext_resource type="PackedScene" path="res://scenes/world/foreground_speed_particles.tscn" id="11"]
+[ext_resource type="PackedScene" path="res://scenes/ui/boss_health.tscn" id="12"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxRankPanel"]
 bg_color = Color(0.0470588, 0.0588235, 0.101961, 0.9)
@@ -81,6 +82,8 @@ offset_right = 100.0
 offset_bottom = 148.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxRankPanel")
+
+[node name="BossHealth" parent="hud" instance=ExtResource("12")]
 
 [node name="rightRail" type="ColorRect" parent="hud" unique_id=2112126863]
 offset_left = 536.0

@@ -10,15 +10,17 @@ Keyboard navigation in full view: Left/Right or Tab/Shift-Tab cycle tabs, wrappi
 
 | Page | Information |
 | --- | --- |
-| Run | Seed, mode, simulation state, survival/regular time, danger/offset, score/combo, encounter ID/history/time, threat budget/rate, formation timing, occupied/reserved slots, recorded spawns and removals, scaling, elite/boss scheduling model |
+| Run | Seed, mode, simulation state, survival/regular time, danger/offset, score/combo, encounter ID/history/time, threat budget/rate, formation timing, occupied/reserved slots, recorded spawns and removals, scaling, elite chance/counts, boss health/phase/attack/adds and next milestone |
 | Enemies | Alive/exploding bodies, elites, cap usage, per-family counts and remaining health, current formation rules, lane ranges, threat costs, selection weights and available family capacity |
 | Players | Both players' controllers, state, position, health, shield, movement/weapon stats, fire readiness, hit protection, plasma, beam/overdrive state and upgrade ranks |
 | Perf | Engine version, FPS, process/physics time, memory, node/resource/orphan counts, draw calls, collision pairs, logical viewport, active/parked projectiles, pool buckets and read-only RNG states |
-| Events | Last 64 encounter, player-loss, upgrade, plasma and elite-spawn notifications, newest first |
+| Events | Last 64 encounter, player-loss, upgrade, plasma, elite-spawn and boss start/phase/defeat notifications, newest first |
 
 **COPY** copies the current snapshot as JSON for bug reports. Rich-text pages scroll and retain their scroll position during refresh. The event page is a gameplay journal, not a replacement for Godot's error console.
 
 In compact mode, existing debug controls remain active: F1/F2 lower/raise danger; N skips regular encounters; F3 speed, F4 damage, F5 side shots, F6 shield, F7 fire rate, F8 plasma, F9 maximum stats.
+
+**F12** launches the next eligible boss immediately during active regular gameplay. Close F10 or the pause menu first. It cancels normal pending formations, clears enemies/projectiles through the usual boss-entry path, and preserves player upgrades, score, survival/regular time and danger. Repeated/held presses cannot overlap a boss; boss/recovery states, stopped runs, pause, screen transitions and disabled debug block the shortcut. A forced boss retains normal solo/co-op health, rewards, recovery and subsequent five-minute scheduling.
 
 ## Data and limits
 
@@ -26,7 +28,7 @@ The panel requests scalar/container snapshots through `Events` at **4 Hz while e
 
 Enemy capacity includes mounted turrets and deferred reservations. Active projectile counts exclude shots marked as pooled. Recorded spawns include immediate mounted turrets; the rolling-minute count uses 60 one-second simulation-time buckets. Spawn/removal counters and the bounded event journal record only while debug is enabled, so enabling it mid-run does not reconstruct earlier activity. Parent-disposed mounted turrets count as other removals; a destroyed enemy leaving the screen is not counted again as an escape.
 
-Elite promotion is integrated: the Run page shows the current promotion chance, active/reserved elite counts and cap, and the event journal records elite spawns. Boss combat and XP are still pending; their scheduling model is distinguished from live features. Rendering monitors may report zero in headless or unsupported renderer configurations; fixed-FPS preview captures are not performance benchmarks.
+Elite promotion and boss combat are integrated. The Run page shows elite chance/counts and, during a boss, its actual health, phase, attack, individual left/right cannon health and destruction state, and active/reserved reinforcements near the top. Boss phases are journaled once rather than flooding history on every hit. XP remains pending. Rendering monitors may report zero in headless or unsupported renderer configurations; fixed-FPS preview captures are not performance benchmarks.
 
 ## Validation — 2026-10-17
 

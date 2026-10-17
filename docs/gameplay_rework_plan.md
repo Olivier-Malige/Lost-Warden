@@ -4,7 +4,7 @@ Updated: 2026-10-17.
 
 **Goal:** a continuous survival shmup with varied builds, enemies and formations, increasing pressure over time, solo and local co-op.
 
-**Next implementation step:** Phase 2 — first boss, when requested.
+**Next step:** Phase 2 — final solo/co-op gameplay validation.
 
 ## Progress and delivery order
 
@@ -21,12 +21,17 @@ Updated: 2026-10-17.
 
 Done: continuous seeded encounters, threat budgets, formations, enemy caps, survival timer, solo/co-op duration records, game-over and hiscore screens. Deterministic elites now have approved markings, a small health bar and a three-elite cap. Danger stays internal. F1/F2 adjust danger; N skips a regular encounter in debug mode.
 
-Debug tools: **F11** toggles compact live metrics; **F10** opens the [paused full inspector](debug_screen.md) for run, enemy, player and performance data, plus an event journal.
+The Dread Ark has three phases: missile salvos, missiles with hunter reinforcements, then beams mixed with salvos. Core health is 650 solo / 1,040 co-op; cannons have 90 / 144 HP. Seeded repositioning combines acceleration, braking, short rests and height changes; beams lock its position. Its segmented health bar has no numeric health or phase text. Five-minute milestones and eight-second recovery remain in place.
+
+Two optional destructible cannons have independent health, local shader hit feedback and persistent wrecks. Each destroyed cannon loses its missiles and lateral beam. The central core takes boss health damage; armor absorbs shots. The central beam stays twice as wide. Defeat chains hull explosions into a large final blast and strong screen shake.
+
+Six regular encounter types now mix formation drones with recognizable magenta hunters. Hunters track the player, then commit to a straight trajectory 64 pixels before reaching the player's height; boss reinforcements share this behavior and appearance.
+
+Debug tools: **F11** toggles compact metrics; **F10** opens the [paused full inspector](debug_screen.md); **F12** starts a boss immediately during active gameplay.
 
 Remaining, one step at a time:
 
-1. One Command Carrier / Dread Ark boss, with aimed volleys, drone reinforcements and three combat phases.
-2. Boss health display and complete solo/co-op validation.
+1. Playtest the revised boss and complete solo/co-op acceptance before Phase 3.
 
 ## Phase 3 — Create varied survival builds
 

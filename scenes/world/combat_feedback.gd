@@ -1,6 +1,7 @@
 extends Camera2D
 
 const MAX_SHAKE := 13.0
+const MAX_STRONG_SHAKE := 26.0
 const SCORE_POPUP := preload("res://scenes/ui/score.tscn")
 const NOISE_SPEED := 36.0
 
@@ -40,8 +41,11 @@ func _process(delta: float) -> void:
 		_noise.get_noise_2d(0.0, _noise_position) * strength
 	)
 
+# Scripted heavy impacts can exceed the normal cap without amplifying ordinary combat.
 func _on_screen_shake_requested(strength: float, duration: float) -> void:
-	_shake_strength = minf(_shake_strength + maxf(strength, 0.0) * 0.5, MAX_SHAKE)
+	var impulse := maxf(strength, 0.0) * 0.5
+	var limit := clampf(maxf(_shake_strength, impulse), MAX_SHAKE, MAX_STRONG_SHAKE)
+	_shake_strength = minf(_shake_strength + impulse, limit)
 	_shake_time = maxf(_shake_time, duration)
 	_shake_duration = maxf(_shake_duration, _shake_time)
 

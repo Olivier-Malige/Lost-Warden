@@ -107,8 +107,9 @@ func setPowerAnim() -> void:
 func _on_area_entered(area: Area2D) -> void:
 	if get_meta("pooled", false):
 		return
-	if area.is_in_group("enemy") or area.is_in_group("asteroid") or area.is_in_group("turret"):
-		_Feedback.spawn(get_parent(), global_position)
+	if area.is_in_group("enemy") or area.is_in_group("asteroid") or area.is_in_group("turret") or area.is_in_group("boss_hit_zone"):
+		var accent: Color = Color("96a5b5") if area.get("armored") == true else _Feedback.GOLD
+		_Feedback.spawn(get_parent(), global_position, accent)
 		area.hitByPlayerShot = true
 		area._hit_something(damage)
 		if not piercing:

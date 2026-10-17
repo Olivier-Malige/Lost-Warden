@@ -1,0 +1,110 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://scenes/bosses/dread_ark.gd" id="1"]
+[ext_resource type="Resource" path="res://data/bosses/dread_ark_enemy.tres" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/bosses/dread_ark_128x96_sheet.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/effects/dread_ark_explosion_sheet.png" id="4"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/enemies/mother_ship_explode.wav" id="5"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/enemies/interceptor_shoot.wav" id="6"]
+[ext_resource type="Script" path="res://scenes/bosses/dread_ark_beam.gd" id="7"]
+[ext_resource type="Script" path="res://scenes/bosses/boss_hit_zone.gd" id="8"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/enemies/drone_explode.wav" id="9"]
+
+[sub_resource type="RectangleShape2D" id="Hull"]
+size = Vector2(24, 76)
+
+[sub_resource type="RectangleShape2D" id="Cannon"]
+size = Vector2(20, 28)
+
+[sub_resource type="Animation" id="Idle"]
+resource_name = "start"
+length = 0.72
+loop_mode = 1
+
+[sub_resource type="Animation" id="Explosion"]
+resource_name = "explode"
+length = 1.4
+tracks/0/type = "value"
+tracks/0/path = NodePath("ExplosionSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+}
+
+[sub_resource type="AnimationLibrary" id="Animations"]
+_data = {&"start": SubResource("Idle"), &"explode": SubResource("Explosion")}
+
+[node name="DreadArk" type="Area2D"]
+script = ExtResource("1")
+definition = ExtResource("2")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3")
+hframes = 12
+vframes = 8
+
+[node name="ExplosionSprite" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("4")
+hframes = 14
+
+[node name="Beam" type="Node2D" parent="."]
+visible = false
+position = Vector2(0, 42)
+show_behind_parent = true
+script = ExtResource("7")
+offsets = PackedFloat32Array(-40, 0, 40)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 6)
+shape = SubResource("Hull")
+
+[node name="PortCannon" type="Area2D" parent="."]
+position = Vector2(-40, 22)
+script = ExtResource("8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PortCannon"]
+shape = SubResource("Cannon")
+
+[node name="ExplosionSound" type="AudioStreamPlayer2D" parent="PortCannon"]
+stream = ExtResource("9")
+volume_db = -6.0
+
+[node name="StarboardCannon" type="Area2D" parent="."]
+position = Vector2(40, 22)
+script = ExtResource("8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StarboardCannon"]
+shape = SubResource("Cannon")
+
+[node name="ExplosionSound" type="AudioStreamPlayer2D" parent="StarboardCannon"]
+stream = ExtResource("9")
+volume_db = -6.0
+
+[node name="Armor" type="Area2D" parent="."]
+script = ExtResource("8")
+armored = true
+
+[node name="PortShape" type="CollisionPolygon2D" parent="Armor"]
+polygon = PackedVector2Array(-62, 15, -55, -2, -30, -18, -22, -40, -12, -44, -12, 30, -30, 30, -30, 8, -50, 8, -50, 30, -58, 30)
+
+[node name="StarboardShape" type="CollisionPolygon2D" parent="Armor"]
+polygon = PackedVector2Array(62, 15, 55, -2, 30, -18, 22, -40, 12, -44, 12, 30, 30, 30, 30, 8, 50, 8, 50, 30, 58, 30)
+
+[node name="anim" type="AnimationPlayer" parent="."]
+libraries = {&"": SubResource("Animations")}
+
+[node name="sound_Hit" type="AudioStreamPlayer2D" parent="."]
+
+[node name="sound_Explode" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5")
+
+[node name="sound_Shooting" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="animation_finished" from="anim" to="." method="_on_anim_animation_finished"]

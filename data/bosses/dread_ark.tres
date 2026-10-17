@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="BossDefinition" format=3]
+
+[ext_resource type="Script" path="res://data/bosses/boss_definition.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/bosses/dread_ark.tscn" id="2"]
+[ext_resource type="Script" path="res://data/waves/spawn_rule.gd" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/drone_hunter.tscn" id="4"]
+[ext_resource type="Resource" path="res://data/enemies/movement/boss_drone_chase.tres" id="5"]
+
+[sub_resource type="Resource" id="Drones"]
+script = ExtResource("3")
+scene = ExtResource("4")
+formation = 4
+spawn_gap = 0.25
+pattern = 1
+movement_profile_override = ExtResource("5")
+
+[resource]
+script = ExtResource("1")
+id = &"dread_ark"
+display_name = "Dread Ark"
+scene = ExtResource("2")
+health = 650.0
+coop_health_multiplier = 1.6
+cannon_health = 90.0
+phase_thresholds = PackedFloat32Array(0.65, 0.3)
+movement_speeds = PackedFloat32Array(55, 80, 105)
+movement_ranges = PackedFloat32Array(88, 120, 144)
+movement_acceleration = 180.0
+movement_arrival_pause = 0.35
+vertical_movement_range = 14.0
+volley_intervals = PackedFloat32Array(1.3, 1.0, 0.75)
+volley_counts = PackedInt32Array(3, 5, 7)
+salvo_count = 3
+salvo_interval = 0.25
+projectile_speed = 230.0
+telegraph_time = 0.6
+reinforcement_intervals = PackedFloat32Array(8, 7, 5)
+reinforcement_cap = 12
+coop_reinforcement_multiplier = 1.5
+beam_charge_time = 0.96
+beam_fire_time = 1.25
+beam_width = 12.0
+central_beam_width = 24.0
+reinforcements = [SubResource("Drones")]

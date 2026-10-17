@@ -1,6 +1,6 @@
 extends SceneTree
 
-const CONFIG: WaveSpawnerConfig = preload("res://data/waves/wave_spawner_config.tres")
+var CONFIG: WaveSpawnerConfig
 var CATALOG: WaveCatalog
 
 var _checks := 0
@@ -20,7 +20,9 @@ func _make_spawner(seed_value: int, coop := false):
 	_globals.coop = coop
 	_globals.reset_run(seed_value)
 	var spawner = load("res://scenes/waves/wave_spawner.gd").new()
-	spawner.config = CONFIG
+	spawner.config = CONFIG.duplicate()
+	spawner.config.bosses = CONFIG.bosses.duplicate()
+	spawner.config.bosses.clear()
 	spawner.catalog = CATALOG
 	for index in CONFIG.lane_count:
 		var marker := Marker2D.new()
@@ -258,6 +260,7 @@ func _test_debug_skip() -> void:
 	main.free()
 
 func _run() -> void:
+	CONFIG = load("res://data/waves/wave_spawner_config.tres")
 	_globals = root.get_node("global")
 	_globals.Debug = false
 	CATALOG = load("res://data/waves/wave_catalog.tres")
