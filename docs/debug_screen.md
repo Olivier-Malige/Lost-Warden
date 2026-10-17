@@ -26,7 +26,7 @@ The panel requests scalar/container snapshots through `Events` at **4 Hz while e
 
 Enemy capacity includes mounted turrets and deferred reservations. Active projectile counts exclude shots marked as pooled. Recorded spawns include immediate mounted turrets; the rolling-minute count uses 60 one-second simulation-time buckets. Spawn/removal counters and the bounded event journal record only while debug is enabled, so enabling it mid-run does not reconstruct earlier activity. Parent-disposed mounted turrets count as other removals; a destroyed enemy leaving the screen is not counted again as an escape.
 
-Elite promotion, boss combat and XP are still pending gameplay work. The panel explicitly distinguishes their existing scheduling/probability model from an implemented runtime feature. Rendering monitors may report zero in headless or unsupported renderer configurations; fixed-FPS preview captures are not performance benchmarks.
+Elite promotion is integrated: the Run page shows the current promotion chance, active/reserved elite counts and cap, and the event journal records elite spawns. Boss combat and XP are still pending; their scheduling model is distinguished from live features. Rendering monitors may report zero in headless or unsupported renderer configurations; fixed-FPS preview captures are not performance benchmarks.
 
 ## Validation — 2026-10-17
 

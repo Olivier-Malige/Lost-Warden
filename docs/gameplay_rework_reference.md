@@ -41,7 +41,7 @@ Maintainer confirmation on 2026-10-17: Phase 1, including its follow-ups, and th
 - Phase 1 follow-up — Existing enemy movement: implementation completed on 2026-09-04; deterministic headless checks pass, while targeted solo and co-op readability playtests remain.
 - Phase 1 follow-up — Alpha 9 balance: implemented on 2026-10-12; the approved profile is documented below. Automated balance checks pass; comparative solo/co-op feel and pressure playtests remain before release approval.
 - Visual production phase: completed, as confirmed by the maintainer on 2026-10-17.
-- Next Phase 2 implementation step: deterministic elites, when explicitly requested. Implement the expanded Phase 3 power-up system before the full enemy/formation redesign and progressive density tuning in Phase 4.
+- Next Phase 2 implementation step: first boss, when explicitly requested. Deterministic elites were completed on 2026-10-17. Implement the expanded Phase 3 power-up system before the full enemy/formation redesign and progressive density tuning in Phase 4.
 - Phase 2: started on 2026-10-17. Deliver and verify one step at a time, then stop for maintainer review before the next step.
 
 Preparation phase B delivered the direct 1066 by 800 viewport, responsive Web presentation, redesigned menus and HUD, browser-fullscreen recovery, the Lost Warden release identity, the approved 24-color palette, itch.io page art, and a validated release archive. Updated gameplay screenshots remain intentionally deferred until the sprite rework is visible. Candidate replacement music is preserved for later review and is not active in the current build.
@@ -493,7 +493,7 @@ Delivery steps:
 
 1. **Done — Data and director logic.** Add encounter/family metadata, boss configuration, four independent seeded random streams, weighted encounter selection with two-encounter history, danger and elite probability curves, capped stat multipliers, and regular-time boss scheduling with recovery. These foundations were delivered independently before runtime integration.
 2. **Done — Continuous spawning.** Migrate the existing catalog to 20–30-second encounters; connect run seed generation, threat budgets, family weights, formations, spawn initialization, caps, and central timing to `WaveSpawner`. See [step 2 validation](phase_2_validation.md).
-3. **Pending — Elites.** Connect deterministic promotion, modifiers, localized approved markings, health bars, and active limits.
+3. **Done — Elites.** Deterministic promotion, modifiers, localized approved markings, health bars, and active/reserved limits, validated on 2026-10-17.
 4. **Pending — Command Carrier.** Integrate the Dread Ark art, aimed volleys, declared drone reinforcements, health transitions, and director lifecycle.
 5. **Partially delivered — HUD, saves, and full validation.** The maintainer brought the survival timer HUD forward on 2026-10-17 and requested that danger remain internal rather than appear in the player HUD. Survival time, F1/F2 danger controls, solo/co-op `bestTime` records, and survival-based game-over/hiscore screens are implemented; boss health and complete phase-level regression and visual checks remain pending.
 

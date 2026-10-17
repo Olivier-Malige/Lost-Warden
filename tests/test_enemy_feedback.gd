@@ -133,10 +133,10 @@ func run() -> void:
 		var elite_sprite: Sprite2D = elite._hit_sprite
 		check(elite.elite, kind + " elite: spawn context must be applied")
 		check(elite.get_node_or_null("EliteIndicator") != null, kind + " elite: indicator must be present")
-		check(elite_sprite.self_modulate == ELITE_DEFINITION.outline_color, kind + " elite: outline tint must survive setup")
+		check(elite_sprite.self_modulate == Color.WHITE, kind + " elite: approved markings must retain their source colors")
 		elite._hit_something(1)
 		check(elite_sprite.get_instance_shader_parameter("hit_flash") == 1.0, kind + " elite: hits must flash without losing identity")
-		check(elite_sprite.self_modulate == ELITE_DEFINITION.outline_color, kind + " elite: hit feedback must preserve the outline tint")
+		check(elite_sprite.self_modulate == Color.WHITE, kind + " elite: hit feedback must preserve source colors")
 		check_lethal_transition(elite, kind + " elite")
 		elite.queue_free()
 		await process_frame

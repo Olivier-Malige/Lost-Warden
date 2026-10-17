@@ -2,10 +2,13 @@
 
 [ext_resource type="Script" uid="uid://bq3xyl864avq8" path="res://data/enemies/enemy_definition.gd" id="1"]
 [ext_resource type="Resource" path="res://data/enemies/movement/drone_sine_tight.tres" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/animation_rework/razor_wing_drone_elite_sheet.png" id="3"]
 
 [resource]
 script = ExtResource("1")
 id = &"razor_wing"
+elite_texture = ExtResource("3")
+elite_frame_grid = Vector2i(8, 4)
 threat_cost = 1
 minimum_danger = 1
 maximum_danger = 1000.0

@@ -9,7 +9,5 @@ extends Resource
 
 @export_group("Presentation")
 @export var outline_color := Color("b979c8")
-@export var aura_color := Color("ff5a4d")
-@export_range(0.0, 1.0, 0.01) var aura_alpha := 0.16
 @export var health_bar_background := Color("101522")
 @export var health_bar_size := Vector2(15, 3)

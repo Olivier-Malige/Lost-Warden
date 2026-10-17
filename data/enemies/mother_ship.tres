@@ -3,9 +3,17 @@
 [ext_resource type="Script" uid="uid://bq3xyl864avq8" path="res://data/enemies/enemy_definition.gd" id="1"]
 [ext_resource type="Resource" path="res://data/enemies/movement/mother_ship_entry.tres" id="2"]
 
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/grave_carrier_elite_32x64_sheet.png" id="3"]
+
+[sub_resource type="AtlasTexture" id="EliteHull"]
+atlas = ExtResource("3")
+region = Rect2(0, 0, 32, 64)
+
 [resource]
 script = ExtResource("1")
 id = &"grave_carrier"
+elite_texture = SubResource("EliteHull")
+elite_frame_grid = Vector2i(1, 1)
 threat_cost = 18
 minimum_danger = 2.4
 maximum_danger = 1000.0

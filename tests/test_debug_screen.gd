@@ -86,7 +86,7 @@ func _run() -> void:
 	_check(screen._snapshot.director.seed == 1234, "inspector shows the actual run seed")
 	_check(screen._snapshot.players.size() == 2, "co-op exposes both individual builds")
 	_check(screen._pages["RUN"].text.contains("Danger:"), "internal danger is visible in the debug view")
-	_check(screen._pages["RUN"].text.contains("not integrated yet"), "planned elite/boss/XP mechanics are distinguished from live state")
+	_check(screen._pages["RUN"].text.contains("not integrated yet"), "planned boss/XP mechanics are distinguished from live state")
 	_check(screen._pages["PLAYERS"].text.contains("PLAYER1") and screen._pages["PLAYERS"].text.contains("PLAYER2"), "both players are rendered")
 	_check(screen._pages["PERF"].text.contains("FPS:") and screen._pages["PERF"].text.contains("Parked:"), "performance and pool data are rendered")
 	await process_frame

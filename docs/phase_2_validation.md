@@ -70,3 +70,19 @@ The maintainer requested adapting the hiscore and game-over screens to the new s
 Validation: **638 checks, 0 failures** in `tests/test_wave_progression.gd`, including legacy load/save round trips, independent mode records, shorter runs, longer low-score runs, live timer snapshots, results text, hiscore card values, and Start navigation. Native-scale and screen-transition regressions PASS. The existing two-instance MP3 shutdown warning remains in the headless progression/transition suites; the native previews complete without runtime errors.
 
 Compatibility-renderer captures were visually inspected: `.godot/phase_2_runtime_validation/game_over_survival_solo.png`, `game_over_survival_coop.png`, and `hiscores_survival.png`. Source scene node paths are preserved for compatibility. Boss health and full-phase validation are still pending; this delivery does not start elite or boss implementation.
+
+## Step 3 — Deterministic elites (2026-10-17)
+
+Implemented after the maintainer requested committing the survival/debug checkpoint and proceeding to the next roadmap step. Boss combat and XP remain outside this step.
+
+- Promote eligible formation members through the seeded enemy stream using the existing elapsed-time curve: zero before two minutes, 5% at three minutes, 10% at five, 18% at eight and at most 25% from twelve minutes. Stop promotion after the first successful member in each formation.
+- Reserve elite capacity together with deferred body slots. At most three living/reserved elites exist in either mode; stop, debug skip and invalidated materialization release their reservations. Hazards, mounted turrets and secondary debris never promote.
+- Apply 2.5x health, 1.1x movement, 0.8x fire delay and 3x score, stacking once with existing director, rule and co-op modifiers. Mounted modules inherit hull durability/cadence once and do not become separate elites. Retain guaranteed power-up plus large plasma rewards until Phase 3 introduces XP.
+- Use existing approved elite textures for drones, fighters, interceptors, standalone turrets and carriers. Configure atlas grids in enemy data; the carrier uses an atlas region for its hull. Keep collision geometry and source palette unchanged. Remove the previous full-sprite tint, continuous outline and red aura. Render only a compact fractional-health bar above the sprite and hide it upon destruction.
+- Report actual elite counts, queued slots and promotion chance in the full debug inspector and existing spawn journal.
+
+Validation: `tests/test_elites.gd` **3,268 checks PASS**, covering repeated seeded traces and unrelated RNG noise, pre-two-minute exclusion, the capped chance, per-formation and solo/co-op limits, live/deferred cancellation, every family, stat stacking, mounted inheritance, fractional bars, collision preservation and guaranteed rewards. Director **859**, encounter spawning **6,004**, progression **638**, Alpha 9 combat **161** and debug **66** checks PASS. Fire input, plasma beam and screen fades PASS.
+
+Native Compatibility solo/co-op presentation captures were visually inspected with normal/elite pairs and partially depleted bars: `.godot/phase_2_runtime_validation/elite_solo.webp` and `elite_coop.webp`. These staged comparisons verify five family appearances and contain three elites each; they are not a density/performance playtest. No raster sources or animation tracks were edited.
+
+Known pre-existing limits remain: the feedback suite reports 34 invalid-frame assertions on carrier/mounted-turret animation checks, with additional intermittent wall-clock hit-flash assertions in headless runs; some audio-owning suites retain MP3 resources at shutdown. These are tracked separately from elite integration. Complete-phase boss and human balance validation remain pending.

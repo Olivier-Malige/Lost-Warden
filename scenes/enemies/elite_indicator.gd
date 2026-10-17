@@ -6,7 +6,6 @@ var definition: EliteDefinition
 var max_health := 1.0
 var current_health := 1.0
 var radius := 9.0
-var elapsed := 0.0
 
 func setup(p_target: Enemy, p_max_health: float, p_definition: EliteDefinition) -> void:
 	target = p_target
@@ -15,23 +14,14 @@ func setup(p_target: Enemy, p_max_health: float, p_definition: EliteDefinition) 
 	current_health = max_health
 	var sprite := target.get_node_or_null("Sprite2D") as Sprite2D
 	if sprite and sprite.texture:
-		radius = clampf(sprite.get_rect().size.length() * 0.5, 9.0, 24.0)
-	show_behind_parent = true
+		radius = sprite.get_rect().size.y * absf(sprite.scale.y) * 0.5
 	queue_redraw()
 
 func set_health(value: float) -> void:
 	current_health = clampf(value, 0.0, max_health)
 	queue_redraw()
 
-func _process(delta: float) -> void:
-	elapsed += delta
-	queue_redraw()
-
 func _draw() -> void:
-	var pulse := 0.5 + sin(elapsed * 4.0) * 0.5
-	var aura_alpha := definition.aura_alpha + pulse * 0.1
-	draw_circle(Vector2.ZERO, radius + 2.0 + pulse, Color(definition.aura_color, aura_alpha))
-	draw_arc(Vector2.ZERO, radius, 0.0, TAU, 20, definition.outline_color, 1.0, true)
 	var bar_position := Vector2(-definition.health_bar_size.x * 0.5, -radius - 5.0)
 	draw_rect(Rect2(bar_position, definition.health_bar_size), definition.health_bar_background)
 	var fill_size := Vector2(definition.health_bar_size.x - 2.0, definition.health_bar_size.y - 2.0)
