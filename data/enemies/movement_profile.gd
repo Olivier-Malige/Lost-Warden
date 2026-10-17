@@ -8,6 +8,7 @@ enum Mode {
 	STRAFE,
 	DRIFT,
 	PATROL_EXIT,
+	CHASE,
 }
 
 @export var id: StringName
@@ -25,6 +26,11 @@ enum Mode {
 @export_range(0.0, 2000.0, 1.0) var min_x := 0.0
 @export_range(0.0, 2000.0, 1.0) var max_x := 640.0
 @export var synchronize_formation := false
+
+@export_group("Chase")
+@export var chase_speed := 125.0
+@export var chase_acceleration := 240.0
+@export var chase_commit_distance := 64.0
 
 @export_group("Patrol")
 @export_range(0.0, 2000.0, 1.0) var entry_y := 0.0
@@ -49,5 +55,7 @@ func is_valid() -> bool:
 			return horizontal_speed_min > 0.0 and horizontal_speed_max >= horizontal_speed_min
 		Mode.PATROL_EXIT:
 			return horizontal_speed > 0.0 and patrol_duration > 0.0
+		Mode.CHASE:
+			return chase_speed > 0.0 and chase_acceleration > 0.0 and chase_commit_distance >= 0.0
 		_:
 			return true

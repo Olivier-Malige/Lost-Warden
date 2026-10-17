@@ -48,7 +48,7 @@ func _on_shot_area_entered(area: Area2D) -> void:
 		_hit_area(area)
 	elif area.is_in_group("asteroid"):
 		_hit_area(area)
-	elif trowbackByShield and area.is_in_group("enemy") and not area.is_in_group(noDamageToGroup):
+	elif trowbackByShield and (area.is_in_group("enemy") or area.is_in_group("boss_hit_zone")) and not area.is_in_group(noDamageToGroup):
 		area.hitByPlayerShot = true
 		_hit_area(area)
 

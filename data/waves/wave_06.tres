@@ -4,6 +4,8 @@
 [ext_resource type="Script" uid="uid://ctp3qhk1vo1qm" path="res://data/waves/spawn_rule.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/big_asteroid.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/drone.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/drone_hunter.tscn" id="hunter"]
+[ext_resource type="Resource" path="res://data/enemies/movement/boss_drone_chase.tres" id="chase"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/tie.tscn" id="5"]
 [ext_resource type="Resource" uid="uid://cl741v0b4uw3i" path="res://data/enemies/movement/drone_sine_wide.tres" id="movement_wide"]
 
@@ -19,6 +21,7 @@ spawn_gap = 0.12
 script = ExtResource("2")
 scene = ExtResource("4")
 interval = 3.2
+weight = 0.65
 spawn_min = 1
 spawn_max = 10
 formation = 5
@@ -44,6 +47,18 @@ formation = 5
 pattern = 7
 spawn_gap = 0.12
 
+[sub_resource type="Resource" id="hunter_drones"]
+script = ExtResource("2")
+scene = ExtResource("hunter")
+interval = 3.2
+weight = 0.35
+spawn_min = 1
+spawn_max = 10
+formation = 5
+pattern = 8
+spawn_gap = 0.12
+movement_profile_override = ExtResource("chase")
+
 [resource]
 script = ExtResource("1")
 id = &"encounter_06"
@@ -52,4 +67,4 @@ maximum_danger = 1000.0
 selection_weight = 1.0
 threat_budget = 30.0
 duration = 20.0
-rules = Array[ExtResource("2")]([SubResource("rule_1"), SubResource("rule_2"), SubResource("rule_3"), SubResource("rule_4")])
+rules = Array[ExtResource("2")]([SubResource("rule_1"), SubResource("rule_2"), SubResource("rule_3"), SubResource("rule_4"), SubResource("hunter_drones")])

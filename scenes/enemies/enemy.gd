@@ -43,6 +43,8 @@ var _hit_sprite: Sprite2D
 var _hit_flash_tween: Tween
 var _movement_animation := &"start"
 var _debug_removal_reported := false
+var _chase_target: WeakRef
+var _chase_committed := false
 
 func _ready() -> void:
 	if definition == null:
@@ -145,10 +147,37 @@ func _update_movement(delta: float) -> void:
 			_update_drift(delta)
 		MovementProfile.Mode.PATROL_EXIT:
 			_update_patrol_exit(delta)
+		MovementProfile.Mode.CHASE:
+			_update_chase(delta)
 		_:
 			translate(Vector2(speedX, speedY) * delta)
 			_apply_horizontal_bounds()
 
+
+func _choose_chase_target() -> void:
+	var players: Array[Node2D] = []
+	for player in get_tree().get_nodes_in_group("player"):
+		if player is Node2D and (player.get("state") == null or int(player.state) < 2):
+			players.append(player)
+	_chase_target = weakref(players[posmod(_spawn_context.movement_seed, players.size())]) if not players.is_empty() else null
+
+# Commit before reaching the player so the final approach stays predictable and dodgeable.
+func _update_chase(delta: float) -> void:
+	var target = _chase_target.get_ref() if _chase_target else null
+	if not _chase_committed and (not is_instance_valid(target) or (target.get("state") != null and int(target.state) >= 2)):
+		_choose_chase_target()
+		target = _chase_target.get_ref() if _chase_target else null
+	if is_instance_valid(target) and target.global_position.y - global_position.y <= _movement_profile.chase_commit_distance:
+		_chase_committed = true
+	if not _chase_committed and is_instance_valid(target):
+		var direction: Vector2 = global_position.direction_to(target.global_position)
+		var desired := direction * _movement_profile.chase_speed * _movement_speed_scale()
+		var velocity := Vector2(speedX, speedY).move_toward(desired, _movement_profile.chase_acceleration * delta)
+		speedX = velocity.x
+		speedY = maxf(velocity.y, 0.0)
+	translate(Vector2(speedX, speedY) * delta)
+	if not _chase_committed:
+		_apply_horizontal_bounds()
 
 func _update_ship_banking(_delta: float) -> void:
 	if not definition.bank_on_turn or _hit_sprite == null:

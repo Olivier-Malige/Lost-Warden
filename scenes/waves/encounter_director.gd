@@ -80,8 +80,8 @@ func choose_encounter(waves: Array[WaveDefinition], lane_count: int = 12) -> Wav
 func boss_due() -> bool:
 	return state == State.REGULAR and regular_elapsed >= next_boss_at
 
-func choose_boss(bosses: Array[BossDefinition]) -> BossDefinition:
-	if not boss_due():
+func choose_boss(bosses: Array[BossDefinition], force := false) -> BossDefinition:
+	if state != State.REGULAR or (not force and not boss_due()):
 		return null
 	var eligible: Array[BossDefinition] = []
 	var alternatives: Array[BossDefinition] = []

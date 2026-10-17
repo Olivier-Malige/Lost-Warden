@@ -23,6 +23,9 @@ var _formation_cycle := 0
 var _run_coop := false
 var _running := false
 var _started := false
+var _boss: Enemy
+var _boss_data: BossDefinition
+var _reserved_boss_adds := 0
 
 func _ready() -> void:
 	call_deferred("start_run")
@@ -67,6 +70,12 @@ func set_movement_seed(value: int) -> void:
 
 func stop_run() -> void:
 	_running = false
+	if is_instance_valid(_boss):
+		_boss.stop_combat()
+		_clear_combat(true)
+	_cancel_formations()
+
+func _cancel_formations() -> void:
 	_generation += 1
 	for item in _pending:
 		_release_reservation(item)
@@ -77,6 +86,11 @@ func _physics_process(delta: float) -> void:
 		return
 	director.advance(delta)
 	_emit_run_time()
+	if director.boss_due() and _begin_boss():
+		return
+	if director.state == EncounterDirector.State.BOSS:
+		_flush_pending()
+		return
 	if director.state != EncounterDirector.State.REGULAR:
 		return
 	if director.encounter_left <= 0.000001:
@@ -86,6 +100,91 @@ func _physics_process(delta: float) -> void:
 	if director.elapsed + 0.000001 >= _next_formation_at:
 		_schedule_formation()
 	_flush_pending()
+
+func _begin_boss(force := false) -> bool:
+	var chosen := director.choose_boss(config.bosses, force)
+	if chosen == null:
+		return false
+	_cancel_formations()
+	_budget_left = 0.0
+	_boss_data = chosen
+	_clear_combat(false)
+	call_deferred("_materialize_boss", chosen, _generation)
+	return true
+
+func _materialize_boss(data: BossDefinition, generation: int) -> void:
+	if not _running or generation != _generation or director.state != EncounterDirector.State.BOSS:
+		return
+	_boss = data.scene.instantiate() as Enemy
+	_boss.boss_data = data
+	_boss.run_coop = _run_coop
+	var context := EnemySpawnContext.new()
+	context.movement_seed = director.random.enemies.randi()
+	_boss.configure_spawn(context)
+	_boss.position = Vector2(320, -60)
+	_boss.defeated.connect(_on_boss_defeated)
+	_boss.reinforcements_requested.connect(_spawn_boss_reinforcements)
+	add_child(_boss)
+	Events.boss_phase_thresholds_changed.emit(data.phase_thresholds)
+	Events.boss_started.emit(data.id, data.display_name, _boss.max_life)
+	enemy_spawned.emit(_boss)
+
+func _on_boss_defeated() -> void:
+	if not _running or director.state != EncounterDirector.State.BOSS:
+		return
+	_cancel_formations()
+	_clear_combat(true)
+	director.boss_defeated()
+	Events.boss_defeated.emit(_boss_data.id)
+
+# Retire combatants outside collision callbacks and recycle shots through their pool.
+func _clear_combat(only_adds: bool) -> void:
+	for enemy in get_tree().get_nodes_in_group("enemy"):
+		if enemy == _boss or (only_adds and not enemy.is_in_group("boss_add")):
+			continue
+		enemy.process_mode = Node.PROCESS_MODE_DISABLED
+		enemy.set_deferred("monitoring", false)
+		enemy.set_deferred("monitorable", false)
+		enemy.call_deferred("free")
+	for shot in get_tree().get_nodes_in_group("enemy_Shot"):
+		if not shot.get_meta("pooled", false):
+			ProjectilePool.despawn(shot)
+
+func _spawn_boss_reinforcements() -> void:
+	if not _running or director.state != EncounterDirector.State.BOSS or not is_instance_valid(_boss) or _boss.destroyed:
+		return
+	var eligible: Array[SpawnRule] = []
+	var weights := PackedFloat32Array()
+	for rule in _boss_data.reinforcements:
+		if rule.weight > 0.0 and _available_members(_rule_definition(rule)) > 0:
+			eligible.append(rule)
+			weights.append(rule.weight)
+	if eligible.is_empty():
+		return
+	var rule := eligible[director.random.encounters.rand_weighted(weights)]
+	var definition := _rule_definition(rule)
+	var formation_size := ceili(rule.formation * (_boss_data.coop_reinforcement_multiplier if _run_coop else 1.0))
+	var count := mini(formation_size, _available_members(definition))
+	count = mini(count, maxi(_boss_reinforcement_cap() - get_tree().get_node_count_in_group("boss_add") - _reserved_boss_adds, 0))
+	var formation_seed := director.random.enemies.randi()
+	for index in count:
+		var context := EnemySpawnContext.new()
+		context.health_multiplier = _health_multiplier(definition)
+		context.rule_health_multiplier = rule.health_multiplier
+		context.speed_multiplier = director.speed_multiplier() * rule.speed_multiplier
+		context.fire_delay_multiplier = director.fire_delay_multiplier()
+		context.movement_profile = rule.movement_profile_override
+		context.movement_seed = director.random.enemies.randi()
+		context.formation_seed = formation_seed
+		context.movement_time_offset = index * rule.spawn_gap
+		var item := {
+			"scene": rule.scene, "position": _boss.position + Vector2(-40 if index % 2 == 0 else 40, 16 + (index / 2) * 12),
+			"context": context, "at": director.elapsed + index * rule.spawn_gap,
+			"slots": definition.spawn_slots, "family": definition.id,
+			"generation": _generation, "boss_add": true,
+		}
+		_reserve(item)
+		_pending.append(item)
 
 func _begin_encounter() -> void:
 	var wave := director.choose_encounter(catalog.waves, config.lane_count)
@@ -164,7 +263,21 @@ func get_debug_snapshot() -> Dictionary:
 		"fire_scale": director.fire_delay_multiplier(), "elite_chance": director.elite_chance(),
 		"boss_in": maxf(director.next_boss_at - director.regular_elapsed, 0.0),
 		"recovery_left": director.recovery_left, "rng_states": rng_states,
+		"boss": _boss_snapshot(),
 	}
+
+func _boss_reinforcement_cap() -> int:
+	return ceili(_boss_data.reinforcement_cap * (_boss_data.coop_reinforcement_multiplier if _run_coop else 1.0))
+
+func _boss_snapshot() -> Dictionary:
+	if not is_instance_valid(_boss) or _boss.destroyed:
+		return {}
+	return {"id": String(_boss_data.id), "name": _boss_data.display_name,
+		"health": _boss.life, "maximum": _boss.max_life, "phase": _boss.phase + 1,
+		"attack": _boss.Attack.keys()[_boss.attack],
+		"cannons": _boss.get_cannon_snapshot(),
+		"adds": get_tree().get_node_count_in_group("boss_add"),
+		"reserved_adds": _reserved_boss_adds, "add_cap": _boss_reinforcement_cap()}
 
 func _schedule_formation() -> void:
 	var eligible: Array[SpawnRule] = []
@@ -237,6 +350,8 @@ func _materialize(item: Dictionary) -> void:
 	if not _running or item.generation != _generation:
 		return
 	var enemy := (item.scene as PackedScene).instantiate() as Enemy
+	if item.get("boss_add", false):
+		enemy.add_to_group("boss_add")
 	enemy.configure_spawn(item.context)
 	enemy.position = item.position
 	add_child(enemy)
@@ -244,7 +359,7 @@ func _materialize(item: Dictionary) -> void:
 
 # Debris shares the same reservation accounting as scheduled formations.
 func queue_enemy(enemy: Enemy) -> bool:
-	if not _running or _available_members(enemy.definition) < 1:
+	if not _running or director.state != EncounterDirector.State.REGULAR or _available_members(enemy.definition) < 1:
 		enemy.call_deferred("free")
 		return false
 	var item := {"slots": enemy.definition.spawn_slots, "family": enemy.definition.id, "generation": _generation}
@@ -266,12 +381,16 @@ func _reserve(item: Dictionary) -> void:
 	_reserved_slots += int(item.slots)
 	if item.get("elite", false):
 		_reserved_elites += 1
+	if item.get("boss_add", false):
+		_reserved_boss_adds += 1
 	_reserved_families[item.family] = _reserved_families.get(item.family, 0) + 1
 
 func _release_reservation(item: Dictionary) -> void:
 	_reserved_slots -= int(item.slots)
 	if item.get("elite", false):
 		_reserved_elites -= 1
+	if item.get("boss_add", false):
+		_reserved_boss_adds -= 1
 	_reserved_families[item.family] = _reserved_families.get(item.family, 0) - 1
 
 func _active_enemy_count() -> int:
@@ -327,15 +446,18 @@ func goto_Next_Wave() -> void:
 	if director:
 		director.danger_offset += 0.2
 
+func debug_start_boss() -> void:
+	if not global.Debug or not _running or get_tree().paused:
+		return
+	if director.state == EncounterDirector.State.REGULAR:
+		_begin_boss(true)
+
 func debug_skip_encounter() -> void:
 	if not global.Debug or not _running or get_tree().paused:
 		return
 	if director.state != EncounterDirector.State.REGULAR:
 		return
-	_generation += 1
-	for item in _pending:
-		_release_reservation(item)
-	_pending.clear()
+	_cancel_formations()
 	_begin_encounter()
 
 func _shuffle_lanes(lanes: Array[int]) -> void:

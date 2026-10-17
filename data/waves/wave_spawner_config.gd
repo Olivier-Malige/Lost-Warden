@@ -17,7 +17,13 @@ extends Resource
 @export var elite_definition: EliteDefinition
 @export_range(1, 10, 1) var elite_cap := 3
 
+@export_group("Bosses")
+@export var bosses: Array[BossDefinition] = []
+
 func is_valid() -> bool:
+	for boss in bosses:
+		if boss == null or not boss.is_valid():
+			return false
 	return lane_count > 0 and solo_enemy_cap > 0 and coop_enemy_cap >= solo_enemy_cap \
 		and v_formation_depth >= 0.0 and coop_budget_multiplier >= 1.0 \
 		and coop_common_health_multiplier >= 1.0 and coop_specialist_health_multiplier >= 1.0 \

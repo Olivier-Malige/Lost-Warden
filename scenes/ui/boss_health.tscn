@@ -1,0 +1,61 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/boss_health.gd" id="1"]
+[ext_resource type="FontFile" path="res://assets/fonts/slkscr.ttf" id="2"]
+[ext_resource type="Script" path="res://scenes/ui/boss_health_segments.gd" id="3"]
+
+[sub_resource type="Theme" id="Theme"]
+default_font = ExtResource("2")
+default_font_size = 10
+Label/colors/font_color = Color(0.92, 0.87, 0.68, 1)
+
+[sub_resource type="StyleBoxFlat" id="Background"]
+bg_color = Color(0.04, 0.05, 0.08, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.33, 0.16, 0.19, 1)
+
+[sub_resource type="StyleBoxFlat" id="Fill"]
+bg_color = Color(0.86, 0.2, 0.24, 1)
+
+[node name="BossHealth" type="VBoxContainer"]
+visible = false
+offset_left = 120.0
+offset_top = 4.0
+offset_right = 520.0
+offset_bottom = 24.0
+mouse_filter = 2
+theme = SubResource("Theme")
+theme_override_constants/separation = 2
+script = ExtResource("1")
+
+[node name="Header" type="HBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "DREAD ARK"
+horizontal_alignment = 1
+
+[node name="Bar" type="ProgressBar" parent="."]
+modulate = Color(1, 1, 1, 0.65)
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("Background")
+theme_override_styles/fill = SubResource("Fill")
+show_percentage = false
+
+[node name="Segments" type="Control" parent="Bar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3")

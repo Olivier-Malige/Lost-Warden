@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EnemyDefinition" format=3]
+
+[ext_resource type="Script" path="res://data/enemies/enemy_definition.gd" id="1"]
+[ext_resource type="Resource" path="res://data/enemies/movement/stationary.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"dread_ark"
+max_health = 650
+collision_damage = 10
+score = 15000
+elite_eligible = false
+durability = 4
+movement_profile = ExtResource("2")

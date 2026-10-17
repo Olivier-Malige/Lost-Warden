@@ -41,7 +41,7 @@ Maintainer confirmation on 2026-10-17: Phase 1, including its follow-ups, and th
 - Phase 1 follow-up — Existing enemy movement: implementation completed on 2026-09-04; deterministic headless checks pass, while targeted solo and co-op readability playtests remain.
 - Phase 1 follow-up — Alpha 9 balance: implemented on 2026-10-12; the approved profile is documented below. Automated balance checks pass; comparative solo/co-op feel and pressure playtests remain before release approval.
 - Visual production phase: completed, as confirmed by the maintainer on 2026-10-17.
-- Next Phase 2 implementation step: first boss, when explicitly requested. Deterministic elites were completed on 2026-10-17. Implement the expanded Phase 3 power-up system before the full enemy/formation redesign and progressive density tuning in Phase 4.
+- Next Phase 2 step: final solo/co-op playtest of the revised boss. Elites, the four-phase boss runtime and its health display were completed on 2026-10-17. Implement the expanded Phase 3 power-up system before the full enemy/formation redesign and progressive density tuning in Phase 4.
 - Phase 2: started on 2026-10-17. Deliver and verify one step at a time, then stop for maintainer review before the next step.
 
 Preparation phase B delivered the direct 1066 by 800 viewport, responsive Web presentation, redesigned menus and HUD, browser-fullscreen recovery, the Lost Warden release identity, the approved 24-color palette, itch.io page art, and a validated release archive. Updated gameplay screenshots remain intentionally deferred until the sprite rework is visible. Candidate replacement music is preserved for later review and is not active in the current build.
@@ -487,15 +487,15 @@ Validation and release gate:
 
 ## Phase 2 — Add the seeded encounter director, elites, and bosses
 
-Status: in progress. The maintainer requested step-by-step delivery on 2026-10-17; steps 1 and 2 are implemented. The later full enemy/formation redesign and density tuning are deferred to Phase 4, after the expanded Phase 3 power-up system. Deliver one bounded implementation at a time.
+Status: in progress. The maintainer requested step-by-step delivery on 2026-10-17; steps 1–4 are implemented. The later full enemy/formation redesign and density tuning are deferred to Phase 4, after the expanded Phase 3 power-up system. Deliver one bounded implementation at a time.
 
 Delivery steps:
 
 1. **Done — Data and director logic.** Add encounter/family metadata, boss configuration, four independent seeded random streams, weighted encounter selection with two-encounter history, danger and elite probability curves, capped stat multipliers, and regular-time boss scheduling with recovery. These foundations were delivered independently before runtime integration.
 2. **Done — Continuous spawning.** Migrate the existing catalog to 20–30-second encounters; connect run seed generation, threat budgets, family weights, formations, spawn initialization, caps, and central timing to `WaveSpawner`. See [step 2 validation](phase_2_validation.md).
 3. **Done — Elites.** Deterministic promotion, modifiers, localized approved markings, health bars, and active/reserved limits, validated on 2026-10-17.
-4. **Pending — Command Carrier.** Integrate the Dread Ark art, aimed volleys, declared drone reinforcements, health transitions, and director lifecycle.
-5. **Partially delivered — HUD, saves, and full validation.** The maintainer brought the survival timer HUD forward on 2026-10-17 and requested that danger remain internal rather than appear in the player HUD. Survival time, F1/F2 danger controls, solo/co-op `bestTime` records, and survival-based game-over/hiscore screens are implemented; boss health and complete phase-level regression and visual checks remain pending.
+4. **Done — Command Carrier.** Dread Ark art, faster aimed volleys, pursuing drone reinforcements, four health-based phases, central beam and director lifecycle, validated on 2026-10-17.
+5. **Partially delivered — HUD, saves, and full validation.** Survival time, F1/F2 danger controls, solo/co-op `bestTime` records, result screens and the dedicated event-driven segmented boss health bar are implemented. Gameplay shows the boss name and phase-threshold segments, without numeric health or phase labels. Automated and native visual checks pass; final human solo/co-op boss balance acceptance remains pending.
 
 Step 1 validation (2026-10-17): Godot 4.7.2 headless ran `tests/test_encounter_director.gd`: **859 checks, 0 failures**. An isolated test project copied the current logic scripts into `.godot/phase_2_validation/` to exclude the ignored root override's missing local Godot AI autoload and avoid touching player saves. The test execution completed without runtime errors. Editor setup reported sandbox safe-save warnings separately. This verifies the pure director model only; runtime spawning, actual boss combat, saves, and visual acceptance remain pending. The normal project test command is `godot --headless --path . --script tests/test_encounter_director.gd` with a valid local addon override.
 
@@ -526,16 +526,16 @@ Step 1 validation (2026-10-17): Godot 4.7.2 headless ran `tests/test_encounter_d
   - 18% at 8 minutes;
   - maximum 25% at 12 minutes and beyond;
   - no more than one elite per formation and three active elites at once.
-- Give elites 2.5x health, 1.1x movement speed, 0.8x firing delays, 3x score, and a guaranteed high-value XP drop once Phase 3 is active.
+- Give elites 3.0x health, 1.1x movement speed, 0.7x firing delays, 3x score, and a guaranteed high-value XP drop once Phase 3 is active. Maintainer-requested tuning on 2026-10-17 raises health from 2.5x and shortens firing delays from 0.8x.
 - Make elites immediately recognizable with the accepted dark-space art treatment: localized pale-violet edge markings, an altered armor panel, and a compact health bar. Do not restore continuous outlines or detached red auras when integrating the revised sources. Their collision shape must not scale with the visual effect.
 - Add milestone boss encounters:
   - start the first boss encounter after 5 minutes of regular encounter time;
   - schedule the next boss after another 5 minutes of regular encounter time following the previous boss defeat, so bosses can never overlap;
   - suspend the normal encounter budget during a boss and allow only the boss-specific adds declared by its data resource;
-  - change movement and attack patterns at 66% and 33% health;
+  - change movement and attack patterns at 75%, 50% and 25% health, following the maintainer's four-phase combat revision on 2026-10-17;
   - resume regular encounters after an 8-second recovery window;
   - select eligible bosses with the run seed and prevent the same boss from appearing twice in succession.
-- Ship Phase 2 with one complete Command Carrier boss based on the mother-ship family, including a dedicated boss health bar, aimed volleys, drone reinforcements, and two phase transitions. Additional bosses must be addable through data without changing the director.
+- Ship Phase 2 with one complete Command Carrier boss based on the mother-ship family, including a dedicated health bar, repeated aimed volleys, pursuing drone reinforcements, two phase transitions, destructible cannons, dynamic repositioning and telegraphed final-phase beams. Additional bosses must be addable through data without changing the director.
 - Replace the wave HUD with survival time. Maintainer revision on 2026-10-17: keep danger internal to the director and debug controls; do not display it in the player HUD.
 - Add `bestTime` to solo and co-op save records without converting or deleting legacy `bestWave` values.
 - Reassign F1/F2 to decrease/increase the debug danger offset while preserving F3–F6.

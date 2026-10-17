@@ -87,7 +87,7 @@ size_flags_vertical = 3
 [node name="Hint" type="Label" parent="Panel/Margin/Content"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 10
-text = "LEFT/RIGHT OR TAB: TABS / UP/DOWN OR PGUP/PGDN: SCROLL\nESC/F10/START: CLOSE / F11: MINI"
+text = "LEFT/RIGHT OR TAB: TABS / UP/DOWN OR PGUP/PGDN: SCROLL\nESC/F10/START: CLOSE / F11: MINI / F12: BOSS (LIVE)"
 autowrap_mode = 2
 
 [node name="Compact" type="PanelContainer" parent="."]
