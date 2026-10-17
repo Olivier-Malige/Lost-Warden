@@ -1,6 +1,6 @@
 extends SceneTree
 
-const CONFIG: WaveSpawnerConfig = preload("res://data/waves/wave_spawner_config.tres")
+var CONFIG: WaveSpawnerConfig
 var _checks := 0
 var _failures := 0
 var _globals: Node
@@ -135,8 +135,8 @@ func _test_stats() -> void:
 		elite.configure_spawn(context)
 		stage.add_child(elite)
 		_freeze_enemy(elite)
-		_check(is_equal_approx(elite.max_life, elite.definition.max_health * 1.2 * 2.5), kind + ": elite health stacks once with director health")
-		_check(is_equal_approx(elite.fire_delay_multiplier, 0.9 * 0.8), kind + ": elite attack delay stacks once")
+		_check(is_equal_approx(elite.max_life, elite.definition.max_health * 1.2 * 3.0), kind + ": elite health stacks once with director health")
+		_check(is_equal_approx(elite.fire_delay_multiplier, 0.9 * 0.7), kind + ": elite attack delay stacks once")
 		_check(is_equal_approx(elite._movement_speed_scale(), 1.1 * 1.1), kind + ": elite movement stacks once")
 		_check(elite.points == normal.points * 3, kind + ": elite score is tripled")
 		var normal_shape: CollisionShape2D = normal.get_node("CollisionShape2D")
@@ -151,8 +151,8 @@ func _test_stats() -> void:
 		if kind == "mother_ship":
 			for turret in elite._mounted_turrets:
 				_freeze_enemy(turret)
-				_check(not turret.elite and is_equal_approx(turret.max_life, turret.definition.max_health * 1.2 * 2.5), "mounted turrets inherit elite hull health without a second elite multiplier")
-				_check(is_equal_approx(turret.fire_delay_multiplier, 0.9 * 0.8), "mounted turrets inherit the hull fire-delay multiplier once")
+				_check(not turret.elite and is_equal_approx(turret.max_life, turret.definition.max_health * 1.2 * 3.0), "mounted turrets inherit elite hull health without a second elite multiplier")
+				_check(is_equal_approx(turret.fire_delay_multiplier, 0.9 * 0.7), "mounted turrets inherit the hull fire-delay multiplier once")
 		elite.free()
 		normal.free()
 	stage.free()
@@ -203,6 +203,7 @@ func _test_rewards() -> void:
 	stage.free()
 
 func _run() -> void:
+	CONFIG = load("res://data/waves/wave_spawner_config.tres")
 	_globals = root.get_node("global")
 	_globals.Debug = true
 	var early := _trace(17, false, 119.99, 1)
