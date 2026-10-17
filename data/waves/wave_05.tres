@@ -13,7 +13,6 @@ interval = 3.0
 spawn_min = 1
 spawn_max = 10
 formation = 5
-active_duration = 10.0
 pattern = 7
 spawn_gap = 0.12
 
@@ -24,8 +23,6 @@ interval = 4.2
 spawn_min = 2
 spawn_max = 9
 formation = 2
-start_delay = 9.0
-active_duration = 10.0
 pattern = 8
 spawn_gap = 0.12
 
@@ -36,8 +33,6 @@ interval = 2.8
 spawn_min = 1
 spawn_max = 10
 formation = 5
-start_delay = 18.0
-active_duration = 10.0
 pattern = 9
 spawn_gap = 0.12
 
@@ -48,14 +43,15 @@ interval = 4.0
 spawn_min = 2
 spawn_max = 9
 formation = 2
-start_delay = 27.0
-active_duration = 10.0
 pattern = 6
 spawn_gap = 0.12
-elite_count = 1
 
 [resource]
 script = ExtResource("1")
-duration = 36.0
-difficulty = 1.75
+id = &"encounter_05"
+minimum_danger = 1.42
+maximum_danger = 1000.0
+selection_weight = 1.0
+threat_budget = 30.0
+duration = 30.0
 rules = Array[ExtResource("2")]([SubResource("rule_1"), SubResource("rule_2"), SubResource("rule_3"), SubResource("rule_4")])

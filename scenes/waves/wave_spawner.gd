@@ -1,128 +1,326 @@
 class_name WaveSpawner
 extends Node2D
 
+signal enemy_spawned(enemy: Enemy)
+
 @export var catalog: WaveCatalog
 @export var config: WaveSpawnerConfig
 
+var director: EncounterDirector
 var wave_index := 0
-var _master: Timer
-var _wave_generation := 0
-var _endless_cycle := 0
-var _active_enemies: Dictionary[int, bool] = {}
-var _movement_seed := 0
-var _movement_seed_overridden := false
+var _seed_override := -1
+var _generation := 0
+var _pending: Array[Dictionary] = []
+var _secondary_pending: Array[Enemy] = []
+var _reserved_slots := 0
+var _reserved_families: Dictionary[StringName, int] = {}
+var _definitions: Dictionary[PackedScene, EnemyDefinition] = {}
+var _next_formation_at := 0.0
+var _budget_left := 0.0
+var _budget_rate := 1.0
+var _formation_cycle := 0
+var _run_coop := false
+var _running := false
+var _started := false
 
 func _ready() -> void:
-	if catalog == null or config == null:
-		push_error("WaveSpawner requires a catalog and a WaveSpawnerConfig.")
-		return
-	if not config.is_valid():
-		push_error("WaveSpawnerConfig contains invalid difficulty, pacing, cap, or elite values.")
-		return
-	if not _has_all_spawn_markers():
-		return
-	if not _movement_seed_overridden:
-		_movement_seed = config.movement_seed
-	_master = Timer.new()
-	_master.one_shot = true
-	_master.timeout.connect(_on_master_timeout)
-	add_child(_master)
-	_apply_wave(0)
+	call_deferred("start_run")
 
-func _apply_wave(index: int) -> void:
-	if catalog == null or catalog.waves.is_empty():
+func _exit_tree() -> void:
+	for enemy in _secondary_pending:
+		if is_instance_valid(enemy):
+			enemy.free()
+	_secondary_pending.clear()
+
+func start_run() -> void:
+	if _started:
 		return
-	_wave_generation += 1
-	_master.stop()
-	wave_index = clampi(index, 0, catalog.waves.size() - 1)
-	var loop_start := mini(config.loop_start_index, catalog.waves.size() - 1)
-	var loop_length := catalog.waves.size() - loop_start
-	global.wave = wave_index + 1 + _endless_cycle * loop_length
-	Events.wave_changed.emit(global.wave)
-	var wave: WaveDefinition = catalog.waves[wave_index]
-	if wave == null or not wave.is_valid(config.lane_count):
-		push_error("Wave %d contains an invalid definition or spawn rule." % (wave_index + 1))
+	if catalog == null or catalog.waves.is_empty() or config == null or not config.is_valid():
+		push_error("WaveSpawner requires a valid encounter catalog and configuration.")
 		return
-	var timeline_scale := _timeline_scale(wave)
-	for rule_index in range(wave.rules.size()):
-		var rule: SpawnRule = wave.rules[rule_index]
-		if rule == null or rule.scene == null:
-			continue
-		_run_rule(rule, rule_index, _wave_generation, wave.difficulty, timeline_scale)
-	_master.wait_time = config.wave_duration + config.inter_wave_delay
-	_master.start()
+	for lane in config.lane_count:
+		if get_node_or_null("spawnPos%d" % lane) is not Node2D:
+			push_error("WaveSpawner is missing spawnPos%d." % lane)
+			return
+	var ids: Array[StringName] = []
+	for wave in catalog.waves:
+		if wave == null or not wave.is_encounter_valid(config.lane_count) or wave.id in ids:
+			push_error("Encounter definitions must be valid and have unique stable identifiers.")
+			return
+		ids.append(wave.id)
+		for rule in wave.rules:
+			var definition := _rule_definition(rule)
+			if definition == null or definition.id == &"" or definition.threat_cost <= 0.0:
+				push_error("Every encounter rule requires an identified enemy family with a positive threat cost.")
+				return
+	var streams := RunRandom.new(_seed_override) if _seed_override >= 0 else global.run_random
+	director = EncounterDirector.new(streams)
+	_run_coop = global.coop
+	_started = true
+	_running = true
+	_begin_encounter()
 
 func set_movement_seed(value: int) -> void:
-	_movement_seed = value
-	_movement_seed_overridden = true
+	if not _running:
+		_seed_override = value
 
-func _run_rule(rule: SpawnRule, rule_index: int, generation: int, difficulty: float, timeline_scale: float) -> void:
-	var start_delay := rule.start_delay * timeline_scale
-	if start_delay > 0.0:
-		await get_tree().create_timer(start_delay, false).timeout
-	if generation != _wave_generation:
+func stop_run() -> void:
+	_running = false
+	_generation += 1
+	for item in _pending:
+		_release_reservation(item)
+	_pending.clear()
+
+func _physics_process(delta: float) -> void:
+	if not _running:
 		return
-	var active_duration := maxf(rule.active_duration * timeline_scale, 0.0)
-	if active_duration <= 0.0:
+	director.advance(delta)
+	_emit_run_time()
+	if director.state != EncounterDirector.State.REGULAR:
 		return
-	var active_timer := get_tree().create_timer(active_duration, false)
-	var interval := _spawn_interval(rule, difficulty, timeline_scale)
-	var cycle := 0
-	var elites_remaining := maxi(rule.elite_count + _endless_elite_bonus(rule), 0)
-	var next_spawn_elapsed := 0.0
-	while generation == _wave_generation and active_timer.time_left > 0.0:
-		var elapsed := active_duration - active_timer.time_left
-		if elapsed < next_spawn_elapsed:
-			await get_tree().create_timer(minf(next_spawn_elapsed - elapsed, active_timer.time_left), false).timeout
-			if generation != _wave_generation or active_timer.time_left <= 0.0:
-				return
-		var elite_spawned := await _spawn_formation(rule, rule_index, generation, cycle, active_timer, difficulty, elites_remaining > 0, timeline_scale)
-		if elite_spawned:
-			elites_remaining -= 1
-		cycle += 1
-		next_spawn_elapsed += interval
-		elapsed = active_duration - active_timer.time_left
-		if next_spawn_elapsed <= elapsed:
-			next_spawn_elapsed = elapsed
+	if director.encounter_left <= 0.000001:
+		_begin_encounter()
+		if not _running:
+			return
+	if director.elapsed + 0.000001 >= _next_formation_at:
+		_schedule_formation()
+	_flush_pending()
 
-func _spawn_formation(rule: SpawnRule, rule_index: int, generation: int, cycle: int, active_timer: SceneTreeTimer, difficulty: float, can_spawn_elite: bool, timeline_scale: float) -> bool:
-	var count := maxi(rule.formation + _endless_formation_bonus(rule), 1)
-	var lanes := _formation_lanes(rule, count, cycle)
-	var spawn_elite := can_spawn_elite and _active_elite_count() < 3
-	for i in range(lanes.size()):
-		if generation != _wave_generation or active_timer.time_left <= 0.0:
-			return false
-		if _active_enemy_count() >= _enemy_cap():
-			return false
-		_spawn_at(rule, rule_index, cycle, lanes[i], i, difficulty, spawn_elite and i == 0, i * rule.spawn_gap * timeline_scale)
-		if i < lanes.size() - 1 and rule.spawn_gap > 0.0:
-			await get_tree().create_timer(minf(rule.spawn_gap * timeline_scale, active_timer.time_left), false).timeout
-	return spawn_elite
+func _begin_encounter() -> void:
+	var wave := director.choose_encounter(catalog.waves, config.lane_count)
+	if wave == null:
+		push_error("No encounter is eligible for the current danger.")
+		stop_run()
+		return
+	wave_index = catalog.waves.find(wave)
+	_budget_left = director.encounter_budget() * (config.coop_budget_multiplier if _run_coop else 1.0)
+	_budget_rate = _budget_left / wave.duration
+	_next_formation_at = director.elapsed
+	_formation_cycle = 0
+	global.wave = director.encounter_number
+	Events.wave_changed.emit(global.wave)
+	Events.encounter_started.emit(wave.id, global.wave)
+	_emit_run_time()
 
-func _timeline_scale(wave: WaveDefinition) -> float:
-	return config.wave_duration / wave.duration
+func _emit_run_time() -> void:
+	global.survival_time = director.elapsed
+	Events.run_time_changed.emit(director.elapsed)
 
-func _spawn_interval(rule: SpawnRule, difficulty: float, timeline_scale: float) -> float:
-	var multiplier := 1.0
+func get_debug_snapshot() -> Dictionary:
+	if director == null:
+		return {"running": false}
+	var families := {}
+	var live := 0
+	var elites := 0
+	for enemy in get_tree().get_nodes_in_group(&"enemy"):
+		if enemy is not Enemy:
+			continue
+		var id := String(enemy.definition.id)
+		if not families.has(id):
+			families[id] = {"bodies": 0, "alive": 0, "elites": 0, "health": 0.0}
+		families[id].bodies += 1
+		if not enemy.destroyed:
+			live += 1
+			families[id].alive += 1
+			families[id].health += maxf(enemy.life, 0.0)
+			if enemy.elite:
+				elites += 1
+				families[id].elites += 1
+	var rules: Array[Dictionary] = []
+	if director.encounter:
+		for rule in director.encounter.rules:
+			var definition := _rule_definition(rule)
+			var weight := rule.weight * definition.weight_at(director.danger()) / rule.interval
+			var available := _available_members(definition)
+			rules.append({
+				"family": String(definition.id), "pattern": SpawnRule.Pattern.keys()[rule.pattern],
+				"formation": rule.formation, "lanes": Vector2i(rule.spawn_min, rule.spawn_max),
+				"cost": definition.threat_cost,
+				"weight": weight, "available": available,
+				"affordable": definition.threat_cost <= _budget_left,
+				"eligible": weight > 0.0 and available > 0 and definition.threat_cost <= _budget_left,
+			})
+	var pending_entries := 0
+	for count in _reserved_families.values():
+		pending_entries += count
+	var rng_states := {}
+	for key in ["encounters", "enemies", "drops", "upgrades"]:
+		rng_states[key] = director.random.get(key).state
+	return {
+		"running": _running, "coop": _run_coop, "seed": director.random.run_seed,
+		"state": EncounterDirector.State.keys()[director.state],
+		"elapsed": director.elapsed, "regular_elapsed": director.regular_elapsed,
+		"danger": director.danger(), "danger_offset": director.danger_offset,
+		"encounter": String(director.encounter.id) if director.encounter else "none",
+		"encounter_number": director.encounter_number, "encounter_left": director.encounter_left,
+		"recent": director.recent.duplicate(), "budget_left": _budget_left, "budget_rate": _budget_rate,
+		"next_formation": maxf(_next_formation_at - director.elapsed, 0.0), "formation_cycle": _formation_cycle,
+		"bodies": _active_enemy_count() - _reserved_slots, "reserved": _reserved_slots,
+		"pending": pending_entries, "cap": _enemy_cap(),
+		"alive": live, "elites": elites, "families": families, "rules": rules,
+		"health_scale": director.health_multiplier(), "speed_scale": director.speed_multiplier(),
+		"fire_scale": director.fire_delay_multiplier(), "elite_chance": director.elite_chance(),
+		"boss_in": maxf(director.next_boss_at - director.regular_elapsed, 0.0),
+		"recovery_left": director.recovery_left, "rng_states": rng_states,
+	}
+
+func _schedule_formation() -> void:
+	var eligible: Array[SpawnRule] = []
+	var weights := PackedFloat32Array()
+	for rule in director.encounter.rules:
+		var definition := _rule_definition(rule)
+		var weight := rule.weight * definition.weight_at(director.danger()) / rule.interval
+		if weight > 0.0 and definition.threat_cost <= _budget_left and _available_members(definition) > 0:
+			eligible.append(rule)
+			weights.append(weight)
+	if eligible.is_empty():
+		_next_formation_at = director.elapsed + 0.25
+		return
+	var rule := eligible[director.random.encounters.rand_weighted(weights)]
 	var definition := _rule_definition(rule)
-	if definition and _is_common(definition):
-		if wave_index >= 8:
-			multiplier = config.common_late_interval_multiplier
-		elif wave_index >= 3:
-			multiplier = config.common_mid_interval_multiplier
-		if global.coop:
-			multiplier /= config.coop_common_density_multiplier
-	return maxf(rule.interval * timeline_scale * _pace_multiplier(difficulty) * config.spawn_interval_multiplier * multiplier, 0.05)
+	var count := mini(rule.formation, floori(_budget_left / definition.threat_cost))
+	count = mini(count, _available_members(definition))
+	var lanes := _formation_lanes(rule, count, _formation_cycle)
+	var formation_seed := director.random.enemies.randi()
+	for index in lanes.size():
+		var lane := lanes[index]
+		var marker := get_node("spawnPos%d" % lane) as Node2D
+		var context := EnemySpawnContext.new()
+		context.health_multiplier = _health_multiplier(definition)
+		context.speed_multiplier = rule.speed_multiplier * (1.0 if definition.durability == EnemyDefinition.Durability.HAZARD else director.speed_multiplier())
+		context.fire_delay_multiplier = director.fire_delay_multiplier()
+		context.rule_health_multiplier = rule.health_multiplier
+		context.movement_profile = rule.movement_profile_override
+		context.formation_seed = formation_seed
+		context.movement_seed = director.random.enemies.randi()
+		context.movement_time_offset = index * rule.spawn_gap
+		var offset := Vector2.ZERO
+		if rule.pattern == SpawnRule.Pattern.V:
+			offset.y = -absf(lane - lanes[0]) * config.v_formation_depth
+		var item := {
+			"scene": rule.scene, "position": marker.position + offset,
+			"context": context, "at": director.elapsed + index * rule.spawn_gap,
+			"slots": definition.spawn_slots, "family": definition.id,
+			"generation": _generation,
+		}
+		_reserve(item)
+		_pending.append(item)
+	var cost := lanes.size() * definition.threat_cost
+	_budget_left = maxf(_budget_left - cost, 0.0)
+	_next_formation_at = director.elapsed + cost / _budget_rate
+	_formation_cycle += 1
+
+func _flush_pending() -> void:
+	var index := 0
+	while index < _pending.size():
+		var item := _pending[index]
+		if item.at <= director.elapsed + 0.000001:
+			_pending.remove_at(index)
+			call_deferred("_materialize", item)
+		else:
+			index += 1
+
+func _materialize(item: Dictionary) -> void:
+	_release_reservation(item)
+	if not _running or item.generation != _generation:
+		return
+	var enemy := (item.scene as PackedScene).instantiate() as Enemy
+	enemy.configure_spawn(item.context)
+	enemy.position = item.position
+	add_child(enemy)
+	enemy_spawned.emit(enemy)
+
+# Debris shares the same reservation accounting as scheduled formations.
+func queue_enemy(enemy: Enemy) -> bool:
+	if not _running or _available_members(enemy.definition) < 1:
+		enemy.call_deferred("free")
+		return false
+	var item := {"slots": enemy.definition.spawn_slots, "family": enemy.definition.id, "generation": _generation}
+	_reserve(item)
+	_secondary_pending.append(enemy)
+	call_deferred("_add_secondary_enemy", enemy, item)
+	return true
+
+func _add_secondary_enemy(enemy: Enemy, item: Dictionary) -> void:
+	_secondary_pending.erase(enemy)
+	_release_reservation(item)
+	if not _running or item.generation != _generation:
+		enemy.free()
+		return
+	add_child(enemy)
+	enemy_spawned.emit(enemy)
+
+func _reserve(item: Dictionary) -> void:
+	_reserved_slots += int(item.slots)
+	_reserved_families[item.family] = _reserved_families.get(item.family, 0) + 1
+
+func _release_reservation(item: Dictionary) -> void:
+	_reserved_slots -= int(item.slots)
+	_reserved_families[item.family] = _reserved_families.get(item.family, 0) - 1
+
+func _active_enemy_count() -> int:
+	return get_tree().get_node_count_in_group(&"enemy") + _reserved_slots
+
+func _available_members(definition: EnemyDefinition) -> int:
+	var count := maxi((_enemy_cap() - _active_enemy_count()) / definition.spawn_slots, 0)
+	if definition.active_limit > 0:
+		var active := get_tree().get_node_count_in_group(StringName("family_" + String(definition.id)))
+		count = mini(count, maxi(definition.active_limit - active - _reserved_families.get(definition.id, 0), 0))
+	return count
+
+func _enemy_cap() -> int:
+	return config.coop_enemy_cap if _run_coop else config.solo_enemy_cap
+
+func _health_multiplier(definition: EnemyDefinition) -> float:
+	if definition.durability == EnemyDefinition.Durability.HAZARD:
+		return 1.0
+	var coop_scale := 1.0
+	if _run_coop:
+		match definition.durability:
+			EnemyDefinition.Durability.FODDER, EnemyDefinition.Durability.FIGHTER:
+				coop_scale = config.coop_common_health_multiplier
+			EnemyDefinition.Durability.SPECIALIST:
+				coop_scale = config.coop_specialist_health_multiplier
+			EnemyDefinition.Durability.HEAVY:
+				coop_scale = config.coop_heavy_health_multiplier
+	return coop_scale * director.health_multiplier()
 
 func _rule_definition(rule: SpawnRule) -> EnemyDefinition:
+	if _definitions.has(rule.scene):
+		return _definitions[rule.scene]
 	var state := rule.scene.get_state()
 	for property in state.get_node_property_count(0):
 		if state.get_node_property_name(0, property) == &"definition":
-			return state.get_node_property_value(0, property) as EnemyDefinition
+			var definition := state.get_node_property_value(0, property) as EnemyDefinition
+			_definitions[rule.scene] = definition
+			return definition
 	return null
 
-func _is_common(definition: EnemyDefinition) -> bool:
-	return definition.durability in [EnemyDefinition.Durability.FODDER, EnemyDefinition.Durability.FIGHTER]
+func goto_Previous_Wave() -> void:
+	if director:
+		director.danger_offset -= 0.2
+
+func goto_Next_Wave() -> void:
+	if director:
+		director.danger_offset += 0.2
+
+func debug_skip_encounter() -> void:
+	if not global.Debug or not _running or get_tree().paused:
+		return
+	if director.state != EncounterDirector.State.REGULAR:
+		return
+	_generation += 1
+	for item in _pending:
+		_release_reservation(item)
+	_pending.clear()
+	_begin_encounter()
+
+func _shuffle_lanes(lanes: Array[int]) -> void:
+	for index in range(lanes.size() - 1, 0, -1):
+		var other := director.random.encounters.randi_range(0, index)
+		var lane := lanes[index]
+		lanes[index] = lanes[other]
+		lanes[other] = lane
 
 func _formation_lanes(rule: SpawnRule, requested_count: int, cycle: int) -> Array[int]:
 	var minimum := clampi(mini(rule.spawn_min, rule.spawn_max), 0, config.lane_count - 1)
@@ -139,7 +337,7 @@ func _formation_lanes(rule: SpawnRule, requested_count: int, cycle: int) -> Arra
 		SpawnRule.Pattern.ALTERNATING_EDGES:
 			return _alternating_edge_lanes(available, count, cycle)
 		SpawnRule.Pattern.SCATTER:
-			available.shuffle()
+			_shuffle_lanes(available)
 			available.resize(count)
 			return available
 		SpawnRule.Pattern.OFFSET_GROUP:
@@ -153,13 +351,13 @@ func _formation_lanes(rule: SpawnRule, requested_count: int, cycle: int) -> Arra
 		SpawnRule.Pattern.GAP_WALL:
 			return _gap_wall_lanes(available, count, cycle)
 		_:
-			return [available.pick_random()]
+			return [available[director.random.encounters.randi_range(0, available.size() - 1)]]
 
 func _line_lanes(available: Array[int], count: int, spacing: int) -> Array[int]:
 	while count > 1 and 1 + (count - 1) * spacing > available.size():
 		count -= 1
 	var maximum_start := available.size() - 1 - (count - 1) * spacing
-	var start := randi_range(0, maximum_start)
+	var start := director.random.encounters.randi_range(0, maximum_start)
 	var lanes: Array[int] = []
 	for i in range(count):
 		lanes.append(available[start + i * spacing])
@@ -182,7 +380,7 @@ func _v_lanes(available: Array[int], count: int) -> Array[int]:
 
 func _alternating_edge_lanes(available: Array[int], count: int, cycle: int) -> Array[int]:
 	var cluster_size := mini(available.size(), count + 1)
-	var cluster_start := randi_range(0, available.size() - cluster_size)
+	var cluster_start := director.random.encounters.randi_range(0, available.size() - cluster_size)
 	var cluster: Array[int] = []
 	for i in range(cluster_size):
 		cluster.append(available[cluster_start + i])
@@ -264,119 +462,3 @@ func _ping_pong_index(maximum: int, cycle: int) -> int:
 	var period := maximum * 2
 	var phase := cycle % period
 	return phase if phase <= maximum else period - phase
-
-func _active_enemy_count() -> int:
-	return _active_enemies.size()
-
-func _active_elite_count() -> int:
-	var count := 0
-	for elite in _active_enemies.values():
-		if elite:
-			count += 1
-	return count
-
-func _enemy_cap() -> int:
-	return config.coop_enemy_cap if global.coop else config.solo_enemy_cap
-
-func _spawn_at(rule: SpawnRule, rule_index: int, cycle: int, lane: int, formation_index: int, difficulty: float, elite: bool, movement_time_offset: float) -> void:
-	lane = clampi(lane, 0, config.lane_count - 1)
-	var marker := get_node_or_null("spawnPos" + str(lane)) as Node2D
-	if marker == null:
-		return
-	var enemy := rule.scene.instantiate()
-	if enemy is Enemy:
-		var context := EnemySpawnContext.new()
-		context.health_multiplier = _health_multiplier(enemy.definition, difficulty)
-		context.elite = elite
-		context.elite_definition = config.elite_definition
-		context.speed_multiplier = rule.speed_multiplier
-		context.rule_health_multiplier = rule.health_multiplier
-		context.movement_profile = rule.movement_profile_override
-		context.formation_seed = _spawn_seed(rule_index, cycle, -1, -1)
-		context.movement_seed = _spawn_seed(rule_index, cycle, lane, formation_index)
-		context.movement_time_offset = movement_time_offset
-		enemy.configure_spawn(context)
-	enemy.position = marker.position
-	add_child(enemy)
-	if enemy is Enemy:
-		_active_enemies[enemy.get_instance_id()] = elite
-		enemy.tree_exited.connect(_on_enemy_tree_exited.bind(enemy.get_instance_id()), CONNECT_ONE_SHOT)
-
-func _spawn_seed(rule_index: int, cycle: int, lane: int, formation_index: int) -> int:
-	var value := _movement_seed & 0x7fffffff
-	for part in [wave_index, _endless_cycle, rule_index, cycle, lane, formation_index, int(global.coop)]:
-		value = int((value * 1103515245 + int(part) * 12345 + 1013904223) & 0x7fffffff)
-	return value
-
-func _has_all_spawn_markers() -> bool:
-	for lane in range(config.lane_count):
-		if get_node_or_null("spawnPos" + str(lane)) is not Node2D:
-			push_error("WaveSpawner is missing spawnPos%d." % lane)
-			return false
-	return true
-
-func _difficulty_progress(difficulty: float) -> float:
-	return clampf(inverse_lerp(config.difficulty_start, config.difficulty_end, difficulty), 0.0, 1.0)
-
-func _pace_multiplier(difficulty: float) -> float:
-	var wave_pace := lerpf(1.0, config.max_wave_pace_multiplier, _difficulty_progress(difficulty))
-	var endless_pace := maxf(1.0 - _endless_cycle * config.pace_step, config.pace_cap)
-	return wave_pace * endless_pace
-
-func _health_multiplier(definition: EnemyDefinition, difficulty: float) -> float:
-	var multiplier := 1.0
-	match definition.durability:
-		EnemyDefinition.Durability.FODDER, EnemyDefinition.Durability.FIGHTER:
-			return config.coop_common_health_multiplier if global.coop else 1.0
-		EnemyDefinition.Durability.SPECIALIST:
-			multiplier = config.coop_specialist_health_multiplier if global.coop else 1.0
-		EnemyDefinition.Durability.HEAVY:
-			multiplier = config.coop_heavy_health_multiplier if global.coop else 1.0
-		_:
-			return 1.0
-	var wave_health := lerpf(1.0, _durability_health_cap(definition), _difficulty_progress(difficulty))
-	var endless_health := minf(1.0 + _endless_cycle * config.health_step, config.health_cap)
-	return multiplier * wave_health * endless_health
-
-func _endless_formation_bonus(rule: SpawnRule) -> int:
-	if not _is_endless_finale() or not rule.endless_formation_growth:
-		return 0
-	return mini(floori(float(_endless_cycle) / float(config.formation_step_cycles)), config.formation_bonus_cap)
-
-func _endless_elite_bonus(rule: SpawnRule) -> int:
-	if not _is_endless_finale() or not rule.endless_elite_growth:
-		return 0
-	return mini(floori(float(_endless_cycle) / float(config.elite_step_cycles)), config.elite_bonus_cap)
-
-func _is_endless_finale() -> bool:
-	return catalog != null and wave_index == catalog.waves.size() - 1 and _endless_cycle > 0
-
-func _on_master_timeout() -> void:
-	goto_Next_Wave()
-
-func goto_Previous_Wave() -> void:
-	var loop_start := mini(config.loop_start_index, catalog.waves.size() - 1)
-	if _endless_cycle > 0 and wave_index == loop_start:
-		_endless_cycle -= 1
-		_apply_wave(catalog.waves.size() - 1)
-	elif wave_index > 0:
-		_apply_wave(wave_index - 1)
-
-func goto_Next_Wave() -> void:
-	if wave_index < catalog.waves.size() - 1:
-		_apply_wave(wave_index + 1)
-	else:
-		_endless_cycle += 1
-		_apply_wave(mini(config.loop_start_index, catalog.waves.size() - 1))
-
-func _on_enemy_tree_exited(instance_id: int) -> void:
-	_active_enemies.erase(instance_id)
-
-func _durability_health_cap(definition: EnemyDefinition) -> float:
-	match definition.durability:
-		EnemyDefinition.Durability.SPECIALIST:
-			return config.specialist_health_cap
-		EnemyDefinition.Durability.HEAVY:
-			return config.heavy_health_cap
-		_:
-			return 1.0

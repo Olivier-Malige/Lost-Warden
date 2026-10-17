@@ -5,6 +5,14 @@
 
 [resource]
 script = ExtResource("1")
+id = &"siege_turret"
+threat_cost = 10
+minimum_danger = 1.8
+maximum_danger = 1000.0
+selection_weight = 1.0
+danger_weight_growth = 1.2
+spawn_slots = 1
+active_limit = 0
 max_health = 56
 collision_damage = 10
 score = 2000

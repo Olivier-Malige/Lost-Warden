@@ -15,7 +15,6 @@ interval = 2.6
 spawn_min = 1
 spawn_max = 10
 formation = 5
-active_duration = 10.0
 pattern = 7
 spawn_gap = 0.12
 
@@ -24,8 +23,6 @@ script = ExtResource("2")
 scene = ExtResource("4")
 interval = 2.5
 formation = 6
-start_delay = 9.0
-active_duration = 10.0
 pattern = 9
 spawn_gap = 0.12
 
@@ -33,8 +30,6 @@ spawn_gap = 0.12
 script = ExtResource("2")
 scene = ExtResource("5")
 interval = 12.0
-start_delay = 18.0
-active_duration = 10.0
 spawn_gap = 0.12
 
 [sub_resource type="Resource" id="rule_4"]
@@ -44,8 +39,6 @@ interval = 3.1
 spawn_min = 1
 spawn_max = 10
 formation = 4
-start_delay = 18.0
-active_duration = 10.0
 pattern = 6
 spawn_gap = 0.12
 movement_profile_override = ExtResource("movement_wide")
@@ -57,15 +50,16 @@ interval = 2.6
 spawn_min = 1
 spawn_max = 10
 formation = 6
-start_delay = 27.0
-active_duration = 10.0
 pattern = 6
 spawn_gap = 0.12
-elite_count = 1
 movement_profile_override = ExtResource("movement_wide")
 
 [resource]
 script = ExtResource("1")
-duration = 36.0
-difficulty = 2.8
+id = &"encounter_12"
+minimum_danger = 2.54
+maximum_danger = 1000.0
+selection_weight = 1.0
+threat_budget = 30.0
+duration = 20.0
 rules = Array[ExtResource("2")]([SubResource("rule_1"), SubResource("rule_2"), SubResource("rule_3"), SubResource("rule_4"), SubResource("rule_5")])

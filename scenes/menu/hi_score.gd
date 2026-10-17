@@ -3,9 +3,9 @@ extends Control
 
 func _ready() -> void:
 	$Center/Panel/Margin/Content/Records/Solo/Card/ScoreValue.text = "%06d" % global.saveData.solo.hiscore
-	$Center/Panel/Margin/Content/Records/Solo/Card/WaveValue.text = "%02d" % global.saveData.solo.bestWave
+	$Center/Panel/Margin/Content/Records/Solo/Card/WaveValue.text = global.format_survival_time(global.saveData.solo.get("bestTime", 0))
 	$Center/Panel/Margin/Content/Records/Coop/Card/ScoreValue.text = "%06d" % global.saveData.coop.hiscore
-	$Center/Panel/Margin/Content/Records/Coop/Card/WaveValue.text = "%02d" % global.saveData.coop.bestWave
+	$Center/Panel/Margin/Content/Records/Coop/Card/WaveValue.text = global.format_survival_time(global.saveData.coop.get("bestTime", 0))
 	_animate_screen()
 
 

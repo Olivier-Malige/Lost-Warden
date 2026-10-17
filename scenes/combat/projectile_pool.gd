@@ -11,6 +11,23 @@ var _free: Dictionary[String, ProjectileBucket] = {}
 func _ready() -> void:
 	add_to_group("projectile_pool")
 
+func get_debug_snapshot() -> Dictionary:
+	var buckets := {}
+	var parked := 0
+	for key in _free:
+		var count := 0
+		for node in _free[key].nodes:
+			if is_instance_valid(node):
+				count += 1
+		buckets[String(key).get_file()] = count
+		parked += count
+	var active := {"player": 0, "enemy": 0}
+	for group in [&"player_Shot", &"enemy_Shot"]:
+		for node in get_tree().get_nodes_in_group(group):
+			if not node.get_meta("pooled", false):
+				active["player" if group == &"player_Shot" else "enemy"] += 1
+	return {"parked": parked, "buckets": buckets, "active": active}
+
 
 func acquire(packed: PackedScene) -> Node:
 	var key := packed.resource_path

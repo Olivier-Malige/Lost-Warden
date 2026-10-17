@@ -88,6 +88,7 @@ func stop_patterns() -> void:
 		$anim.play("start")
 
 func shutdown_from_parent() -> void:
+	_report_debug_removal("other")
 	stop_patterns()
 	set_combat_enabled(false)
 	visible = false

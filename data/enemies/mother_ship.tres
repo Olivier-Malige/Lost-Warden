@@ -5,6 +5,14 @@
 
 [resource]
 script = ExtResource("1")
+id = &"grave_carrier"
+threat_cost = 18
+minimum_danger = 2.4
+maximum_danger = 1000.0
+selection_weight = 1.0
+danger_weight_growth = 1.5
+spawn_slots = 3
+active_limit = 3
 max_health = 76
 collision_damage = 10
 score = 1000

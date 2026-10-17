@@ -3,6 +3,18 @@ extends Resource
 
 enum Durability { HAZARD, FODDER, FIGHTER, SPECIALIST, HEAVY }
 
+@export_group("Encounter director")
+@export var id: StringName
+@export var threat_cost := 1.0
+@export var minimum_danger := 1.0
+@export var maximum_danger := 1000.0
+@export var selection_weight := 1.0
+@export var danger_weight_growth := 0.0
+@export var elite_eligible := true
+@export var elite_texture: Texture2D
+@export_range(1, 8, 1) var spawn_slots := 1
+@export_range(0, 100, 1) var active_limit := 0
+
 @export_group("Combat")
 @export_range(1, 10000, 1) var max_health := 1
 @export_range(0, 10000, 1) var collision_damage := 1
@@ -24,8 +36,16 @@ enum Durability { HAZARD, FODDER, FIGHTER, SPECIALIST, HEAVY }
 @export_range(1, 64, 1) var sprite_variants := 1
 @export var bank_on_turn := false
 
+func weight_at(danger: float) -> float:
+	if danger < minimum_danger or danger > maximum_danger:
+		return 0.0
+	return maxf(selection_weight + danger_weight_growth * (danger - minimum_danger), 0.0)
+
 func is_valid() -> bool:
-	return max_health > 0 \
+	return id != &"" and threat_cost > 0.0 and spawn_slots > 0 and active_limit >= 0 \
+		and minimum_danger >= 1.0 and maximum_danger >= minimum_danger \
+		and selection_weight >= 0.0 and danger_weight_growth >= 0.0 \
+		and max_health > 0 \
 		and collision_damage >= 0 \
 		and score >= 0 \
 		and power_up_chance >= 0 \

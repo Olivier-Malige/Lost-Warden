@@ -1,0 +1,117 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scenes/debug/debug_screen.gd" id="1"]
+[ext_resource type="FontFile" path="res://assets/fonts/slkscr.ttf" id="2"]
+
+[sub_resource type="StyleBoxFlat" id="PanelStyle"]
+bg_color = Color(0.035, 0.047, 0.075, 0.97)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.84, 0.84, 0.33, 1)
+
+[sub_resource type="StyleBoxFlat" id="TabPanelStyle"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.055, 0.067, 0.10, 1)
+
+[sub_resource type="Theme" id="DebugTheme"]
+default_font = ExtResource("2")
+default_font_size = 12
+TabContainer/styles/panel = SubResource("TabPanelStyle")
+
+[node name="DebugScreen" type="CanvasLayer"]
+process_mode = 3
+layer = 90
+visible = false
+script = ExtResource("1")
+
+[node name="Panel" type="PanelContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("DebugTheme")
+theme_override_styles/panel = SubResource("PanelStyle")
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="Content" type="VBoxContainer" parent="Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Header" type="HBoxContainer" parent="Panel/Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Panel/Margin/Content/Header"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.84, 0.84, 0.33, 1)
+text = "DEBUG"
+
+[node name="Status" type="Label" parent="Panel/Margin/Content/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "WAITING"
+
+[node name="Copy" type="Button" parent="Panel/Margin/Content/Header"]
+layout_mode = 2
+focus_mode = 0
+text = "COPY"
+tooltip_text = "Copy the current snapshot as JSON"
+
+[node name="Close" type="Button" parent="Panel/Margin/Content/Header"]
+layout_mode = 2
+focus_mode = 0
+text = "CLOSE"
+
+[node name="Tabs" type="TabContainer" parent="Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Hint" type="Label" parent="Panel/Margin/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "LEFT/RIGHT OR TAB: TABS / UP/DOWN OR PGUP/PGDN: SCROLL\nESC/F10/START: CLOSE / F11: MINI"
+autowrap_mode = 2
+
+[node name="Compact" type="PanelContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -104.0
+offset_top = 234.0
+offset_right = -4.0
+grow_horizontal = 0
+mouse_filter = 2
+theme = SubResource("DebugTheme")
+theme_override_styles/panel = SubResource("PanelStyle")
+
+[node name="Margin" type="MarginContainer" parent="Compact"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Stats" type="Label" parent="Compact/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 10
+text = "DEBUG / WAITING"

@@ -10,3 +10,4 @@ var movement_profile: MovementProfile
 var movement_seed := 0
 var formation_seed := 0
 var movement_time_offset := 0.0
+var fire_delay_multiplier := 1.0
