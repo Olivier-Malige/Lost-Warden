@@ -157,6 +157,38 @@ func _test_stats() -> void:
 		normal.free()
 	stage.free()
 
+func _test_fire_timing() -> void:
+	for kind in ["tie", "interceptor"]:
+		for promoted in [false, true]:
+			var enemy = load("res://scenes/enemies/%s.tscn" % kind).instantiate()
+			var timer: Timer = enemy.get_node(enemy.shoot_timer_paths[0])
+			var original_delay := timer.wait_time
+			timer.process_callback = Timer.TIMER_PROCESS_PHYSICS
+			var context := EnemySpawnContext.new()
+			context.fire_delay_multiplier = 0.2
+			context.elite = promoted
+			context.elite_definition = CONFIG.elite_definition
+			enemy.configure_spawn(context)
+			enemy.position = Vector2(320, 100)
+			for audio in enemy.find_children("*", "AudioStreamPlayer2D", true, false):
+				audio.stream = null
+			root.add_child(enemy)
+			enemy.set_physics_process(false)
+			var expected_delay := original_delay * 0.2 * (0.7 if promoted else 1.0)
+			_check(is_equal_approx(timer.time_left, expected_delay), "%s: initial countdown uses director and elite multipliers" % kind)
+			var fired := {"count": 0}
+			timer.timeout.connect(func(): fired.count += 1)
+			for tick in ceili(expected_delay * Engine.physics_ticks_per_second) + 2:
+				await physics_frame
+			_check(fired.count == 1, "%s: the actual first timeout uses the scaled delay" % kind)
+			timer.stop()
+			enemy._apply_spawn_context()
+			_check(timer.is_stopped(), "%s: scaling does not start a stopped shooting timer" % kind)
+			enemy.free()
+	for shot in get_nodes_in_group("enemy_Shot"):
+		shot.queue_free()
+	await process_frame
+
 func _test_cancellation() -> void:
 	var spawner = _make_spawner(98)
 	spawner.director.elapsed = 720.0
@@ -218,6 +250,7 @@ func _run() -> void:
 	_test_caps(true)
 	_test_ineligible()
 	_test_stats()
+	await _test_fire_timing()
 	await _test_cancellation()
 	await _test_rewards()
 	await process_frame
