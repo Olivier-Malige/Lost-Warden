@@ -67,6 +67,7 @@ func start_run() -> void:
 	_started = true
 	_running = true
 	_begin_encounter()
+	_next_formation_at = director.elapsed + config.initial_spawn_delay
 
 func set_movement_seed(value: int) -> void:
 	if not _running:

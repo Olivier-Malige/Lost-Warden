@@ -6,6 +6,7 @@
 
 [resource]
 script = ExtResource("1")
+initial_spawn_delay = 3.0
 solo_enemy_cap = 70
 coop_enemy_cap = 90
 coop_budget_multiplier = 1.2

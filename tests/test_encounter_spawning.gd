@@ -200,6 +200,30 @@ func _debris_trace(noise: bool) -> Array[Vector2]:
 	spawner.free()
 	return positions
 
+func _test_initial_delay() -> void:
+	for coop in [false, true]:
+		var spawner = _make_spawner(17, coop)
+		spawner._physics_process(2.99)
+		await process_frame
+		_check(spawner._active_enemy_count() == 0 and spawner._pending.is_empty(), "a new run leaves three seconds clear in solo and co-op")
+		spawner.set_physics_process(true)
+		paused = true
+		var elapsed: float = spawner.director.elapsed
+		await create_timer(0.04).timeout
+		_check(spawner.director.elapsed == elapsed, "pause preserves the initial respite")
+		paused = false
+		spawner.set_physics_process(false)
+		spawner._physics_process(0.01)
+		await process_frame
+		_check(spawner._active_enemy_count() > 0, "the first formation begins after three seconds")
+		spawner._begin_encounter()
+		_check(is_equal_approx(spawner._next_formation_at, spawner.director.elapsed), "subsequent encounters retain their normal formation timing")
+		spawner.stop_run()
+		spawner.free()
+	var invalid := CONFIG.duplicate()
+	invalid.initial_spawn_delay = -1.0
+	_check(not invalid.is_valid(), "negative initial delays are rejected")
+
 func _test_debug_skip() -> void:
 	var main := Node.new()
 	root.add_child(main)
@@ -264,6 +288,7 @@ func _run() -> void:
 	_globals.Debug = false
 	CATALOG = load("res://data/waves/wave_catalog.tres")
 	_test_catalog()
+	await _test_initial_delay()
 	var expected := await _trace(42, false)
 	_check(expected == await _trace(42, true), "same seed reproduces encounter families, positions, movement seeds and health despite cosmetic noise")
 	_check(expected != await _trace(43, false), "different seeds produce different actual spawn traces")
