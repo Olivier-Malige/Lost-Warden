@@ -2,6 +2,7 @@ class_name WaveSpawnerConfig
 extends Resource
 
 @export_group("Formation")
+@export_range(0.0, 10.0, 0.5) var initial_spawn_delay := 3.0
 @export_range(1, 32, 1) var lane_count := 12
 @export_range(1, 200, 1) var solo_enemy_cap := 70
 @export_range(1, 200, 1) var coop_enemy_cap := 90
@@ -25,7 +26,7 @@ func is_valid() -> bool:
 	for boss in bosses:
 		if boss == null or not boss.is_valid():
 			return false
-	return lane_count > 0 and solo_enemy_cap > 0 and coop_enemy_cap >= solo_enemy_cap \
+	return initial_spawn_delay >= 0.0 and lane_count > 0 and solo_enemy_cap > 0 and coop_enemy_cap >= solo_enemy_cap \
 		and v_formation_depth >= 0.0 and coop_budget_multiplier >= 1.0 \
 		and coop_common_health_multiplier >= 1.0 and coop_specialist_health_multiplier >= 1.0 \
 		and coop_heavy_health_multiplier >= 1.0 and elite_definition != null and elite_cap > 0 \
