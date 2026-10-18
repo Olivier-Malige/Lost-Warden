@@ -31,11 +31,66 @@ func _palette_counts(texture: Texture2D) -> Vector2i:
 			var pixel := image.get_pixel(x, y)
 			if pixel.a <= 0.0:
 				continue
-			if pixel.r > 0.15 and pixel.r > pixel.g * 1.3 and pixel.b > pixel.g * 1.3:
+			if pixel.to_html(false) in ["06070c", "101522", "222735"]:
 				counts.x += 1
 			if pixel.r > 0.5 and pixel.g > 0.29 and pixel.b < pixel.g * 0.65:
 				counts.y += 1
 	return counts
+
+func _silhouette_difference(first: Texture2D, second: Texture2D) -> int:
+	var a := first.get_image()
+	var b := second.get_image()
+	var difference := 0
+	for y in 32:
+		for x in 32:
+			if (a.get_pixel(x, y).a > 0.0) != (b.get_pixel(x, y).a > 0.0):
+				difference += 1
+	return difference
+
+func _uses_project_palette(texture: Texture2D) -> bool:
+	var allowed := {}
+	for line in FileAccess.get_file_as_string("res://assets/palettes/lost_warden_64.gpl").split("\n"):
+		var fields := line.strip_edges().split(" ", false)
+		if fields.size() >= 3 and fields[0].is_valid_int() and fields[1].is_valid_int() and fields[2].is_valid_int():
+			allowed["%02x%02x%02x" % [int(fields[0]), int(fields[1]), int(fields[2])]] = true
+	var image := texture.get_image()
+	for y in image.get_height():
+		for x in image.get_width():
+			var pixel := image.get_pixel(x, y)
+			if pixel.a > 0.0 and not allowed.has(pixel.to_html(false)):
+				return false
+	return true
+
+func _test_heading(hunter: Variant) -> void:
+	var sprite := hunter.get_node("Sprite2D") as Sprite2D
+	var collider := hunter.get_node("CollisionShape2D") as CollisionShape2D
+	var collision_transform := collider.global_transform
+	for velocity in [Vector2(-90, 100), Vector2(90, 100), Vector2(0, 125), Vector2(-120, 15), Vector2(120, 15)]:
+		hunter.speedX = velocity.x
+		hunter.speedY = velocity.y
+		hunter._update_ship_banking(0.1)
+		_check(Vector2.DOWN.rotated(sprite.rotation).is_equal_approx(velocity.normalized()), "the hunter nose follows its actual velocity in both turn directions")
+		_check(hunter.rotation == 0.0 and collider.global_transform == collision_transform, "visual turning preserves the collision footprint and movement axes")
+		for index in 2:
+			var reactor := hunter.get_node("droneReactorParticles" + ("2" if index == 1 else "")) as GPUParticles2D
+			var offset := Vector2(4 if index == 1 else -4, -10)
+			_check(reactor.position.is_equal_approx(offset.rotated(sprite.rotation)) and is_equal_approx(reactor.rotation, PI + sprite.rotation), "reactor positions and exhaust direction follow the hull")
+		_check(hunter.get_node("anim").current_animation == "start", "heading does not mix fixed banking poses with rotation")
+	var heading := sprite.rotation
+	hunter.speedX = 0.0
+	hunter.speedY = 0.0
+	hunter._update_ship_banking(0.1)
+	_check(sprite.rotation == heading, "zero velocity preserves the previous heading")
+	hunter.speedX = -90.0
+	hunter.speedY = 100.0
+	hunter._chase_committed = true
+	hunter._chase_exiting = false
+	hunter._chase_exit_y = hunter.position.y + 1000.0
+	hunter._physics_process(0.1)
+	heading = sprite.rotation
+	var before: Vector2 = hunter.position
+	hunter._physics_process(0.1)
+	_check(hunter.position.is_equal_approx(before + Vector2(-90, 100) * 0.1) and sprite.rotation == heading, "committed hunters retain their heading and straight world trajectory")
 
 func _test_catalog() -> void:
 	var catalog = load("res://data/waves/wave_catalog.tres")
@@ -77,13 +132,14 @@ func _test_approach_and_art() -> void:
 	_check(hunter.position.is_equal_approx(before + velocity * 0.5) and hunter.speedY > 0.0, "the final approach stays straight when the player dodges behind the drone")
 	hunter.position.x = 525.0
 	hunter._update_movement(0.5)
-	_check(hunter.position.x > 525.0 and Vector2(hunter.speedX, hunter.speedY) == velocity, "a committed hunter exits naturally rather than bouncing at horizontal bounds")
+	_check(hunter.position.x >= 525.0 and absf(hunter.speedX) < absf(velocity.x) and hunter.speedY > 0.0, "a passed hunter turns down without bouncing at horizontal bounds")
 	var normal = load("res://scenes/enemies/drone.tscn").instantiate()
 	root.add_child(normal)
 	_freeze(normal)
 	_check(normal._movement_profile.mode == MovementProfile.Mode.SINE, "ordinary drones retain their coordinated formation movement")
-	_check(hunter.get_node("Sprite2D").texture != normal.get_node("Sprite2D").texture, "hunters have a distinct magenta texture")
-	_check(_palette_counts(hunter.get_node("Sprite2D").texture).x > 100, "the imported hunter hull stays visibly magenta rather than losing its palette")
+	var hunter_texture: Texture2D = hunter.get_node("Sprite2D").texture
+	_check(_silhouette_difference(hunter_texture, normal.get_node("Sprite2D").texture) > 100, "hunter interceptors have a new silhouette rather than a recolored formation drone")
+	_check(_palette_counts(hunter_texture).x > 100 and _uses_project_palette(hunter_texture), "the interceptor uses the shared palette and the boss's dark structural tones")
 	_check(hunter.definition == normal.definition and hunter.max_life == normal.max_life, "hunter identity changes preserve shared family health and rewards")
 	var elite = load("res://scenes/enemies/drone_hunter.tscn").instantiate()
 	var context := EnemySpawnContext.new()
@@ -95,13 +151,57 @@ func _test_approach_and_art() -> void:
 	var sprite = elite.get_node("Sprite2D")
 	_check(sprite.texture == elite.ELITE_TEXTURE and sprite.hframes == 8 and sprite.vframes == 4, "elite hunters retain gold markings with their own compatible animation sheet")
 	var palette := _palette_counts(sprite.texture)
-	_check(palette.x > 100 and palette.y >= 8, "the elite hunter combines visible magenta hull pixels and preserved gold markings")
+	_check(palette.x > 100 and palette.y >= 8 and _uses_project_palette(sprite.texture), "the elite interceptor uses dark hulls and amber armor from the shared palette")
+	_check(_silhouette_difference(sprite.texture, hunter_texture) >= 8, "elite interceptor armor also changes its silhouette")
 	_check(not elite.get_node("EliteIndicator").visible and elite._movement_profile.mode == MovementProfile.Mode.CHASE, "elite hunters keep their pursuit behavior without an overhead health bar")
+	_test_heading(hunter)
+	_test_heading(elite)
 	var profile = hunter.CHASE.duplicate()
 	profile.chase_commit_distance = -1.0
 	_check(not profile.is_valid(), "pursuit profiles reject negative commitment distances")
 	for node in [hunter, normal, elite, target]:
 		node.free()
+
+func _test_downward_exit() -> void:
+	for elite in [false, true]:
+		for side in [-1.0, 1.0]:
+			var target := Target.new()
+			target.position = Vector2(320, 280)
+			target.add_to_group("player")
+			root.add_child(target)
+			var hunter = load("res://scenes/enemies/drone_hunter.tscn").instantiate()
+			var context := EnemySpawnContext.new()
+			context.elite = elite
+			context.elite_definition = load("res://data/enemies/elite_definition.tres") if elite else null
+			context.speed_multiplier = 1.2
+			hunter.configure_spawn(context)
+			hunter.position = Vector2(320 + side * 110, 120)
+			root.add_child(hunter)
+			_freeze(hunter)
+			var elapsed := 0.0
+			while not hunter._chase_committed and elapsed < 2.0:
+				hunter._physics_process(1.0 / 60.0)
+				elapsed += 1.0 / 60.0
+			_check(hunter._chase_committed and not hunter._chase_exiting, "both hunter variants commit before the player's height")
+			var velocity := Vector2(hunter.speedX, hunter.speedY)
+			_check(velocity.length() > 150.0, "the faster chase reaches threatening speed before commitment")
+			target.position = Vector2(500, 360)
+			hunter._physics_process(1.0 / 60.0)
+			_check(Vector2(hunter.speedX, hunter.speedY) == velocity and hunter._chase_exit_y == 280.0, "dodges cannot redirect the committed attack or its exit height")
+			while hunter.position.y < 281.0 and elapsed < 3.0:
+				hunter._physics_process(1.0 / 60.0)
+				elapsed += 1.0 / 60.0
+			hunter._physics_process(1.0 / 60.0)
+			_check(hunter._chase_exiting and absf(hunter.speedX) < absf(velocity.x), "passing the locked player height starts a progressive downward turn")
+			target.free()
+			for frame in 60:
+				var old_velocity := Vector2(hunter.speedX, hunter.speedY)
+				hunter._physics_process(1.0 / 60.0)
+				_check(hunter.speedY > 0.0 and Vector2(hunter.speedX, hunter.speedY).distance_to(old_velocity) <= hunter._movement_profile.chase_acceleration / 60.0 + 0.001, "the exit stays downward and respects acceleration after losing the target")
+			var expected_speed: float = 175.0 * hunter._movement_speed_scale()
+			_check(is_zero_approx(hunter.speedX) and is_equal_approx(hunter.speedY, expected_speed), "normal and elite exits reach vertical speed with spawn and elite modifiers")
+			_check(Vector2.DOWN.rotated(hunter.get_node("Sprite2D").rotation).is_equal_approx(Vector2.DOWN), "the nose finishes pointing down with the exit trajectory")
+			hunter.free()
 
 func _trace(coop: bool, noise: bool) -> Array[String]:
 	var globals = root.get_node("global")
@@ -144,6 +244,7 @@ func _trace(coop: bool, noise: bool) -> Array[String]:
 func _run() -> void:
 	_test_catalog()
 	_test_approach_and_art()
+	_test_downward_exit()
 	var trace := await _trace(false, false)
 	_check(trace == await _trace(false, true), "mixed-role spawn traces remain seeded and independent of cosmetic/drop randomness")
 	await _trace(true, false)
