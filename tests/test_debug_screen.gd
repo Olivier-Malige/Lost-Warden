@@ -48,6 +48,7 @@ func _run() -> void:
 	root.add_child(main)
 	main.set_script(load("res://scenes/main/main.gd"))
 	main.process_mode = Node.PROCESS_MODE_ALWAYS
+	main.set_process(true)
 	main.set_process_input(true)
 	main.worldScreen = true
 	var world = load("res://scenes/world/world.tscn").instantiate()
@@ -71,6 +72,24 @@ func _run() -> void:
 	main._input(key)
 	_check(main.get("_debug_screen") == null, "screen transitions cannot open the inspector")
 	main._transitioning = false
+	globals.Debug = false
+	await process_frame
+	await process_frame
+	_check(main.get("_debug_screen") == null, "starting without debug keeps the overlay uncreated")
+	globals.Debug = true
+	await process_frame
+	await process_frame
+	var restored_screen = main.get("_debug_screen")
+	_check(is_instance_valid(restored_screen) and restored_screen.visible, "enabling debug creates compact mode without a shortcut")
+	if is_instance_valid(restored_screen):
+		globals.Debug = false
+		await process_frame
+		await process_frame
+		_check(not restored_screen.visible and not restored_screen.is_processing(), "disabling debug hides compact mode")
+		globals.Debug = true
+		await process_frame
+		await process_frame
+		_check(restored_screen.visible and restored_screen.get_node("Compact").visible, "reenabling debug restores compact mode without a shortcut")
 	var before_rng: int = spawner.director.random.encounters.state
 	var before_enemy_rng: int = spawner.director.random.enemies.state
 	var before_drop_rng: int = spawner.director.random.drops.state
@@ -225,6 +244,9 @@ func _run() -> void:
 	_check(not screen.visible and not screen.is_processing(), "disabling debug hides the overlay and stops sampling")
 	_check(not paused, "disabling debug releases the inspector-owned pause")
 	globals.Debug = true
+	await process_frame
+	await process_frame
+	_check(not screen.visible and not paused, "reenabling debug preserves the hidden compact preference")
 	main._input(key)
 	_check(paused, "full view can reopen after debug is reenabled")
 	await _click(screen.get_node("Panel/Margin/Content/Header/Close").get_global_rect().get_center())

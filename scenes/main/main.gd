@@ -14,6 +14,7 @@ var _debug_screen: CanvasLayer
 var _debug_full_open := false
 var _debug_compact_enabled := true
 var _debug_pause_owned := false
+var _debug_enabled := global.Debug
 const FADE_DURATION := 0.3
 @onready var _screen_fade: ColorRect = $ScreenFade/Black
 @onready var _title_music: AudioStreamPlayer = $TitleMusic
@@ -49,6 +50,15 @@ func _ready() -> void:
 	Events.restart_requested.connect(set_Restart)
 	Events.game_over_requested.connect(go_GameOver_Screen)
 
+
+func _process(_delta: float) -> void:
+	if _debug_enabled == global.Debug:
+		return
+	_debug_enabled = global.Debug
+	if not _debug_enabled:
+		_hide_debug()
+	elif worldScreen and not _transitioning:
+		_update_debug_view()
 
 func _input(event: InputEvent) -> void:
 	if _transitioning:
