@@ -29,6 +29,11 @@ extends Resource
 @export var reinforcements: Array[SpawnRule] = []
 
 func is_valid() -> bool:
+	for value in [minimum_danger, maximum_danger, selection_weight, health, coop_health_multiplier, cannon_health,
+		movement_acceleration, movement_arrival_pause, vertical_movement_range, attack_pause, coop_reinforcement_multiplier,
+		beam_charge_time, beam_fire_time, beam_width, central_beam_width, beam_damage_interval]:
+		if not is_finite(value):
+			return false
 	var phases := phase_thresholds.size() + 1
 	if not (id != &"" and scene != null and health > 0.0 and coop_health_multiplier >= 1.0 and cannon_health > 0.0 \
 		and minimum_danger >= 1.0 and maximum_danger >= minimum_danger and selection_weight >= 0.0 \
@@ -42,11 +47,12 @@ func is_valid() -> bool:
 		return false
 	var previous := 1.0
 	for threshold in phase_thresholds:
-		if threshold <= 0.0 or threshold >= previous:
+		if not is_finite(threshold) or threshold <= 0.0 or threshold >= previous:
 			return false
 		previous = threshold
 	for index in phases:
-		if movement_speeds[index] < 0.0 or movement_ranges[index] < 0.0:
+		if not is_finite(movement_speeds[index]) or not is_finite(movement_ranges[index]) \
+			or movement_speeds[index] < 0.0 or movement_ranges[index] < 0.0:
 			return false
 	for patterns in [phase_one_patterns, phase_two_patterns]:
 		for pattern in patterns:

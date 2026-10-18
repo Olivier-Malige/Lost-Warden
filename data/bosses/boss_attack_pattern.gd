@@ -15,14 +15,17 @@ enum Kind { AIMED, RINGS, SPIRAL, DRONES, BEAM }
 @export var recovery_time := 0.4
 
 func is_valid() -> bool:
+	for value in [telegraph_time, recovery_time, burst_interval, projectile_speed, angular_step_degrees, gap_degrees, gap_offset_degrees]:
+		if not is_finite(value):
+			return false
 	if kind < Kind.AIMED or kind > Kind.BEAM or telegraph_time <= 0.0 or recovery_time <= 0.0:
 		return false
 	if kind in [Kind.DRONES, Kind.BEAM]:
 		return true
 	if projectile_count < 1 or burst_count < 1 or burst_interval <= 0.0 or projectile_speed <= 0.0:
 		return false
-	if not is_finite(angular_step_degrees) or angular_step_degrees <= 0.0:
+	if angular_step_degrees <= 0.0:
 		return false
 	if kind == Kind.RINGS:
-		return projectile_count >= 8 and gap_degrees >= 30.0 and gap_degrees < 180.0 and is_finite(gap_offset_degrees)
+		return projectile_count >= 8 and gap_degrees >= 30.0 and gap_degrees < 180.0
 	return true

@@ -203,6 +203,22 @@ func _test_data_and_timing() -> void:
 		invalid.set(property, 0)
 		_check(not invalid.is_valid(), "invalid pattern counts, speeds and timings are rejected")
 	var invalid = data.duplicate()
+	for value in [NAN, INF, -INF]:
+		for property in ["burst_interval", "projectile_speed", "angular_step_degrees", "gap_degrees", "gap_offset_degrees", "telegraph_time", "recovery_time"]:
+			var pattern = data.phase_one_patterns[0].duplicate()
+			pattern.set(property, value)
+			_check(not pattern.is_valid(), "pattern %s rejects non-finite values" % property)
+		for property in ["minimum_danger", "maximum_danger", "selection_weight", "health", "coop_health_multiplier", "cannon_health", "movement_acceleration", "movement_arrival_pause", "vertical_movement_range", "attack_pause", "coop_reinforcement_multiplier", "beam_charge_time", "beam_fire_time", "beam_width", "central_beam_width", "beam_damage_interval"]:
+			invalid = data.duplicate()
+			invalid.set(property, value)
+			_check(not invalid.is_valid(), "boss %s rejects non-finite values" % property)
+		for property in ["phase_thresholds", "movement_speeds", "movement_ranges"]:
+			invalid = data.duplicate()
+			var values: PackedFloat32Array = invalid.get(property).duplicate()
+			values[0] = value
+			invalid.set(property, values)
+			_check(not invalid.is_valid(), "boss %s rejects non-finite entries" % property)
+	invalid = data.duplicate()
 	var illegal: Array[BossAttackPattern] = [data.phase_two_patterns[3]]
 	invalid.phase_one_patterns = illegal
 	_check(not invalid.is_valid(), "beam patterns cannot be placed in phase one")
