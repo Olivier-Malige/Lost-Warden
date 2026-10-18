@@ -97,8 +97,8 @@ func _on_snapshot_updated(snapshot: Dictionary) -> void:
 	_write_page("PERF", _performance_text(snapshot))
 	_write_page("EVENTS", "[color=#d6d653]RECENT EVENTS / NEWEST FIRST / MAX 64[/color]\n\n" + "\n".join(snapshot.events))
 
-func _write_page(name: String, text: String) -> void:
-	var page := _pages[name]
+func _write_page(page_name: String, text: String) -> void:
+	var page := _pages[page_name]
 	if page.text == text:
 		return
 	var scroll := page.get_v_scroll_bar().value

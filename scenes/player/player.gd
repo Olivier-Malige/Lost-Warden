@@ -43,7 +43,7 @@ var vitals: PlayerVitals
 var energy: int
 var touched := false
 var canShooting := true
-var malusSpeed := 0
+var malusSpeed := 0.0
 var controller := ""
 var id_Player := ""
 var shooting := false

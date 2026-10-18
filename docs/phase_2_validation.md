@@ -310,3 +310,9 @@ Verification: patterns **957**, beam damage **22**, central-cannon presentation 
 ### Opening respite — 2026-10-18
 
 New runs schedule the first regular formation after the resource-configured `initial_spawn_delay` of three simulation seconds, rather than the first physics tick. The survival clock continues and pause freezes the delay. Subsequent encounters, including recovery after a boss, keep their normal timing. Verification: encounter spawning **6,122**, natural boss approach **18** and boss encounters **396** checks PASS. The added checks cover the pre-deadline empty arena, first spawn at the deadline, pause and unchanged subsequent scheduling in solo/co-op, plus invalid negative configuration. `git diff --check` PASS.
+
+### Connected-editor diagnostics — 2026-10-18
+
+Godot AI 4.3.0 editor diagnostics reproduced implicit integer division, float-to-int velocity conversion, incompatible animation-suffix branches, shadowed names and an uncast process-mode restore. Explicit rounding/casts and consistent float/string types remove these warnings while retaining formation rows, capacity limits, timer formatting and animation names. MCP launch, world entry, immediate boss access, 180 subsequent frames and the full debug inspector report no editor or game errors/warnings. The local addon remains configured through ignored `override.cfg`.
+
+Regression checks PASS: background, screen fades, Alpha 9 **161**, patterns **957**, beam damage **22**, inspector **66** and spawning **6,122**. Screen-fade and debug headless suites still emit the previously recorded resource-in-use shutdown warning; the connected gameplay run has clean logs. No addon implementation files were edited.

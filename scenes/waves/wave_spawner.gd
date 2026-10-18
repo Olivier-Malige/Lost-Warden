@@ -221,7 +221,7 @@ func _spawn_boss_reinforcements() -> void:
 		context.formation_seed = formation_seed
 		context.movement_time_offset = index * rule.spawn_gap
 		var item := {
-			"scene": rule.scene, "position": _boss.position + Vector2(-40 if index % 2 == 0 else 40, 16 + (index / 2) * 12),
+			"scene": rule.scene, "position": _boss.position + Vector2(-40 if index % 2 == 0 else 40, 16 + floori(float(index) / 2.0) * 12),
 			"context": context, "at": director.elapsed + index * rule.spawn_gap,
 			"slots": definition.spawn_slots, "family": definition.id,
 			"generation": _generation, "boss_add": true,
@@ -328,9 +328,9 @@ func _schedule_formation() -> void:
 	var eligible: Array[SpawnRule] = []
 	var weights := PackedFloat32Array()
 	for rule in director.encounter.rules:
-		var definition := _rule_definition(rule)
-		var weight := rule.weight * definition.weight_at(director.danger()) / rule.interval
-		if weight > 0.0 and definition.threat_cost <= _budget_left and _available_members(definition) > 0:
+		var candidate_definition := _rule_definition(rule)
+		var weight := rule.weight * candidate_definition.weight_at(director.danger()) / rule.interval
+		if weight > 0.0 and candidate_definition.threat_cost <= _budget_left and _available_members(candidate_definition) > 0:
 			eligible.append(rule)
 			weights.append(weight)
 	if eligible.is_empty():
@@ -449,7 +449,7 @@ func _active_elite_count() -> int:
 	return count
 
 func _available_members(definition: EnemyDefinition) -> int:
-	var count := maxi((_enemy_cap() - _active_enemy_count()) / definition.spawn_slots, 0)
+	var count := maxi(floori(float(_enemy_cap() - _active_enemy_count()) / float(definition.spawn_slots)), 0)
 	if definition.active_limit > 0:
 		var active := get_tree().get_node_count_in_group(StringName("family_" + String(definition.id)))
 		count = mini(count, maxi(definition.active_limit - active - _reserved_families.get(definition.id, 0), 0))

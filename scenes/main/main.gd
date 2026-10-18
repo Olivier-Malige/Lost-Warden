@@ -329,7 +329,7 @@ func _restore_transition_audio() -> void:
 	for id in _fade_audio_modes:
 		var player := instance_from_id(id) as Node
 		if is_instance_valid(player):
-			player.process_mode = _fade_audio_modes[id]
+			player.process_mode = _fade_audio_modes[id] as Node.ProcessMode
 	_fade_audio_modes.clear()
 
 func _exit_tree() -> void:
