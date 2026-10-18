@@ -1,6 +1,6 @@
 # Gameplay roadmap
 
-Updated: 2026-10-17.
+Updated: 2026-10-18.
 
 **Goal:** a continuous survival shmup with varied builds, enemies and formations, increasing pressure over time, solo and local co-op.
 
@@ -21,11 +21,17 @@ Updated: 2026-10-17.
 
 Done: continuous seeded encounters, threat budgets, formations, enemy caps, survival timer, solo/co-op duration records, game-over and hiscore screens. Deterministic elites now have approved markings, a small health bar and a three-elite cap. Danger stays internal. F1/F2 adjust danger; N skips a regular encounter in debug mode.
 
-The Dread Ark has three phases: missile salvos, missiles with hunter reinforcements, then beams mixed with salvos. Core health is 650 solo / 1,040 co-op; cannons have 90 / 144 HP. Seeded repositioning combines acceleration, braking, short rests and height changes; beams lock its position. Its segmented health bar has no numeric health or phase text. Five-minute milestones and eight-second recovery remain in place.
+The Dread Ark has two phases, switching at 50% health. Phase one cycles rings, aimed salvos, spirals, aimed salvos and drones; phase two adds a dedicated beam attack. Rings keep a 30-degree opening; spirals alternate rotation with 16 / 20 emissions, and circular missiles travel more slowly than aimed salvos. Core health remains 650 solo / 1,040 co-op; cannons have 90 / 144 HP. Faster seeded repositioning combines acceleration, braking, short rests and height changes; beams lock its position. Its health bar has two segments without numeric health or phase text. Five-minute milestones and eight-second recovery remain in place.
 
-Two optional destructible cannons have independent health, local shader hit feedback and persistent wrecks. Each destroyed cannon loses its missiles and lateral beam. The central core takes boss health damage; armor absorbs shots. The central beam stays twice as wide. Defeat chains hull explosions into a large final blast and strong screen shake.
+Natural milestones enter `BOSS_APPROACH`: stop new formations, preserve existing enemies, asteroid fragments and enemy shots, then wait for an empty arena and 0.5 seconds of calm. Survival time continues; regular scheduling and the calm window respect pause. F12 retains immediate debug cleanup.
 
-Six regular encounter types now mix formation drones with recognizable magenta hunters. Hunters track the player, then commit to a straight trajectory 64 pixels before reaching the player's height; boss reinforcements share this behavior and appearance.
+Rings and spirals emit round red energy balls from the central cannon mouth, with a local charge/fire/recovery effect and continuous phase hull animation. Aimed salvos retain elongated missiles. The new editable Aseprite assets use Lost Warden 64 exclusively. Attacks retain their charging animations without projected ring guides or beam-lane indicators.
+
+Two optional destructible cannons have independent health, local shader hit feedback and persistent wrecks. Each destroyed cannon loses its targeted salvos and lateral beam; the core retains circular patterns and its wide central beam. Drone launches contain four solo / six co-op hunters, capped at eight / twelve including reservations; incomplete groups are skipped. Phase changes cancel pending launches and active boss missiles. Defeat chains hull explosions into a large final blast and strong screen shake.
+
+Boss beams deal one energy point on contact and every 0.35 seconds of continued exposure, with independent player cooldowns. Leaving the damage core stops further drain.
+
+Six regular encounter types now mix formation drones with hunters using distinct arrowhead interceptor sprites, dark neutral hulls and red sensors matching the boss palette; elites have amber armor. Their hull and exhausts face their actual velocity. Hunters pursue at 175 px/s, commit to a straight attack 64 pixels before reaching the player, then progressively turn downward after crossing the height locked at commitment. Boss reinforcements share this behavior and appearance.
 
 Player beams stop at the first impact, damage only that obstacle and extend to the next target when it is destroyed. Boss armor, core and cannons use their own collision surfaces.
 

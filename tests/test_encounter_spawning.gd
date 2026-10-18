@@ -16,7 +16,7 @@ func _check(condition: bool, message: String) -> void:
 		_failures += 1
 		push_error(message)
 
-func _make_spawner(seed_value: int, coop := false):
+func _make_spawner(seed_value: int, coop := false, parent: Node = null):
 	_globals.coop = coop
 	_globals.reset_run(seed_value)
 	var spawner = load("res://scenes/waves/wave_spawner.gd").new()
@@ -29,7 +29,7 @@ func _make_spawner(seed_value: int, coop := false):
 		marker.name = "spawnPos%d" % index
 		marker.position = Vector2(116 + index * 37, -28)
 		spawner.add_child(marker)
-	root.add_child(spawner)
+	(root if parent == null else parent).add_child(spawner)
 	spawner.start_run()
 	spawner.set_physics_process(false)
 	spawner.enemy_spawned.connect(_freeze_enemy)
@@ -201,7 +201,6 @@ func _debris_trace(noise: bool) -> Array[Vector2]:
 	return positions
 
 func _test_debug_skip() -> void:
-	var spawner = _make_spawner(17)
 	var main := Node.new()
 	root.add_child(main)
 	main.set_script(load("res://scenes/main/main.gd"))
@@ -209,8 +208,8 @@ func _test_debug_skip() -> void:
 	var world := Node2D.new()
 	world.name = "world"
 	main.add_child(world)
+	var spawner = _make_spawner(17, false, world)
 	spawner.name = "waveGenerator"
-	spawner.reparent(world)
 	var existing = load("res://scenes/enemies/drone.tscn").instantiate()
 	spawner.queue_enemy(existing)
 	await process_frame
@@ -248,7 +247,7 @@ func _test_debug_skip() -> void:
 	main._input(event)
 	_check(spawner.director.encounter_number == number + 1, "pause prevents debug skipping")
 	paused = false
-	for state in [EncounterDirector.State.BOSS, EncounterDirector.State.RECOVERY]:
+	for state in [EncounterDirector.State.BOSS, EncounterDirector.State.RECOVERY, EncounterDirector.State.BOSS_APPROACH]:
 		spawner.director.state = state
 		main._input(event)
 		_check(spawner.director.encounter_number == number + 1, "boss encounters and recovery cannot be bypassed")

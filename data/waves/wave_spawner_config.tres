@@ -16,3 +16,4 @@ coop_heavy_health_multiplier = 1.60
 elite_definition = ExtResource("2")
 elite_cap = 3
 bosses = [ExtResource("3")]
+boss_approach_clear_time = 0.5

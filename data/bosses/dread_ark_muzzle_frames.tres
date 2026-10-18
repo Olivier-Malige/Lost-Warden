@@ -1,0 +1,89 @@
+[gd_resource type="SpriteFrames" load_steps=14 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/combat/dread_ark_muzzle_sheet.png" id="1"]
+
+[sub_resource type="AtlasTexture" id="Frame0"]
+atlas = ExtResource("1")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Frame1"]
+atlas = ExtResource("1")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Frame2"]
+atlas = ExtResource("1")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Frame3"]
+atlas = ExtResource("1")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Frame4"]
+atlas = ExtResource("1")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Frame5"]
+atlas = ExtResource("1")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Frame6"]
+atlas = ExtResource("1")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Frame7"]
+atlas = ExtResource("1")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Frame8"]
+atlas = ExtResource("1")
+region = Rect2(128, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Frame9"]
+atlas = ExtResource("1")
+region = Rect2(144, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Frame10"]
+atlas = ExtResource("1")
+region = Rect2(160, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Frame11"]
+atlas = ExtResource("1")
+region = Rect2(176, 0, 16, 16)
+
+[resource]
+animations = [
+{
+"frames": [
+{"duration": 1.0, "texture": SubResource("Frame0")},
+{"duration": 1.0, "texture": SubResource("Frame1")},
+{"duration": 1.0, "texture": SubResource("Frame2")},
+{"duration": 1.0, "texture": SubResource("Frame3")}
+],
+"loop": false,
+"name": &"charge",
+"speed": 6.666666666666667
+},
+{
+"frames": [
+{"duration": 1.0, "texture": SubResource("Frame4")},
+{"duration": 1.0, "texture": SubResource("Frame5")},
+{"duration": 1.0, "texture": SubResource("Frame6")},
+{"duration": 1.0, "texture": SubResource("Frame7")}
+],
+"loop": true,
+"name": &"fire",
+"speed": 13.333333333333334
+},
+{
+"frames": [
+{"duration": 1.0, "texture": SubResource("Frame8")},
+{"duration": 1.0, "texture": SubResource("Frame9")},
+{"duration": 1.0, "texture": SubResource("Frame10")},
+{"duration": 1.0, "texture": SubResource("Frame11")}
+],
+"loop": false,
+"name": &"recover",
+"speed": 10
+}
+]
+

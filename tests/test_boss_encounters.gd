@@ -23,7 +23,7 @@ func _freeze(enemy: Variant) -> void:
 	for timer in enemy.find_children("*", "Timer", true, false):
 		timer.stop()
 
-func _make_spawner(seed_value := 91, coop := false) -> Variant:
+func _make_spawner(seed_value := 91, coop := false, parent: Node = null) -> Variant:
 	_globals.coop = coop
 	_globals.reset_run(seed_value)
 	var spawner = load("res://scenes/waves/wave_spawner.gd").new()
@@ -36,7 +36,7 @@ func _make_spawner(seed_value := 91, coop := false) -> Variant:
 		spawner.add_child(marker)
 	var pool = load("res://scenes/combat/projectile_pool.gd").new()
 	spawner.add_child(pool)
-	root.add_child(spawner)
+	(root if parent == null else parent).add_child(spawner)
 	spawner.start_run()
 	spawner.set_physics_process(false)
 	spawner.enemy_spawned.connect(_freeze)
@@ -48,12 +48,19 @@ func _start_boss(spawner: Variant) -> void:
 	spawner._physics_process(0.5)
 	_check(spawner.director.state == EncounterDirector.State.REGULAR, "the boss does not start before five regular minutes")
 	spawner._physics_process(0.5)
-	_check(spawner.director.state == EncounterDirector.State.BOSS, "five regular minutes trigger the boss")
+	_check(spawner.director.state == EncounterDirector.State.BOSS_APPROACH, "five regular minutes trigger the natural approach")
+	for enemy in get_nodes_in_group("enemy"):
+		if spawner.is_ancestor_of(enemy):
+			enemy._on_screen_exited()
+	await process_frame
+	spawner._physics_process(0.49)
+	_check(spawner.director.state == EncounterDirector.State.BOSS_APPROACH, "boss entry waits for the calm window")
+	spawner._physics_process(0.01)
 	await process_frame
 	await process_frame
 	_check(is_instance_valid(spawner._boss) and get_nodes_in_group("boss").size() == 1, "one boss materializes through the deferred spawn path")
 	_check(spawner._reserved_slots == 0 and is_zero_approx(spawner._budget_left), "boss entry cancels normal formations and their budget")
-	_check(spawner._active_enemy_count() == 1, "boss entry retires regular enemies without leaving occupied slots")
+	_check(spawner._active_enemy_count() == 1, "boss entry starts after the regular enemies finish exiting")
 
 func _shots() -> Array[Node]:
 	var result: Array[Node] = []
@@ -71,11 +78,11 @@ func _recycle() -> void:
 func _volley(boss: Variant, target: Node2D) -> void:
 	boss.attack = boss.Attack.IDLE
 	boss._attack_left = 0.0
-	boss._reinforcement_left = 100.0
+	boss._attack_cycle = 1
 	boss._physics_process(0.01)
 	_check(boss.attack == boss.Attack.CHARGE and _shots().is_empty(), "each volley has a harmless preparation window")
 	target.position.x = 640.0 - target.position.x
-	boss._physics_process(boss.boss_data.telegraph_time)
+	boss._physics_process(boss._pattern.telegraph_time)
 	_check(boss.attack == boss.Attack.FIRE, "shots fire only after the telegraph")
 	_check(boss._locked_target == target.global_position, "the first salvo updates its aim after the player moves during charging")
 	for shot in _shots():
@@ -85,13 +92,13 @@ func _volley(boss: Variant, target: Node2D) -> void:
 
 func _finish_burst(boss: Variant, target: Node2D) -> void:
 	var per_salvo := _shots().size()
-	for index in range(1, boss.boss_data.salvo_count):
+	for index in range(1, boss._pattern.burst_count):
 		var previous := _shots()
 		var previous_velocity := Vector2(previous[0].speedX, previous[0].speedY)
 		target.position.x = 120.0 if index % 2 else 520.0
-		boss._physics_process(boss.boss_data.salvo_interval * 0.5)
+		boss._physics_process(boss._pattern.burst_interval * 0.5)
 		_check(_shots().size() == per_salvo * index, "successive salvos wait for their configured interval")
-		boss._physics_process(boss.boss_data.salvo_interval * 0.5)
+		boss._physics_process(boss._pattern.burst_interval * 0.5)
 		_check(boss.attack == boss.Attack.FIRE and _shots().size() == per_salvo * (index + 1), "each repeated salvo fires the complete missile fan")
 		_check(boss._locked_target == target.global_position, "each salvo aims at the player's updated position")
 		var aimed := false
@@ -104,7 +111,7 @@ func _finish_burst(boss: Variant, target: Node2D) -> void:
 	_check(boss._salvos_left == 0, "a missile burst ends after its configured salvo count")
 	boss._physics_process(0.21)
 	_check(boss.attack == boss.Attack.RECOVER, "recovery starts only after the last salvo finishes")
-	boss._physics_process(0.52)
+	boss._physics_process(boss._pattern.recovery_time)
 	_check(boss.attack == boss.Attack.IDLE, "a completed burst leaves a rest window before the next attack")
 
 func _test_fight(coop: bool) -> void:
@@ -117,21 +124,23 @@ func _test_fight(coop: bool) -> void:
 	boss._hit_something(100.0, false)
 	_check(boss.life == health_before, "the arriving boss cannot take damage before entering the arena")
 	boss._physics_process(2.0)
+	_check(boss._visual == "open_bays", "entry opens the hangars before the first combat cycle")
+	boss._physics_process(0.78)
 	_check(boss.attack == boss.Attack.IDLE and is_equal_approx(boss.position.y, 82.0), "the boss enters the upper combat area before attacking")
 	var target := Node2D.new()
 	target.add_to_group("player")
 	target.position = Vector2(300, 370)
 	root.add_child(target)
 	await _volley(boss, target)
-	_check(_shots().size() == 6, "phase one fires two aimed three-shot fans")
+	_check(_shots().size() == 10, "phase one fires two aimed five-shot fans")
 	_check(boss._locked_target == target.global_position, "the first salvo targets a real player position")
-	_check(boss.boss_data.salvo_count == 3 and is_equal_approx(boss.boss_data.salvo_interval, 0.25), "Dread Ark fires three salvos a quarter second apart")
+	_check(boss._pattern.burst_count == 3 and is_equal_approx(boss._pattern.burst_interval, 0.25), "phase one fires three salvos a quarter second apart")
 	var remaining: int = boss._salvos_left
 	var before_pause: float = boss._attack_left
 	boss.set_physics_process(true)
 	paused = true
 	await create_timer(0.1).timeout
-	_check(boss._salvos_left == remaining and boss._attack_left == before_pause and _shots().size() == 6, "pause freezes an in-progress missile burst")
+	_check(boss._salvos_left == remaining and boss._attack_left == before_pause and _shots().size() == 10, "pause freezes an in-progress missile burst")
 	boss.set_physics_process(false)
 	paused = false
 	_finish_burst(boss, target)
@@ -140,33 +149,36 @@ func _test_fight(coop: bool) -> void:
 		ids.append(shot.get_instance_id())
 		_check(is_equal_approx(Vector2(shot.speedX, shot.speedY).length(), 230.0), "boss projectile speed uses its revised configured value")
 	await _recycle()
-	boss._hit_something(boss.max_life * 0.36, false)
-	_check(boss.phase == 1 and boss.attack == boss.Attack.TRANSITION, "crossing 65 percent starts the second phase transition")
-	boss._physics_process(0.78)
-	_check(boss.attack == boss.Attack.IDLE and boss._visual == "phase_2", "opening the hangars ends in the second phase idle")
+	spawner._spawn_boss_reinforcements()
+	_check(not spawner._pending.is_empty(), "the transition fixture has reserved reinforcements")
+	boss._hit_something(boss.max_life * 0.51, false)
+	_check(boss.phase == 1 and boss.attack == boss.Attack.TRANSITION, "crossing half health starts the only combat phase transition")
+	_check(spawner._pending.is_empty() and spawner._reserved_boss_adds == 0, "the phase transition cancels pending reinforcements and releases their reservations")
+	boss._physics_process(0.96)
+	_check(boss.attack == boss.Attack.IDLE and boss._visual == "phase_3", "opening the core ends in the second phase idle")
 	await _volley(boss, target)
-	_check(_shots().size() == 5, "phase two fires an aimed broadside with five shots")
+	_check(_shots().size() == 7, "phase two fires an aimed broadside with seven shots")
 	_check(_shots().all(func(shot): return shot.get_instance_id() in ids), "boss volleys reuse pooled projectiles")
 	var first_side: int = boss._gun_side
 	_finish_burst(boss, target)
 	await _recycle()
 	await _volley(boss, target)
-	_check(boss._gun_side == 1 - first_side and boss._visual == boss._gun_tag("fire") and _shots().size() == 5, "completed broadsides alternate to the other gun and its authored animation")
+	_check(boss._gun_side == 1 - first_side and boss._visual == boss._gun_tag("fire") and _shots().size() == 7, "completed broadsides alternate to the other gun and its authored animation")
+	_finish_burst(boss, target)
 	await _recycle()
-	boss._hit_something(boss.max_life * 0.35, false)
-	_check(boss.phase == 2 and boss.attack == boss.Attack.TRANSITION and boss._visual == "core_transition", "crossing 30 percent opens the final-phase core")
-	_check(boss._salvos_left == 0, "a phase transition cancels the remaining missile salvos")
-	boss._physics_process(0.96)
-	_check(_shots().is_empty(), "an interrupted burst emits no missiles during the phase transition")
 	boss._attack_left = 0.0
-	boss._reinforcement_left = 100.0
+	boss._attack_cycle = 3
 	boss._physics_process(0.01)
 	_check(boss.attack == boss.Attack.BEAM_CHARGE and boss._beam.warning and not boss._beam.active, "the final phase warns the beam corridor without dealing damage")
+	spawner._spawn_boss_reinforcements()
+	_check(spawner._pending.is_empty(), "beam preparation rejects new reinforcement launches")
 	var beam_x: float = boss.global_position.x
 	boss._physics_process(0.5)
 	_check(boss.global_position.x == beam_x, "beam preparation locks its lane instead of chasing the player")
 	boss._physics_process(boss.boss_data.beam_charge_time - 0.5 + 0.001)
 	_check(boss._beam.active and boss._visual == "beam_fire", "the beam starts only at the firing animation")
+	spawner._spawn_boss_reinforcements()
+	_check(spawner._pending.is_empty(), "beam fire rejects new reinforcement launches")
 	boss._physics_process(boss.boss_data.beam_fire_time)
 	_check(not boss._beam.active and boss._visual == "beam_recover", "the beam ends before its cooling animation")
 	boss._physics_process(0.84)
@@ -181,8 +193,8 @@ func _test_fight(coop: bool) -> void:
 	_check(boss.phase == phase_before, "ordinary hits never restart or reverse a completed phase transition")
 	for index in 20:
 		spawner._spawn_boss_reinforcements()
-	var add_cap := 18 if coop else 12
-	_check(spawner._reserved_boss_adds == add_cap and spawner._active_enemy_count() == add_cap + 1, "reinforcement reservations respect the enlarged solo/co-op caps")
+	var add_cap := 12 if coop else 8
+	_check(spawner._reserved_boss_adds == add_cap and spawner._active_enemy_count() == add_cap + 1, "reinforcement reservations respect the solo/co-op caps")
 	_check(spawner._pending.all(func(item): return item.boss_add and not item.context.elite), "boss formations contain only declared ordinary reinforcements")
 	spawner.director.elapsed += 5.0
 	spawner._flush_pending()
@@ -208,7 +220,7 @@ func _test_fight(coop: bool) -> void:
 	boss.set_physics_process(false)
 	paused = false
 	var snapshot: Dictionary = spawner.get_debug_snapshot().boss
-	_check(snapshot.phase == 3 and snapshot.adds == add_cap and snapshot.health == boss.life, "debug diagnostics expose actual boss health, phase and adds")
+	_check(snapshot.phase == 2 and snapshot.adds == add_cap and snapshot.health == boss.life, "debug diagnostics expose actual boss health, phase and adds")
 	target.free()
 	var defeats := {"count": 0}
 	var on_defeat := func(_id): defeats.count += 1
@@ -226,8 +238,12 @@ func _test_fight(coop: bool) -> void:
 	spawner._physics_process(0.01)
 	_check(spawner.director.state == EncounterDirector.State.REGULAR and spawner.director.encounter_number == encounter_before + 1, "a fresh normal encounter follows the recovery window")
 	_check(is_equal_approx(spawner.director.regular_elapsed, regular_before), "recovery adds no regular scheduling time")
+	boss.free()
 	spawner.director.regular_elapsed = spawner.director.next_boss_at - 0.01
 	spawner._physics_process(0.01)
+	await process_frame
+	await process_frame
+	spawner._physics_process(0.5)
 	await process_frame
 	await process_frame
 	_check(spawner.director.state == EncounterDirector.State.BOSS and spawner._boss != boss, "the single-boss catalog can launch a new fight after five more regular minutes")
@@ -272,7 +288,7 @@ func _test_partner_death() -> void:
 	spawner.set_physics_process(false)
 	spawner.enemy_spawned.connect(_freeze)
 	spawner.director.regular_elapsed = 299.99
-	spawner._physics_process(0.01)
+	spawner.debug_start_boss()
 	await process_frame
 	await process_frame
 	var boss = spawner._boss
@@ -297,12 +313,15 @@ func _seeded_trace(seed_value: int, noise: bool) -> Array[String]:
 	spawner._physics_process(0.01)
 	await process_frame
 	await process_frame
+	spawner._physics_process(0.5)
+	await process_frame
+	await process_frame
 	var boss = spawner._boss
 	boss._physics_process(2.0)
 	boss._hit_something(boss.max_life * 0.75, false)
-	_check(boss.phase == 2 and boss._visual == "open_bays", "one large hit can cross both thresholds without losing the hangar transition")
+	_check(boss.phase == 1 and boss._visual == "open_bays", "one large hit crosses the single threshold without losing the hangar opening")
 	boss._physics_process(0.78)
-	_check(boss._visual == "core_transition", "a skipped second phase still opens the core before phase three")
+	_check(boss._visual == "core_transition", "the core opens after the hangars before phase two")
 	boss._physics_process(0.96)
 	var trace: Array[String] = ["%s|%s|%s" % [spawner._boss_data.id, boss._movement_leg, boss.position]]
 	for index in 3:
@@ -323,9 +342,8 @@ func _test_debug_shortcut(coop: bool) -> void:
 	var world := Node2D.new()
 	world.name = "world"
 	main.add_child(world)
-	var spawner = _make_spawner(81, coop)
+	var spawner = _make_spawner(81, coop, world)
 	spawner.name = "waveGenerator"
-	spawner.reparent(world)
 	var key := InputEventKey.new()
 	key.keycode = KEY_F12
 	key.pressed = true

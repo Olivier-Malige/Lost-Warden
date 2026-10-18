@@ -209,3 +209,100 @@ Validation: `tests/test_boss_movement.gd` **1,212 checks PASS** for bounded move
 Use a width-aware shape cast to stop each player beam at the first obstacle's collision surface. Only that obstacle receives damage; destroying it reveals the next target immediately. Include obstacles already overlapping the emitter and ignore destroyed actors. Match the beam line, halo and collision geometry to the endpoint, with impact feedback at the contact point. Preserve normal/overdrive widths, damage cadence and independent co-op beams.
 
 Validation: `tests/player/test_beam_impact.gd` **18 checks PASS** for nearest-target selection, surface endpoints, protected targets behind obstacles, emitter overlap, overdrive width/damage, boss armor/core/cannons, independent co-op probes and deactivation. Existing beam effects, player fire input, shield throwback and boss parts **73 checks PASS**. Native solo/co-op presentation checks PASS for first impact, reveal after destruction and separate boss core/cannon endpoints (`player_beam_solo_first_impact.webp`, `player_beam_coop_boss.webp`).
+
+### Dedicated hunter interceptor sprites
+
+Replace the interim magenta recolor with new pixel art drawn through Aseprite MCP: an arrowhead interceptor with swept wings, a steel hull, red sensor and twin exhausts. Elite hunters gain gold wing armor with a slightly wider silhouette. Both editable sources now use 32-by-32-pixel animation frames with separate hull/explosion layers and named idle, explosion and banking tags. Export the existing 16-by-1 normal and 8-by-4 elite atlas layouts; preserve all nine explosion cells exactly. Align hunter reactor particles to the new exhausts. Movement, collision shapes and combat data remain unchanged.
+
+Validation: hunter suite **596 checks PASS**, including imported hull shading and actual silhouette differences from formation drones and between normal/elite interceptors. Native solo/co-op lineup and committed-approach preview PASS (`hunters_solo_lineup_detail.webp`, `hunters_coop_commit_1.webp`). Reviewed `COMP-SIL-THREAT` **2/2** for a distinct arrowhead outline and elite armor, and `LIGHT-PLAY-SEP` **2/2** for readable steel edges and sensor details against the gameplay background. Existing intermittent audio-resource shutdown warnings remain unchanged.
+
+### Hunter palette and heading correction
+
+The first bespoke sprites used an unapproved blue-steel ramp and excessive bright metal, which did not match Dread Ark. Rework both Aseprite sources and exports with the shared Lost Warden 64 palette: Void, Deep Space and Hull Shadow dominate; Gunmetal and short Steel edges define the hull; Warden Red/Ember mark the sensor and engines. Elite armor uses restrained Amber/Warm Copper accents. Load the complete official palette in each editable source and use discrete palette shades for bank frames.
+
+Inherited banking animations previously left the nose pointing down regardless of the chase velocity. Hunter presentation now faces its actual velocity, including near-horizontal approaches, while preserving the root transform and collision footprint. Both exhaust positions and their emission directions follow the hull. Zero velocity preserves heading, and the committed approach remains straight. Formation drones retain their existing banking behavior.
+
+Validation: `scripts/art/audit_palette.py` reports **2 PNGs checked; 0 outside palette** across the complete normal/elite atlases. Hunter suite **650 checks PASS**, covering palette membership, structural tones, both turn directions, exhaust alignment, unchanged collision transforms and committed heading/trajectory. Native boss comparison verifies normal/elite left, down and right headings alongside Dread Ark (`hunter_boss_heading_detail.webp`); existing solo/co-op approach preview also PASS. Reviewed `COMP-SIL-THREAT`, `LIGHT-PLAY-SEP` and heading-to-trajectory continuity at **2/2**. The isolated boss comparison exits cleanly; the existing full-world preview retains its intermittent audio-resource shutdown warning.
+
+### Faster hunters and downward exit
+
+Increase the shared hunter profile's chase speed from 125 to 175 px/s (40%), initial downward speed from 100 to 140 px/s and acceleration from 240 to 340 px/s². Preserve spawn and elite speed multipliers. Hunters still commit 64 pixels before reaching their selected target. Capture that target's height at commitment; after crossing it, progressively steer to a vertical downward exit using the profile acceleration. This state is permanent, including after dodges, co-op target loss or crossing horizontal bounds. Hull and exhaust orientation follow the changing velocity. Ordinary formation drones are unchanged.
+
+Validation: hunter suite **914 checks PASS** for both lateral approach directions, normal/elite speeds and modifiers, committed attacks, gradual downward acceleration, target loss, final vertical heading and seeded spawn traces. Boss pressure **59 checks PASS** with the faster shared reinforcements. Native solo/co-op approach, turn and vertical-exit sequences PASS (`hunter_exit_solo_approach.webp`, `hunter_exit_solo_turn.webp`, `hunter_exit_solo_down.webp`, corresponding co-op images). Reviewed heading-to-trajectory continuity and exit readability at **2/2**. These fixed-step captures are presentation checks, not performance measurements; the existing full-world shutdown audio warning remains unchanged.
+
+### Boss beam sustained contact damage
+
+Previously, repeated beam calls were blocked by the player's ordinary hit protection; the supplied damage amount was also intentionally ignored by the one-energy-per-impact vitals system. Add a dedicated continuous-hazard entry point that retains the normal hit/death feedback while allowing the beam's own cadence to govern exposure. Ordinary shots and collisions keep their existing protection.
+
+The boss resource now authors `beam_damage_interval = 0.35`: one energy point on contact, then one per interval while intersecting a live beam core. Per-player cooldowns prevent overlapping lanes and rapid reentry from multiplying damage. Leaving stops damage; warning/fire/stop reset contact state, pause freezes the clock, and destroyed cannons immediately remove their lane. Dying players and disabled colliders remain excluded. With three starting energy points, uninterrupted exposure can be lethal within the 1.25-second firing window.
+
+Validation: `tests/test_boss_beam_damage.gd` **20 checks PASS** using real player scenes for ordinary protection, repeated beam energy loss, independent co-op entry, reentry, exit, cannon-lane removal, disabled collision, stop, death and invalid cadence data. Existing boss parts **73**, Alpha 9 balance **161** and shield throwback checks PASS. Boss pressure also verifies resource-to-runtime cadence. Native co-op warning/contact/sustained/exit comparison PASS with matching energy HUD changes (`boss_beam_contact_entry.webp`, `boss_beam_contact_exit_vs_stay.webp`); the isolated preview exits cleanly. Reviewed `LIGHT-HIT-FLASH` **2/2** for repeated contact feedback. Beam shapes and artwork remain unchanged.
+
+### Two-phase attack-pattern rework
+
+Status: implemented from the maintainer-approved two-phase plan on 2026-10-17. Final human balance acceptance remains pending; Phase 3 is unchanged.
+
+Reduce Dread Ark to two gameplay phases with one threshold at 50%, preserving 650 solo / 1,040 co-op core health and 90 / 144 cannon health. Entry opens the hangars; the only health transition opens the core. Idle presentation uses the existing hangar-open and core-open atlas ranges. The HUD receives one threshold through the existing event bus, producing two segments. F10 now reports both the attack state and active pattern; F12 retains the normal guarded boss-entry path.
+
+`BossAttackPattern` resources replace the old fixed-volley/cooldown fields with authored AIMED, RINGS, SPIRAL, DRONES and BEAM entries. Phase one cycles rings, aimed salvos, spiral, aimed salvos, drones. Phase two cycles rings, aimed salvos, spiral, beam, aimed salvos, drones. Missile attacks charge for 0.6 seconds, recover for 0.4 seconds and leave a 0.35-second pause between attacks. Existing animations, projectile sprites, sounds and pooling remain in use.
+
+| Pattern | Phase one | Phase two |
+| --- | --- | --- |
+| Rings | Two 24-slot rings at 145 px/s, 0.38 seconds apart | Three 32-slot rings at 165 px/s, 0.32 seconds apart |
+| Spiral | Two opposed arms, 10 emissions, 0.10-second interval, 12-degree step, 145 px/s | Two opposed arms, 14 emissions, 0.08-second interval, 18-degree step, 165 px/s |
+| Aimed | Both living cannons, five missiles each, three salvos | One living cannon at a time, seven missiles, four salvos |
+| Drones | Two solo / three co-op per launch | Two solo / three co-op per launch |
+| Beam | None | Existing 0.96-second warning, 1.25-second firing, 0.84-second recovery |
+
+Each ring omits a 45-degree sector initially centered 35 degrees to one side of the locked player direction. Successive attacks alternate the opening side. Within an attack, the ring and opening advance 15 degrees per emission, preserving the full opening and a shared overlap between rings. The resulting counts are 21 / 28 missiles per ring. A lightweight core warning shows the opening edges. Spirals alternate direction between uses; their directional warning arcs were removed at the maintainer's request, preserving the charge animation and timing. Circular patterns originate from the central emitter and remain available with both cannons destroyed. Aimed salvos travel at 230 px/s with 0.25-second spacing and reacquire aim between salvos; all released missiles retain their velocity.
+
+The shared drone cap is four solo / six co-op, including pending reservations. Launches require room for a complete group; a full launch slot is skipped. No new missiles or drone launches occur during beam states. A destroyed cannon immediately loses its targeted salvos and lateral beam. Its destruction cannot interrupt a core pattern. Phase changes cancel pending launches and recycle owned missiles before their visual transition; stop/death also clear owned missiles and emission clocks without touching unrelated projectiles.
+
+Movement now uses phase speeds 80 / 115 px/s, horizontal ranges 120 / 144 pixels, acceleration 220 px/s² and 0.15-second arrival rests. Height variation remains 14 pixels. Firing slows travel to 55%, while beam warning/fire/recovery lock both axes. Pattern orientation and route use the spawn seed without consuming cosmetic randomness.
+
+Validation: pattern suite **893 checks PASS** for quantities, speeds, 45-degree gaps, ring shifts, spiral direction/spacing, exact cycles in solo/co-op, disarmed core attacks, full drone-slot skipping, pause, long-frame emission scheduling, owned-projectile cleanup, transition/death/stop cancellation, invalid data and reproducible missile traces. Boss encounter lifecycle **393**, movement **1,212**, parts **73**, pressure **61**, death sequence **19**, continuous beam damage **20**, encounter director **859**, encounter spawning **6,112**, hunter drones **914**, Alpha 9 **161**, debug **66** and player beam impact **18** checks PASS. Shield throwback PASS; the wall-clock-sensitive fire-input test passed when rerun alone after a concurrent-run failure.
+
+Native GL Compatibility F12 previews verify every pattern and both phases in solo/co-op, including warnings, two-segment health, drone caps, beams, and circular fire with both guns destroyed (`two_phase_solo_p1_ring_warning.webp`, `two_phase_solo_p1_rings.webp`, `two_phase_solo_p2_spiral.webp`, `two_phase_coop_disarmed_rings.webp`). Visual review: `COMP-SIL-THREAT` **2/2** for separated missiles/openings, `LIGHT-PLAY-SEP` **2/2** for preserved projectile contrast, and `MOT-ANTIC` **2/2** for harmless preparation cues and locked beam lanes. These captures are presentation evidence, not a performance benchmark. Existing intermittent audio-resource shutdown warnings remain in full-world previews; no script or physics errors were reported.
+
+### Natural boss arrival and central-cannon presentation — 2026-10-18
+
+Implemented the approved arrival, artwork and drone follow-up. The two phases, health, pattern quantities/speeds and beam dimensions/damage/duration retain their current settings. Phase 3 has not started. Human balance acceptance remains pending.
+
+Natural milestones select one boss and enter `BOSS_APPROACH`. New formations and pending regular spawns stop; existing enemies, patrol turrets, asteroid fragments and enemy shots continue normally. Once enemies/reservations and enemy projectiles are gone, a 0.5-second calm window precedes boss materialization and its health-bar event. Player shots do not block arrival. Survival time advances, regular scheduling freezes, pause freezes the wait, and stopping or removing the screen cancels deferred arrival. F12 retains immediate debug cleanup. The full inspector exposes the approach state and calm timer.
+
+Rings and spirals originate from `MainMuzzle` at (0, 42), including ring warning geometry. They retain the phase hull animation and use a separate local AnimatedSprite2D: charge 0.6 seconds, fire looping every 0.3 seconds, recovery 0.4 seconds. Subsequent emissions do not restart the flash or hull animation. Spirals have no directional warning. Cannon wrecks and actual beam animations remain intact.
+
+New editable Aseprite sources: `assets/sources/combat/dread_ark_muzzle.aseprite` and `dread_ark_orb.aseprite`. Their sprite sheets live in `assets/sprites/combat/`. The orb has four 16 × 16 cells, an eight-pixel visible circular silhouette, red glow and bright core without an elongated trail. The palette audit reports **two sheets checked, zero colors outside Lost Warden 64**. `scenes/bosses/dread_ark_orb.tscn` has its own ProjectilePool bucket, keeps the existing missile collision/damage and disables velocity-based orientation. Aimed salvos still use the original elongated missile scene. The shield can reflect and recycle either type.
+
+Drone launch sizes are now **four solo / six co-op**, with caps of **eight / twelve including reservations**. The existing cadence, complete-group eligibility and beam exclusion remain in place.
+
+Automated verification using Godot 4.7.2 in the isolated runtime project:
+
+| Suite | Checks passed |
+| --- | ---: |
+| Natural approach, cancellation, pause, fragments, late shots, F12 | 18 |
+| Main muzzle, animation continuity, orb shape, separate pool reuse, shield reflection | 52 |
+| Patterns, phase changes and deterministic solo/co-op traces | 893 |
+| Boss encounters and reinforcement reservations/caps | 396 |
+| Boss pressure | 61 |
+| Encounter director | 860 |
+| Encounter spawning and debug skip | 6,113 |
+| Boss movement / cannon parts / death sequence | 1,212 / 73 / 19 |
+| Continuous beam damage / player beam impact | 20 / 18 |
+| Hunter drones / Alpha 9 / debug inspector | 914 / 161 / 66 |
+
+Shield throwback and isolated fire-input regressions PASS. Editor import completes without script errors and `git diff --check` finds no whitespace errors. Headless editor startup also reports a Windows safe-save warning without identifying a target path; it reproduces with a separate APPDATA directory. Both new textures and script UIDs are present and load successfully in the runtime checks. The debug-skip fixture now constructs its spawner directly under the final parent: removing a running spawner from the tree intentionally cancels arrival and cannot serve as neutral fixture setup.
+
+Native GL Compatibility captures in `.godot/phase_2_runtime_validation/`:
+
+- `natural_approach_preserved.webp`, `natural_approach_fragments.webp`, `natural_approach_boss_entry.webp`: actual movement, turret patrol/fire, asteroid destruction/fragments and projectile exits complete before automatic boss entry, without deleting surviving actors. This preview completes cleanly after 1,072 physics frames of approach.
+- `main_cannon_solo_p1_ring_warning.webp`, `main_cannon_solo_p2_spiral.webp`, `main_cannon_coop_p2_salvos.webp`: both phases, round central shots, local preparation and preserved aimed missiles.
+- `main_cannon_solo_one_cannon_rings.webp`, `main_cannon_coop_disarmed_rings.webp`: circular patterns remain readable with one or both cannon wrecks, alongside the intact-cannon captures. The full solo/co-op preview also covers drone groups and beam warning/fire.
+
+Visual review: `COMP-SIL-THREAT` **2/2** for round projectile silhouettes and openings, `LIGHT-PLAY-SEP` **2/2** for projectile contrast, `MOT-ANTIC` **2/2** for local preparation while preserving the phase hull. Native previews validate presentation rather than real-time performance or final difficulty. Full-world pattern previews and the debug suite still report the previously observed audio-resource shutdown leaks; the new approach/presentation suites and natural-arrival preview complete cleanly. No script or physics errors occur in the successful verification runs.
+
+### Attack indicator and pattern tuning — 2026-10-18
+
+Maintainer follow-up removes the projected ring arc/opening guides and the beam's translucent/dashed lane indicators. Local cannon charge effects and the hull's beam-charge animation remain, with unchanged harmless preparation times, actual beam rendering and damage. The ring opening is now 30 degrees rather than 45, yielding 22 / 29 projectiles per ring. Spirals retain their two arms, speeds, angular steps and intervals but emit 16 / 20 times rather than 10 / 14: first-to-last emission spans 1.50 / 1.52 seconds instead of 0.90 / 1.04 seconds.
+
+Verification: patterns **957**, beam damage **22**, central-cannon presentation **52**, cannon parts **73** and boss encounters **396** checks PASS. The beam test verifies that preparation remains hidden and actual firing becomes visible. The F12 test fixture now creates its running spawner under the final world parent, preserving the screen-removal cancellation contract. Native solo/co-op previews PASS; inspected `boss_tuning_solo_p1_ring_warning.webp`, `boss_tuning_coop_beam_warning.webp` and `boss_tuning_solo_p2_spiral.webp` confirm absent projected indicators and the longer spiral. Captures use the same isolated runtime directory. Visual review: `COMP-SIL-THREAT` and `LIGHT-PLAY-SEP` **2/2**; local charge animations remain the preparation cue. Previously recorded shutdown resource warnings still occur in the full-world preview. Final difficulty remains subject to gameplay acceptance.

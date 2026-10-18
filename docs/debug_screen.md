@@ -10,7 +10,7 @@ Keyboard navigation in full view: Left/Right or Tab/Shift-Tab cycle tabs, wrappi
 
 | Page | Information |
 | --- | --- |
-| Run | Seed, mode, simulation state, survival/regular time, danger/offset, score/combo, encounter ID/history/time, threat budget/rate, formation timing, occupied/reserved slots, recorded spawns and removals, scaling, elite chance/counts, boss health/phase/attack/adds and next milestone |
+| Run | Seed, mode, simulation state, survival/regular time, danger/offset, score/combo, encounter ID/history/time, threat budget/rate, formation timing, occupied/reserved slots, recorded spawns and removals, scaling, elite chance/counts, boss health/phase/attack/pattern/adds and next milestone |
 | Enemies | Alive/exploding bodies, elites, cap usage, per-family counts and remaining health, current formation rules, lane ranges, threat costs, selection weights and available family capacity |
 | Players | Both players' controllers, state, position, health, shield, movement/weapon stats, fire readiness, hit protection, plasma, beam/overdrive state and upgrade ranks |
 | Perf | Engine version, FPS, process/physics time, memory, node/resource/orphan counts, draw calls, collision pairs, logical viewport, active/parked projectiles, pool buckets and read-only RNG states |
@@ -28,7 +28,7 @@ The panel requests scalar/container snapshots through `Events` at **4 Hz while e
 
 Enemy capacity includes mounted turrets and deferred reservations. Active projectile counts exclude shots marked as pooled. Recorded spawns include immediate mounted turrets; the rolling-minute count uses 60 one-second simulation-time buckets. Spawn/removal counters and the bounded event journal record only while debug is enabled, so enabling it mid-run does not reconstruct earlier activity. Parent-disposed mounted turrets count as other removals; a destroyed enemy leaving the screen is not counted again as an escape.
 
-Elite promotion and boss combat are integrated. The Run page shows elite chance/counts and, during a boss, its actual health, phase, attack, individual left/right cannon health and destruction state, and active/reserved reinforcements near the top. Boss phases are journaled once rather than flooding history on every hit. XP remains pending. Rendering monitors may report zero in headless or unsupported renderer configurations; fixed-FPS preview captures are not performance benchmarks.
+Elite promotion and boss combat are integrated. The Run page exposes `BOSS_APPROACH` and its remaining calm window (0.5 seconds after the last enemy or enemy shot exits). Natural milestones preserve the arena; F12 remains the immediate cleanup shortcut. During a boss, the page shows its actual health, phase, attack, individual left/right cannon health and destruction state, and active/reserved reinforcements near the top. Boss phases are journaled once rather than flooding history on every hit. XP remains pending. Rendering monitors may report zero in headless or unsupported renderer configurations; fixed-FPS preview captures are not performance benchmarks.
 
 ## Validation — 2026-10-17
 

@@ -26,11 +26,15 @@ var _started := false
 var _boss: Enemy
 var _boss_data: BossDefinition
 var _reserved_boss_adds := 0
+var _boss_clear_left := 0.0
 
 func _ready() -> void:
 	call_deferred("start_run")
 
 func _exit_tree() -> void:
+	_running = false
+	_boss_clear_left = 0.0
+	_generation += 1
 	for enemy in _secondary_pending:
 		if is_instance_valid(enemy):
 			enemy.free()
@@ -70,6 +74,7 @@ func set_movement_seed(value: int) -> void:
 
 func stop_run() -> void:
 	_running = false
+	_boss_clear_left = 0.0
 	if is_instance_valid(_boss):
 		_boss.stop_combat()
 		_clear_combat(true)
@@ -87,6 +92,9 @@ func _physics_process(delta: float) -> void:
 	director.advance(delta)
 	_emit_run_time()
 	if director.boss_due() and _begin_boss():
+		return
+	if director.state == EncounterDirector.State.BOSS_APPROACH:
+		_advance_boss_approach(delta)
 		return
 	if director.state == EncounterDirector.State.BOSS:
 		_flush_pending()
@@ -108,22 +116,43 @@ func _begin_boss(force := false) -> bool:
 	_cancel_formations()
 	_budget_left = 0.0
 	_boss_data = chosen
-	_clear_combat(false)
-	call_deferred("_materialize_boss", chosen, _generation)
+	if force:
+		_clear_combat(false)
+		call_deferred("_materialize_boss", chosen, _generation)
+	else:
+		_boss_clear_left = config.boss_approach_clear_time
 	return true
 
+func _advance_boss_approach(delta: float) -> void:
+	var occupied := _active_enemy_count() > 0
+	for shot in get_tree().get_nodes_in_group("enemy_Shot"):
+		if not shot.get_meta("pooled", false) and not shot.is_queued_for_deletion():
+			occupied = true
+			break
+	if occupied:
+		_boss_clear_left = config.boss_approach_clear_time
+		return
+	_boss_clear_left = maxf(_boss_clear_left - delta, 0.0)
+	if _boss_clear_left <= 0.000001:
+		director.boss_entered()
+		call_deferred("_materialize_boss", _boss_data, _generation)
+
 func _materialize_boss(data: BossDefinition, generation: int) -> void:
+	if not is_inside_tree() or is_queued_for_deletion() or get_parent().is_queued_for_deletion():
+		return
 	if not _running or generation != _generation or director.state != EncounterDirector.State.BOSS:
 		return
 	_boss = data.scene.instantiate() as Enemy
 	_boss.boss_data = data
 	_boss.run_coop = _run_coop
+	_boss.can_launch_reinforcements = _can_launch_boss_reinforcements
 	var context := EnemySpawnContext.new()
 	context.movement_seed = director.random.enemies.randi()
 	_boss.configure_spawn(context)
 	_boss.position = Vector2(320, -60)
 	_boss.defeated.connect(_on_boss_defeated)
 	_boss.reinforcements_requested.connect(_spawn_boss_reinforcements)
+	_boss.phase_transition_started.connect(_cancel_formations)
 	add_child(_boss)
 	Events.boss_phase_thresholds_changed.emit(data.phase_thresholds)
 	Events.boss_started.emit(data.id, data.display_name, _boss.max_life)
@@ -150,13 +179,26 @@ func _clear_combat(only_adds: bool) -> void:
 		if not shot.get_meta("pooled", false):
 			ProjectilePool.despawn(shot)
 
-func _spawn_boss_reinforcements() -> void:
+func _can_launch_boss_reinforcements() -> bool:
 	if not _running or director.state != EncounterDirector.State.BOSS or not is_instance_valid(_boss) or _boss.destroyed:
+		return false
+	if _boss.attack in [_boss.Attack.BEAM_CHARGE, _boss.Attack.BEAM_FIRE, _boss.Attack.BEAM_RECOVER]:
+		return false
+	var slots := _boss_reinforcement_cap() - get_tree().get_node_count_in_group("boss_add") - _reserved_boss_adds
+	for rule in _boss_data.reinforcements:
+		var count := ceili(rule.formation * (_boss_data.coop_reinforcement_multiplier if _run_coop else 1.0))
+		if rule.weight > 0.0 and slots >= count and _available_members(_rule_definition(rule)) >= count:
+			return true
+	return false
+
+func _spawn_boss_reinforcements() -> void:
+	if not _can_launch_boss_reinforcements():
 		return
 	var eligible: Array[SpawnRule] = []
 	var weights := PackedFloat32Array()
 	for rule in _boss_data.reinforcements:
-		if rule.weight > 0.0 and _available_members(_rule_definition(rule)) > 0:
+		var required := ceili(rule.formation * (_boss_data.coop_reinforcement_multiplier if _run_coop else 1.0))
+		if rule.weight > 0.0 and _available_members(_rule_definition(rule)) >= required and _boss_reinforcement_cap() - get_tree().get_node_count_in_group("boss_add") - _reserved_boss_adds >= required:
 			eligible.append(rule)
 			weights.append(rule.weight)
 	if eligible.is_empty():
@@ -262,6 +304,7 @@ func get_debug_snapshot() -> Dictionary:
 		"health_scale": director.health_multiplier(), "speed_scale": director.speed_multiplier(),
 		"fire_scale": director.fire_delay_multiplier(), "elite_chance": director.elite_chance(),
 		"boss_in": maxf(director.next_boss_at - director.regular_elapsed, 0.0),
+		"boss_approach_clear_left": _boss_clear_left,
 		"recovery_left": director.recovery_left, "rng_states": rng_states,
 		"boss": _boss_snapshot(),
 	}
@@ -275,6 +318,7 @@ func _boss_snapshot() -> Dictionary:
 	return {"id": String(_boss_data.id), "name": _boss_data.display_name,
 		"health": _boss.life, "maximum": _boss.max_life, "phase": _boss.phase + 1,
 		"attack": _boss.Attack.keys()[_boss.attack],
+		"pattern": _boss.get_attack_pattern_name(),
 		"cannons": _boss.get_cannon_snapshot(),
 		"adds": get_tree().get_node_count_in_group("boss_add"),
 		"reserved_adds": _reserved_boss_adds, "add_cap": _boss_reinforcement_cap()}
@@ -359,7 +403,7 @@ func _materialize(item: Dictionary) -> void:
 
 # Debris shares the same reservation accounting as scheduled formations.
 func queue_enemy(enemy: Enemy) -> bool:
-	if not _running or director.state != EncounterDirector.State.REGULAR or _available_members(enemy.definition) < 1:
+	if not _running or director.state not in [EncounterDirector.State.REGULAR, EncounterDirector.State.BOSS_APPROACH] or _available_members(enemy.definition) < 1:
 		enemy.call_deferred("free")
 		return false
 	var item := {"slots": enemy.definition.spawn_slots, "family": enemy.definition.id, "generation": _generation}

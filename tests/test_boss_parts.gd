@@ -105,9 +105,10 @@ func _test_parts(coop: bool) -> void:
 	await _settle()
 	beam.free()
 	boss._locked_target = boss.global_position + Vector2(0, 300)
+	boss._pattern = data.phase_one_patterns[1]
 	boss._salvos_left = 3
 	boss._fire_salvo()
-	_check(_shots().size() == 6, "two intact cannons fire both phase-one fans")
+	_check(_shots().size() == 10, "two intact cannons fire both phase-one fans")
 	await _recycle()
 	port._hit_something(port.life - 10.0)
 	shot = _shoot(stage, port.global_position)
@@ -119,29 +120,31 @@ func _test_parts(coop: bool) -> void:
 	_check(port.get_node("CollisionShape2D").disabled and not port.monitorable, "destroyed cannon collision is disabled through deferred physics-safe changes")
 	port._hit_something(1000.0)
 	_check(port.life == 0.0, "repeated hits cannot destroy or reward a cannon twice")
-	boss._physics_process(data.salvo_interval)
-	_check(_shots().size() == 3 and _shots().all(func(missile): return missile.global_position.x > boss.global_position.x), "remaining salvos fire only from the surviving cannon")
+	boss._physics_process(boss._pattern.burst_interval)
+	_check(_shots().size() == 5 and _shots().all(func(missile): return missile.global_position.x > boss.global_position.x), "remaining salvos fire only from the surviving cannon")
 	await _recycle()
-	boss.phase = 1
+	boss._hit_something(boss.life - boss.max_life * 0.49, false)
+	boss._physics_process(0.96)
+	boss._pattern = data.phase_two_patterns[1]
+	boss._salvos_left = 4
 	boss._gun_side = 0
 	boss._fire_salvo()
-	_check(_shots().size() == 5 and boss._gun_side == 1, "later phases select the surviving cannon instead of a destroyed gun")
+	_check(_shots().size() == 7 and boss._gun_side == 1, "phase two selects the surviving cannon instead of a destroyed gun")
 	await _recycle()
 	starboard._hit_something(1000.0)
 	_check(boss._salvos_left == 0 and boss.attack == boss.Attack.RECOVER, "destroying the last cannon interrupts the current missile burst")
 	_check(boss.get_node("Sprite2D").texture == boss.DAMAGED_HULLS[2], "both destroyed guns remain visible as wrecks")
 	_check(globals.score == 0, "destroying optional cannons does not grant the boss kill reward")
-	boss._physics_process(0.52)
+	boss._physics_process(0.4)
 	boss._attack_left = 0.0
-	boss._reinforcement_left = 100.0
+	boss._attack_cycle = 1
 	boss._physics_process(0.01)
-	_check(boss.attack == boss.Attack.IDLE and _shots().is_empty(), "a disarmed boss stops charging and firing missiles")
-	boss._hit_something(boss.max_life * 0.8, false)
-	boss._physics_process(0.96)
-	_check(boss.phase == 2 and port.destroyed and starboard.destroyed and boss.get_node("Sprite2D").texture == boss.DAMAGED_HULLS[2], "core damage advances phases without restoring destroyed cannons")
+	_check(boss.attack == boss.Attack.CHARGE and boss._pattern.kind == BossAttackPattern.Kind.SPIRAL and _shots().is_empty(), "a disarmed boss skips cannon salvos but retains core patterns")
+	boss._hit_something(1.0, false)
+	_check(boss.phase == 1 and port.destroyed and starboard.destroyed and boss.get_node("Sprite2D").texture == boss.DAMAGED_HULLS[2], "further core damage never restores destroyed cannons")
+	boss.attack = boss.Attack.IDLE
 	boss._attack_left = 0.0
-	boss._reinforcement_left = 100.0
-	boss._attack_cycle = 0
+	boss._attack_cycle = 3
 	boss._physics_process(0.01)
 	_check(boss.attack == boss.Attack.BEAM_CHARGE and boss._beam.warning, "destroying missile cannons preserves the three-beam attack")
 	boss._physics_process(data.beam_charge_time)
@@ -150,9 +153,9 @@ func _test_parts(coop: bool) -> void:
 	boss._physics_process(data.beam_fire_time)
 	boss._physics_process(0.84)
 	boss._attack_left = 0.0
-	boss._reinforcement_left = 100.0
+	boss._attack_cycle = 3
 	boss._physics_process(0.01)
-	_check(boss.attack == boss.Attack.BEAM_CHARGE and boss._beam.warning, "a disarmed boss continues using beams on subsequent attack cycles")
+	_check(boss.attack == boss.Attack.BEAM_CHARGE and boss._beam.warning, "a disarmed boss retains its beam on subsequent cycles")
 	var parts: Array = boss.get_cannon_snapshot()
 	_check(parts.size() == 2 and parts[0].destroyed and parts[1].health == 0.0, "debug snapshots expose each cannon's actual state")
 	boss._hit_something(boss.life, false)
@@ -194,7 +197,7 @@ func _test_starboard_and_stop() -> void:
 	_check(starboard.destroyed and not port.destroyed and boss._available_guns() == [0], "the right cannon can be destroyed first without affecting the left cannon")
 	_check(boss.get_node("Sprite2D").texture == boss.DAMAGED_HULLS[1], "destroying the right cannon first selects its own wreck atlas")
 	_check(boss._beam.offsets == PackedFloat32Array([-40.0, 0.0]) and boss._beam.central_width == 24.0, "destroying one cannon removes its beam without shrinking the center")
-	boss._beam._physics_process(0.2)
+	boss._beam._physics_process(boss.boss_data.beam_damage_interval + 0.01)
 	_check(targets[0].hits == 2 and targets[1].hits == 2 and targets[2].hits == 1, "destroying a cannon cancels damage in its active beam immediately")
 	boss._beam.warn()
 	boss._salvos_left = 3
