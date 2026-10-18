@@ -26,6 +26,8 @@ func _boss(id: StringName) -> BossDefinition:
 	var boss := BossDefinition.new()
 	boss.id = id
 	boss.scene = PackedScene.new()
+	boss.phase_one_patterns = [BossAttackPattern.new()]
+	boss.phase_two_patterns = [BossAttackPattern.new()]
 	return boss
 
 func _sequence(seed_value: int, noise: bool) -> Array[StringName]:
@@ -110,11 +112,13 @@ func _test_boss_timeline() -> void:
 	director.advance(1.0)
 	_check(director.boss_due(), "first boss due at five regular minutes")
 	var first := director.choose_boss(bosses)
-	_check(first != null and director.state == EncounterDirector.State.BOSS, "eligible boss starts")
+	_check(first != null and director.state == EncounterDirector.State.BOSS_APPROACH, "eligible boss enters the approach state")
 	_check(director.choose_boss(bosses) == null, "boss encounters cannot overlap")
 	var waves: Array[WaveDefinition] = [_wave(&"regular")]
 	_check(director.choose_encounter(waves) == null, "normal encounters are suspended during a boss")
 	director.advance(90.0)
+	_check(director.state == EncounterDirector.State.BOSS_APPROACH, "the approach does not automatically expire before the arena is clear")
+	director.boss_entered()
 	_check(is_equal_approx(director.regular_elapsed, 300.0), "boss time does not count toward next milestone")
 	director.boss_defeated()
 	director.advance(7.0)
@@ -129,6 +133,7 @@ func _test_boss_timeline() -> void:
 	director.advance(1.0)
 	var second := director.choose_boss(bosses)
 	_check(second != null and second.id != first.id, "next boss uses five more regular minutes and avoids the previous boss")
+	director.boss_entered()
 	director.boss_defeated()
 	director.advance(8.0)
 	director.advance(300.0)
@@ -137,8 +142,8 @@ func _test_boss_timeline() -> void:
 	var invalid := BossDefinition.new()
 	_check(not invalid.is_valid(), "incomplete boss definitions are rejected")
 	invalid = _boss(&"invalid_cadence")
-	invalid.volley_intervals = PackedFloat32Array([2.0, 0.0, 1.0])
-	_check(not invalid.is_valid(), "boss cadence must stay positive in every phase")
+	invalid.attack_pause = 0.0
+	_check(not invalid.is_valid(), "boss pauses must stay positive")
 
 func _test_weighted_selection() -> void:
 	var director := EncounterDirector.new(RunRandom.new(81))

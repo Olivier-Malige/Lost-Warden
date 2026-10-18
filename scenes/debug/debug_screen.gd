@@ -128,6 +128,7 @@ func _run_text(data: Dictionary) -> String:
 		"Elite chance: %.1f%%   Elites: %d + %d reserved / %d" % [d.elite_chance * 100.0, d.elites, d.reserved_elites, d.elite_cap],
 		"Recovery left: %.2fs" % d.recovery_left,
 		"Next boss in %s regular time" % global.format_survival_time(d.boss_in),
+		"Boss approach clear window: %.2fs" % d.get("boss_approach_clear_left", 0.0),
 		"XP is not integrated yet.",
 	]
 	if not d.boss.is_empty():
@@ -135,7 +136,7 @@ func _run_text(data: Dictionary) -> String:
 		if boss.has("cannons"):
 			var cannons: Array = boss.cannons
 			lines.insert(5, "Cannons L %.1f / %.1f%s | R %.1f / %.1f%s" % [cannons[0].health, cannons[0].maximum, " DESTROYED" if cannons[0].destroyed else "", cannons[1].health, cannons[1].maximum, " DESTROYED" if cannons[1].destroyed else ""])
-		lines.insert(5, "\n[color=#d6d653]BOSS / %s / PHASE %d[/color]\nHP %.1f / %.1f / %s\nReinforcements: %d + %d queued / %d" % [boss.name, boss.phase, boss.health, boss.maximum, boss.attack, boss.adds, boss.reserved_adds, boss.add_cap])
+		lines.insert(5, "\n[color=#d6d653]BOSS / %s / PHASE %d[/color]\nHP %.1f / %.1f / %s / %s\nReinforcements: %d + %d queued / %d" % [boss.name, boss.phase, boss.health, boss.maximum, boss.attack, boss.get("pattern", ""), boss.adds, boss.reserved_adds, boss.add_cap])
 	return "\n".join(lines)
 
 func _enemies_text(data: Dictionary) -> String:

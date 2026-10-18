@@ -6,8 +6,8 @@ var player: Player
 func _init(p_player: Player) -> void:
 	player = p_player
 
-func hit(_dmg := 1) -> void:
-	if player.touched:
+func hit(_dmg := 1, continuous_damage := false) -> void:
+	if player.state >= Player.State.DYING or (player.touched and not continuous_damage):
 		return
 	if player.energy > 1:
 		player.hit_audio.playing = true

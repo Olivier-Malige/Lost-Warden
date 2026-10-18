@@ -126,7 +126,6 @@ func _test_chase() -> void:
 	left.position = Vector2(280, 380)
 	first.position = Vector2(300, 300)
 	left.speedY = 125.0
-	var exit_velocity := Vector2(left.speedX, left.speedY)
 	var turned_up := false
 	for index in 300:
 		left._update_movement(1.0 / 60.0)
@@ -135,8 +134,8 @@ func _test_chase() -> void:
 	_check(left.global_position.y > root.get_visible_rect().end.y, "a missed drone exits through the bottom of the screen")
 	first.position = left.position + Vector2(200, 100)
 	left._update_movement(0.2)
-	_check(Vector2(left.speedX, left.speedY) == exit_velocity and left.speedY > 0.0, "a committed drone preserves its heading even when the player moves ahead again")
-	_check(left._movement_profile.chase_speed == 125.0, "boss drones use the slightly increased pursuit speed")
+	_check(is_zero_approx(left.speedX) and is_equal_approx(left.speedY, 175.0), "a passed drone keeps exiting downward even when the player moves ahead again")
+	_check(left._movement_profile.chase_speed == 175.0, "boss drones use the faster shared pursuit speed")
 	second.state = 2
 	right._update_movement(0.1)
 	_check(right._chase_target.get_ref() == first, "a pursuing drone retargets a surviving co-op partner")
@@ -162,9 +161,11 @@ func _test_hud(coop: bool) -> void:
 	var boss = spawner._boss
 	boss.set_physics_process(false)
 	_check(boss._beam.offsets == PackedFloat32Array([-40, 0, 40]), "the boss scene places beams under its left, central and right emitters")
+	_check(is_equal_approx(boss._beam.damage_interval, boss.boss_data.beam_damage_interval), "boss contact damage uses the cadence authored in its resource")
 	_check(hud.visible and hud.get_node("Bar").max_value == boss.max_life, "boss entry displays the correct solo/co-op maximum health")
 	boss._physics_process(2.0)
-	boss._hit_something(boss.max_life * 0.36, false)
+	boss._physics_process(0.78)
+	boss._hit_something(boss.max_life * 0.51, false)
 	_check(is_equal_approx(hud.get_node("Bar").value, boss.life) and hud.get_node("Header/Title").text == "DREAD ARK", "the boss bar follows health while displaying only its name")
 	_check(hud.get_node_or_null("Header/Health") == null and not hud.get_node("Bar").show_percentage, "gameplay boss health has no numeric or phase text")
 	_check(hud.get_node("Bar/Segments").thresholds == boss.boss_data.phase_thresholds, "bar segmentation uses the actual resource thresholds")
@@ -172,8 +173,9 @@ func _test_hud(coop: bool) -> void:
 	_check(is_equal_approx(hud.get_global_transform_with_canvas().origin.x + hud.size.x * 0.5, 480.0), "the boss bar stays centered over the combat area on wider viewports")
 	world._layout_for_width(640.0)
 	var expected := 6 if coop else 4
-	boss._physics_process(0.78)
+	boss._physics_process(0.96)
 	boss._attack_left = 0.0
+	boss._attack_cycle = 5
 	boss._physics_process(0.01)
 	_check(boss.attack == boss.Attack.LAUNCH and spawner._pending.is_empty(), "the boss announces reinforcements with the launch animation")
 	boss._physics_process(0.35)
@@ -204,14 +206,14 @@ func _run() -> void:
 	await _test_hud(false)
 	await _test_hud(true)
 	var data = load("res://data/bosses/dread_ark.tres")
-	_check(data.is_valid() and data.phase_thresholds.size() == 2, "the revised three-phase boss data is valid")
-	data = data.duplicate()
-	data.salvo_count = 0
-	_check(not data.is_valid(), "boss bursts require at least one salvo")
-	data.salvo_count = 3
-	data.salvo_interval = 0.1
-	_check(not data.is_valid(), "salvos leave enough time for the firing animation")
-	data.salvo_interval = 0.25
+	_check(data.is_valid() and data.phase_thresholds.size() == 1, "the revised two-phase boss data is valid")
+	data = data.duplicate(true)
+	data.phase_one_patterns[1].burst_count = 0
+	_check(not data.is_valid(), "boss patterns require at least one emission")
+	data.phase_one_patterns[1].burst_count = 3
+	data.phase_one_patterns[1].burst_interval = 0.0
+	_check(not data.is_valid(), "boss emissions require positive intervals")
+	data.phase_one_patterns[1].burst_interval = 0.25
 	data.phase_thresholds = PackedFloat32Array([0.3, 0.65])
 	_check(not data.is_valid(), "phase thresholds must decrease strictly")
 	await process_frame

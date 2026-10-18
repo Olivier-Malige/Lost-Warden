@@ -1,7 +1,7 @@
 class_name EncounterDirector
 extends RefCounted
 
-enum State { REGULAR, BOSS, RECOVERY }
+enum State { REGULAR, BOSS, RECOVERY, BOSS_APPROACH }
 
 var random: RunRandom
 var elapsed := 0.0
@@ -99,8 +99,12 @@ func choose_boss(bosses: Array[BossDefinition], force := false) -> BossDefinitio
 		weights.append(boss.selection_weight)
 	var chosen := eligible[random.encounters.rand_weighted(weights)]
 	previous_boss = chosen.id
-	state = State.BOSS
+	state = State.BOSS if force else State.BOSS_APPROACH
 	return chosen
+
+func boss_entered() -> void:
+	if state == State.BOSS_APPROACH:
+		state = State.BOSS
 
 func boss_defeated() -> void:
 	if state != State.BOSS:

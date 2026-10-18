@@ -28,9 +28,10 @@ func _ready() -> void:
 	add_to_group("boss_death_effect")
 	z_index = 10
 	_small_sound.stream = SMALL_SOUND
-	_small_sound.volume_db = -8.0
+	_small_sound.volume_db = -2.0
 	add_child(_small_sound)
 	_final_sound.stream = FINAL_SOUND
+	_final_sound.volume_db = 6.0
 	add_child(_final_sound)
 
 func _process(delta: float) -> void:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://scenes/bosses/dread_ark.gd" id="1"]
 [ext_resource type="Resource" path="res://data/bosses/dread_ark_enemy.tres" id="2"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scenes/bosses/dread_ark_beam.gd" id="7"]
 [ext_resource type="Script" path="res://scenes/bosses/boss_hit_zone.gd" id="8"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/enemies/drone_explode.wav" id="9"]
+[ext_resource type="SpriteFrames" path="res://data/bosses/dread_ark_muzzle_frames.tres" id="10"]
 
 [sub_resource type="RectangleShape2D" id="Hull"]
 size = Vector2(24, 76)
@@ -63,6 +64,15 @@ offsets = PackedFloat32Array(-40, 0, 40)
 position = Vector2(0, 6)
 shape = SubResource("Hull")
 
+[node name="MainMuzzle" type="Marker2D" parent="."]
+position = Vector2(0, 42)
+
+[node name="PatternFlash" type="AnimatedSprite2D" parent="MainMuzzle"]
+visible = false
+position = Vector2(0.5, 0.5)
+sprite_frames = ExtResource("10")
+animation = &"charge"
+
 [node name="PortCannon" type="Area2D" parent="."]
 position = Vector2(-40, 22)
 script = ExtResource("8")
@@ -72,7 +82,7 @@ shape = SubResource("Cannon")
 
 [node name="ExplosionSound" type="AudioStreamPlayer2D" parent="PortCannon"]
 stream = ExtResource("9")
-volume_db = -6.0
+volume_db = 0.0
 
 [node name="StarboardCannon" type="Area2D" parent="."]
 position = Vector2(40, 22)
@@ -83,7 +93,7 @@ shape = SubResource("Cannon")
 
 [node name="ExplosionSound" type="AudioStreamPlayer2D" parent="StarboardCannon"]
 stream = ExtResource("9")
-volume_db = -6.0
+volume_db = 0.0
 
 [node name="Armor" type="Area2D" parent="."]
 script = ExtResource("8")
@@ -102,6 +112,7 @@ libraries = {&"": SubResource("Animations")}
 
 [node name="sound_Explode" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5")
+volume_db = 6.0
 
 [node name="sound_Shooting" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("6")

@@ -19,6 +19,7 @@ extends Resource
 
 @export_group("Bosses")
 @export var bosses: Array[BossDefinition] = []
+@export_range(0.1, 5.0, 0.1) var boss_approach_clear_time := 0.5
 
 func is_valid() -> bool:
 	for boss in bosses:
@@ -27,4 +28,5 @@ func is_valid() -> bool:
 	return lane_count > 0 and solo_enemy_cap > 0 and coop_enemy_cap >= solo_enemy_cap \
 		and v_formation_depth >= 0.0 and coop_budget_multiplier >= 1.0 \
 		and coop_common_health_multiplier >= 1.0 and coop_specialist_health_multiplier >= 1.0 \
-		and coop_heavy_health_multiplier >= 1.0 and elite_definition != null and elite_cap > 0
+		and coop_heavy_health_multiplier >= 1.0 and elite_definition != null and elite_cap > 0 \
+		and boss_approach_clear_time > 0.0

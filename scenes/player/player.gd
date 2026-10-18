@@ -238,6 +238,10 @@ func play_shot_recoil(amount := 1.0, duration := 0.07) -> void:
 func _hit_something(dmg := 1) -> void:
 	vitals.hit(dmg)
 
+# Continuous hazards enforce their own cadence instead of the ordinary hit grace period.
+func _hit_by_beam() -> void:
+	vitals.hit(1, true)
+
 func _on_touchedReset_timeout() -> void:
 	touched = false
 	malusSpeed = 0

@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/combat/mother_ship_shot.tscn" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/combat/dread_ark_orb_sheet.png" id="2"]
+
+[node name="DreadArkOrb" instance=ExtResource("1")]
+align_with_velocity = false
+
+[node name="Sprite2D" parent="." index="1"]
+texture = ExtResource("2")
+hframes = 4

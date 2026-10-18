@@ -40,7 +40,7 @@ func _trace(seed_value: int, noise: bool) -> Array[Vector2]:
 
 func _run() -> void:
 	var data = load("res://data/bosses/dread_ark.tres")
-	_check(data.is_valid() and data.phase_thresholds.size() == 2 and data.health == 650.0 and data.cannon_health == 90.0, "the boss has three phases with reduced core and cannon durability")
+	_check(data.is_valid() and data.phase_thresholds == PackedFloat32Array([0.5]) and data.health == 650.0 and data.cannon_health == 90.0, "the boss has two phases at half health with unchanged durability")
 	var boss = _boss(0)
 	boss._move_between_positions(1.0 / 60.0)
 	_check(boss._reposition_velocity.length() > 0.0 and boss._reposition_velocity.length() < 4.0, "repositioning accelerates from rest instead of jumping straight to cruise speed")
@@ -72,7 +72,7 @@ func _run() -> void:
 	_check(first == _trace(42, true), "movement is reproducible despite cosmetic random noise")
 	_check(first != _trace(43, false), "different movement seeds change the initial repositioning route")
 	var peak_speeds: Array[float] = []
-	for phase_index in 3:
+	for phase_index in 2:
 		boss = _boss(0, phase_index)
 		var peak := 0.0
 		for tick in 120:
@@ -80,8 +80,8 @@ func _run() -> void:
 			peak = maxf(peak, boss._reposition_velocity.length())
 		peak_speeds.append(peak)
 		boss.free()
-	_check(peak_speeds[0] < peak_speeds[1] and peak_speeds[1] < peak_speeds[2], "repositioning becomes faster across the three combat phases")
-	boss = _boss(0, 2)
+	_check(peak_speeds[0] < peak_speeds[1], "repositioning becomes faster in the second combat phase")
+	boss = _boss(0, 1)
 	for attack in [boss.Attack.BEAM_CHARGE, boss.Attack.BEAM_FIRE, boss.Attack.BEAM_RECOVER]:
 		boss.attack = attack
 		boss._reposition_velocity = Vector2(60, 12)
