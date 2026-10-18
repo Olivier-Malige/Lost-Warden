@@ -104,6 +104,8 @@ func _apply_spawn_context() -> void:
 		fire_delay_multiplier *= elite_definition.fire_delay_multiplier
 	for timer in _shoot_timers:
 		timer.wait_time *= fire_delay_multiplier
+		if not timer.is_stopped():
+			timer.start()
 	life *= health_multiplier
 	max_life = life
 	add_to_group("enemy")
