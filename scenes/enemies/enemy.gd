@@ -45,6 +45,8 @@ var _movement_animation := &"start"
 var _debug_removal_reported := false
 var _chase_target: WeakRef
 var _chase_committed := false
+var _chase_exit_y := INF
+var _chase_exiting := false
 
 func _ready() -> void:
 	if definition == null:
@@ -167,10 +169,13 @@ func _update_chase(delta: float) -> void:
 	if not _chase_committed and (not is_instance_valid(target) or (target.get("state") != null and int(target.state) >= 2)):
 		_choose_chase_target()
 		target = _chase_target.get_ref() if _chase_target else null
-	if is_instance_valid(target) and target.global_position.y - global_position.y <= _movement_profile.chase_commit_distance:
+	if not _chase_committed and is_instance_valid(target) and target.global_position.y - global_position.y <= _movement_profile.chase_commit_distance:
 		_chase_committed = true
-	if not _chase_committed and is_instance_valid(target):
-		var direction: Vector2 = global_position.direction_to(target.global_position)
+		_chase_exit_y = target.global_position.y
+	if _chase_committed and global_position.y >= _chase_exit_y:
+		_chase_exiting = true
+	if _chase_exiting or (not _chase_committed and is_instance_valid(target)):
+		var direction := Vector2.DOWN if _chase_exiting else global_position.direction_to(target.global_position)
 		var desired := direction * _movement_profile.chase_speed * _movement_speed_scale()
 		var velocity := Vector2(speedX, speedY).move_toward(desired, _movement_profile.chase_acceleration * delta)
 		speedX = velocity.x

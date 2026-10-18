@@ -11,3 +11,9 @@ definition = ExtResource("4")
 
 [node name="Sprite2D" parent="." index="0"]
 texture = ExtResource("3")
+
+[node name="droneReactorParticles" parent="." index="4"]
+position = Vector2(-4, -10)
+
+[node name="droneReactorParticles2" parent="." index="5"]
+position = Vector2(4, -10)

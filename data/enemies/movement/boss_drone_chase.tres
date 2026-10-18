@@ -6,9 +6,9 @@
 script = ExtResource("1")
 id = &"boss_drone_chase"
 mode = 6
-velocity = Vector2(0, 100)
+velocity = Vector2(0, 140)
 min_x = 116.0
 max_x = 524.0
-chase_speed = 125.0
-chase_acceleration = 240.0
+chase_speed = 175.0
+chase_acceleration = 340.0
 chase_commit_distance = 64.0
