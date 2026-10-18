@@ -85,7 +85,7 @@ func reset_run(run_seed: int = -1) -> void:
 
 func format_survival_time(seconds: float) -> String:
 	var total := maxi(floori(seconds), 0)
-	return "%02d:%02d" % [total / 60, total % 60]
+	return "%02d:%02d" % [floori(float(total) / 60.0), total % 60]
 
 func register_kill(points: int) -> int:
 	combo = mini(combo + 1, 99)

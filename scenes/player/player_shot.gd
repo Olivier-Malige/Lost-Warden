@@ -14,7 +14,7 @@ const _ProjectileGlow := preload("res://scenes/combat/projectile_glow.gd")
 @export var vfx_config: ProjectileVfxConfig
 var player_Id: String
 var _base_damage: float = -1.0
-var _base_speed_y := 0
+var _base_speed_y := 0.0
 var _follow_target: Node2D
 var _follow_offset := Vector2.ZERO
 var _follow_time := 0.0

@@ -48,11 +48,11 @@ func _ready() -> void:
 func _update_horizontal_repeat() -> void:
 	var tile_size: Vector2 = $"b3/stars".texture.get_size()
 	var repeat_width := ceilf(get_viewport().get_visible_rect().size.x / tile_size.x) * tile_size.x
-	for layer in get_children():
-		if layer is not ParallaxLayer:
+	for parallax_layer in get_children():
+		if parallax_layer is not ParallaxLayer:
 			continue
-		layer.motion_mirroring.x = repeat_width
-		for sprite in layer.get_children():
+		parallax_layer.motion_mirroring.x = repeat_width
+		for sprite in parallax_layer.get_children():
 			if sprite is Sprite2D:
 				sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 				sprite.region_enabled = true
@@ -90,7 +90,7 @@ func _on_wave_changed(wave: int) -> void:
 
 
 func _apply_theme_for_wave(wave: int) -> void:
-	var theme_index := mini(maxi((wave - 1) / WAVES_PER_THEME, 0), THEME_TEXTURES.size() - 1)
+	var theme_index := mini(maxi(floori(float(wave - 1) / float(WAVES_PER_THEME)), 0), THEME_TEXTURES.size() - 1)
 	if theme_index == _theme_index:
 		return
 	_theme_index = theme_index

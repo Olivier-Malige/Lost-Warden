@@ -299,7 +299,7 @@ func _configure_collision() -> void:
 	collision_mask = Layers.PLAYER | Layers.PLAYER_SHOT
 
 func _play_spawn_animation() -> void:
-	indexSprites = randi() % definition.sprite_variants + 1 if definition.sprite_variants > 1 else ""
+	indexSprites = str(randi() % definition.sprite_variants + 1) if definition.sprite_variants > 1 else ""
 	$anim.play("start" + str(indexSprites))
 
 func _hit_something(dmg: float = 0.0, impact_feedback := true) -> void:
