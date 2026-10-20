@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/upgrade_selection.gd" id="1"]
+
+[node name="UpgradeSelection" type="CanvasLayer"]
+process_mode = 3
+layer = 20
+script = ExtResource("1")

@@ -7,12 +7,12 @@ var _scenes := {}
 var _combo_tween: Tween
 var _feedback_tweens := {}
 var _beam_tweens := {}
-const RANK_LABELS := {
-	UpgradeDefinition.Effect.SPEED: "SPD",
-	UpgradeDefinition.Effect.DAMAGE: "DMG",
-	UpgradeDefinition.Effect.FIRE_RATE: "RATE",
-	UpgradeDefinition.Effect.SIDE_SHOT: "SIDE",
-}
+var _build_controls := {}
+var _level_label: Label
+var _xp_bar: ProgressBar
+const FONT := preload("res://assets/fonts/slkscr.ttf")
+const ART := preload("res://assets/sprites/ui/phase_3_upgrade_ui.png")
+const MINI_ICONS := preload("res://assets/sprites/ui/upgrade_miniatures.png")
 
 func _ready() -> void:
 	Events.score_changed.connect(_on_score_changed)
@@ -20,7 +20,8 @@ func _ready() -> void:
 	Events.run_time_changed.connect(_on_run_time_changed)
 	Events.energy_changed.connect(_on_energy_changed)
 	Events.beam_charge_changed.connect(_on_beam_charge_changed)
-	Events.upgrade_changed.connect(_on_upgrade_changed)
+	Events.build_changed.connect(_on_build_changed)
+	Events.progression_changed.connect(_on_progression_changed)
 	Events.upgrade_feedback_requested.connect(_on_upgrade_feedback_requested)
 
 func _on_score_changed(score: int) -> void:
@@ -91,27 +92,98 @@ func _stop_beam_pulse(player_id: String) -> void:
 		tween.kill()
 		_beam_tweens.erase(player_id)
 
-func _on_upgrade_changed(player_id: String, effect: int, rank: int, max_rank: int) -> void:
-	if not RANK_LABELS.has(effect):
-		return
+func _on_build_changed(player_id: StringName, snapshot: Dictionary) -> void:
 	var column := "LeftColumn" if player_id == "player1" else "RightColumn"
-	var label := get_node_or_null(column + "/ranks_" + player_id) as Label
-	if label == null:
-		return
-	var rows: PackedStringArray = label.get_meta("rows", PackedStringArray(["SPD 0/8", "DMG 0/10", "RATE 0/8", "SIDE 0/7"]))
-	var prefix := String(RANK_LABELS[effect])
-	var value := prefix + " MAX" if rank >= max_rank else prefix + " " + str(rank) + "/" + str(max_rank)
-	for index in rows.size():
-		if rows[index].begins_with(prefix + " "):
-			rows[index] = value
-			break
-	label.set_meta("rows", rows)
-	label.text = "UPGRADES\n" + "\n".join(rows)
-	label.visible = true
+	get_node(column + "/ranks_" + player_id).hide()
 	var panel_name := "LeftRankPanel" if player_id == "player1" else "RightRankPanel"
 	var panel := get_node_or_null(panel_name) as Panel
-	if panel:
-		panel.visible = true
+	if panel: panel.hide()
+	if not _build_controls.has(player_id):
+		var holder := VBoxContainer.new()
+		holder.name = "Build" + String(player_id).capitalize().replace(" ", "")
+		holder.custom_minimum_size = Vector2(96, 76)
+		holder.alignment = BoxContainer.ALIGNMENT_CENTER
+		holder.add_theme_constant_override("separation", 0)
+		get_node(column).add_child(holder)
+		get_node(column).move_child(holder, 2)
+		_build_controls[player_id] = holder
+	var holder: VBoxContainer = _build_controls[player_id]
+	for child in holder.get_children():
+		child.hide()
+		child.queue_free()
+	for category in [UpgradeDefinition.Category.OFFENSIVE, UpgradeDefinition.Category.UTILITY]:
+		var title := _text("OFFENSE" if category == UpgradeDefinition.Category.OFFENSIVE else "UTILITY", 8)
+		holder.add_child(title)
+		var row := HBoxContainer.new()
+		row.alignment = BoxContainer.ALIGNMENT_CENTER
+		row.add_theme_constant_override("separation", 2)
+		holder.add_child(row)
+		var equipped := []
+		for family in snapshot.families:
+			if family.category == category: equipped.append(family)
+		for index in (4 if category == UpgradeDefinition.Category.OFFENSIVE else 3):
+			var slot := TextureRect.new()
+			slot.custom_minimum_size = Vector2(18, 24)
+			slot.texture = _atlas(Rect2(96 if category == UpgradeDefinition.Category.OFFENSIVE else 112, 32, 16, 16))
+			slot.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			row.add_child(slot)
+			if index < equipped.size():
+				var icon := TextureRect.new()
+				icon.texture = equipped[index].icon
+				if player_id == &"player2" and icon.texture is AtlasTexture and icon.texture.atlas == MINI_ICONS:
+					var team_icon := icon.texture.duplicate() as AtlasTexture
+					team_icon.region = Rect2(team_icon.region.position + Vector2(0, 16), team_icon.region.size)
+					icon.texture = team_icon
+				icon.position = Vector2(1, 0)
+				icon.size = Vector2(16, 16)
+				slot.add_child(icon)
+				var rank := _text(str(equipped[index].rank), 8)
+				rank.position = Vector2(0, 14)
+				rank.size = Vector2(18, 10)
+				slot.add_child(rank)
+				slot.tooltip_text = equipped[index].display_name
+
+func _on_progression_changed(snapshot: Dictionary) -> void:
+	if _level_label == null:
+		var holder := VBoxContainer.new()
+		holder.name = "Progression"
+		holder.custom_minimum_size = Vector2(96, 28)
+		holder.add_theme_constant_override("separation", 1)
+		$RightColumn.add_child(holder)
+		$RightColumn.move_child(holder, 1)
+		_level_label = _text("", 12)
+		holder.add_child(_level_label)
+		_xp_bar = ProgressBar.new()
+		_xp_bar.name = "LevelProgress"
+		_xp_bar.custom_minimum_size = Vector2(84, 5)
+		_xp_bar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		_xp_bar.show_percentage = false
+		for state in ["background", "fill"]:
+			var style := StyleBoxTexture.new()
+			style.texture = ART
+			style.region_rect = Rect2(0 if state == "background" else 8, 48, 8, 4)
+			style.texture_margin_left = 2
+			style.texture_margin_right = 2
+			_xp_bar.add_theme_stylebox_override(state, style)
+		holder.add_child(_xp_bar)
+	_level_label.text = "LEVEL %d" % snapshot.level
+	_xp_bar.max_value = snapshot.next_threshold
+	_xp_bar.value = snapshot.xp
+
+func _text(value: String, font_size: int) -> Label:
+	var label := Label.new()
+	label.text = value
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_font_override("font", FONT)
+	label.add_theme_font_size_override("font_size", font_size)
+	label.add_theme_color_override("font_color", Color("f3ebdd"))
+	return label
+
+func _atlas(region: Rect2) -> AtlasTexture:
+	var texture := AtlasTexture.new()
+	texture.atlas = ART
+	texture.region = region
+	return texture
 
 func _on_upgrade_feedback_requested(player_id: String, text: String, capped: bool) -> void:
 	var label := get_node_or_null("Feedback_" + player_id) as Label

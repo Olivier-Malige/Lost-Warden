@@ -175,7 +175,8 @@ func _run() -> void:
 	await physics_frame
 	spawner.set_physics_process(false)
 	_check(spawner.director.elapsed > before_time, "simulation continues while the compact display is open")
-	paused = true
+	main.menuShow = true
+	main._sync_pause()
 	main._input(key)
 	events.debug_snapshot_requested.emit()
 	_check(screen._snapshot.paused and screen._status.text.begins_with("PAUSED"), "paused simulation is explicitly identified")
@@ -199,7 +200,8 @@ func _run() -> void:
 	_check(screen.visible and paused, "F10 can reopen the inspector during pause")
 	main._input(key)
 	_check(not screen.visible and paused, "closing full view respects hidden compact preference")
-	paused = false
+	main.menuShow = false
+	main._sync_pause()
 	main._input(key)
 	for index in 100:
 		world._debug_log("Entry %d" % index)

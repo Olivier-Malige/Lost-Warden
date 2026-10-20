@@ -28,7 +28,16 @@ func _run() -> void:
 	await _check_hiscore_music()
 	await _check_transition("world", _main.go_World_Screen, "start", "game")
 	_check(not _main.get_node("TitleMusic").playing, "title music must stop when gameplay starts")
+	var catalog = load("res://data/upgrades/foundation_catalog.tres")
+	var config = load("res://data/progression/progression_config.tres")
+	var random := RandomNumberGenerator.new()
+	random.seed = 8
+	var build := {"ranks": {}, "offensive_count": 0, "utility_count": 0}
+	var hand: Dictionary = catalog.generate_offers(build, {"energy": 3, "shield": 0}, random, config, true)
+	_main._open_selection(99, {&"player1": {"build": build, "offers": hand.offers}}, {"level": 2, "xp": 0, "next_threshold": 13})
+	_check(paused and _main._selection_pause, "selection must be active before real navigation")
 	await _check_transition("gameOver", _main.go_GameOver_Screen, "world", "game_over")
+	_check(_main._selection == null and not _main._selection_pause, "real screen navigation must cancel selection and its pending callbacks")
 	await _check_transition("start", _main.go_Start_Screen, "gameOver", "return_title")
 	_main.queue_free()
 	await process_frame

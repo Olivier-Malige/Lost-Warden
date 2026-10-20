@@ -23,6 +23,8 @@ enum Durability { HAZARD, FODDER, FIGHTER, SPECIALIST, HEAVY }
 @export var durability: Durability = Durability.FODDER
 @export_range(0, 100, 1) var power_up_chance := 0
 @export_range(0, 100, 1) var plasma_drop_chance := 0
+@export_range(0, 100, 1) var xp_drop_chance := 0
+@export_range(0, 1000, 1) var xp_value := 0
 
 @export_group("Movement")
 @export var movement_profile: MovementProfile
@@ -51,7 +53,8 @@ func is_valid() -> bool:
 		and score >= 0 \
 		and power_up_chance >= 0 \
 		and plasma_drop_chance >= 0 \
-		and power_up_chance + plasma_drop_chance <= 100 \
+		and plasma_drop_chance <= 100 \
+		and xp_drop_chance >= 0 and xp_drop_chance <= 100 and xp_value >= 0 \
 		and movement_profile != null \
 		and movement_profile.is_valid() \
 		and sprite_variants > 0 \

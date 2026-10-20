@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="UpgradeTable" load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/upgrade_table.gd" id="1"]
+[ext_resource type="Resource" path="res://data/upgrades/foundation/speed.tres" id="2"]
+[ext_resource type="Resource" path="res://data/upgrades/foundation/damage.tres" id="3"]
+[ext_resource type="Resource" path="res://data/upgrades/foundation/fire_rate.tres" id="4"]
+[ext_resource type="Resource" path="res://data/upgrades/foundation/orb_magnet.tres" id="5"]
+[ext_resource type="Resource" path="res://data/upgrades/foundation/side_shot.tres" id="6"]
+[ext_resource type="Resource" path="res://data/upgrades/foundation/energy.tres" id="7"]
+[ext_resource type="Resource" path="res://data/upgrades/foundation/shield.tres" id="8"]
+[ext_resource type="Resource" path="res://data/upgrades/foundation/score.tres" id="9"]
+[ext_resource type="Resource" path="res://data/upgrades/foundation/beam_capacity.tres" id="10"]
+[ext_resource type="Resource" path="res://data/upgrades/foundation/beam_recharge.tres" id="11"]
+
+[resource]
+script = ExtResource("1")
+upgrades = Array[UpgradeDefinition]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10"), ExtResource("11")])

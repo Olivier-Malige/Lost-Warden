@@ -1,0 +1,153 @@
+# Phase 3 validation evidence
+
+## Status — 2026-10-20
+
+Phase 3 **steps 1-4 are complete**. The maintainer authorized continuing through a first playable version: ordinary gameplay now uses shared collected XP, personal foundation builds, the paused native selection/HUD and safe pooled orbs, with paired Aseprite/PNG art. Steps 5-14 remain pending. No commit was made.
+
+The maintainer approved the silent interactive preview, with **Arsenal déployé** selected; the corresponding native Godot UI is now implemented and captured. Solo has three horizontal cards; co-op has independent stacked choices. The maintainer supplies dedicated sounds/music. Existing menu cues are temporary selection cues; no dedicated selection/XP audio or listening acceptance is claimed. Human co-op balance acceptance remains deferred to roadmap Phase 6.
+
+## Step 1 — inspected evidence
+
+The [verified inventory](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/art_audio_inventory.md) records each active source/export/grid/tag, pivots, alpha footprints, collision shapes, team colors and target checkpoint. The [audio brief](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/selection_audio_brief.md) assigns provided files, preparation, bus/mute behavior and listening acceptance.
+
+| Inspection | Actual result |
+| --- | --- |
+| Scene/resource dependency scan | Primary/side resources point to scenes/player projectiles. Beam and shield are instanced by player.tscn. HUD is in world.tscn. PlasmaCell references legacy power_up.png frame 7. |
+| PNG metadata and per-cell alpha bounds using Pillow | Primary 80x16 (16x8 cells), side 30x16 (6x8), beam 320x16 (16x8), shield 96x40 (16x10), pickups 128x16 (16x16). Actual bounds recorded in inventory. |
+| Aseprite binary headers, layers and tag chunks | Existing primary/side/beam/shield/pickup masters exist and have 5/5/20/24/8 frames, respectively. Primary source is flattened; side and beam retain team layers. |
+| Animation-library JSON and reference scan | Primary/side library cells are 8x16 / 4x16 rather than active 16x8 / 6x8. Beam library packs 16x16 cells into 128x48 rather than live shader layout. Shield library has 72 frames versus active 24. None of these four library sheets is referenced by scenes/data. |
+| Beam runtime/source discrepancy | Source frames authored at 80 ms; active ContinuousBeam uses 160 ms flow frames and only tiers 2/4. Preserve active timing unless a measured change is explicitly accepted. |
+| Shield scene/instance discrepancy | Standalone shield root scale 4 is overridden to 1 in player.tscn. Preserve the active instance and existing fractional offsets/collisions during art work. |
+| Native layout and palette | project.godot declares 640x400 and nearest sampling; Lost Warden 64 palette exists. Current HUD uses slkscr.ttf at size 12. Historical x4 rules are not Phase 3 production targets. |
+| Production coverage | Foundation sources/exports, sixteen stable icon indices, card/slot/XP components and all eight new offensive families have assigned destinations and steps. These targets are not files already produced. |
+| Legacy dependency migration | Dedicated plasma_cell source/export is assigned to step 4 before removing the legacy atlas dependency. Its 16x16 footprint and 14x14 collision remain explicit. |
+| Audio library | Existing menu cues and gameplay track present; no dedicated selection files supplied. Proposed source/export paths, null-stream behavior and listening gate documented. |
+| Working diff hygiene | `git diff --check` passes. This checkpoint changes documentation only; prior phase-2/roadmap edits remain in the working tree. |
+
+Inspection was read-only for assets and runtime. No engine tests were run because this step changes no game behavior. Source metadata does not establish source/export pixel equality, art quality, musical continuity or gameplay correctness.
+
+## Step 2 — dormant progression, loadouts and offers
+
+Implemented 2026-10-20. `ProgressionConfig` and `RunProgression` own detached authored limits and shared XP/level/FIFO state. Eight detached foundation definitions and `foundation_catalog.tres` supply five permanent families, repeatable repair/shield and automatic score fallback. `PlayerLoadout.initialize_foundation` explicitly enables personal stable-ID ranks, category slots and derived stats; ordinary construction still follows the legacy path. Foundation rewards return a vital-state update for a future controller; they do not mutate player nodes or the caller's vital snapshot.
+
+`UpgradeTable` validates stable IDs, unique effects, category/rank consistency and weights, then generates unique weighted offers from personal snapshots. It reserves offensive/utility choices at first selection and acquired/new families when both exist. `generate_player_offers` snapshots both participants and consumes the explicit offer RNG in P1/P2 order. Returned dictionaries/arrays are detached from owner state and authored rank arrays. Confirmation validation, eligibility of living participants and pause coordination remain step 3/controller work.
+
+### Actual validation
+
+Godot **4.7.2**, existing addon-free `.godot/phase_2_runtime_validation/` project, separate ignored APPDATA directories (`qa_phase3_*`) for each suite. Data/core/scenes/tests junctions resolve to current repository files; personal save data is not used. Commands use `C:/godot/Godot_v4.7.2-stable_win64_console.exe --headless --path .godot/phase_2_runtime_validation --script res://tests/<suite>.gd` after editor import.
+
+| Suite/check | Result and scope |
+| --- | --- |
+| `tests/test_run_progression.gd` | **102 checks, 0 failures**: exact rounded thresholds through level 60, rejected nonpositive XP/configuration, multi-level grants, excess, FIFO, detached snapshots, grant partition invariance and reset. |
+| `tests/test_upgrade_offers.gd` | **1,853 checks, 0 failures**: enum/legacy compatibility, catalog validation, exact foundation stats and caps, all four three-utility combinations, four-offensive cap via test-only future-family fixtures, repeatable/clamped rewards, copied snapshots, first-choice/acquired-new guarantees, exact 10:5 weighting, one/two/zero candidates, score fallback, zero/one/two participants, fixed P1/P2 drawing, stream isolation, reversed confirmation order, ten deterministic co-op traces and queued-level recomputation. Synthetic future-family definitions exist only inside tests and do not enter the detached catalog. |
+| `tests/test_alpha_9_balance.gd` | **161 checks PASS**: legacy damage/ranks, direct rewards, player health, pooled shots and combat behavior. |
+| `tests/test_debug_screen.gd` | **71 checks, 0 failures** on final run. An earlier run reproduced the known two-instance/one-resource shutdown warning; no assertion failed. |
+| `tests/player/test_fire_input.gd` | **PASS**. |
+| `tests/player/test_beam_effect.gd` | **PASS**. |
+| `tests/player/test_shield_throwback.gd` | **PASS**. |
+| Main scene, 120 headless frames | Exit 0; known four-instance/two-resource shutdown warning remains. No new script/startup error. |
+| Editor import | Exit 0 and new script classes/UIDs load. Existing Windows safe-save warning reproduced; no script parse errors. |
+| Diff/data boundary | `git diff --check` PASS; original upgrade_table.tres, six direct-pickup definitions, PlayerStats script/resource, enemy rewards, events and gameplay initialization are unchanged. New catalog/configuration have no ordinary gameplay caller. |
+
+The foundation tests exit cleanly. No visual or listening acceptance is claimed for these pure models, and the passing selected regressions do not imply that all repository tests pass. Audio-resource shutdown behavior and historical enemy-feedback assertions remain separate baseline limits.
+
+## Step 3 — native paused selection
+
+Step 3 verified before step 4 activation on 2026-10-20: `test_upgrade_selection.gd` **33 headless / 39 native checks PASS**, `test_selection_presentation.gd` **7 checks PASS**, inspector **71 PASS** and screen fades **PASS**. Main now composes transition/menu/inspector/selection pause reasons. Input tests cover held fire, independent cursors, P2-first and duplicate/stale confirmations, controller reassignment, queued levels and cancellation. Fade tests cancel a real selection during actual screen navigation. Audio tests check same-player playback preservation, independent mutes, one session and null-stream/cancellation behavior. Windows safe-save and intermittent headless audio shutdown warnings remain separately recorded; native selection exits cleanly.
+
+Native captures in the ignored validation project: `phase3_selection_coop_opening.webp`, `phase3_selection_coop.webp`, `phase3_selection_coop_ready.webp`, `phase3_selection_solo.webp`, `phase3_selection_solo_wide.webp`. Reviewed crisp type/rank/body hierarchy, team/selected/ready distinction, native margins and centered wide core; applicable TYPE-ROLE-TOKEN, TYPE-FACE-CAP, TYPE-NUM-TABULAR, COLOR-ONLY, ICON-SIL and COMP-SAFE-EDGE checks scored 2/2. The pulse, dim and card reveal settle without layout clipping. Source/export equality and palette membership PASS for the combined UI atlas. Dedicated selection music remains unsupplied; current cues are existing menu sounds, not final audio acceptance.
+
+## Step 4 — first playable foundation
+
+Delivered 2026-10-20. World startup explicitly resets its run, registers players and then starts its controller with the run offer stream. Every accepted enemy defeat resolves XP then plasma independently; elite/boss guarantees remain, fragments suppress XP through spawn context, and legacy direct-power-up spawning is removed. Native players initialize the foundation catalog: four offensive/three utility slots, authored ranks, common gun damage once, separate additive plasma damage, outer side pair at rank four and three shield charges. HUD/debug snapshots reflect those values. Legacy save/profile data remains unchanged.
+
+XP pools reserve before deferred materialization, cap active plus reserved at 128 and merge overflow into the oldest entry. Collection is latched, collision changes and parking are deferred, P1 wins distance ties, targets persist/reacquire correctly, and optional collection audio is owned outside recycled nodes. Cancellation invalidates reservations and queued choices. Monotonic selection IDs prevent old-world confirmations from applying to replacements. Queued score-only fallback levels close the last visible selection correctly.
+
+### Final focused verification
+
+Godot **4.7.2**, addon-free isolated runtime with separate `qa_phase3_*` APPDATA directories. Native Compatibility runs use the NVIDIA RTX 3060. Root-project editor import also completes with registered classes and no script errors; 120 root-project startup frames exit zero. The existing Windows safe-save warning and root startup's four-instance/two-resource audio shutdown warning remain. No personal records were used.
+
+| Suite / inspection | Actual result |
+| --- | --- |
+| Run progression | **102 checks PASS**. |
+| Upgrade offers / loadouts | **1,853 checks PASS**. Legacy data compatibility assertions intentionally distinguish the activated 240/0.12 limits from old authored increments. |
+| Upgrade selection | **35 headless / 41 native checks PASS**. Includes mapped keyboard and both gamepad button events, held input, menu remapping, stale/duplicate requests (including fading old-panel callbacks), queued levels and composed pause. |
+| Selection presentation/audio | **8 headless and native checks PASS**, with no retained audio after the fixture allows the mixer to complete teardown. Includes null streams, playback position, nested pause resumption, independent mutes and a locally looping copy that preserves its supplied master. No dedicated audio is supplied. |
+| XP orbs | **20 checks PASS**, including real Area2D collection callbacks, double-release protection, target tie/retention/reacquisition, falling/offscreen loss, active+reserved saturation/conservation, reuse, cancellation and audio surviving immediate recycling. |
+| XP rewards | **2,526 checks PASS** across all ordinary families, elite and Dread Ark override, exact XP/plasma roll order, fragment contexts, repeated lethal hits, uncredited collisions and escapes. |
+| Progression activation | **65 headless / 73 native checks PASS**. Actual turret defeats lead through attracted orbs into a level-up; technical co-op resolves five queued levels in either personal confirmation order. Covers excess XP, same-tick DYING exclusion, zero living participants, solo automatic fallback, world replacement, stale old-world confirmations, maximum stats and exact main/side/outer/plasma damage. Five further replacements cancel saturated pending orbs with a stable scene-node count. |
+| Alpha 9 durability/combat regression, intentionally migrated | **130 checks PASS**. Enemy health remains unchanged; damage/rank/drop/side-pair assertions now follow the foundation. |
+| Elites | **3,280 checks PASS**; guaranteed direct-power-up assertion replaced with guaranteed six-XP/large-plasma behavior. |
+| Encounter director / spawning | **860 / 6,122 checks PASS**. |
+| Boss encounters / parts / patterns / pressure / beam damage | **396 / 73 / 1,035 / 61 / 22 checks PASS**. |
+| Hunters / inspector / survival records and legacy saves | **914 / 71 / 638 checks PASS**. |
+| Player fire, normal beam, beam impact, shield reflection | **PASS**; beam impact has **18 checks**. Reflection retains the one-second charge window and now exercises all three attainable charges. |
+| Native scale, screen fades, pickup audio | **PASS**. |
+| Foundation collision subset | `tests/player/test_collision_alignment.gd -- --foundation-only` **PASS**: dedicated plasma plus primary/side animated collision alignment and shield protection. The optional test-only filter does not change the default broad suite. |
+| Paired art exports | Fresh Aseprite exports exactly match UI, XP, dedicated plasma and refreshed primary/side PNGs. All authored colors are in Lost Warden 64. Laser PNG dimensions and every alpha byte match the pre-step baseline. Plasma's 14x14 visible bounds match its unchanged collision. |
+| Diff / production boundaries | `git diff --check` PASS. No new offensive effect, permanent progression, rarity, enemy-pressure redesign, global MusicDirector or dedicated audio production is enabled. |
+
+The **unfiltered** broad collision-alignment suite is not green: it reports hunter/interceptor/carrier/enemy-shot and retired direct-pickup assertions, including obsolete frame indices, on scene/atlas files outside this change. These unrelated fixtures are not repaired by this checkpoint. The changed foundation's focused subset passes after import. The historical enemy-feedback suite also remains outside the selected green baseline. Audio-owning headless world fixtures may still show the previously observed shutdown-retention warning; native activation/selection runs exit cleanly. Do not report the entire repository test suite as passing.
+
+### Native visual evidence
+
+Reviewed files in `.godot/phase_2_runtime_validation/`:
+
+- `phase3_playable_coop_choices.webp`, `phase3_playable_coop_hud.webp`, `phase3_playable_coop_hud_wide.webp`: real shared progression, personal cards/builds and centered wide core.
+- `phase3_playable_coop_projectiles.webp`: actual owner-specific red/blue cannon and side-shot volleys.
+- `phase3_playable_solo_maximum.webp`: valid three-utility maximum, four-rank side shots, three-charge shield and full energy/plasma.
+- `phase3_playable_plasma_normal.webp`, `phase3_playable_plasma_overdrive.webp`: preserved manual signature, distinct native widths and unchanged beam art/flow.
+- `phase3_playable_xp_and_plasma.webp`: distinct low/high gold XP silhouettes and cyan plasma battery against gameplay, alongside refreshed red/blue projectiles.
+
+Source/frame mappings are in the [art inventory](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/art_audio_inventory.md). Native composition, pixel sampling, team/choice state labels and HUD separation were inspected; applicable TYPE-ROLE-TOKEN, TYPE-NUM-TABULAR, COLOR-ONLY, ICON-PIXEL-LOCK, ICON-SIL and COMP-SAFE-EDGE checks scored 2/2. These are technical visual checks; final subjective play/balance and audio listening remain human acceptance.
+
+### Playable review
+
+Run `res://scenes/main/main.tscn` (F5 in Godot), choose SOLO or CO-OP and collect enemy XP. Controls follow the configured player bindings; during selection use directional controls and FIRE (or Enter on keyboard), or click a card then CONFIRM. Escape/Start opens the menu without losing the pending choice. F10 retains the inspector; stat cheats are blocked while selection is outstanding. F9 produces a valid available foundation maximum while preserving occupied slots.
+
+The currently playable catalog includes speed, damage, fire rate, attraction and side shots, plus repair/shield and automatic score fallback. The signature beam remains native/manual with plasma. The eight later offensive families are not playable yet. No elapsed-time target or balance claim is made from the scripted fixture; actual collected-XP calibration is step 5.
+
+## Remaining acceptance
+
+- Steps 5-13: measured economy, accepted-hit ownership and each bounded offensive family with its matching art/source/export/native evidence.
+- Step 14: full selected regressions, build comparisons, native/wide visual review, performance/restart evidence and supplied audio listening approval or explicit deferral.
+
+## Playable follow-ups — miniatures, plasma charge and XP audio
+
+Implemented on the maintainer's request on 2026-10-20. Personal `beam_capacity` and `beam_recharge` utility families have three authored ranks: +25/+50/+75 capacity and +25%/+50%/+75% cell yield. Capacity grows from 100 to 175 and recovery from x1 to x1.75. Each consumes one of the existing three utility slots, persists only during the run, and grants no charge on acquisition. Shared pickup base amounts are credited once with each living player's own multiplier, then clamped to their own limit. Overdrive requires the new full reserve; 10-point activation, 20/second drain and separate beam damage remain unchanged. HUD and debug snapshots report the personal limits.
+
+The ten live entries have 64px menu illustrations in a 640x128 atlas and refined 16px miniatures in a 160x32 atlas, each with red/blue ownership rows and editable Aseprite sources. Definition icons, HUD builds and menu slots use the dedicated miniature atlas. Menu categories now use snapshot family metadata, so charge utilities are grouped correctly. The original eight 64px columns are pixel-identical to the prior checkpoint. The full atlas uses 37 exact Lost Warden 64 colors and the miniature atlas 36; both have binary alpha. Native `phase3_beam_upgrades_choices.webp` and `phase3_beam_upgrades_hud.webp` show the new cards, miniatures and personal reserves. ICON-SIL, ICON-PIXEL-LOCK and COMP-SAFE-EDGE score 2/2 in these captures.
+
+XP collection now defaults to `xp_orb_collect.wav`: a reproducible agent-authored 75 ms PCM16 mono ping on Sounds, generated by `assets/sources/audio/xp_orb_collect.py`. High-value orbs use x1.12 pitch. A shared 60 ms cue interval and two-voice limit bound simultaneous pickups without dropping XP credits. Playback belongs to the pool, survives orb recycling and finishes across level-up pause; teardown stops and releases it. Null cues remain supported. Sample validation finds zero endpoints, no clipping and peak -16.6 dBFS before the player's -2 dB gain. Human listening acceptance remains pending; dedicated selection music is unchanged.
+
+| Focused verification | Result |
+| --- | --- |
+| Upgrade offers | **1,957 checks PASS**; all twenty three-utility combinations, three beam ranks, no compounding, caps/reset, eligibility and deterministic streams |
+| Beam upgrades | **38 native checks PASS**; real plasma-cell collision, personal co-op recovery, no free fill, new-capacity overdrive/drain, HUD/inspector values, invalid/dead credit, restart and new card/miniature presentation |
+| Upgrade selection | **42 headless / 48 native checks PASS** after the catalog expansion |
+| Progression activation | **76 native checks PASS**, including actual enemy XP collection with the default sound and queued choices/restarts |
+| XP orbs | **30 checks PASS**; default Sounds cue, high-value pitch, shared burst playback, all XP credits, pause-independent tail, null stream and teardown alongside existing pool invariants |
+| Beam effect / impact | **PASS / 18 checks PASS** |
+| Inspector | **71 checks PASS** |
+
+Known headless selection/inspector shutdown-retention warnings remain; the native beam/activation/selection runs exit cleanly. Economy/build calibration remains step 5 and later offensive families remain unimplemented. No commit or save-schema change was made.
+
+Existing phase-2 evidence remains in [phase_2_validation.md](phase_2_validation.md). Its selected passing suites do not imply that all repository tests pass, and do not validate unimplemented Phase 3 mechanics.
+
+## First playable feedback — XP visibility and HUD
+
+Implemented 2026-10-20 following the maintainer's playtest: ordinary/high-value XP orbs now have 28/36 px additive gold halos behind the unchanged diamond cores. Opacity pulses between 0.65 and 0.95 over 1.2 seconds, follows gameplay pause and resets on pool reuse. Overflow merging updates the high-value halo without creating extra nodes. Following the maintainer's follow-up, a scene-shared radial gradient now fades from ivory through gold to transparent amber. Projectile glow resources remain unchanged, as do collection distance, XP values and sprite sources/exports.
+
+Following the maintainer's clarification, the HUD keeps the shared level and its 84x5 px progress bar without the numeric XP counter. The right-rail progression block is 28 px tall. Selection-screen XP information is preserved.
+
+The headless activation run retains the previously recorded shutdown warning (three ObjectDB instances / one resource); the native run exits cleanly.
+
+### Upgrade icons and beam recharge artwork
+
+**Current menu-art checkpoint:** the maintainer replaced the 32px direction with **64px effect illustrations authored through the Aseprite MCP**, using actual Nomad, main/side shots, XP diamonds and reflector art. A 512x128 atlas has eight family columns and separate red/blue team rows, with four editable layers in its Aseprite master. Native 64px card icons show each effect around the ship; co-op text moves to x76, and compact HUD/build miniatures remain 16px. `test_upgrade_selection.gd` passes **48 native checks** with correct ownership rows and native source/display sizes. All sixteen cells have transparent margins and binary alpha; all 36 opaque colors match Lost Warden 64 exactly; fresh source exports are pixel-identical. Native solo/co-op/wide captures were inspected: ICON-PIXEL-LOCK, ICON-SIL and COMP-SAFE-EDGE score 2/2 for these states. The following 32px checkpoint is retained as superseded history. See the [current 64px art inventory](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/art_audio_inventory.md#current-64px-nomad-effect-compositions--2026-10-20).
+
+Follow-up: the maintainer selected **native 32x32 menu icons** after reviewing a more detailed equipment concept. A dedicated eight-cell 256x32 atlas and editable Aseprite source now supply the choice cards, with steel/bronze hardware silhouettes and energy accents. Solo displays them at integer x2, co-op at x1; text positions are adjusted to preserve separation. Existing 16px HUD/build miniatures and pickups retain their footprints. `test_upgrade_selection.gd` passes **48 native checks**, including 32px source regions, crisp sampling, solo x2 and existing input/pause behavior. Palette validation finds 23 exact Lost Warden 64 colors with binary alpha; source/export parity and diff checks pass. Native solo/co-op/wide captures show clear icon/text separation: ICON-PIXEL-LOCK, ICON-SIL and COMP-SAFE-EDGE score 2/2 in these states. See the [32px menu art inventory](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/art_audio_inventory.md#native-32px-menu-equipment-icons--2026-10-20).
+
+The maintainer's subsequent art review replaces all eight active foundation icons and the plasma-cell sprite, preserving native grids, resource indices, source tags and collision footprints. Side shots now show a forward-facing ship with two upward bolts above its wings; the recharge pickup is a cyan plasma cartridge with an ivory energy core. Opaque colors match Lost Warden 64 exactly, alpha is binary, fresh source exports match runtime pixels, and atlas rows below the eight active icons remain byte-identical. Native menu/HUD/pickup captures were inspected: ICON-SIL and ICON-PIXEL-LOCK score 2/2 for the revised symbols in the captured states. Native activation remains **76 checks PASS** and the foundation collision subset passes. The existing editor safe-save warning occurs during isolated import; import completes and native runtime exits cleanly. See the [art review](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/art_audio_inventory.md#first-playable-icon-and-plasma-review--2026-10-20).
+
+Focused verification: `test_xp_orbs.gd` **24 checks PASS** (including additive mode, pulse, merge/reuse sizing and existing collection/pool checks); `test_progression_activation.gd` **76 native checks PASS** after the follow-up, including HUD assertions for the shared level, accurate progress bar and absence of the numeric XP counter. The preceding headless run passed 66 checks before this follow-up. Native captures `phase3_playable_xp_and_plasma.webp` and `phase3_playable_xp_contrast.webp` show both orb sizes against the dark playfield and the nebula/scenery respectively. Visual review: LIGHT-PLAY-SEP, LIGHT-BLOOM-ABUSE and COMP-SAFE-EDGE score 2/2 in these captures: halos separate the pickups, preserve the diamond cores and stay clear of HUD content. Dense combat readability remains part of subsequent playtest/economy calibration. No later Phase 3 step was started.

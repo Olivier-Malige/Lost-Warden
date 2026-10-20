@@ -3,9 +3,11 @@ extends SceneTree
 var CONFIG: WaveSpawnerConfig
 var catalog: WaveCatalog
 const STATS: PlayerStats = preload("res://data/player/player_stats.tres")
-const DAMAGE: UpgradeDefinition = preload("res://data/upgrades/damage.tres")
-const RATE: UpgradeDefinition = preload("res://data/upgrades/fire_rate.tres")
-const SIDE: UpgradeDefinition = preload("res://data/upgrades/side_shot.tres")
+const DAMAGE: UpgradeDefinition = preload("res://data/upgrades/foundation/damage.tres")
+const RATE: UpgradeDefinition = preload("res://data/upgrades/foundation/fire_rate.tres")
+const SIDE: UpgradeDefinition = preload("res://data/upgrades/foundation/side_shot.tres")
+const FOUNDATION: UpgradeTable = preload("res://data/upgrades/foundation_catalog.tres")
+const PROGRESSION: ProgressionConfig = preload("res://data/progression/progression_config.tres")
 
 var failures := 0
 var checks := 0
@@ -62,10 +64,11 @@ func check_health_and_impacts() -> void:
 		for kind in ["drone", "tie"]:
 			for rank in range(DAMAGE.max_rank + 1):
 				var loadout := PlayerLoadout.new(STATS)
+				loadout.initialize_foundation(PROGRESSION, FOUNDATION.upgrades)
 				for upgrade_index in rank:
 					loadout.apply(DAMAGE)
 				var enemy = make_enemy(kind, 0.0)
-				var damage := 1.0 + loadout.damage_bonus
+				var damage := loadout.direct_damage_multiplier
 				var hits := 0
 				while not enemy.destroyed and hits < 4:
 					enemy._hit_something(damage, false)
@@ -82,15 +85,16 @@ func check_health_and_impacts() -> void:
 
 func check_upgrades_and_rewards() -> void:
 	var loadout := PlayerLoadout.new(STATS)
-	for rank in range(1, 11):
+	loadout.initialize_foundation(PROGRESSION, FOUNDATION.upgrades)
+	for rank in range(1, 6):
 		loadout.apply(RATE)
-		check(is_equal_approx(loadout.fire_delay, 0.2 - rank * 0.007), "each fire-rate rank must reduce delay by 0.007 seconds")
-	check(loadout.apply(RATE).capped, "fire rate must cap at ten ranks")
-	for rank in range(1, 11):
+		check(is_equal_approx(loadout.fire_delay, 0.2 - rank * 0.016), "each foundation fire-rate rank must reduce delay by 0.016 seconds")
+	check(loadout.apply(RATE).capped, "foundation fire rate must cap at five ranks")
+	for rank in range(1, 5):
 		loadout.apply(SIDE)
-		check(is_equal_approx(loadout.side_damage_bonus, (rank - 1) * 0.08), "side damage must increase only after unlocking")
+		check(is_equal_approx(loadout.side_base_damage, SIDE.rank_value(rank)), "side base damage must follow the authored four ranks")
 	var reward_kinds := ["drone", "tie", "interceptor", "turret", "mother_ship", "mother_ship_turret", "asteroid", "big_asteroid"]
-	var power_chances := [5, 3, 12, 15, 16, 3, 1, 3]
+	var power_chances := [0, 0, 0, 0, 0, 0, 0, 0]
 	var plasma_chances := [11, 12, 63, 59, 55, 30, 4, 9]
 	for index in reward_kinds.size():
 		var kind: String = reward_kinds[index]
@@ -99,15 +103,15 @@ func check_upgrades_and_rewards() -> void:
 		for roll in range(100):
 			counts[enemy._reward_for_roll(roll)] += 1
 		check(counts[enemy.RewardDrop.PLASMA] == plasma_chances[index], "%s plasma probability must remain unchanged" % kind)
-		check(counts[enemy.RewardDrop.POWER_UP] == power_chances[index], "%s power-up probability must match the reduced profile" % kind)
+		check(counts[enemy.RewardDrop.POWER_UP] == power_chances[index], "%s must no longer emit direct power-ups" % kind)
 		enemy.free()
 	var pool := ProjectilePool.new()
 	stage.add_child(pool)
 	var packed: PackedScene = load("res://scenes/player/player_shot.tscn")
 	var shot = ProjectilePool.spawn(packed, Vector2(300, 300), stage)
 	shot.player_Id = "player1"
-	shot.set_damage_bonus(1.5)
-	check(is_equal_approx(shot.damage, 2.5), "primary damage must reach its existing cap")
+	shot.set_foundation_damage(1.0, 2.25, 4)
+	check(is_equal_approx(shot.damage, 2.25), "primary damage must receive the common multiplier once")
 	ProjectilePool.despawn(shot)
 	await process_frame
 	var reused = ProjectilePool.spawn(packed, Vector2(300, 300), stage)
@@ -122,16 +126,16 @@ func check_upgrades_and_rewards() -> void:
 	for rank in DAMAGE.max_rank:
 		player.apply_upgrade(DAMAGE)
 	var previous_score: int = globals.score
-	check(player.apply_upgrade(DAMAGE).capped and globals.score == previous_score + 500, "capped damage pickups must retain the 500-point conversion")
-	for rank in range(7):
+	check(player.apply_upgrade(DAMAGE).capped and globals.score == previous_score, "capped debug ranks must not grant automatic fallback score")
+	for rank in range(3):
 		player.apply_upgrade(SIDE)
 	var before := stage.get_child_count()
 	player.weapons.fire_primary()
-	check(stage.get_child_count() - before == 3, "side rank seven must fire three projectiles")
+	check(stage.get_child_count() - before == 3, "side rank three must fire three projectiles")
 	player.apply_upgrade(SIDE)
 	before = stage.get_child_count()
 	player.weapons.fire_primary()
-	check(stage.get_child_count() - before == 5, "side rank eight must unlock the extra two projectiles")
+	check(stage.get_child_count() - before == 5, "side rank four must unlock the extra two projectiles")
 	player.hit_audio.stream = null
 	player.explosion_audio.stream = null
 	for remaining_health in [2, 1, 0]:

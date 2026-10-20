@@ -1,5 +1,15 @@
 # Sound Design — Suno Production and Godot Integration
 
+## Phase 3 selection moment — brief verified 2026-10-20
+
+The maintainer requests a rewarding level-up opening and special transition/selection music, and will provide all music and sound effects. The [Phase 3 contract](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/contract.md#selection-audio) suggests an energetic 0.5-0.8-second sting and a compatible restrained space/synthwave loop targeting 20-30 seconds before musical-boundary editing. The requested file checklist is a level-up sting, selection loop, navigation cue, confirmation cue and return accent, with source/master files and intended loop points where available. No dedicated selection or XP-collection audio files have been supplied. Steps 1-4 now provide a playable foundation: the native screen temporarily uses existing menu cues, with tested local music pause/resume, loop-copy handling and null streams. The earlier interactive preview remains silent. Dedicated audio integration/listening remains pending.
+
+The maintainer approved the preview and requested implementation on 2026-10-20. The [local selection audio brief](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/selection_audio_brief.md) records the file checklist, proposed master/runtime destinations, existing menu cues and exact integration/listening gates. No new audio file has been produced or imported; XP collection's optional stream is null by default and owned outside recycled orbs.
+
+No generation prompts or Suno production are required for these selection assets. The agent preserves supplied masters and handles technical import, loop-boundary preparation, matched levels, Music/Sounds routing, runtime Ogg/WAV exports and Godot integration. Prototype music is optional; visual review and choices must work without audio. Later integration tests may use existing UI cues and a null loop. Final audio acceptance requires the supplied assets and maintainer listening approval, or an explicit deferral. The historical audio workstream below retains its own workflow.
+
+Use one local musical session per contiguous batch of queued levels, shared across co-op players. Pause and resume the same gameplay player at its previous position. Musical assets use Music, UI cues use Sounds; muted, missing or browser-blocked audio never delays choices. Keep the global MusicDirector and unrelated screen/encounter music outside this Phase 3 addition. Future audio design must use current encounter/time progression rather than silently reviving the historical wave mapping below.
+
 ## Continuous title and hiscore music — 2026-10-12
 
 The main screen controller owns one `TitleMusic` player on the `Music` bus. Opening hiscores or returning to the title keeps its current playback position and audio volume. The return retains its visual fade without an audio fade; other screen transitions retain their audio fades, and starting gameplay stops title music during the existing screen fade. The title scene no longer owns an autoplay player. `tests/test_screen_fades.gd` verifies uninterrupted hiscore playback, stable volume throughout the return, visual fade completion and gameplay handoff; both that suite and `tests/test_start_screen.gd` pass in Godot 4.7.2 headless.
@@ -86,6 +96,10 @@ Switch at prepared phrase boundaries, retain only the latest pending wave reques
 ### Effects and announcements
 
 Preserve the `Music` and `Sounds` controls and route a `Voice` sub-bus through `Sounds`. Play pickup effects immediately, serialize announcements without overlapping voices, and discard stale or duplicate queued announcements. Keep voices independent of pickup node lifetime. Capped upgrades must not announce an increase that did not occur. Limit repeated effects and ensure beam audio stops correctly.
+
+### Requested XP pickup cue — 2026-10-20
+
+The maintainer requested audible XP collection during the playable review. `assets/sources/audio/xp_orb_collect.py` reproducibly exports the agent-authored `assets/audio/sfx/pickups/xp_orb_collect.wav`: 75 ms, 44.1 kHz mono PCM16, short rising electronic ping with a tapered envelope, zero endpoints and peak -16.6 dBFS. The XP pool defaults to this cue at -2 dB on Sounds; orbs worth four or more XP use x1.12 pitch. A 60 ms interval coalesces dense bursts and max polyphony two bounds overlap without suppressing XP credit. The pool-owned player can finish during level-up pause and stops on run cancellation. This is the requested playable prototype; the maintainer may replace it with a supplied master and final listening approval remains pending. Selection sting/loop delivery and the broader MusicDirector workstream are unchanged.
 
 ### Acceptance
 

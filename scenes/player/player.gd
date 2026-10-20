@@ -4,10 +4,12 @@ extends Area2D
 const STATS: PlayerStats = preload("res://data/player/player_stats.tres")
 const WEAPON_PRIMARY: WeaponDefinition = preload("res://data/weapons/primary.tres")
 const WEAPON_SIDE: WeaponDefinition = preload("res://data/weapons/side.tres")
-const UPGRADE_SPEED: UpgradeDefinition = preload("res://data/upgrades/speed.tres")
-const UPGRADE_DAMAGE: UpgradeDefinition = preload("res://data/upgrades/damage.tres")
-const UPGRADE_SIDE: UpgradeDefinition = preload("res://data/upgrades/side_shot.tres")
-const UPGRADE_FIRE_RATE: UpgradeDefinition = preload("res://data/upgrades/fire_rate.tres")
+const UPGRADE_SPEED: UpgradeDefinition = preload("res://data/upgrades/foundation/speed.tres")
+const UPGRADE_DAMAGE: UpgradeDefinition = preload("res://data/upgrades/foundation/damage.tres")
+const UPGRADE_SIDE: UpgradeDefinition = preload("res://data/upgrades/foundation/side_shot.tres")
+const UPGRADE_FIRE_RATE: UpgradeDefinition = preload("res://data/upgrades/foundation/fire_rate.tres")
+const FOUNDATION: UpgradeTable = preload("res://data/upgrades/foundation_catalog.tres")
+const PROGRESSION_CONFIG: ProgressionConfig = preload("res://data/progression/progression_config.tres")
 const Layers := preload("res://core/collision_layers.gd")
 const PLAYER_ONE_TEXTURE: Texture2D = preload("res://assets/sprites/player/nomad-red.png")
 const PLAYER_TWO_TEXTURE: Texture2D = preload("res://assets/sprites/player/nomad-blue.png")
@@ -64,6 +66,7 @@ func _ready() -> void:
 
 func _setup_components() -> void:
 	loadout = PlayerLoadout.new(STATS)
+	loadout.initialize_foundation(PROGRESSION_CONFIG, FOUNDATION.upgrades)
 	weapons = PlayerWeapons.new(self)
 	vitals = PlayerVitals.new(self)
 
@@ -98,9 +101,10 @@ func get_debug_snapshot() -> Dictionary:
 		"shield": shield.power, "touched": touched, "hit_slowdown": malusSpeed,
 		"move_speed": loadout.move_speed(), "weapon_speed_multiplier": STATS.weapon_speed_multiplier,
 		"fire_delay": loadout.fire_delay, "can_fire": canShooting,
-		"primary_damage": WEAPON_PRIMARY.damage + loadout.damage_bonus,
-		"side_shot": loadout.side_shot, "side_damage": WEAPON_SIDE.damage + loadout.side_damage_bonus,
-		"plasma": beam_charge, "plasma_max": STATS.beam_charge_max,
+		"primary_damage": WEAPON_PRIMARY.damage * loadout.direct_damage_multiplier,
+		"side_shot": loadout.side_shot, "side_damage": loadout.side_base_damage * loadout.direct_damage_multiplier,
+		"plasma": beam_charge, "plasma_max": loadout.beam_capacity,
+		"plasma_pickup_multiplier": loadout.plasma_pickup_multiplier,
 		"beam_active": beam_active, "overdrive_left": _beam_overdrive_left,
 		"ranks": upgrade_ranks,
 	}
@@ -189,7 +193,7 @@ func _update_beam(delta: float, beam_held: bool) -> void:
 		_stop_beam()
 
 func _start_beam() -> void:
-	var overdrive := is_equal_approx(beam_charge, STATS.beam_charge_max)
+	var overdrive := is_equal_approx(beam_charge, loadout.beam_capacity)
 	beam_active = true
 	_beam_overdrive_left = STATS.beam_overdrive_duration if overdrive else 0.0
 	continuous_beam.damage_interval = STATS.beam_damage_interval
@@ -218,14 +222,14 @@ func _update_effects(motion: Vector2, delta: float) -> void:
 	effects.update_reactor(motion.y, delta)
 
 func add_beam_charge(amount: float) -> void:
-	if state == State.DYING or state == State.DEAD:
+	if state == State.DYING or state == State.DEAD or not is_finite(amount) or amount <= 0.0:
 		return
-	beam_charge = clampf(beam_charge + amount, 0.0, STATS.beam_charge_max)
+	beam_charge = clampf(beam_charge + amount * loadout.plasma_pickup_multiplier, 0.0, loadout.beam_capacity)
 	update_beam_charge()
 
 func update_beam_charge() -> void:
-	effects.update_plasma_reserve(beam_charge / STATS.beam_charge_max)
-	Events.beam_charge_changed.emit(id_Player, beam_charge, STATS.beam_charge_max, is_equal_approx(beam_charge, STATS.beam_charge_max))
+	effects.update_plasma_reserve(beam_charge / loadout.beam_capacity)
+	Events.beam_charge_changed.emit(id_Player, beam_charge, loadout.beam_capacity, is_equal_approx(beam_charge, loadout.beam_capacity))
 
 
 func play_shot_recoil(amount := 1.0, duration := 0.07) -> void:
@@ -259,42 +263,39 @@ func update_energy() -> void:
 	Events.energy_changed.emit(id_Player, energy)
 
 func apply_upgrade(upgrade: UpgradeDefinition) -> UpgradeResult:
-	if upgrade == null:
+	if upgrade == null or state not in [State.ACTIVE, State.HIT]:
 		return UpgradeResult.new(false, 0, 0, false)
-	var result := UpgradeResult.new(true, 0, 0, false)
-
-	match upgrade.effect:
-		UpgradeDefinition.Effect.ENERGY:
-			_apply_energy_upgrade(upgrade)
-		UpgradeDefinition.Effect.SHIELD:
-			_apply_shield_upgrade(upgrade)
-		_:
-			result = _apply_ranked_upgrade(upgrade)
-
-	if upgrade.max_rank > 0:
-		_publish_upgrade_result(upgrade, result)
-
-	return result
-
-func _apply_energy_upgrade(upgrade: UpgradeDefinition) -> void:
-	energy += int(upgrade.value)
-	update_energy()
-
-func _apply_shield_upgrade(upgrade: UpgradeDefinition) -> void:
-	shield.power = int(upgrade.value)
-
-func _apply_ranked_upgrade(upgrade: UpgradeDefinition) -> UpgradeResult:
-	var result := loadout.apply(upgrade)
-	if result.capped:
-		global.add_score(500)
+	var canonical: UpgradeDefinition
+	for entry in FOUNDATION.upgrades:
+		if entry.id == upgrade.id: canonical = entry
+	if canonical == null:
+		return UpgradeResult.new(false, 0, 0, false)
+	var applied := loadout.apply_foundation(canonical.id, {"energy": energy, "shield": int(shield.power)})
+	var result := UpgradeResult.new(applied.applied, applied.rank, canonical.max_rank, applied.capped)
+	if result.applied and canonical.category == UpgradeDefinition.Category.REWARD:
+		if canonical.effect == UpgradeDefinition.Effect.ENERGY:
+			energy = applied.reward.value
+			update_energy()
+		else:
+			shield.power = applied.reward.amount
 	setShootingDelay()
+	update_beam_charge()
+	_publish_upgrade_result(canonical, result)
+	publish_build()
 	return result
+
+func publish_build() -> void:
+	Events.build_changed.emit(StringName(id_Player), loadout.foundation_snapshot())
 
 func _publish_upgrade_result(upgrade: UpgradeDefinition, result: UpgradeResult) -> void:
 	Events.upgrade_changed.emit(id_Player, upgrade.effect, result.rank, result.max_rank)
 	Events.upgrade_feedback_requested.emit(id_Player, _upgrade_feedback_text(upgrade, result), result.capped)
 
 func _upgrade_feedback_text(upgrade: UpgradeDefinition, result: UpgradeResult) -> String:
+	if not result.applied and not result.capped:
+		return "SLOTS / VITALS FULL"
+	if upgrade.repeatable:
+		return upgrade.display_name
 	if result.capped:
 		return "MAX +500"
 	if result.rank >= result.max_rank:
@@ -304,6 +305,7 @@ func _upgrade_feedback_text(upgrade: UpgradeDefinition, result: UpgradeResult) -
 func _emit_upgrade_state() -> void:
 	for upgrade in [UPGRADE_SPEED, UPGRADE_DAMAGE, UPGRADE_SIDE, UPGRADE_FIRE_RATE]:
 		Events.upgrade_changed.emit(id_Player, upgrade.effect, loadout.rank_for(upgrade.effect), upgrade.max_rank)
+	publish_build()
 
 func increase_Speed() -> void:
 	apply_upgrade(UPGRADE_SPEED)
@@ -316,7 +318,7 @@ func increase_Shot() -> void:
 
 # Setter adds to power rather than replacing it.
 func increase_Shield() -> void:
-	shield.power = 1
+	apply_upgrade(preload("res://data/upgrades/foundation/shield.tres"))
 
 func debug_increase_fire_rate() -> void:
 	apply_upgrade(UPGRADE_FIRE_RATE)
@@ -326,11 +328,11 @@ func debug_add_plasma() -> void:
 
 func debug_max_stats() -> void:
 	for upgrade in [UPGRADE_SPEED, UPGRADE_DAMAGE, UPGRADE_SIDE, UPGRADE_FIRE_RATE]:
-		while loadout.rank_for(upgrade.effect) < upgrade.max_rank:
-			loadout.apply(upgrade)
+		for rank in upgrade.max_rank:
+			if not loadout.apply_foundation(upgrade.id).applied: break
 	energy = STATS.energy_max
-	beam_charge = STATS.beam_charge_max
-	shield.power = 6
+	beam_charge = loadout.beam_capacity
+	shield.power = PROGRESSION_CONFIG.shield_max
 	setShootingDelay()
 	update_energy()
 	update_beam_charge()

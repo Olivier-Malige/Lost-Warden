@@ -3,7 +3,6 @@ extends Area2D
 
 const Layers := preload("res://core/collision_layers.gd")
 const EliteIndicatorScene := preload("res://scenes/enemies/elite_indicator.gd")
-const PowerUpScene := preload("res://scenes/ui/power_up.tscn")
 const PlasmaCellScene := preload("res://scenes/ui/plasma_cell.tscn")
 const PROJECTILE_SPEED_MULTIPLIER := 1.1
 const HIT_FLASH_MATERIAL := preload("res://scenes/effects/enemy_hit_flash.tres")
@@ -370,39 +369,45 @@ func _destroy() -> void:
 	if hitByPlayerShot:
 		_award_player_kill()
 	if definition.drops_on_destroy:
-		_drop_debris()
+		call_deferred("_drop_debris")
 
 func _award_player_kill() -> void:
 	var awarded_points := global.register_kill(points)
 	var multiplier := global.combo_multiplier(global.combo)
 	Events.score_popup_requested.emit(awarded_points, global.combo, multiplier, global_position)
+	var xp := _xp_for_roll(global.run_random.drops.randi_range(0, 99))
+	var plasma := _plasma_amount_for_roll(global.run_random.drops.randi_range(0, 99))
+	if xp > 0:
+		Events.xp_spawn_requested.emit(xp, global_position)
+	if plasma > 0.0:
+		_spawn_plasma_cell(plasma)
+
+func _xp_for_roll(roll: int) -> int:
+	if _spawn_context.asteroid_fragment:
+		return 0
 	if elite:
-		_spawn_power_up()
-		_spawn_plasma_cell(25.0)
-		return
-	match _reward_for_roll(global.run_random.drops.randi_range(0, 99)):
-		RewardDrop.PLASMA:
-			_spawn_plasma_cell(12.5)
-		RewardDrop.POWER_UP:
-			_spawn_power_up()
+		return maxi(6, 3 * definition.xp_value)
+	return definition.xp_value if roll < definition.xp_drop_chance else 0
+
+func _plasma_amount_for_roll(roll: int) -> float:
+	if elite: return 25.0
+	return 12.5 if roll < definition.plasma_drop_chance else 0.0
 
 func _reward_for_roll(roll: int) -> RewardDrop:
 	if roll < definition.plasma_drop_chance:
 		return RewardDrop.PLASMA
-	if roll < definition.plasma_drop_chance + definition.power_up_chance:
-		return RewardDrop.POWER_UP
 	return RewardDrop.NONE
 
-func _spawn_power_up() -> void:
-	var power_up := PowerUpScene.instantiate()
-	power_up.position = get_parent().to_local(global_position)
-	get_parent().call_deferred("add_child", power_up)
-
 func _spawn_plasma_cell(amount: float) -> void:
+	call_deferred("_materialize_plasma_cell", amount, global_position)
+
+func _materialize_plasma_cell(amount: float, point: Vector2) -> void:
+	if not is_inside_tree() or get_parent().is_queued_for_deletion():
+		return
 	var plasma_cell := PlasmaCellScene.instantiate() as PlasmaCell
 	plasma_cell.charge_amount = amount
-	plasma_cell.position = get_parent().to_local(global_position)
-	get_parent().call_deferred("add_child", plasma_cell)
+	plasma_cell.position = get_parent().to_local(point)
+	get_parent().add_child(plasma_cell)
 
 func _drop_debris() -> void:
 	if definition.drop_scene == null:
@@ -413,6 +418,7 @@ func _drop_debris() -> void:
 		var debris := definition.drop_scene.instantiate()
 		if debris is Enemy:
 			var debris_context := EnemySpawnContext.new()
+			debris_context.asteroid_fragment = true
 			debris_context.movement_seed = _derived_seed(_spawn_context.movement_seed, index + 1)
 			debris_context.formation_seed = _spawn_context.formation_seed
 			debris.configure_spawn(debris_context)

@@ -21,10 +21,13 @@ func sprite_bounds(sprite: Sprite2D) -> Rect2:
 	return Rect2(sprite.position + sprite.offset - frame_size * 0.5 + Vector2(pixels.position), Vector2(pixels.size))
 
 func run() -> void:
+	var foundation_only := "--foundation-only" in OS.get_cmdline_user_args()
 	var world := Node2D.new()
 	root.add_child(world)
 	for folder in ["enemies", "combat", "ui"]:
 		for file in DirAccess.get_files_at("res://scenes/" + folder):
+			if foundation_only and (folder != "ui" or file != "plasma_cell.tscn"):
+				continue
 			if not file.ends_with(".tscn"):
 				continue
 			var instance = load("res://scenes/" + folder + "/" + file).instantiate()

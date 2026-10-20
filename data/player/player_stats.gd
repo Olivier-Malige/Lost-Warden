@@ -2,13 +2,13 @@ class_name PlayerStats
 extends Resource
 
 @export var shoot_delay_base: float = 0.18
-@export var shoot_delay_min: float = 0.13
+@export var shoot_delay_min: float = 0.12
 @export var speed: float = 180.0
 @export var malus_speed: float = 50.0
 @export_range(0.1, 1.0, 0.01) var weapon_speed_multiplier: float = 1.0
 @export var energy_max: int = 12
 @export_range(1, 100, 1) var starting_energy: int = 4
-@export var speed_max: float = 225.0
+@export var speed_max: float = 240.0
 @export var bound_min := Vector2(112.5, 12)
 @export var bound_max := Vector2(527.5, 392)
 

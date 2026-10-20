@@ -8,6 +8,7 @@ var _debug_spawn_buckets: Dictionary[int, int] = {}
 var _debug_spawn_total := 0
 var _debug_removed := {"killed": 0, "escaped": 0, "other": 0}
 var _debug_boss_phase := 0
+var progression: ProgressionController
 
 
 func _ready() -> void:
@@ -29,8 +30,13 @@ func _ready() -> void:
 		$music.stream.loop = true
 	var offsets := [Vector2(-25, 0), Vector2(25, 0)] if global.coop else [Vector2.ZERO]
 	nbr_Player = offsets.size()
+	var registered: Array[Player] = []
 	for i in nbr_Player:
-		_spawn_player(i == 1, offsets[i])
+		registered.append(_spawn_player(i == 1, offsets[i]))
+	progression = ProgressionController.new()
+	progression.name = "ProgressionController"
+	add_child(progression)
+	progression.start(registered, global.run_random.upgrades)
 
 
 func _layout_for_viewport() -> void:
@@ -49,17 +55,19 @@ func _layout_for_width(viewport_width: float) -> void:
 	$playerSpawn.position.x = CORE_WIDTH * 0.5 + side_width
 	$ForegroundSpeedParticles.position.x = CORE_WIDTH * 0.5 + side_width
 
-func _spawn_player(is_p2: bool, offset: Vector2) -> void:
+func _spawn_player(is_p2: bool, offset: Vector2) -> Player:
 	var p = preload("res://scenes/player/player.tscn").instantiate()
 	p.set_Player_2 = is_p2
 	p.position = $playerSpawn.global_position + offset
 	add_child(p, true)
+	return p
 
 func _on_player_died() -> void:
 	nbr_Player -= 1
 	_debug_log("Player lost; %d alive" % nbr_Player)
 	if nbr_Player <= 0:
 		$waveGenerator.stop_run()
+		if progression: progression.cancel()
 		call_deferred("_request_game_over")
 
 func _request_game_over() -> void:
@@ -127,6 +135,8 @@ func _on_debug_snapshot_requested() -> void:
 		"combo_multiplier": global.combo_multiplier(global.combo), "combo_left": global.combo_time_left,
 		"players_alive": nbr_Player, "players": players,
 		"director": $waveGenerator.get_debug_snapshot(), "pool": $projectilePool.get_debug_snapshot(),
+		"progression": progression.progression.snapshot() if progression else {},
+		"xp_pool": progression.pool.snapshot() if progression else {},
 		"spawn_total": _debug_spawn_total, "spawns_last_minute": recent_spawns,
 		"enemy_removed": _debug_removed.duplicate(),
 		"events": _debug_events.duplicate(),

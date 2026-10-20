@@ -1,5 +1,6 @@
 extends Area2D
 const Layers := preload("res://core/collision_layers.gd")
+const CONFIG: ProgressionConfig = preload("res://data/progression/progression_config.tres")
 
 var power = 0: set = _set_Power
 var animPower
@@ -36,7 +37,7 @@ func _set_Power(up: int) -> void:
 	$ChargeUseTimer.stop()
 	$AnimationPlayer.stop()
 	$ThrowbackEcho.self_modulate.a = 0.0
-	power = clampi(power + up, 0, 6)
+	power = clampi(power + up, 0, CONFIG.shield_max)
 	_set_AnimPower()
 	if power > 0:
 		$AnimationPlayer.play(get_parent().id_Player + animPower)

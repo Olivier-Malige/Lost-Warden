@@ -214,6 +214,8 @@ func _test_rewards() -> void:
 	var stage := Node2D.new()
 	root.add_child(stage)
 	var enemy: Variant = load("res://scenes/enemies/drone.tscn").instantiate()
+	var xp: Array[int] = []
+	root.get_node("Events").xp_spawn_requested.connect(func(amount, _position): xp.append(amount), CONNECT_ONE_SHOT)
 	var context := EnemySpawnContext.new()
 	context.elite = true
 	context.elite_definition = CONFIG.elite_definition
@@ -230,7 +232,7 @@ func _test_rewards() -> void:
 			powerups += 1
 		if child.scene_file_path == "res://scenes/ui/plasma_cell.tscn" and is_equal_approx(child.charge_amount, 25.0):
 			plasma += 1
-	_check(powerups == 1 and plasma == 1, "player elite kills retain a guaranteed power-up and large plasma cell until XP integration")
+	_check(powerups == 0 and plasma == 1 and xp == [6], "player elite kills guarantee six XP and large plasma without direct power-ups")
 	_check(_globals.score == 30, "the first elite drone awards triple its base score")
 	stage.free()
 

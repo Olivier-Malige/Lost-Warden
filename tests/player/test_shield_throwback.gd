@@ -31,7 +31,7 @@ func _run() -> void:
 		var animation: AnimationPlayer = shield.get_node("AnimationPlayer")
 		animation.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 		shield.get_node("sound_trowback").stream = null
-		for tier in range(1, 7):
+		for tier in range(1, 4):
 			shield.power = -6
 			shield.power = tier
 			animation.advance(0.0)

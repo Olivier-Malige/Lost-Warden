@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ProgressionConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/progression/progression_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+xp_base = 10
+xp_growth = 1.28
+offensive_slots = 4
+utility_slots = 3
+family_weight = 10
+reward_weight = 5
+speed_base = 180.0
+speed_max = 240.0
+manual_delay_base = 0.2
+manual_delay_min = 0.12
+attraction_base = 24.0
+attraction_max = 120.0
+energy_max = 12
+shield_max = 3

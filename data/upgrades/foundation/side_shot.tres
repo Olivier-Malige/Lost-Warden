@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/upgrade_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/upgrade_miniatures.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="Icon"]
+atlas = ExtResource("2")
+region = Rect2(64, 0, 16, 16)
+
+[resource]
+script = ExtResource("1")
+icon = SubResource("Icon")
+id = &"side_shot"
+effect = 3
+weight = 10
+max_rank = 4
+display_name = "SIDE SHOTS"
+description = "Add paired side cannons; rank four adds an outer pair at 60% damage."
+category = 1
+repeatable = false
+rank_values = PackedFloat32Array(0.4, 0.6, 0.8, 1)
+hud_label = &"SIDE"

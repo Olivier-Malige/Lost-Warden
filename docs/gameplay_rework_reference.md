@@ -41,8 +41,8 @@ Maintainer confirmation on 2026-10-17: Phase 1, including its follow-ups, and th
 - Phase 1 follow-up — Existing enemy movement: implementation completed on 2026-09-04; deterministic headless checks pass, while targeted solo and co-op readability playtests remain.
 - Phase 1 follow-up — Alpha 9 balance: implemented on 2026-10-12; the approved profile is documented below. Automated balance checks pass; comparative solo/co-op feel and pressure playtests remain before release approval.
 - Visual production phase: completed, as confirmed by the maintainer on 2026-10-17.
-- Next Phase 2 step: final solo/co-op playtest of the revised boss. Elites, the four-phase boss runtime and its health display were completed on 2026-10-17. Implement the expanded Phase 3 power-up system before the full enemy/formation redesign and progressive density tuning in Phase 4.
-- Phase 2: started on 2026-10-17. Deliver and verify one step at a time, then stop for maintainer review before the next step.
+- Next step: Phase 3 XP/selection foundation, then bounded groups of expanded power-ups, before the full enemy/formation redesign and progressive density tuning in Phase 4.
+- Phase 2: completed on 2026-10-19. The maintainer accepts solo gameplay and defers the human co-op playtest until after the power-up and balance rework, tracked in Phase 6. Automated solo/co-op regressions and native presentation checks pass; co-op gameplay acceptance remains deferred.
 
 Preparation phase B delivered the direct 1066 by 800 viewport, responsive Web presentation, redesigned menus and HUD, browser-fullscreen recovery, the Lost Warden release identity, the approved 24-color palette, itch.io page art, and a validated release archive. Updated gameplay screenshots remain intentionally deferred until the sprite rework is visible. Candidate replacement music is preserved for later review and is not active in the current build.
 
@@ -487,7 +487,7 @@ Validation and release gate:
 
 ## Phase 2 — Add the seeded encounter director, elites, and bosses
 
-Status: in progress. The maintainer requested step-by-step delivery on 2026-10-17; steps 1–4 are implemented. The later full enemy/formation redesign and density tuning are deferred to Phase 4, after the expanded Phase 3 power-up system. Deliver one bounded implementation at a time.
+Status: complete on 2026-10-19, with solo accepted by the maintainer and human co-op gameplay acceptance deferred until after the power-up and balance rework. The later full enemy/formation redesign and density tuning remain in Phase 4, after the expanded Phase 3 power-up system. Deliver one bounded implementation at a time.
 
 Delivery steps:
 
@@ -495,7 +495,7 @@ Delivery steps:
 2. **Done — Continuous spawning.** Migrate the existing catalog to 20–30-second encounters; connect run seed generation, threat budgets, family weights, formations, spawn initialization, caps, and central timing to `WaveSpawner`. See [step 2 validation](phase_2_validation.md).
 3. **Done — Elites.** Deterministic promotion, modifiers, localized approved markings, health bars, and active/reserved limits, validated on 2026-10-17.
 4. **Done — Command Carrier.** Dread Ark art, two health-based phases at 50%, resource-authored rings/spirals/aimed salvos, pursuing drone reinforcements, central beam and director lifecycle, validated on 2026-10-17. See the latest two-phase combat evidence in [Phase 2 validation](phase_2_validation.md).
-5. **Partially delivered — HUD, saves, and full validation.** Survival time, F1/F2 danger controls, solo/co-op `bestTime` records, result screens and the dedicated event-driven segmented boss health bar are implemented. Gameplay shows the boss name and phase-threshold segments, without numeric health or phase labels. Automated and native visual checks pass; final human solo/co-op boss balance acceptance remains pending.
+5. **Done — HUD, saves, and validation checkpoint.** Survival time, F1/F2 danger controls, solo/co-op `bestTime` records, result screens and the dedicated event-driven segmented boss health bar are implemented. Gameplay shows the boss name and phase-threshold segments, without numeric health or phase labels. Automated and native visual checks pass. The maintainer accepts solo gameplay on 2026-10-19 and explicitly defers human co-op gameplay acceptance to Phase 6, after the power-up and balance rework.
 
 Step 1 validation (2026-10-17): Godot 4.7.2 headless ran `tests/test_encounter_director.gd`: **859 checks, 0 failures**. An isolated test project copied the current logic scripts into `.godot/phase_2_validation/` to exclude the ignored root override's missing local Godot AI autoload and avoid touching player saves. The test execution completed without runtime errors. Editor setup reported sandbox safe-save warnings separately. This verifies the pure director model only; runtime spawning, actual boss combat, saves, and visual acceptance remain pending. The normal project test command is `godot --headless --path . --script tests/test_encounter_director.gd` with a valid local addon override.
 
@@ -563,6 +563,8 @@ Planned commits:
 
 ## Phase 3 — Add experience orbs and run levels
 
+Delivery update on 2026-10-20: steps 1-4 of the [detailed step plan](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/plan.md) are complete, with a first playable foundation: shared XP, personal ranks/offers, native selection/HUD, bounded orbs and paired art. The [contract](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/contract.md) controls current native-scale prototype values and later synergies. See [validation evidence](phase_3_validation.md); calibration and the eight new offensive effects remain pending. The maintainer confirmed a four-offensive/three-utility build, XP/choices/synergies without rarity, and Nomad's manual secondary plasma signature outside slots. Future ships remain planning-only.
+
 Maintainer revision on 2026-10-17: expand the power-up catalog to enable substantially different survival builds, then verify progression before redesigning the full enemy roster, formations, or density curve. The ranked stat upgrades below are the starting foundation, not the complete intended catalog.
 
 - Replace direct power-up drops with falling experience orbs that can be attracted by a player's pickup field.
@@ -578,12 +580,12 @@ Maintainer revision on 2026-10-17: expand the power-up catalog to enable substan
 - Present three distinct personal offers to each living player.
 - In co-op, resume only after both living players confirm a choice.
 - Queue multiple level-ups and resolve them in order.
-- Add these ranked upgrades:
-  - speed: +30, 4 ranks, total speed capped at 480;
-  - damage: +0.25, 5 ranks;
-  - fire rate: -0.02 seconds, 5 ranks, minimum delay 0.12 seconds;
-  - side shots: unlock, then +0.2 damage, 4 ranks;
-  - orb attraction: +48 pixels, 4 ranks;
+- Prototype these ranked upgrades in the current 640x400 viewport:
+  - speed: +15 native px/s, 4 ranks, 180 to 240 maximum;
+  - damage: +25% authored direct base per rank, 5 ranks; plasma retains its additive +0.25 per rank instead;
+  - fire rate: -0.016 seconds, 5 ranks, 0.20 to 0.12 seconds;
+  - side shots: base 0.4 / 0.6 / 0.8 / 1.0, 4 ranks, outer pair at rank 4;
+  - orb attraction: initial 24 native pixels, +24 pixels, 4 ranks;
   - repair: +2 energy when applicable;
   - shield: +1 charge, capped at 3;
   - salvage: +500 score.
@@ -596,6 +598,7 @@ Maintainer revision on 2026-10-17: expand the power-up catalog to enable substan
 - Define each upgrade's stable identifier, description, icon, rank progression, eligibility, stacking rules, weapon compatibility and interactions. Decide any build-capacity or exclusion rules during this design pass rather than silently adding them during implementation.
 - Keep offers seeded, distinct and personal in co-op, with shared XP and complete gameplay pause during selection. Exclude capped or inapplicable upgrades from offers and preserve the fallback reward.
 - Bound secondary projectile counts, area hits and triggered chains. Prevent recursive on-hit/on-kill combinations from producing unbounded effects. Preserve pooled-projectile resets and collision-safe collection.
+- Deliver matching original weapon sprites and editable sources per checkpoint; include refreshed player lasers, XP/plasma-cell art, icons and a rewarding level-up pulse/card reveal. Scope dedicated selection sting/loop production through the existing audio workflow, preserving gameplay playback position.
 - Deliver the XP/selection foundation first, then add and verify bounded groups of upgrades. Check that different choices produce recognizable builds before calibrating enemy pressure against them. Permanent upgrades, rarity tiers and weapon-evolution systems remain outside this revision.
 
 Validation:
@@ -697,6 +700,7 @@ Planned commit:
 - Validate the time-based density progression against several builds from the expanded Phase 3 catalog, rather than balancing only a default ship or one maximum-damage build.
 - Test enemy and elite caps, boss non-overlap, queued levels, one-player death in co-op, and legacy save loading.
 - Run Godot headless validation, followed by manual 12-minute solo and co-op runs.
+- Complete the human co-op gameplay acceptance deferred from Phase 2 by the maintainer on 2026-10-19, after the power-up and balance rework.
 - Update architecture documentation and debug-control documentation.
 
 Planned commits:

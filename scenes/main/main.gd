@@ -13,7 +13,8 @@ var _fade_audio_modes: Dictionary[int, int] = {}
 var _debug_screen: CanvasLayer
 var _debug_full_open := false
 var _debug_compact_enabled := true
-var _debug_pause_owned := false
+var _selection_pause := false
+var _selection: UpgradeSelection
 var _debug_enabled := global.Debug
 const FADE_DURATION := 0.3
 @onready var _screen_fade: ColorRect = $ScreenFade/Black
@@ -49,6 +50,9 @@ func _ready() -> void:
 	Events.resume_requested.connect(set_Resume)
 	Events.restart_requested.connect(set_Restart)
 	Events.game_over_requested.connect(go_GameOver_Screen)
+	Events.upgrade_selection_requested.connect(_open_selection)
+	Events.upgrade_selection_finished.connect(_finish_selection)
+	Events.upgrade_selection_cancelled.connect(_cancel_selection)
 
 
 func _process(_delta: float) -> void:
@@ -86,6 +90,14 @@ func _input(event: InputEvent) -> void:
 		if not menuShow and event.is_action_pressed("start") and not event.is_echo():
 			set_Pause()
 			get_viewport().set_input_as_handled()
+			return
+		if menuShow:
+			return
+		if _selection_pause and is_instance_valid(_selection):
+			_selection.handle_input(event)
+			if not event is InputEventMouse:
+				get_viewport().set_input_as_handled()
+			return
 		if global.Debug:
 			_debug_cheats(event)
 	if gameOverScreen:
@@ -102,19 +114,56 @@ func _update_debug_view() -> void:
 		_debug_screen.debug_disabled.connect(_hide_debug)
 	_debug_screen.set_view(_debug_compact_enabled and worldScreen, _debug_full_open)
 
-# Only release a pause acquired by the inspector; an existing menu pause belongs to screen flow.
 func _set_debug_full(open: bool) -> void:
 	if open == _debug_full_open:
 		return
 	release_gameplay_input()
-	if open:
-		_debug_pause_owned = not get_tree().paused
-		get_tree().paused = true
-	elif _debug_pause_owned:
-		get_tree().paused = false
-		_debug_pause_owned = false
 	_debug_full_open = open
+	_sync_pause()
 	_update_debug_view()
+	_sync_selection_overlay()
+
+func _sync_pause() -> void:
+	get_tree().paused = _transitioning or menuShow or _debug_full_open or _selection_pause
+
+func _sync_selection_overlay() -> void:
+	if is_instance_valid(_selection):
+		_selection.set_suspended(menuShow or _debug_full_open, menuShow)
+
+func _open_selection(id: int, participants: Dictionary, progression: Dictionary) -> void:
+	if _transitioning or not worldScreen or participants.is_empty():
+		return
+	if not is_instance_valid(_selection):
+		_selection = preload("res://scenes/ui/upgrade_selection.tscn").instantiate()
+		add_child(_selection)
+		_selection.closed.connect(_selection_closed)
+	_selection_pause = true
+	_sync_pause()
+	_selection.open(id, participants, progression, get_node_or_null("world/music"))
+	release_gameplay_input()
+	_sync_selection_overlay()
+
+func _finish_selection(id: int) -> void:
+	if is_instance_valid(_selection) and _selection.selection_id == id:
+		_selection.close()
+
+func _selection_closed() -> void:
+	if is_instance_valid(_selection):
+		_selection.queue_free()
+	_selection = null
+	_selection_pause = false
+	release_gameplay_input()
+	_sync_pause()
+
+func _cancel_selection(id: int = -1) -> void:
+	if is_instance_valid(_selection):
+		if id != -1 and _selection.selection_id != id:
+			return
+		_selection.cancel()
+		_selection.queue_free()
+	_selection = null
+	_selection_pause = false
+	_sync_pause()
 
 func _hide_debug() -> void:
 	_set_debug_full(false)
@@ -122,7 +171,7 @@ func _hide_debug() -> void:
 		_debug_screen.set_view(false, false)
 
 func _debug_cheats(event: InputEvent) -> void:
-	if event.is_echo():
+	if event.is_echo() or _selection_pause:
 		return
 	if event.is_action_pressed("debug_Key1"):
 		$world/waveGenerator.goto_Previous_Wave()
@@ -152,13 +201,14 @@ func set_Pause() -> void:
 		return
 	if not menuShow:
 		_set_debug_full(false)
-		get_tree().paused = true
+		menuShow = true
+		_sync_pause()
 		var p = paused.instantiate()
 		add_child(p)
 		var m = menu.instantiate()
 		add_child(m)
 		m.set_mode(m.MENU_PAUSE)
-		menuShow = true
+		_sync_selection_overlay()
 		# Parallax layers otherwise draw over the pause overlay.
 		_set_world_background(false)
 
@@ -166,8 +216,9 @@ func set_Restart() -> void:
 	if _transitioning:
 		return
 	menuShow = false
+	_cancel_selection()
 	release_gameplay_input()
-	get_tree().paused = false
+	_sync_pause()
 	get_tree().reload_current_scene()
 
 func set_Resume() -> void:
@@ -180,9 +231,12 @@ func set_Resume() -> void:
 		var pause_overlay := get_node_or_null("paused")
 		if pause_overlay:
 			pause_overlay.queue_free()
-		get_tree().paused = false
+		_sync_pause()
 		_set_world_background(true)
 		_call_players("update_controller")
+		if is_instance_valid(_selection):
+			_selection.refresh_bindings()
+		_sync_selection_overlay()
 
 func go_Start_Screen() -> void:
 	if _transitioning or (startScreen and has_node("start")):
@@ -194,7 +248,8 @@ func go_Start_Screen() -> void:
 
 func _show_start_screen() -> void:
 	menuShow = false
-	get_tree().paused = false
+	_cancel_selection()
+	_sync_pause()
 	release_gameplay_input()
 	for node_name in ["world", "paused", "gameOver", "hiscore"]:
 		var current_screen := get_node_or_null(node_name)
@@ -263,8 +318,9 @@ func go_GameOver_Screen() -> void:
 	await _fade_to(_show_game_over_screen)
 
 func _show_game_over_screen() -> void:
-	get_tree().paused = false
 	menuShow = false
+	_cancel_selection()
+	_sync_pause()
 	release_gameplay_input()
 	gameOverScreen = true
 	_game_over_input_ready_at = Time.get_ticks_msec() + 750
@@ -295,11 +351,12 @@ func _show_game_over_screen() -> void:
 func _fade_to(show_screen: Callable, fade_audio := true) -> void:
 	_hide_debug()
 	_transitioning = true
+	_cancel_selection()
 	_fade_audio_volume_db = AudioServer.get_bus_volume_db(0)
 	_keep_transition_audio_running()
 	release_gameplay_input()
 	get_viewport().gui_release_focus()
-	get_tree().paused = true
+	_sync_pause()
 	_screen_fade.show()
 	var fade_out := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_parallel(true)
 	fade_out.tween_property(_screen_fade, "color:a", 1.0, FADE_DURATION).set_trans(Tween.TRANS_SINE)
@@ -308,7 +365,7 @@ func _fade_to(show_screen: Callable, fade_audio := true) -> void:
 	await fade_out.finished
 	show_screen.call()
 	_keep_transition_audio_running()
-	get_tree().paused = true
+	_sync_pause()
 	await get_tree().process_frame
 	var fade_in := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_parallel(true)
 	fade_in.tween_property(_screen_fade, "color:a", 0.0, FADE_DURATION).set_trans(Tween.TRANS_SINE)
@@ -317,9 +374,9 @@ func _fade_to(show_screen: Callable, fade_audio := true) -> void:
 	await fade_in.finished
 	_screen_fade.hide()
 	release_gameplay_input()
-	get_tree().paused = false
 	_restore_transition_audio()
 	_transitioning = false
+	_sync_pause()
 
 # Audio must keep playing while combat is paused so it can fade instead of cutting off.
 func _keep_transition_audio_running() -> void:
@@ -343,7 +400,8 @@ func _restore_transition_audio() -> void:
 	_fade_audio_modes.clear()
 
 func _exit_tree() -> void:
-	if _debug_pause_owned:
-		get_tree().paused = false
+	if is_instance_valid(_selection):
+		_selection.cancel()
+	get_tree().paused = false
 	if _transitioning:
 		_restore_transition_audio()

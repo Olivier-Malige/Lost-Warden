@@ -20,5 +20,7 @@ score = 1
 durability = 0
 power_up_chance = 1
 plasma_drop_chance = 4
+xp_drop_chance = 35
+xp_value = 1
 movement_profile = ExtResource("2")
 sprite_variants = 3

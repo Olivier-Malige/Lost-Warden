@@ -428,10 +428,10 @@ func _destroy() -> void:
 	defeated.emit()
 
 func _award_player_kill() -> void:
-	var points_awarded := global.register_kill(points)
-	Events.score_popup_requested.emit(points_awarded, global.combo, global.combo_multiplier(global.combo), global_position)
-	_spawn_power_up()
-	_spawn_plasma_cell(25.0)
+	super._award_player_kill()
+
+func _plasma_amount_for_roll(_roll: int) -> float:
+	return 25.0
 
 func _on_screen_exited() -> void:
 	pass

@@ -20,5 +20,7 @@ max_health = 2
 score = 10
 power_up_chance = 5
 plasma_drop_chance = 11
+xp_drop_chance = 45
+xp_value = 1
 movement_profile = ExtResource("2")
 bank_on_turn = true

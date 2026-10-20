@@ -22,5 +22,7 @@ score = 250
 durability = 3
 power_up_chance = 12
 plasma_drop_chance = 63
+xp_drop_chance = 75
+xp_value = 4
 movement_profile = ExtResource("2")
 bank_on_turn = true

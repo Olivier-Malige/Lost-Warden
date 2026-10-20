@@ -43,6 +43,11 @@ func set_damage_bonus(extra_damage: float) -> void:
 	damage = minf(_base_damage + extra_damage, damage_Max)
 	setPowerAnim()
 
+func set_foundation_damage(authored_base: float, multiplier: float, visual_tier: int) -> void:
+	damage = minf(authored_base, damage_Max) * multiplier
+	$anim.play(player_Id + ["_small", "_normal", "_big", "_large", "_full"][clampi(visual_tier, 0, 4)])
+	$anim.advance(0.0)
+
 func _physics_process(delta: float) -> void:
 	_sync_laser_glow()
 	if is_instance_valid(_follow_target) and _follow_time > 0.0:

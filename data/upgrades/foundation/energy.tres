@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/upgrade_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/upgrade_miniatures.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="Icon"]
+atlas = ExtResource("2")
+region = Rect2(80, 0, 16, 16)
+
+[resource]
+script = ExtResource("1")
+icon = SubResource("Icon")
+id = &"energy"
+effect = 5
+weight = 5
+max_rank = 1
+display_name = "REPAIR"
+description = "Restore two energy, up to twelve."
+category = 2
+repeatable = true
+rank_values = PackedFloat32Array(2)

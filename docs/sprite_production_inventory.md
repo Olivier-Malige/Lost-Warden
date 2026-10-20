@@ -1,5 +1,13 @@
 # Sprite Production Inventory
 
+## Phase 3 weapon and selection art — inventory verified 2026-10-20
+
+The [Phase 3 delivery contract](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/contract.md#art-and-opening-presentation) adds refreshed player lasers, ordinary/high-value XP silhouettes, a dedicated plasma-cell sprite, sixteen upgrade/reward icons and reusable selection/HUD states. Steps 1-4 are complete: the refreshed laser pairs, xp_orbs.aseprite/png, plasma_cell.aseprite/png and combined phase_3_upgrade_ui.aseprite/png are produced and integrated. Every pair has verified pixel-equal re-export and palette membership; laser alpha geometry is unchanged. The [verified inventory](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/art_audio_inventory.md) records current mappings separately from initial targets. Each of the eight later offensive effects still ships its own artwork in its feature checkpoint; their icons alone do not enable them.
+
+Retain Nomad's signature plasma mechanics and normal/overdrive distinction. Use the current 640x400 native viewport and Lost Warden 64; historical x4 production rules below are not the Phase 3 target. Active player_shot/player_side_shot/beam files have editable masters; animation_rework sheets need explicit frame/layout integration. PlasmaCell now uses its dedicated 16x16 sprite with a 14x14 visible/collision footprint; its old power_up.png cell-7 dependency is retired.
+
+Measured active grids remain primary 80x16 (5x2 of 16x8), side 30x16 (5x2 of 6x8), beam 320x16 and shield 96x40. The corresponding animation_rework sheets are unused libraries with different packing; none is a drop-in replacement. The beam master has 80 ms frame durations while active runtime uses 160 ms. Shield root scale 4 is overridden to 1 by player.tscn. Feature steps produce and visually verify paired Aseprite sources and runtime exports, including ownership colors and collision agreement. General enemy particles and broad shader polish remain Phase 5.
+
 ## Animation Library Update — 2026-09-09
 
 The maintainer requested extending the accepted Dread Ark animation approach to all other animated production sprites, including effects. Added 54 native comparison masters and 55 synchronized atlases under domain-specific `animation_rework/` directories, with 930 verified frames, an interactive before/after gallery, GIF reels and integration metadata. These dedicated libraries preserve the existing runtime layouts and retain the current art as their baseline. See `sprite_animation_rework.md` and `assets/sprites/animation_rework_catalog.json` for coverage, playback contracts and validation limits.

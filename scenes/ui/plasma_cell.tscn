@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scenes/ui/plasma_cell.gd" id="1"]
-[ext_resource type="Texture2D" path="res://assets/sprites/pickups/power_up.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/pickups/plasma_cell.png" id="2"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/pickups/powers_plasma_energy_up.wav" id="3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cell"]
@@ -13,8 +13,6 @@ script = ExtResource("1")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(1, 1)
 texture = ExtResource("2")
-hframes = 8
-frame = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_cell")

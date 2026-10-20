@@ -20,4 +20,6 @@ score = 250
 durability = 3
 power_up_chance = 3
 plasma_drop_chance = 30
+xp_drop_chance = 60
+xp_value = 2
 movement_profile = ExtResource("2")
