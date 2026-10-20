@@ -8,6 +8,16 @@ The [MIT License](LICENSE.txt) is retained for project source code (Godot script
 
 For newly contributed original creative assets whose copyright is controlled by the project owner, **all rights are reserved unless an asset-specific license or written permission says otherwise**. No general permission is granted to reuse such assets in another game or redistribute them commercially. Permission to run or share official Lost Warden builds containing those assets is limited to the distribution permissions expressly provided with those builds.
 
+## Official game builds and commercial distribution
+
+The project maintainer may publish official Lost Warden builds for Linux, Windows, macOS, Steam, itch.io and other platforms, free of charge or commercially, subject to the rights applicable to all included materials.
+
+For **new original creative assets under this reserved-rights policy**, players who lawfully obtain an official build may download, install, run and enjoy those assets **as part of that build for personal gameplay**. This permission does not separately license the assets for extraction, redistribution, inclusion in another game, or resale of a complete game package.
+
+**Commercial distribution of a complete Lost Warden game build that includes protected original artwork, audio, narrative content or branding requires prior written authorization from the relevant rightsholder**, unless that distribution is already permitted under an earlier valid license or other applicable rights. This does not limit the MIT-licensed code, independently created replacements, third-party licenses, or legally permitted uses.
+
+The official project's hosting and online services (such as cloud saves and leaderboards) are separate from source-code licensing; access to those services is not granted by the MIT License.
+
 ## Existing assets and third-party material
 
 The current `assets/` tree contains legacy game-jam content, references, fonts and potentially third-party material. **Do not assume that every existing file is owned by the project or covered by this all-rights-reserved policy.** Before assigning a specific license to existing resources, establish authorship, source, historical license grants and permission to redistribute.
