@@ -4,7 +4,9 @@ status: blocked
 
 # Instruction: Measure and calibrate the foundation XP economy
 
-Measurement completed on 2026-10-20: **800 simulations, 16,324 checks PASS**. See [actual results and candidate tradeoffs](validation/step_5_economy.md). The maintainer chose to test the current cadence first. The declared early cadence goals remain unmet; no gameplay tuning is retained. Await three real solo observations (prepared seeds 69/29/4) before acceptance or a numerical revision. This step is not accepted and later steps have not started.
+Measurement completed on 2026-10-20: **800 simulations, 16,324 checks PASS**. See [actual results and candidate tradeoffs](validation/step_5_economy.md). The maintainer chose to test the current cadence first. The declared early cadence goals remain unmet; no gameplay tuning is retained. Three seeded solo observations and qualitative feedback are required before acceptance or a numerical revision; the first log is now captured below. This step is not accepted.
+
+Follow-up: [one actual seed-69 run](validation/step_5_solo_seed_69.json) reached five choices. Two seeded runs and qualitative feedback remain pending. The maintainer explicitly authorized publication and proceeding to step 6 while this acceptance is deferred; this does not mark step 5 passed.
 
 ## Architecture projection
 

@@ -9,6 +9,7 @@ var _debug_spawn_total := 0
 var _debug_removed := {"killed": 0, "escaped": 0, "other": 0}
 var _debug_boss_phase := 0
 var progression: ProgressionController
+@onready var hit_effects: PlayerHitEffects = $PlayerHitEffects
 
 
 func _ready() -> void:
@@ -37,6 +38,10 @@ func _ready() -> void:
 	progression.name = "ProgressionController"
 	add_child(progression)
 	progression.start(registered, global.run_random.upgrades)
+	hit_effects.start(registered, global.run_random)
+
+func _exit_tree() -> void:
+	hit_effects.cancel()
 
 
 func _layout_for_viewport() -> void:
@@ -67,6 +72,7 @@ func _on_player_died() -> void:
 	_debug_log("Player lost; %d alive" % nbr_Player)
 	if nbr_Player <= 0:
 		$waveGenerator.stop_run()
+		hit_effects.cancel()
 		if progression: progression.cancel()
 		call_deferred("_request_game_over")
 

@@ -1,8 +1,12 @@
 ---
-status: pending
+status: done
 ---
 
 # Instruction: Establish accepted player hits, deterministic combat identities and safe projectile snapshots
+
+The maintainer explicitly requested starting this next step on 2026-10-20 after publication. Step 5's remaining solo observations and numerical acceptance stay deferred and are not marked passed. This step introduces combat infrastructure only; the new offensive families remain inactive.
+
+Completed 2026-10-20: [actual implementation and validation](validation/step_6_hits.md). New real-contact suite: **41 headless / 42 native checks PASS**; seeded reproducibility/lifetime suite: **1,641 checks PASS**. Focused regressions and unchanged art mappings are recorded there. Stop for review; step 7 remains pending.
 
 ## Architecture projection
 

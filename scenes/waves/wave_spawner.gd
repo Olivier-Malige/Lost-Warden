@@ -23,6 +23,7 @@ var _formation_cycle := 0
 var _run_coop := false
 var _running := false
 var _started := false
+var _combat_sequence := 0
 var _boss: Enemy
 var _boss_data: BossDefinition
 var _reserved_boss_adds := 0
@@ -72,6 +73,10 @@ func start_run() -> void:
 func set_movement_seed(value: int) -> void:
 	if not _running:
 		_seed_override = value
+
+func _next_combat_identity() -> StringName:
+	_combat_sequence += 1
+	return StringName("actor_%09d" % _combat_sequence)
 
 func stop_run() -> void:
 	_running = false
@@ -148,6 +153,7 @@ func _materialize_boss(data: BossDefinition, generation: int) -> void:
 	_boss.run_coop = _run_coop
 	_boss.can_launch_reinforcements = _can_launch_boss_reinforcements
 	var context := EnemySpawnContext.new()
+	context.combat_id = _next_combat_identity()
 	context.movement_seed = director.random.enemies.randi()
 	_boss.configure_spawn(context)
 	_boss.position = Vector2(320, -60)
@@ -212,6 +218,7 @@ func _spawn_boss_reinforcements() -> void:
 	var formation_seed := director.random.enemies.randi()
 	for index in count:
 		var context := EnemySpawnContext.new()
+		context.combat_id = _next_combat_identity()
 		context.health_multiplier = _health_multiplier(definition)
 		context.rule_health_multiplier = rule.health_multiplier
 		context.speed_multiplier = director.speed_multiplier() * rule.speed_multiplier
@@ -353,6 +360,7 @@ func _schedule_formation() -> void:
 		var lane := lanes[index]
 		var marker := get_node("spawnPos%d" % lane) as Node2D
 		var context := EnemySpawnContext.new()
+		context.combat_id = _next_combat_identity()
 		context.elite = index == elite_index
 		context.elite_definition = config.elite_definition if context.elite else null
 		context.health_multiplier = _health_multiplier(definition)
@@ -404,6 +412,8 @@ func _materialize(item: Dictionary) -> void:
 
 # Debris shares the same reservation accounting as scheduled formations.
 func queue_enemy(enemy: Enemy) -> bool:
+	if enemy._spawn_context.combat_id == &"":
+		enemy._spawn_context.combat_id = _next_combat_identity()
 	if not _running or director.state not in [EncounterDirector.State.REGULAR, EncounterDirector.State.BOSS_APPROACH] or _available_members(enemy.definition) < 1:
 		enemy.call_deferred("free")
 		return false

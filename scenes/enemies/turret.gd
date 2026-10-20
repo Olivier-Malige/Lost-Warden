@@ -87,6 +87,9 @@ func stop_patterns() -> void:
 	if not destroyed:
 		$anim.play("start")
 
+func can_receive_player_hit() -> bool:
+	return super.can_receive_player_hit() and (not mounted or not get_parent().destroyed)
+
 func shutdown_from_parent() -> void:
 	_report_debug_removal("other")
 	stop_patterns()

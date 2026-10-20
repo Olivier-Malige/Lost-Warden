@@ -20,6 +20,14 @@ var _follow_offset := Vector2.ZERO
 var _follow_time := 0.0
 var _source_sprite: Sprite2D
 var _laser_glow: Sprite2D
+var hit_snapshot: PlayerHitSnapshot
+var _hit_effects: WeakRef
+var _reservation_key: StringName = &""
+var _visited_groups: Array[WeakRef] = []
+var remaining_penetrations := 0
+var remaining_lifetime := -1.0
+var steering_target: WeakRef
+var _base_piercing := false
 
 
 func _ready() -> void:
@@ -27,17 +35,48 @@ func _ready() -> void:
 	if _base_damage < 0.0:
 		_base_damage = damage
 		_base_speed_y = speedY
+		_base_piercing = piercing
 	damage = minf(damage, damage_Max)
 	_create_laser_glow()
 
 
 func prepare() -> void:
+	reset_hit_state()
 	$anim.stop()
 	damage = _base_damage
 	speedX = 0
 	speedY = _base_speed_y
 	_follow_target = null
 	_follow_time = 0.0
+	_follow_offset = Vector2.ZERO
+	player_Id = ""
+	piercing = _base_piercing
+	trowbackByShield = false
+	rotation = 0.0
+	scale = Vector2.ONE
+
+# The initial root lease transfers to the projectile; queued children transfer their reservation.
+func configure_hit(hit: PlayerHitSnapshot, effects: PlayerHitEffects, reservation: StringName = &"") -> void:
+	reset_hit_state()
+	hit_snapshot = hit.copy()
+	_hit_effects = weakref(effects)
+	_reservation_key = reservation
+
+func reset_hit_state() -> void:
+	var effects: PlayerHitEffects = _hit_effects.get_ref() if _hit_effects else null
+	if is_instance_valid(effects):
+		effects.release_root(hit_snapshot)
+		effects.release_reservation(_reservation_key)
+	hit_snapshot = null
+	_hit_effects = null
+	_reservation_key = &""
+	_visited_groups.clear()
+	remaining_penetrations = 0
+	remaining_lifetime = -1.0
+	steering_target = null
+
+func _exit_tree() -> void:
+	reset_hit_state()
 
 func set_damage_bonus(extra_damage: float) -> void:
 	damage = minf(_base_damage + extra_damage, damage_Max)
@@ -49,6 +88,11 @@ func set_foundation_damage(authored_base: float, multiplier: float, visual_tier:
 	$anim.advance(0.0)
 
 func _physics_process(delta: float) -> void:
+	if remaining_lifetime >= 0.0:
+		remaining_lifetime -= delta
+		if remaining_lifetime <= 0.0:
+			ProjectilePool.despawn(self)
+			return
 	_sync_laser_glow()
 	if is_instance_valid(_follow_target) and _follow_time > 0.0:
 		global_position = _follow_target.global_position + _follow_offset
@@ -115,7 +159,13 @@ func _on_area_entered(area: Area2D) -> void:
 	if area.is_in_group("enemy") or area.is_in_group("asteroid") or area.is_in_group("turret") or area.is_in_group("boss_hit_zone"):
 		var accent: Color = Color("96a5b5") if area.get("armored") == true else _Feedback.GOLD
 		_Feedback.spawn(get_parent(), global_position, accent)
-		area.hitByPlayerShot = true
-		area._hit_something(damage)
+		var effects: PlayerHitEffects = _hit_effects.get_ref() if _hit_effects else null
+		if hit_snapshot and is_instance_valid(effects):
+			effects.resolve_hit(hit_snapshot, area, true, global_position)
+		elif area.has_method("receive_player_hit"):
+			var group := CombatTargeting.damage_group(area)
+			var visited := _visited_groups.any(func(reference: WeakRef): return reference.get_ref() == group)
+			if not visited and area.receive_player_hit(damage, StringName(player_Id)):
+				_visited_groups.append(weakref(group))
 		if not piercing:
 			ProjectilePool.despawn(self)

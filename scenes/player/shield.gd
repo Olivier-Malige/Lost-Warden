@@ -19,6 +19,8 @@ func _on_shield_area_entered(shot: Shot) -> void:
 		shot.noDamageToGroup = ""
 		$sound_trowback.playing = true
 		shot.trowbackByShield = true
+		if shot.has_method("set_reflected_owner"):
+			shot.set_reflected_owner(get_parent())
 		shot.speedY = -shot.speedY
 		shot.speedX = -shot.speedX
 		if $ChargeUseTimer.is_stopped():

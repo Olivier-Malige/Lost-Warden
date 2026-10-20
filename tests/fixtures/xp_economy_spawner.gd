@@ -80,10 +80,10 @@ func _register(enemy: Enemy) -> void:
 func advance() -> void:
 	_physics_process(1.0 / 60.0)
 	for body in bodies.duplicate():
-		var enemy: Enemy = body.enemy
-		if not is_instance_valid(enemy):
+		if not is_instance_valid(body.enemy):
 			bodies.erase(body)
 			continue
+		var enemy: Enemy = body.enemy
 		if body.free_at >= 0:
 			if tick >= body.free_at:
 				enemy.free()

@@ -39,6 +39,7 @@ func run() -> void:
 	# World initializes a random run in _ready; replace it before its deferred spawner starts.
 	globals.reset_run(seed_value)
 	world.progression.start(world.progression.players, globals.run_random.upgrades)
+	world.hit_effects.start(world.progression.players, globals.run_random)
 	root.mode = Window.MODE_WINDOWED
 	root.size = Vector2i(1280, 800)
 	root.title = "Lost Warden - solo XP / seed %d" % seed_value

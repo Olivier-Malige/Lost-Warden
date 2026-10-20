@@ -9,6 +9,7 @@ const EXPLOSION := preload("res://assets/sprites/effects/dread_ark_explosion_she
 @export var armored := false
 
 var hitByPlayerShot := false
+var last_player_hit_owner: StringName = &""
 var destroyed := false
 var life := 0.0
 var max_life := 0.0
@@ -23,6 +24,24 @@ func _ready() -> void:
 func configure(health: float) -> void:
 	life = health
 	max_life = health
+
+func get_combat_identity() -> StringName:
+	return StringName("%s/%s" % [get_parent().get_combat_identity(), name])
+
+func player_damage_group() -> Node:
+	return get_parent()
+
+func can_receive_player_hit() -> bool:
+	return not armored and not destroyed and life > 0.0 and is_inside_tree() and get_parent().can_damage_parts()
+
+func receive_player_hit(amount: float, owner_id: StringName = &"", feedback := true) -> bool:
+	if not is_finite(amount) or amount <= 0.0 or not can_receive_player_hit():
+		return false
+	var before := life
+	hitByPlayerShot = true
+	last_player_hit_owner = owner_id
+	_hit_something(amount, feedback)
+	return life < before
 
 func _hit_something(damage: float = 0.0, _feedback := true) -> void:
 	if armored or destroyed or damage <= 0.0 or not get_parent().can_damage_parts():

@@ -63,6 +63,8 @@ func release(node: Node) -> void:
 	if not is_instance_valid(node) or node.get_meta("pooled", false):
 		return
 	node.set_meta("pooled", true)
+	if node.has_method("reset_hit_state"):
+		node.reset_hit_state()
 	node.set_process(false)
 	node.set_physics_process(false)
 	if node is CanvasItem:
@@ -90,8 +92,20 @@ func _park(node: Node) -> void:
 		bucket.nodes.append(node)
 
 
+static func _find_pool(node: Node) -> Node:
+	if not node.is_inside_tree():
+		return null
+	var pools := node.get_tree().get_nodes_in_group("projectile_pool")
+	var parent := node
+	while parent:
+		for pool in pools:
+			if pool.get_parent() == parent:
+				return pool
+		parent = parent.get_parent()
+	return null
+
 static func spawn(packed: PackedScene, world_pos: Vector2, parent: Node) -> Node:
-	var pool := parent.get_tree().get_first_node_in_group("projectile_pool")
+	var pool := _find_pool(parent)
 	var node: Node
 	if pool:
 		node = pool.acquire(packed)
@@ -108,8 +122,11 @@ static func despawn(node: Node) -> void:
 		return
 	var pool: Node = null
 	if node.is_inside_tree():
-		pool = node.get_tree().get_first_node_in_group("projectile_pool")
+		pool = _find_pool(node)
 	if pool:
 		pool.release(node)
 	else:
-		node.queue_free()
+		if node.has_method("reset_hit_state"):
+			node.reset_hit_state()
+		node.set_meta("pooled", true)
+		node.call_deferred("queue_free")

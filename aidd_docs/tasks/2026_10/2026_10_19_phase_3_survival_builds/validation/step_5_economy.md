@@ -1,6 +1,6 @@
 # Step 5 — collected XP economy measurement
 
-Date: 2026-10-20. Status: **measurement passed; maintainer chose to test the current cadence first; human acceptance pending**.
+Date: 2026-10-20. Status: **measurement passed; maintainer chose to test the current cadence first; one real solo log captured, two runs and qualitative feedback pending**.
 
 The playable foundation was committed and rebased on the freshly pulled `origin/master` (`0240d19`). This repository has no `main` branch. The sixteen rebased patches are unchanged according to `git range-diff`; the foundation commit is now `37c55d8`.
 
@@ -88,7 +88,9 @@ $env:APPDATA = Join-Path (Get-Location) '.godot/phase_2_runtime_validation/qa_ph
 # Repeat separately with --seed=29 and --seed=4.
 ```
 
-Capture for each run: actual first choice/early intervals, difficulty recovering XP, useful upgrade choices, menu readability and any death. **All three human runs and maintainer feedback are pending.** The existing informal playable feedback about XP visibility is not substituted for these seeded observations. The `--smoke` option verifies seed wiring, restored preferences and the time-zero pause and labels its output `technical-smoke`; it is not human evidence. Seed 69 native smoke passes with clean teardown. The initial headless smoke showed shutdown retention, so native evidence is used for teardown verification.
+Capture for each run: actual first choice/early intervals, difficulty recovering XP, useful upgrade choices, menu readability and any death. **Two seeded runs and qualitative maintainer feedback remain pending.** The [actual seed-69 log](step_5_solo_seed_69.json) records a first choice at **47.05 s**, then **33.72 / 41.15 / 37.75 / 32.80 s** intervals, reaching five choices/level 6 at **192.47 s**, without a recorded death. XP accounting at this observation end is 99 emitted = 87 collected + 9 lost + 3 active. Its feedback fields are still empty. This observed first choice is substantially later than that seed's 19 s perfect-collection projection, reinforcing the separation between economic fixture and actual play. The maintainer explicitly requested publication and the next infrastructure step while the remaining acceptance stays deferred.
+
+The existing informal playable feedback about XP visibility is not substituted for the missing seeded observations. The `--smoke` option verifies seed wiring, restored preferences and the time-zero pause and labels its output `technical-smoke`; it is not human evidence. Seed 69 native smoke passes with clean teardown. The initial headless smoke showed shutdown retention, so native evidence is used for teardown verification.
 
 Technical co-op remains covered by the actual activation/offers suites, including shared XP, independent choices and participant death. Human co-op balance acceptance is still deferred to roadmap Phase 6. No later offensive family has been started.
 

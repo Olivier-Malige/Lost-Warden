@@ -368,6 +368,9 @@ func _on_cannon_hit(side: int) -> void:
 func _set_cannon_flash(amount: float, side: int) -> void:
 	$Sprite2D.set_instance_shader_parameter(&"port_hit_flash" if side == 0 else &"starboard_hit_flash", amount)
 
+func can_receive_player_hit() -> bool:
+	return super.can_receive_player_hit() and combat_active and attack != Attack.ENTERING
+
 func _hit_something(damage: float = 0.0, _feedback := true) -> void:
 	if destroyed or not combat_active or attack == Attack.ENTERING:
 		return

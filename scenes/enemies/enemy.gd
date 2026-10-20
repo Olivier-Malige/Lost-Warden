@@ -15,6 +15,7 @@ enum PatrolState { ENTERING, PATROLLING, EXITING }
 
 var destroyed := false
 var hitByPlayerShot := false
+var last_player_hit_owner: StringName = &""
 var life := 0.0
 var max_life := 0.0
 var hitSomething := 1
@@ -81,6 +82,31 @@ func _physics_process(delta: float) -> void:
 
 func configure_spawn(context: EnemySpawnContext) -> void:
 	_spawn_context = context
+
+func get_combat_identity() -> StringName:
+	return _spawn_context.combat_id
+
+func player_damage_group() -> Node:
+	return self
+
+func can_receive_player_hit() -> bool:
+	return not destroyed and life > 0.0 and is_inside_tree() and not is_queued_for_deletion()
+
+# Kill ownership must be set before virtual damage can synchronously award the kill.
+func receive_player_hit(amount: float, owner_id: StringName = &"", impact_feedback := true) -> bool:
+	if not is_finite(amount) or amount <= 0.0 or not can_receive_player_hit():
+		return false
+	var before := life
+	var previous_credit := hitByPlayerShot
+	var previous_owner := last_player_hit_owner
+	hitByPlayerShot = true
+	last_player_hit_owner = owner_id
+	_hit_something(amount, impact_feedback)
+	if life < before:
+		return true
+	hitByPlayerShot = previous_credit
+	last_player_hit_owner = previous_owner
+	return false
 
 func _apply_definition() -> void:
 	life = definition.max_health
@@ -419,6 +445,7 @@ func _drop_debris() -> void:
 		if debris is Enemy:
 			var debris_context := EnemySpawnContext.new()
 			debris_context.asteroid_fragment = true
+			debris_context.combat_id = StringName("%s/fragment_%02d" % [_spawn_context.combat_id, index])
 			debris_context.movement_seed = _derived_seed(_spawn_context.movement_seed, index + 1)
 			debris_context.formation_seed = _spawn_context.formation_seed
 			debris.configure_spawn(debris_context)

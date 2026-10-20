@@ -12,6 +12,8 @@ func _init(p_player: Player) -> void:
 	player = p_player
 
 func fire_primary() -> void:
+	if not is_instance_valid(player) or player.state >= Player.State.DYING:
+		return
 	_spawn_gun(Player.WEAPON_PRIMARY.projectile, player.primary_origin, Player.WEAPON_PRIMARY.damage)
 	player.play_shot_recoil()
 	player.shooting_audio.playing = true
@@ -55,6 +57,11 @@ func _spawn_gun(
 	if packed == Player.WEAPON_SIDE.projectile:
 		tier = [0, 1, 2, 4][clampi(player.loadout.rank_for(UpgradeDefinition.Effect.SIDE_SHOT) - 1, 0, 3)]
 	shot.set_foundation_damage(authored_damage, player.loadout.direct_damage_multiplier * damage_multiplier, tier)
+	var effects := PlayerHitEffects.find_service(player)
+	if effects:
+		var hit := effects.create_hit(StringName(player.id_Player), minf(authored_damage, shot.damage_Max), shot.damage, player.loadout.acquired_ranks)
+		if hit:
+			shot.configure_hit(hit, effects)
 	shot.speedX = speed_x
 	shot.scale = Vector2.ONE
 	shot.rotation = Vector2.UP.angle_to(Vector2(shot.speedX, shot.speedY))

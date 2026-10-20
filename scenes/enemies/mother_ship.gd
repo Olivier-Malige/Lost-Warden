@@ -86,6 +86,7 @@ func _spawn_mounted_turrets() -> void:
 		if index == 1:
 			turret.get_node("Sprite2D").texture = STARBOARD_TURRET_TEXTURE
 		var context := EnemySpawnContext.new()
+		context.combat_id = StringName("%s/turret_%d" % [_spawn_context.combat_id, index])
 		context.health_multiplier = health_multiplier
 		context.fire_delay_multiplier = fire_delay_multiplier
 		context.movement_seed = _derived_seed(_spawn_context.movement_seed, index + 1)

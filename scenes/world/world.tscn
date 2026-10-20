@@ -12,6 +12,7 @@
 [ext_resource type="Resource" path="res://data/waves/wave_catalog.tres" id="10"]
 [ext_resource type="PackedScene" path="res://scenes/world/foreground_speed_particles.tscn" id="11"]
 [ext_resource type="PackedScene" path="res://scenes/ui/boss_health.tscn" id="12"]
+[ext_resource type="Script" path="res://scenes/combat/player_hit_effects.gd" id="13"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxRankPanel"]
 bg_color = Color(0.0470588, 0.0588235, 0.101961, 0.9)
@@ -370,6 +371,9 @@ position = Vector2(320, 380)
 
 [node name="projectilePool" type="Node" parent="." unique_id=2128302741]
 script = ExtResource("6")
+
+[node name="PlayerHitEffects" type="Node" parent="."]
+script = ExtResource("13")
 
 [node name="background" parent="." unique_id=1458692991 instance=ExtResource("5")]
 scroll_ignore_camera_zoom = true

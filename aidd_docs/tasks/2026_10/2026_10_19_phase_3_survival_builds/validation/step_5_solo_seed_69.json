@@ -1,0 +1,100 @@
+{
+	"choice_requests": [
+		{
+			"player": "player1",
+			"time": 47.0499999999986,
+			"upgrade": "side_shot"
+		},
+		{
+			"player": "player1",
+			"time": 80.7666666666634,
+			"upgrade": "damage"
+		},
+		{
+			"player": "player1",
+			"time": 121.916666666661,
+			"upgrade": "damage"
+		},
+		{
+			"player": "player1",
+			"time": 159.666666666686,
+			"upgrade": "damage"
+		},
+		{
+			"player": "player1",
+			"time": 192.466666666712,
+			"upgrade": "speed"
+		}
+	],
+	"choices": [
+		{
+			"player": "player1",
+			"time": 47.0499999999986
+		},
+		{
+			"player": "player1",
+			"time": 80.7666666666634
+		},
+		{
+			"player": "player1",
+			"time": 121.916666666661
+		},
+		{
+			"player": "player1",
+			"time": 159.666666666686
+		},
+		{
+			"player": "player1",
+			"time": 192.466666666712
+		}
+	],
+	"completed_choices": 5,
+	"elapsed": 192.466666666712,
+	"feedback": {
+		"overall_rhythm": null,
+		"selection_readability": null,
+		"useful_choices": null,
+		"xp_recovery": null
+	},
+	"godot": "4.7.2-stable (official)",
+	"kind": "real-solo-playtest",
+	"pool": {
+		"active": 3,
+		"collected": 87,
+		"emitted": 99,
+		"lost": 9,
+		"parked": 3,
+		"reserved": 0,
+		"value": 3
+	},
+	"progression": {
+		"level": 6,
+		"next_threshold": 34,
+		"pending_count": 0,
+		"xp": 0
+	},
+	"seed": 69,
+	"selections": [
+		{
+			"level": 2,
+			"time": 47.0499999999986
+		},
+		{
+			"level": 3,
+			"time": 80.7666666666634
+		},
+		{
+			"level": 4,
+			"time": 121.916666666661
+		},
+		{
+			"level": 5,
+			"time": 159.666666666686
+		},
+		{
+			"level": 6,
+			"time": 192.466666666712
+		}
+	],
+	"status": "five-choices"
+}

@@ -103,8 +103,14 @@ func _damage_overlaps() -> void:
 	var tick_damage := damage * (overdrive_damage_multiplier if overdrive else 1.0)
 	var color := Color("96a5b5") if target.get("armored") == true else (PLAYER_ONE_COLOR if player_id == "player1" else PLAYER_TWO_COLOR)
 	IMPACT_FEEDBACK.spawn(target.get_parent(), to_global(_impact_point), color)
-	target.hitByPlayerShot = true
-	target._hit_something(tick_damage, false)
+	var effects := PlayerHitEffects.find_service(self)
+	if effects:
+		var hit := effects.create_hit(StringName(player_id), damage, tick_damage, {}, PlayerHitSnapshot.Kind.PLASMA)
+		if hit:
+			effects.resolve_hit(hit, target, false, to_global(_impact_point))
+			effects.release_root(hit)
+	elif target.has_method("receive_player_hit"):
+		target.receive_player_hit(tick_damage, StringName(player_id), false)
 	if not is_instance_valid(target) or target.destroyed:
 		_update_geometry()
 

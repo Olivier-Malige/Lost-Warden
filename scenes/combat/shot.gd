@@ -11,6 +11,7 @@ const Layers := preload("res://core/collision_layers.gd")
 @export var playerShot: bool = false
 var speedRotation := 20 # radians per frame at 60 FPS
 var trowbackByShield := false
+var reflected_owner_id: StringName = &""
 
 
 func _physics_process(delta: float) -> void:
