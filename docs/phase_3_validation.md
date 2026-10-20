@@ -2,9 +2,11 @@
 
 ## Status — 2026-10-20
 
-Phase 3 **steps 1-4 are complete**. The maintainer authorized continuing through a first playable version: ordinary gameplay now uses shared collected XP, personal foundation builds, the paused native selection/HUD and safe pooled orbs, with paired Aseprite/PNG art. Steps 5-14 remain pending. No commit was made.
+Phase 3 **steps 1-4 are complete and committed**. Ordinary gameplay uses shared collected XP, personal foundation builds, the paused native selection/HUD and safe pooled orbs, with paired Aseprite/PNG art. The branch was rebased without conflicts after pulling `origin/master`. Step 5 now has a repeated 100-seed economy fixture and measured results. The maintainer chose to test the current cadence first; three real solo observations remain pending. Steps 6-14 have not started.
 
-The maintainer approved the silent interactive preview, with **Arsenal déployé** selected; the corresponding native Godot UI is now implemented and captured. Solo has three horizontal cards; co-op has independent stacked choices. The maintainer supplies dedicated sounds/music. Existing menu cues are temporary selection cues; no dedicated selection/XP audio or listening acceptance is claimed. Human co-op balance acceptance remains deferred to roadmap Phase 6.
+See [step 5 economy evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/step_5_economy.md): **800 simulations / 16,324 checks PASS**, closed XP accounting, complete percentile/censor reporting and a verified reward-only candidate replay. Solo perfect-collection medians are 23.00 s to first choice, followed by 21.73/26.47/33.07/35.50 s intervals. The early cadence misses the 35-50 s target. No tested reward candidate satisfies all declared solo missed-profile targets, and no gameplay tuning is retained. Seeds 69/29/4 are prepared for actual solo feedback; human co-op balance remains deferred.
+
+The maintainer approved the silent interactive preview, with **Arsenal déployé** selected; the corresponding native Godot UI is now implemented and captured. Solo has three horizontal cards; co-op has independent stacked choices. The maintainer supplies dedicated selection sounds/music; existing menu cues remain temporary selection cues. The requested XP pickup ping uses the agent-authored prototype recorded below; human listening acceptance is pending. Human co-op balance acceptance remains deferred to roadmap Phase 6.
 
 ## Step 1 — inspected evidence
 
