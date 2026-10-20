@@ -1,5 +1,27 @@
 # Phase 2 validation
 
+## Phase 2 closure — 2026-10-19
+
+The maintainer accepts solo gameplay and explicitly defers the human co-op playtest until after the power-up and balance rework. This closes the Phase 2 delivery checkpoint; deferred co-op gameplay acceptance is tracked in Phase 6. Phase 3 has not started.
+
+Fresh Godot 4.7.2 verification uses the existing isolated runtime project in `.godot/phase_2_runtime_validation/`. Its core/data/scenes/tests junctions resolve to the current repository sources; its project settings exclude the local addon override, and separate temporary APPDATA directories isolate headless and native saves from personal records. No gameplay code or resources changed at this checkpoint.
+
+| Suite | Result |
+| --- | ---: |
+| Encounter director / spawning / elites | 860 / 6,122 / 3,280 checks PASS |
+| Boss approach / patterns / encounters | 18 / 1,035 / 396 checks PASS |
+| Boss movement / parts / continuous beam damage | 1,212 / 73 / 22 checks PASS |
+| Boss pressure / main cannon presentation / death sequence | 61 / 52 / 19 checks PASS |
+| Hunter drones / Alpha 9 combat | 914 / 161 checks PASS |
+| Progression and legacy records / debug inspector / player beam impact | 638 / 71 / 18 checks PASS |
+| Shield throwback / fire input / beam effects / screen fades / native scale | PASS |
+
+All 22 selected suites pass. The debug inspector suite retains the previously documented shutdown issue: two ObjectDB instances and one resource still in use. The other selected suites and the native preview exit without shutdown diagnostics. The historical enemy-feedback failures were not rerun or repaired in this checkpoint; this is not a claim that every repository test passes.
+
+The native GL Compatibility preview passes for both modes through both boss phases, rings, spirals, aimed salvos, drone launches, beams, single-cannon destruction and disarmed core attacks. Fresh captures are stored under `.godot/phase_2_runtime_validation/boss_tuning_*.webp`. Inspected solo phase-two spiral and co-op beam preparation/fire captures preserve distinct projectile silhouettes, contrast against the background and the removal of projected warning lanes (`COMP-SIL-THREAT` and `LIGHT-PLAY-SEP`: 2/2). This staged presentation check disables player collision and does not establish co-op difficulty, live player coordination or performance acceptance.
+
+`git diff --check` passes. No commit or publication is performed. Historical pending acceptance notes below are superseded by the maintainer's decision at this checkpoint.
+
 ## Step 2 — Continuous encounters (2026-10-17)
 
 Implemented on `codex/phase-2-encounter-director`, following maintainer authorization for step 2 only.
