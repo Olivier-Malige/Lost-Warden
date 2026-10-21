@@ -179,6 +179,9 @@ func _debug_cheats(event: InputEvent) -> void:
 		$world/waveGenerator.goto_Next_Wave()
 	elif event.is_action_pressed("debug_next_wave"):
 		$world/waveGenerator.debug_skip_encounter()
+	elif event.is_action_pressed("debug_level_up"):
+		$world.progression.debug_gain_level()
+		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("debug_boss"):
 		$world/waveGenerator.debug_start_boss()
 	else:

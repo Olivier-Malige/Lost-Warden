@@ -20,6 +20,8 @@ Keyboard navigation in full view: Left/Right or Tab/Shift-Tab cycle tabs, wrappi
 
 In compact mode, existing debug controls remain active: F1/F2 lower/raise danger; N skips regular encounters; F3 speed, F4 damage, F5 side shots, F6 shield, F7 fire rate, F8 plasma, F9 maximum stats.
 
+**L** grants exactly the remaining XP for the next level and opens the normal personal upgrade choices, including both living players in co-op. Confirm the choices to resume, then press L again for another level. It requires `global.Debug`, active gameplay and at least one living player. Held-key repeats, pauses, transitions, the full inspector, pending/open/closing choices and cancelled runs cannot queue additional levels. It changes no enemy scheduling or build directly.
+
 **F12** launches the next eligible boss immediately during active regular gameplay. Close F10 or the pause menu first. It cancels normal pending formations, clears enemies/projectiles through the usual boss-entry path, and preserves player upgrades, score, survival/regular time and danger. Repeated/held presses cannot overlap a boss; boss/recovery states, stopped runs, pause, screen transitions and disabled debug block the shortcut. A forced boss retains normal solo/co-op health, rewards, recovery and subsequent five-minute scheduling.
 
 ## Data and limits
@@ -29,6 +31,10 @@ The panel requests scalar/container snapshots through `Events` at **4 Hz while e
 Enemy capacity includes mounted turrets and deferred reservations. Active projectile counts exclude shots marked as pooled. Recorded spawns include immediate mounted turrets; the rolling-minute count uses 60 one-second simulation-time buckets. Spawn/removal counters and the bounded event journal record only while debug is enabled, so enabling it mid-run does not reconstruct earlier activity. Parent-disposed mounted turrets count as other removals; a destroyed enemy leaving the screen is not counted again as an escape.
 
 Elite promotion and boss combat are integrated. The Run page exposes `BOSS_APPROACH` and its remaining calm window (0.5 seconds after the last enemy or enemy shot exits). Natural milestones preserve the arena; F12 remains the immediate cleanup shortcut. During a boss, the page shows its actual health, phase, attack, individual left/right cannon health and destruction state, and active/reserved reinforcements near the top. Boss phases are journaled once rather than flooding history on every hit. XP remains pending. Rendering monitors may report zero in headless or unsupported renderer configurations; fixed-FPS preview captures are not performance benchmarks.
+
+## Level shortcut validation — 2026-10-21
+
+`tests/test_debug_level_up.gd`: **44 checks PASS** in headless and native Compatibility runs. Real viewport L input covers the binding, missing-XP grant, one deferred selection, solo/co-op participants, normal personal confirmation/resume, HUD updates, unchanged encounter/drop RNG, repeated presses before deferral, held-key repeats, disabled debug, title/transition/menu/inspector guards, open/closing selection, no living participants, cancelled progression and world teardown. The native run exits cleanly; headless retains the previously observed shutdown warning (three objects/one resource).
 
 ## Validation — 2026-10-17
 

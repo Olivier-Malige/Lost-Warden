@@ -2,6 +2,7 @@ extends Node
 
 @warning_ignore_start("unused_signal")
 signal score_changed(score: int)
+signal eliminations_changed(count: int)
 signal wave_changed(wave: int)
 signal encounter_started(encounter_id: StringName, encounter_number: int)
 signal boss_started(boss_id: StringName, display_name: String, maximum_health: float)

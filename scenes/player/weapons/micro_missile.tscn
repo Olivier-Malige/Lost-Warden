@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scenes/player/weapons/micro_missile.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/weapons/micro_missile_sheet.png" id="2"]
+
+[sub_resource type="RectangleShape2D" id="Hull"]
+size = Vector2(3, 6)
+
+[node name="MicroMissile" type="Area2D"]
+script = ExtResource("1")
+playerShot = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2")
+hframes = 16
+vframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+shape = SubResource("Hull")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+rect = Rect2(-8, -12, 16, 24)
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_screen_exited"]

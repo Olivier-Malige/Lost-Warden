@@ -1,10 +1,18 @@
 ---
-status: pending
+status: done
 ---
 
 # Instruction: Add bounded homing micro-missiles and their complete sprite delivery
 
+Delivered locally on 2026-10-21 following maintainer approval. [Implementation and evidence](validation/micro_missiles.md): **261 native missile checks**, **2,133 offer checks**, **76 native progression checks**, **132 headless chain checks**, **708 critical/legacy checks**, **111 beam-piercing checks**, **42 selection checks** and **41 accepted-hit checks PASS**. Dedicated Aseprite body/thrust/impact and owner-specific card/miniature exports pass palette/parity checks. Prototype values are retained for later balance. Stop for review before the escort drone; no commit/publication is included.
+
 ## Architecture projection
+
+Destroyed-target follow-up: the existing retargeting is verified with a real three-missile volley: one lethal contact, then both siblings physically hit the closest forward replacement without lifetime reset or side/rear acquisition. Latest native missile fixture: **458 checks PASS**, clean shutdown. No runtime/range adjustment was required.
+
+Forward-only follow-up: missiles now acquire, retain and reacquire targets only within the authored 90-degree screen-up cone. Side/rear targets cannot cause a launch or a U-turn. Latest verification: **447 native missile**, **423 headless missile**, **132 chain** and **2,133 offer** checks PASS; native teardown is clean. The headless missile run retains the known audio-resource shutdown warning.
+
+Maintainer playtest revision, 2026-10-21: native small/medium/large sprites and matching independent hull collisions now accompany 1/2/3-projectile volleys. The three-active/reserved cap remains; partial volleys use only free entries. Missiles retain criticals but explicitly cannot trigger energy chains or consume their cooldown. **440 native checks**, **2,133 offer checks**, **132 chain checks** and **67 progression checks PASS** after this revision. Updated Aseprite exports and native rank comparisons supersede the original one-size/one-projectile art and chain compatibility below.
 
 > Tree of the final files. ✅ create · ✏️ modify · ❌ delete
 
@@ -77,7 +85,7 @@ journey
 
 > Missiles are direct sources, with complete art rather than an enemy-projectile recolor.
 
-1. Route accepted hits through the common snapshot/effects service. Enable critical hits; keep piercing and ricochet disabled for missiles. Preserve the future explosion/chain extension points without exposing unfinished cards.
+1. Route accepted hits through the common snapshot/effects service. Enable critical hits; keep energy chains, piercing and ricochet disabled for missiles. Preserve future explosion extension points without exposing unfinished cards.
 2. Stop new emissions and procs at owner DYING; existing missiles finish their bounded lives. Cancel reserved/deferred emissions on owner/world invalidation and clear target, turn state, reacquisition latch and ownership on reuse.
 3. Deliver source plus PNG/JSON for the body, propulsion and impact; update `art_audio_inventory.md` with anchors/tags and team variants. Inspect the native silhouette against both player lasers and enemy missiles; palette-check exports.
 

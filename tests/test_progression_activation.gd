@@ -147,6 +147,8 @@ func run() -> void:
 		var upgrade = load("res://data/upgrades/foundation/%s.tres" % file)
 		for rank in upgrade.max_rank: p1.apply_upgrade(upgrade)
 	for rank in 3: p1.apply_upgrade(load("res://data/upgrades/foundation/side_shot.tres"))
+	for id in ["critical_hits", "energy_chains", "micro_missiles"]:
+		for rank in 3: p1.apply_upgrade(load("res://data/upgrades/%s.tres" % id))
 	p1.energy = 12
 	p1.update_energy()
 	p1.shield.power = 3
@@ -178,7 +180,7 @@ func run() -> void:
 	p1._stop_beam()
 	p1.beam_charge = 100
 	p1._update_beam(0.01, true)
-	check(p1.continuous_beam.overdrive and p1.loadout.foundation_snapshot().offensive_count == 1, "full-reserve overdrive must remain native and outside offensive slots")
+	check(p1.continuous_beam.overdrive and p1.loadout.foundation_snapshot().offensive_count == 4, "full-reserve overdrive must remain native and outside offensive slots")
 	await capture("plasma_overdrive")
 	p1._stop_beam()
 	controller.pool.spawn(1, p1.global_position + Vector2(-32, -160))

@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource path="res://scenes/player/player_shot.gd" type="Script" id=1]
 [ext_resource path="res://assets/sprites/player/player_shot.png" type="Texture2D" id=2]
 [ext_resource path="res://data/player/projectile_vfx_config.tres" type="Resource" id=3]
+[ext_resource path="res://assets/sprites/player/weapons/piercing_shot_sheet.png" type="Texture2D" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 size = Vector2(10, 6)
@@ -463,6 +464,7 @@ audio_bus_override = false
 audio_bus_name = "Master"
 script = ExtResource( 1 )
 vfx_config = ExtResource( 3 )
+piercing_texture = ExtResource( 4 )
 _sections_unfolded = [ "Transform3D" ]
 speedY = -600
 speedX = 0

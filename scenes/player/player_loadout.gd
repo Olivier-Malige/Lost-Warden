@@ -17,6 +17,10 @@ var attraction_radius := 0.0
 var outer_side_pair := false
 var beam_capacity := 100.0
 var plasma_pickup_multiplier := 1.0
+var critical_chance := 0.0
+var beam_extra_targets := 0
+var beam_damage_multiplier := 1.0
+var beam_width_multiplier := 1.0
 
 func _init(p_stats: PlayerStats) -> void:
 	stats = p_stats
@@ -36,6 +40,10 @@ func reset() -> void:
 	outer_side_pair = false
 	beam_capacity = stats.beam_charge_max
 	plasma_pickup_multiplier = 1.0
+	critical_chance = 0.0
+	beam_extra_targets = 0
+	beam_damage_multiplier = 1.0
+	beam_width_multiplier = 1.0
 	if _foundation_config != null:
 		_derive_foundation_stats()
 
@@ -111,6 +119,9 @@ func foundation_snapshot() -> Dictionary:
 			"attraction_radius": attraction_radius, "outer_side_pair": outer_side_pair,
 			"plasma_damage_bonus": damage_bonus,
 			"beam_capacity": beam_capacity, "plasma_pickup_multiplier": plasma_pickup_multiplier,
+			"critical_chance": critical_chance,
+			"beam_extra_targets": beam_extra_targets, "beam_damage_multiplier": beam_damage_multiplier,
+			"beam_width_multiplier": beam_width_multiplier,
 		},
 	}
 
@@ -173,3 +184,12 @@ func _derive_foundation_stats() -> void:
 	)
 	beam_capacity = stats.beam_charge_max + _foundation_value(UpgradeDefinition.Effect.BEAM_CAPACITY)
 	plasma_pickup_multiplier = 1.0 + _foundation_value(UpgradeDefinition.Effect.BEAM_RECHARGE)
+	critical_chance = _foundation_value(UpgradeDefinition.Effect.CRITICAL_HITS)
+	beam_extra_targets = int(_foundation_value(UpgradeDefinition.Effect.BEAM_PIERCING))
+	beam_damage_multiplier = 1.0
+	beam_width_multiplier = 1.0
+	for id in _foundation_definitions:
+		var definition := _foundation_definitions[id]
+		if definition.effect == UpgradeDefinition.Effect.BEAM_PIERCING:
+			beam_damage_multiplier += definition.damage_bonus(int(acquired_ranks.get(id, 0)))
+			beam_width_multiplier += definition.width_bonus(int(acquired_ranks.get(id, 0)))

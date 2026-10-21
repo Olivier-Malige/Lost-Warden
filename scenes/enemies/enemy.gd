@@ -343,15 +343,19 @@ func _hit_something(dmg: float = 0.0, impact_feedback := true) -> void:
 	if life <= 0:
 		_destroy()
 
-func _flash_hit() -> void:
+func play_critical_feedback() -> void:
+	if not destroyed:
+		_flash_hit(true)
+
+func _flash_hit(critical := false) -> void:
 	if _hit_sprite == null:
 		return
 	if _hit_flash_tween and _hit_flash_tween.is_valid():
 		_hit_flash_tween.kill()
 	_set_hit_flash(1.0)
 	_hit_flash_tween = create_tween()
-	_hit_flash_tween.tween_interval(0.04)
-	_hit_flash_tween.tween_method(_set_hit_flash, 1.0, 0.0, 0.08).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_hit_flash_tween.tween_interval(0.08 if critical else 0.04)
+	_hit_flash_tween.tween_method(_set_hit_flash, 1.0, 0.0, 0.12 if critical else 0.08).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 func _set_hit_flash(amount: float) -> void:
 	_hit_sprite.set_instance_shader_parameter(&"hit_flash", amount)
@@ -398,9 +402,7 @@ func _destroy() -> void:
 		call_deferred("_drop_debris")
 
 func _award_player_kill() -> void:
-	var awarded_points := global.register_kill(points)
-	var multiplier := global.combo_multiplier(global.combo)
-	Events.score_popup_requested.emit(awarded_points, global.combo, multiplier, global_position)
+	global.register_kill(points, definition.id not in [&"asteroid_small", &"asteroid_large"])
 	var xp := _xp_for_roll(global.run_random.drops.randi_range(0, 99))
 	var plasma := _plasma_amount_for_roll(global.run_random.drops.randi_range(0, 99))
 	if xp > 0:

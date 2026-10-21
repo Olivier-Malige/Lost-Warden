@@ -1,10 +1,10 @@
 # Gameplay roadmap
 
-Updated: 2026-10-20.
+Updated: 2026-10-21.
 
 **Goal:** a continuous survival shmup with varied builds, enemies and formations, increasing pressure over time, solo and local co-op.
 
-**Next step:** Review the first playable Phase 3 foundation, then step 5 — measure collected XP and calibrate its economy in the [detailed delivery plan](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/plan.md). Steps 1-4 are complete: shared XP, personal foundation choices, Arsenal déployé selection, HUD, safe pooled orbs and paired sprite art. Later offensive families and dedicated audio are not yet delivered. See [Phase 3 evidence](phase_3_validation.md).
+**Next step:** Review playable step 8, autonomous homing micro-missiles, before requesting step 9, the escort drone. Steps 1-4, 6-8 and standalone step 12 chains are implemented. Missiles retain criticals but are explicitly excluded from electric chains; piercing belongs to the manual signature beam. Explosion coexistence remains with step 11. Step 5 still needs two solo observations and qualitative feedback. The maintainer explicitly defers effect balancing; prototype values remain recorded. Dedicated selection audio remains pending. See [Phase 3 evidence](phase_3_validation.md).
 
 ## Progress and delivery order
 
@@ -12,7 +12,7 @@ Updated: 2026-10-20.
 | --- | --- | --- |
 | Preparation, Phase 1 and art | Original identity, display, core combat, controls, plasma and graphics | Complete |
 | 2 — Continuous survival | Seeded encounters, elites, first boss, survival UI and records | Complete; solo accepted, co-op playtest deferred |
-| 3 — Experience and power-ups | XP, personal builds, original weapon sprites and audiovisual level-up choices | In progress; steps 1-4 complete, first playable foundation ready |
+| 3 — Experience and power-ups | XP, personal builds, original weapon sprites and audiovisual level-up choices | In progress; steps 1-4, 6-8 and standalone 12 implemented; plasma piercing, criticals, chains and micro-missiles playable; human XP acceptance deferred |
 | 4 — Enemies and density | Redesign current enemies, add roles, enrich formations, increase pressure over time | Planned; after Phase 3 |
 | 5 — Combat effects | Impacts, explosions, collections and upgrade feedback | Planned |
 | 6 — Final balance | Complete solo/co-op runs, performance and regression checks | Planned; includes deferred co-op gameplay acceptance after power-up and balance rework |
@@ -37,7 +37,7 @@ Boss beams deal one energy point on contact and every 0.35 seconds of continued 
 
 Six regular encounter types now mix formation drones with hunters using distinct arrowhead interceptor sprites, dark neutral hulls and red sensors matching the boss palette; elites have amber armor. Their hull and exhausts face their actual velocity. Hunters pursue at 175 px/s, commit to a straight attack 64 pixels before reaching the player, then progressively turn downward after crossing the height locked at commitment. Boss reinforcements share this behavior and appearance.
 
-Player beams stop at the first impact, damage only that obstacle and extend to the next target when it is destroyed. Boss armor, core and cannons use their own collision surfaces.
+Unmodified player beams stop at the first impact, damage only that obstacle and extend to the next target when it is destroyed. Phase 3's optional piercing utility extends this behavior; armor still blocks it. Boss armor, core and cannons use their own collision surfaces.
 
 Debug tools: **F11** toggles compact metrics; **F10** opens the [paused full inspector](debug_screen.md); **F12** starts a boss immediately during active gameplay.
 
@@ -45,13 +45,15 @@ No implementation remains in Phase 2. Carry the deferred co-op gameplay acceptan
 
 ## Phase 3 — Create varied survival builds
 
-The [detailed plan](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/plan.md) and its [delivery contract](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/contract.md) record the maintainer's direction and prototype values. Steps 1-4 and the requested playable follow-ups are implemented; measured calibration and later offensive families remain pending. Execute only the requested numbered step, then verify and stop for review.
+The [detailed plan](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/plan.md) and its [delivery contract](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/contract.md) record the maintainer's direction and prototype values. Steps 1-4, 6-8 and standalone 12 are implemented. Automated XP measurement exists; human calibration acceptance and later offensive families remain pending. Execute only the requested numbered step, then verify and stop for review.
 
 Replace direct drops with pooled XP and paused choices inspired by Vampire Survivors / Megabonk. Share XP in co-op with personal offers and four offensive plus three utility family slots per player. Acquired families stay for the run; rarity remains deferred.
 
 Nomad retains its native manual secondary plasma beam and reserve, outside the offensive slots. Future ship signatures remain planning-only; no ship selection or permanent progression is included.
 
-Prepare dormant models and a complete animated selection screen before activating XP, rewards, foundation ranks and HUD together. Then deliver piercing/criticals, missiles, drone, satellites, explosions, chains and ricochets in bounded checkpoints. Each weapon delivery includes editable sources, runtime sprites and native visual verification.
+Prepare dormant models and a complete animated selection screen before activating XP, rewards, foundation ranks and HUD together. Deliver each offensive family in bounded checkpoints with editable sources, runtime sprites and native visual verification. Following the maintainer's playtest, piercing belongs to the manual plasma beam as a utility. The cannon's nearest-target electric arc is now playable: 1/2/3 other targets within 72/88/104 px, 45% pre-critical damage per jump and a 0.5-second personal cooldown. Obstacles block the links; secondary effects cannot recurse. Missiles, drone, satellites, explosions and ricochets remain pending. See [chain evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/energy_chains.md).
+
+The three beam-piercing ranks cross 1/2/3 extra targets, add 20/30/40% initial damage and raise normal width from 8 to 10/11/12 px (overdrive 20/22/24 px). Each crossed target reduces subsequent damage and width to 80%. These prototype bonuses apply only with this utility, occupy one utility slot, grant no plasma and preserve manual drain and armor blocking. See [beam verification](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/beam_piercing.md).
 
 Include refreshed player lasers, XP and dedicated plasma-cell sprites, upgrade icons and a strong level-up opening. Plan one musical sting/selection loop session per queued-level batch, with gameplay music resuming at its previous position. Follow the [selection audio scope](sound_design_plan.md#phase-3-selection-moment--brief-verified-2026-10-20) for production/listening; the full MusicDirector workstream remains separate.
 
@@ -60,6 +62,10 @@ First playable feedback (2026-10-20): XP orbs now use visible pulsing gold halos
 Further approved follow-ups: 64px Nomad effect illustrations and matching 16px team miniatures; two three-rank utility families for plasma capacity (+25 per rank, up to 175) and cell recovery (+25% per rank, up to x1.75). They share the three utility slots, preserve current charge on acquisition, and retain manual beam drain/full-reserve overdrive. XP collection now plays a short dedicated procedural ping on Sounds, with bounded burst playback. These additions are playable prototypes; economy calibration and human audio/balance acceptance remain pending.
 
 Verify that different choices produce different, useful builds before redesigning enemy pressure.
+
+Micro-missiles fire autonomously at nearby visible targets, including during manual cannon or plasma use. Three ranks provide 1/2/3 missiles per volley, increasing native sprite sizes, damage 0.9/1.1/1.3 and intervals 1.10/0.95/0.80 seconds before common DAMAGE/FIRE_RATE adjustments. Each owner has at most three active/reserved missiles, speed 240 px/s, turn limit 240 degrees/s, one reacquisition and 1.8-second lifetime. Physical impacts can critically strike but cannot trigger electric chains, piercing or ricochet; no intrinsic splash. Dedicated body/thrust/impact and card art ship together. See [missile evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/micro_missiles.md).
+
+Latest missile targeting revision: acquisition, target retention and reacquisition are restricted to the 90-degree screen-up cone. Rear/lateral enemies cannot trigger a launch or pull a missile into a U-turn. Cannon chains retain their existing targeting.
 
 ## Phase 4 — Redesign enemies, formations and density
 

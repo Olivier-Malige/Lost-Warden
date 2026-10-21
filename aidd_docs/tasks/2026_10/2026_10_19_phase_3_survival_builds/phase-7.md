@@ -1,8 +1,12 @@
 ---
-status: pending
+status: done
 ---
 
 # Instruction: Add piercing and critical-hit builds with their readable weapon art
+
+Completed locally on 2026-10-20 under the maintainer's instruction to continue after step 6. [Initial implementation, native art review and verification](validation/step_7_piercing_criticals.md): **708 native combat checks PASS**, **1,993 offer checks PASS** and focused beam/shield/fire/selection/boss regressions. Step 5 human economy acceptance remains deferred.
+
+**Superseding playtest revision, 2026-10-21:** the maintainer found cannon penetration unsatisfying and moved it to the manual plasma beam. Live offers now contain utility `beam_piercing` and offensive `critical_hits`; the old `piercing` card is removed. Beam ranks cross 1/2/3 extra targets with +20/+30/+40% initial damage and +25/+37.5/+50% initial width. Each crossed target attenuates both by 20%; armor and boss-group exclusion remain enforced. The [beam evidence](validation/beam_piercing.md) supersedes the cannon-piercing portions of the historical instructions below. Nearest-target electric cannon chains are the next requested checkpoint, still unimplemented.
 
 ## Architecture projection
 

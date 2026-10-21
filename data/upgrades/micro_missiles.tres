@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/upgrade_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/upgrade_miniatures.png" id="2"]
+[ext_resource type="Resource" path="res://data/weapons/micro_missile.tres" id="3"]
+
+[sub_resource type="AtlasTexture" id="Icon"]
+atlas = ExtResource("2")
+region = Rect2(208, 0, 16, 16)
+
+[resource]
+script = ExtResource("1")
+icon = SubResource("Icon")
+id = &"micro_missiles"
+effect = 10
+weight = 10
+max_rank = 3
+display_name = "MICRO-MISSILES"
+description = "Launch 1/2/3 guided missiles per volley at enemies in the forward 90-degree cone. Size grows by rank; criticals apply, energy chains do not."
+category = 1
+repeatable = false
+rank_values = PackedFloat32Array(0.9, 1.1, 1.3)
+interval_values = PackedFloat32Array(1.1, 0.95, 0.8)
+projectile_counts = PackedInt32Array(1, 2, 3)
+weapon = ExtResource("3")
+hud_label = &"MISSILE"

@@ -10,6 +10,9 @@ const PLAYER_STATS := preload("res://data/player/player_stats.tres")
 const MENU_ICON_IDS: Array[StringName] = [
 	&"speed", &"damage", &"fire_rate", &"orb_magnet", &"side_shot", &"energy", &"shield", &"score",
 	&"beam_capacity", &"beam_recharge",
+	&"beam_piercing", &"critical_hits",
+	&"energy_chains",
+	&"micro_missiles",
 ]
 const INK := Color("101522")
 const WHITE := Color("f3ebdd")
@@ -20,6 +23,7 @@ const ICON_IDS: Array[StringName] = [
 	&"piercing", &"critical_hits", &"micro_missiles", &"escort_drone", &"orbiting_satellites",
 	&"impact_explosions", &"energy_chains", &"ricochet",
 	&"beam_capacity", &"beam_recharge",
+	&"beam_piercing",
 ]
 
 var selection_id := 0
@@ -308,6 +312,11 @@ func _effect_lines(offer: Dictionary) -> String:
 		&"shield": return "ADD 1 REFLECTOR\nUP TO 3 CHARGES"
 		&"beam_capacity": return "+25 RESERVE\n%d MAX PLASMA" % roundi(PLAYER_STATS.beam_charge_max + offer.next_value)
 		&"beam_recharge": return "+25%% CELL CHARGE\nx%.2f PER CELL" % (1.0 + offer.next_value)
+		&"piercing": return "%d EXTRA TARGETS\n80%% DAMAGE RETAINED" % roundi(offer.next_value)
+		&"beam_piercing": return "%d EXTRA TARGETS\n+%d%% DAMAGE / +%s%% WIDTH" % [roundi(offer.next_value), roundi(offer.next_damage_bonus * 100.0), str(snappedf(offer.next_width_bonus * 100.0, 0.1)).trim_suffix(".0")]
+		&"critical_hits": return "%d%% CRITICAL CHANCE\nx2 DIRECT DAMAGE" % roundi(offer.next_value * 100.0)
+		&"energy_chains": return "%d ARC JUMPS / %d PX\n%d%% DAMAGE / %.1f SEC" % [roundi(offer.next_value), roundi(offer.next_range), roundi(offer.secondary_damage_scale * 100.0), offer.proc_cooldown]
+		&"micro_missiles": return "%d MISSILES / VOLLEY\n%.1f DMG / %.2f SEC" % [offer.next_projectile_count, offer.next_value, offer.next_interval]
 	return offer.description
 
 func _icon(parent: Control, id: StringName, rect: Rect2, menu_icon := false, team := 0) -> void:
@@ -322,7 +331,7 @@ func _icon(parent: Control, id: StringName, rect: Rect2, menu_icon := false, tea
 		texture.region = Rect2(menu_index * cell_size, team * cell_size, cell_size, cell_size)
 	else:
 		texture.atlas = _art
-		texture.region = Rect2((index % 8) * 16, (index / 8) * 16, 16, 16)
+		texture.region = Rect2((index % 8) * 16, floori(index / 8.0) * 16, 16, 16)
 	var icon := TextureRect.new()
 	icon.name = "Icon"
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -335,11 +344,11 @@ func _icon(parent: Control, id: StringName, rect: Rect2, menu_icon := false, tea
 
 func _style(team: int, state: int) -> StyleBox:
 	if _art:
-		var skin := StyleBoxTexture.new()
-		skin.texture = _art
-		skin.region_rect = Rect2((team * 3 + state) * 16, 32, 16, 16)
-		for edge in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]: skin.set_texture_margin(edge, 4)
-		return skin
+		var textured_skin := StyleBoxTexture.new()
+		textured_skin.texture = _art
+		textured_skin.region_rect = Rect2((team * 3 + state) * 16, 32, 16, 16)
+		for edge in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]: textured_skin.set_texture_margin(edge, 4)
+		return textured_skin
 	var skin := StyleBoxFlat.new()
 	skin.bg_color = INK
 	skin.border_color = GOLD if state > 0 else Color("323846")

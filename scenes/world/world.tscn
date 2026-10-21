@@ -149,27 +149,20 @@ offset_right = 104.0
 offset_bottom = 400.0
 theme_override_constants/separation = 0
 
-[node name="score" type="Label" parent="hud/LeftColumn" unique_id=1521622055]
+[node name="Eliminations" type="Label" parent="hud/LeftColumn" unique_id=1521622055]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 theme_override_fonts/font = ExtResource("2")
 theme_override_font_sizes/font_size = 12
-text = "Score"
+text = "ELIMINATIONS\n0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="combo" type="Label" parent="hud/LeftColumn" unique_id=847588406]
-custom_minimum_size = Vector2(0, 32)
+[node name="RunHeaderGap" type="Control" parent="hud/LeftColumn"]
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 12
-text = "COMBO
--"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="ranks_player1" type="Label" parent="hud/LeftColumn" unique_id=175769612]
 visible = false

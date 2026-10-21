@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/upgrade_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/upgrade_miniatures.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="Icon"]
+atlas = ExtResource("2")
+region = Rect2(192, 0, 16, 16)
+
+[resource]
+script = ExtResource("1")
+icon = SubResource("Icon")
+id = &"energy_chains"
+effect = 14
+weight = 10
+max_rank = 3
+display_name = "ENERGY CHAINS"
+description = "Cannon impacts arc to the nearest visible enemies. Each jump deals 45% pre-critical damage. Shared cooldown: 0.5 seconds."
+category = 1
+repeatable = false
+rank_values = PackedFloat32Array(1, 2, 3)
+range_values = PackedFloat32Array(72, 88, 104)
+secondary_damage_scale = 0.45
+proc_cooldown = 0.5
+hud_label = &"ARC"

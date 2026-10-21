@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="WeaponDefinition" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://data/weapons/weapon_definition.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player/weapons/micro_missile.tscn" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"micro_missile"
+kind = 2
+projectile = ExtResource("2")
+damage = 0.9
+fire_delay = 1.1
+target_range = 220.0
+forward_angle_degrees = 90.0
+projectile_speed = 240.0
+turn_speed_degrees = 240.0
+projectile_lifetime = 1.8
+active_limit = 3
+collision_sizes = PackedVector2Array(3, 6, 4, 8, 5, 10)
+collision_offsets = PackedVector2Array(0, -1, 0, -2, 0, -3)

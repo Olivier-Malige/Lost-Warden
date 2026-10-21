@@ -4,7 +4,6 @@ const PLAYER_STATS: PlayerStats = preload("res://data/player/player_stats.tres")
 
 var _pips := {}
 var _scenes := {}
-var _combo_tween: Tween
 var _feedback_tweens := {}
 var _beam_tweens := {}
 var _build_controls := {}
@@ -15,8 +14,8 @@ const ART := preload("res://assets/sprites/ui/phase_3_upgrade_ui.png")
 const MINI_ICONS := preload("res://assets/sprites/ui/upgrade_miniatures.png")
 
 func _ready() -> void:
-	Events.score_changed.connect(_on_score_changed)
-	Events.combo_changed.connect(_on_combo_changed)
+	Events.eliminations_changed.connect(_on_eliminations_changed)
+	_on_eliminations_changed(global.eliminations)
 	Events.run_time_changed.connect(_on_run_time_changed)
 	Events.energy_changed.connect(_on_energy_changed)
 	Events.beam_charge_changed.connect(_on_beam_charge_changed)
@@ -24,20 +23,8 @@ func _ready() -> void:
 	Events.progression_changed.connect(_on_progression_changed)
 	Events.upgrade_feedback_requested.connect(_on_upgrade_feedback_requested)
 
-func _on_score_changed(score: int) -> void:
-	$LeftColumn/score.set_text("SCORE\n" + str(score))
-
-func _on_combo_changed(combo: int, multiplier: float, _time_left: float) -> void:
-	if _combo_tween:
-		_combo_tween.kill()
-	if combo < 2:
-		$LeftColumn/combo.set_text("COMBO\n-")
-		$LeftColumn/combo.modulate = Color.WHITE
-	else:
-		$LeftColumn/combo.set_text("COMBO " + str(combo) + "\nx" + str(snapped(multiplier, 0.1)))
-		$LeftColumn/combo.modulate = Color.WHITE
-		_combo_tween = create_tween()
-		_combo_tween.tween_property($LeftColumn/combo, "modulate", Color(0.86, 0.79, 0.42), 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+func _on_eliminations_changed(count: int) -> void:
+	$LeftColumn/Eliminations.text = "ELIMINATIONS\n%d" % count
 
 func _on_run_time_changed(survival_seconds: float) -> void:
 	var text := "SURVIVAL\n" + global.format_survival_time(survival_seconds)
@@ -98,8 +85,9 @@ func _on_build_changed(player_id: StringName, snapshot: Dictionary) -> void:
 	var panel_name := "LeftRankPanel" if player_id == "player1" else "RightRankPanel"
 	var panel := get_node_or_null(panel_name) as Panel
 	if panel: panel.hide()
+	var holder: VBoxContainer = _build_controls.get(player_id)
 	if not _build_controls.has(player_id):
-		var holder := VBoxContainer.new()
+		holder = VBoxContainer.new()
 		holder.name = "Build" + String(player_id).capitalize().replace(" ", "")
 		holder.custom_minimum_size = Vector2(96, 76)
 		holder.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -107,7 +95,6 @@ func _on_build_changed(player_id: StringName, snapshot: Dictionary) -> void:
 		get_node(column).add_child(holder)
 		get_node(column).move_child(holder, 2)
 		_build_controls[player_id] = holder
-	var holder: VBoxContainer = _build_controls[player_id]
 	for child in holder.get_children():
 		child.hide()
 		child.queue_free()

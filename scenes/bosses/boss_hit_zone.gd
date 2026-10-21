@@ -1,6 +1,7 @@
 extends Area2D
 
 signal hit()
+signal critical_hit()
 signal broken()
 
 const Layers := preload("res://core/collision_layers.gd")
@@ -42,6 +43,10 @@ func receive_player_hit(amount: float, owner_id: StringName = &"", feedback := t
 	last_player_hit_owner = owner_id
 	_hit_something(amount, feedback)
 	return life < before
+
+func play_critical_feedback() -> void:
+	if not destroyed and not armored:
+		critical_hit.emit()
 
 func _hit_something(damage: float = 0.0, _feedback := true) -> void:
 	if armored or destroyed or damage <= 0.0 or not get_parent().can_damage_parts():

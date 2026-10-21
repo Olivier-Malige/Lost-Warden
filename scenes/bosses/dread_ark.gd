@@ -81,6 +81,7 @@ func _ready() -> void:
 	for side in 2:
 		_cannons[side].configure(boss_data.cannon_health * (boss_data.coop_health_multiplier if run_coop else 1.0))
 		_cannons[side].hit.connect(_on_cannon_hit.bind(side))
+		_cannons[side].critical_hit.connect(_on_cannon_hit.bind(side, true))
 		_cannons[side].broken.connect(_on_cannon_broken.bind(side))
 	Events.boss_health_changed.emit(life, max_life, phase + 1)
 
@@ -356,14 +357,14 @@ func _on_cannon_broken(side: int) -> void:
 		_salvos_left = 0
 		_begin_recovery()
 
-func _on_cannon_hit(side: int) -> void:
+func _on_cannon_hit(side: int, critical := false) -> void:
 	if _cannon_flash_tweens[side] and _cannon_flash_tweens[side].is_valid():
 		_cannon_flash_tweens[side].kill()
 	_set_cannon_flash(1.0, side)
 	var tween := create_tween()
 	_cannon_flash_tweens[side] = tween
-	tween.tween_interval(0.04)
-	tween.tween_method(_set_cannon_flash.bind(side), 1.0, 0.0, 0.12)
+	tween.tween_interval(0.08 if critical else 0.04)
+	tween.tween_method(_set_cannon_flash.bind(side), 1.0, 0.0, 0.16 if critical else 0.12)
 
 func _set_cannon_flash(amount: float, side: int) -> void:
 	$Sprite2D.set_instance_shader_parameter(&"port_hit_flash" if side == 0 else &"starboard_hit_flash", amount)

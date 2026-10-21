@@ -5,7 +5,7 @@ enum Effect {
 	SPEED, FIRE_RATE, DAMAGE, SIDE_SHOT, SHIELD, ENERGY,
 	ORB_MAGNET, SCORE, PIERCING, CRITICAL_HITS, MICRO_MISSILES, ESCORT_DRONE,
 	ORBITING_SATELLITES, IMPACT_EXPLOSIONS, ENERGY_CHAINS, RICOCHET,
-	BEAM_CAPACITY, BEAM_RECHARGE,
+	BEAM_CAPACITY, BEAM_RECHARGE, BEAM_PIERCING,
 }
 enum Category { UTILITY, OFFENSIVE, REWARD, FALLBACK }
 
@@ -23,6 +23,29 @@ enum Category { UTILITY, OFFENSIVE, REWARD, FALLBACK }
 @export var category: Category = Category.UTILITY
 @export var repeatable: bool = false
 @export var rank_values: PackedFloat32Array = []
+@export var damage_bonus_values: PackedFloat32Array = []
+@export var width_bonus_values: PackedFloat32Array = []
+@export var range_values: PackedFloat32Array = []
+@export var secondary_damage_scale := 0.0
+@export var proc_cooldown := 0.0
+@export var weapon: WeaponDefinition
+@export var interval_values: PackedFloat32Array = []
+@export var projectile_counts: PackedInt32Array = []
+
+func projectile_count(rank: int) -> int:
+	return projectile_counts[mini(rank, projectile_counts.size()) - 1] if rank > 0 and not projectile_counts.is_empty() else 0
+
+func interval_value(rank: int) -> float:
+	return interval_values[mini(rank, interval_values.size()) - 1] if rank > 0 and not interval_values.is_empty() else 0.0
+
+func range_value(rank: int) -> float:
+	return range_values[mini(rank, range_values.size()) - 1] if rank > 0 and not range_values.is_empty() else 0.0
+
+func damage_bonus(rank: int) -> float:
+	return damage_bonus_values[mini(rank, damage_bonus_values.size()) - 1] if rank > 0 and not damage_bonus_values.is_empty() else 0.0
+
+func width_bonus(rank: int) -> float:
+	return width_bonus_values[mini(rank, width_bonus_values.size()) - 1] if rank > 0 and not width_bonus_values.is_empty() else 0.0
 
 func rank_value(rank: int) -> float:
 	if rank <= 0 or rank_values.is_empty():
@@ -44,10 +67,10 @@ func foundation_errors() -> PackedStringArray:
 			errors.append("Authored rank values must be finite, positive and nondecreasing.")
 		previous = amount
 	var expected := Category.OFFENSIVE
-	if effect < Effect.SPEED or effect > Effect.BEAM_RECHARGE:
+	if effect < Effect.SPEED or effect > Effect.BEAM_PIERCING:
 		errors.append("Unknown foundation effect.")
 	match effect:
-		Effect.SPEED, Effect.FIRE_RATE, Effect.DAMAGE, Effect.ORB_MAGNET, Effect.BEAM_CAPACITY, Effect.BEAM_RECHARGE:
+		Effect.SPEED, Effect.FIRE_RATE, Effect.DAMAGE, Effect.ORB_MAGNET, Effect.BEAM_CAPACITY, Effect.BEAM_RECHARGE, Effect.BEAM_PIERCING:
 			expected = Category.UTILITY
 		Effect.ENERGY, Effect.SHIELD:
 			expected = Category.REWARD
@@ -55,6 +78,55 @@ func foundation_errors() -> PackedStringArray:
 			expected = Category.FALLBACK
 	if category != expected or repeatable != (category == Category.REWARD):
 		errors.append("Foundation categories and repeatable rewards must match their effects.")
+	if effect == Effect.BEAM_PIERCING:
+		for bonuses in [damage_bonus_values, width_bonus_values]:
+			if bonuses.size() != max_rank:
+				errors.append("Beam piercing requires authored damage and width bonuses for every rank.")
+			var previous_bonus := 0.0
+			for bonus in bonuses:
+				if not is_finite(bonus) or bonus <= 0.0 or bonus < previous_bonus:
+					errors.append("Beam bonuses must be positive, finite and nondecreasing.")
+				previous_bonus = bonus
+	if effect == Effect.ENERGY_CHAINS:
+		if range_values.size() != max_rank or not is_finite(secondary_damage_scale) or secondary_damage_scale <= 0.0 or not is_finite(proc_cooldown) or proc_cooldown <= 0.0:
+			errors.append("Energy chains require authored ranges, positive damage scale and cooldown.")
+		var previous_range := 0.0
+		for radius in range_values:
+			if not is_finite(radius) or radius <= 0.0 or radius < previous_range:
+				errors.append("Chain ranges must be finite, positive and nondecreasing.")
+			previous_range = radius
+		for jumps in rank_values:
+			if jumps != roundf(jumps) or jumps > 3.0:
+				errors.append("Chain jump budgets must be whole numbers, at most three.")
+	if effect == Effect.MICRO_MISSILES:
+		if projectile_counts.size() != max_rank:
+			errors.append("Micro-missiles require an authored volley count for every rank.")
+		var previous_count := 0
+		for count in projectile_counts:
+			if count <= 0 or count > 3 or count < previous_count:
+				errors.append("Missile volley counts must increase within the three-missile cap.")
+			previous_count = count
+		if weapon == null or weapon.kind != WeaponDefinition.Kind.MICRO_MISSILE or weapon.projectile == null:
+			errors.append("Micro-missiles require their authored weapon and projectile.")
+		elif weapon.active_limit <= 0 or weapon.active_limit > 3 or not is_finite(weapon.target_range) or weapon.target_range <= 0.0 or not is_finite(weapon.projectile_speed) or weapon.projectile_speed <= 0.0 or not is_finite(weapon.turn_speed_degrees) or weapon.turn_speed_degrees <= 0.0 or not is_finite(weapon.projectile_lifetime) or weapon.projectile_lifetime <= 0.0:
+			errors.append("Missile guidance, lifetime and capacity must be positive and bounded.")
+		if interval_values.size() != max_rank:
+			errors.append("Micro-missiles require a fully authored interval for every rank.")
+		if weapon != null:
+			if not is_finite(weapon.forward_angle_degrees) or weapon.forward_angle_degrees <= 0.0 or weapon.forward_angle_degrees > 180.0:
+				errors.append("Missile targeting requires a finite forward cone no wider than 180 degrees.")
+			if weapon.collision_sizes.size() != max_rank or weapon.collision_offsets.size() != max_rank:
+				errors.append("Every missile size requires matching collision dimensions and offsets.")
+			for size in weapon.collision_sizes:
+				if not size.is_finite() or size.x <= 0.0 or size.y <= 0.0:
+					errors.append("Missile collision sizes must be positive and finite.")
+			for offset in weapon.collision_offsets:
+				if not offset.is_finite(): errors.append("Missile collision offsets must be finite.")
+		var previous_interval := INF
+		for interval in interval_values:
+			if not is_finite(interval) or interval <= 0.0 or interval > previous_interval:
+				errors.append("Missile intervals must be positive, finite and nonincreasing.")
+			previous_interval = interval
 	if not is_family() and max_rank != 1:
 		errors.append("Rewards require one authored value and no acquired ranks.")
 	if not is_family() and not rank_values.is_empty() and not is_equal_approx(rank_values[0], roundf(rank_values[0])):
@@ -84,4 +156,10 @@ func offer_snapshot(rank: int) -> Dictionary:
 		"repeatable": repeatable, "current_rank": rank, "next_rank": next_rank,
 		"max_rank": max_rank, "current_value": rank_value(rank),
 		"next_value": rank_value(next_rank), "rank_values": rank_values.duplicate(),
+		"next_damage_bonus": damage_bonus(next_rank),
+		"next_width_bonus": width_bonus(next_rank),
+		"next_range": range_value(next_rank),
+		"secondary_damage_scale": secondary_damage_scale, "proc_cooldown": proc_cooldown,
+		"next_interval": interval_value(next_rank),
+		"next_projectile_count": projectile_count(next_rank),
 	}

@@ -56,7 +56,7 @@ func _materialize(reservation: Dictionary) -> void:
 	var world := get_parent().get_parent() as Node2D
 	if world == null or world.is_queued_for_deletion():
 		return
-	var orb: XpOrb
+	var orb: XpOrb = null
 	while not _free.is_empty() and orb == null:
 		var candidate: XpOrb = _free.pop_back()
 		if is_instance_valid(candidate): orb = candidate

@@ -2,6 +2,7 @@ extends Shot
 
 const _Feedback := preload("res://scenes/effects/combat_feedback.gd")
 const _ProjectileGlow := preload("res://scenes/combat/projectile_glow.gd")
+const PIERCING_DECAY := 0.8
 
 @export var damage: float
 @export var damage_Max: float
@@ -12,6 +13,7 @@ const _ProjectileGlow := preload("res://scenes/combat/projectile_glow.gd")
 @export var power_Full: float
 @export var piercing := false
 @export var vfx_config: ProjectileVfxConfig
+@export var piercing_texture: Texture2D
 var player_Id: String
 var _base_damage: float = -1.0
 var _base_speed_y := 0.0
@@ -28,6 +30,8 @@ var remaining_penetrations := 0
 var remaining_lifetime := -1.0
 var steering_target: WeakRef
 var _base_piercing := false
+var _base_texture: Texture2D
+var _damage_scale := 1.0
 
 
 func _ready() -> void:
@@ -36,6 +40,11 @@ func _ready() -> void:
 		_base_damage = damage
 		_base_speed_y = speedY
 		_base_piercing = piercing
+		for child in get_children():
+			if child is Sprite2D:
+				_source_sprite = child
+				_base_texture = child.texture
+				break
 	damage = minf(damage, damage_Max)
 	_create_laser_glow()
 
@@ -61,6 +70,10 @@ func configure_hit(hit: PlayerHitSnapshot, effects: PlayerHitEffects, reservatio
 	hit_snapshot = hit.copy()
 	_hit_effects = weakref(effects)
 	_reservation_key = reservation
+	if hit.kind() == PlayerHitSnapshot.Kind.GUN:
+		remaining_penetrations = hit.modifier_rank(&"piercing")
+		if remaining_penetrations > 0 and piercing_texture:
+			_source_sprite.texture = piercing_texture
 
 func reset_hit_state() -> void:
 	var effects: PlayerHitEffects = _hit_effects.get_ref() if _hit_effects else null
@@ -74,6 +87,9 @@ func reset_hit_state() -> void:
 	remaining_penetrations = 0
 	remaining_lifetime = -1.0
 	steering_target = null
+	_damage_scale = 1.0
+	if _base_texture:
+		_source_sprite.texture = _base_texture
 
 func _exit_tree() -> void:
 	reset_hit_state()
@@ -157,15 +173,25 @@ func _on_area_entered(area: Area2D) -> void:
 	if get_meta("pooled", false):
 		return
 	if area.is_in_group("enemy") or area.is_in_group("asteroid") or area.is_in_group("turret") or area.is_in_group("boss_hit_zone"):
-		var accent: Color = Color("96a5b5") if area.get("armored") == true else _Feedback.GOLD
-		_Feedback.spawn(get_parent(), global_position, accent)
+		var armored: bool = area.get("armored") == true
+		var accepted := false
 		var effects: PlayerHitEffects = _hit_effects.get_ref() if _hit_effects else null
 		if hit_snapshot and is_instance_valid(effects):
-			effects.resolve_hit(hit_snapshot, area, true, global_position)
+			accepted = effects.resolve_hit(hit_snapshot.scaled_direct(_damage_scale), area, true, global_position)
 		elif area.has_method("receive_player_hit"):
 			var group := CombatTargeting.damage_group(area)
 			var visited := _visited_groups.any(func(reference: WeakRef): return reference.get_ref() == group)
 			if not visited and area.receive_player_hit(damage, StringName(player_Id)):
 				_visited_groups.append(weakref(group))
-		if not piercing:
+				accepted = true
+		if armored or accepted:
+			if not (accepted and hit_snapshot and hit_snapshot.is_critical()):
+				_Feedback.spawn(get_parent(), global_position, Color("96a5b5") if armored else _Feedback.GOLD)
+		if armored:
+			ProjectilePool.despawn(self)
+		elif accepted and remaining_penetrations > 0:
+			remaining_penetrations -= 1
+			_damage_scale *= PIERCING_DECAY
+			damage *= PIERCING_DECAY
+		elif not piercing and (accepted or hit_snapshot == null or hit_snapshot.modifier_rank(&"piercing") == 0):
 			ProjectilePool.despawn(self)

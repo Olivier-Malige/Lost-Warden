@@ -167,6 +167,7 @@ func _update_movement_animation(horizontal_motion: float) -> void:
 		animation_player.play(animation)
 
 func _update_weapons(delta: float) -> void:
+	weapons.update_autonomous(delta)
 	var fire_action := controller + "_fire"
 	var beam_action := controller + "_beam"
 	_update_beam(delta, Input.is_action_pressed(beam_action))
@@ -183,7 +184,8 @@ func _update_beam(delta: float, beam_held: bool) -> void:
 			return
 		_start_beam()
 	beam_charge = maxf(beam_charge - STATS.beam_drain_per_second * delta, 0.0)
-	continuous_beam.set_damage(STATS.beam_damage + loadout.damage_bonus)
+	continuous_beam.set_damage((STATS.beam_damage + loadout.damage_bonus) * loadout.beam_damage_multiplier)
+	continuous_beam.extra_targets = loadout.beam_extra_targets
 	if _beam_overdrive_left > 0.0:
 		_beam_overdrive_left = maxf(_beam_overdrive_left - delta, 0.0)
 		if _beam_overdrive_left <= 0.0:
@@ -197,11 +199,12 @@ func _start_beam() -> void:
 	beam_active = true
 	_beam_overdrive_left = STATS.beam_overdrive_duration if overdrive else 0.0
 	continuous_beam.damage_interval = STATS.beam_damage_interval
-	continuous_beam.beam_width = STATS.beam_width
-	continuous_beam.overdrive_width = STATS.beam_overdrive_width
+	continuous_beam.beam_width = STATS.beam_width * loadout.beam_width_multiplier
+	continuous_beam.overdrive_width = STATS.beam_overdrive_width * loadout.beam_width_multiplier
 	continuous_beam.collision_width_multiplier = STATS.beam_collision_width_multiplier
 	continuous_beam.overdrive_damage_multiplier = STATS.beam_overdrive_damage_multiplier
-	continuous_beam.activate(id_Player, STATS.beam_damage + loadout.damage_bonus, overdrive)
+	continuous_beam.extra_targets = loadout.beam_extra_targets
+	continuous_beam.activate(id_Player, (STATS.beam_damage + loadout.damage_bonus) * loadout.beam_damage_multiplier, overdrive)
 	(full_beam_audio if overdrive else normal_beam_audio).play()
 	var kick := 4.0 if overdrive else 2.0
 	play_shot_recoil(kick, 0.1)

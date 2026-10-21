@@ -4,6 +4,7 @@ const _Save := preload("res://core/save_service.gd")
 
 var Debug := OS.is_debug_build()
 var score := 0
+var eliminations := 0
 var combo := 0
 var combo_time_left := 0.0
 var wave := 0
@@ -79,6 +80,8 @@ func reset_run(run_seed: int = -1) -> void:
 	if Debug:
 		print("Run seed: %d" % run_seed)
 	score = 0
+	eliminations = 0
+	Events.eliminations_changed.emit(eliminations)
 	combo = 0
 	combo_time_left = 0.0
 	Events.combo_changed.emit(combo, 1.0, combo_time_left)
@@ -87,7 +90,7 @@ func format_survival_time(seconds: float) -> String:
 	var total := maxi(floori(seconds), 0)
 	return "%02d:%02d" % [floori(float(total) / 60.0), total % 60]
 
-func register_kill(points: int) -> int:
+func register_kill(points: int, count_elimination := true) -> int:
 	combo = mini(combo + 1, 99)
 	combo_time_left = 2.0
 	var multiplier := combo_multiplier(combo)
@@ -95,6 +98,9 @@ func register_kill(points: int) -> int:
 	score += awarded_points
 	Events.score_changed.emit(score)
 	Events.combo_changed.emit(combo, multiplier, combo_time_left)
+	if count_elimination:
+		eliminations += 1
+		Events.eliminations_changed.emit(eliminations)
 	return awarded_points
 
 func add_score(points: int) -> void:

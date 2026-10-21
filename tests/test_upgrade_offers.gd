@@ -46,7 +46,7 @@ func subset(names: Array[StringName]) -> UpgradeTable:
 	return table
 
 func check_data_and_legacy() -> void:
-	check(CATALOG.foundation_errors(CONFIG).is_empty() and CATALOG.upgrades.size() == 10, "only implemented foundation families/rewards must be authored")
+	check(CATALOG.foundation_errors(CONFIG).is_empty() and CATALOG.upgrades.size() == 14 and definition(&"piercing") == null and definition(&"beam_piercing") != null and definition(&"energy_chains") != null and definition(&"micro_missiles") != null, "only completed families including autonomous micro-missiles enter live offers")
 	check([UpgradeDefinition.Effect.SPEED, UpgradeDefinition.Effect.FIRE_RATE, UpgradeDefinition.Effect.DAMAGE, UpgradeDefinition.Effect.SIDE_SHOT, UpgradeDefinition.Effect.SHIELD, UpgradeDefinition.Effect.ENERGY] == [0, 1, 2, 3, 4, 5], "legacy enum ordinals must remain stable")
 	check(LEGACY.upgrades.size() == 6 and STATS.speed_max == 240 and is_equal_approx(STATS.shoot_delay_min, 0.12), "legacy catalog stays readable while live stat limits use the activated foundation")
 	var legacy := PlayerLoadout.new(STATS)
@@ -147,7 +147,7 @@ func check_rewards_and_capacity() -> void:
 		check(build.apply_foundation(&"energy", {"energy": 3}).reward.value == 5, "repairs must remain repeatable without acquiring ranks")
 	check(build.acquired_ranks.is_empty() and build.ranks.is_empty() and build.foundation_snapshot().utility_count == 0, "repeatable consumables must never occupy family slots")
 	check(not build.apply_foundation(&"score").applied, "score fallback must never be manually applied as a normal family/reward")
-	var utilities: Array[StringName] = [&"speed", &"damage", &"fire_rate", &"orb_magnet", &"beam_capacity", &"beam_recharge"]
+	var utilities: Array[StringName] = [&"speed", &"damage", &"fire_rate", &"orb_magnet", &"beam_capacity", &"beam_recharge", &"beam_piercing"]
 	for a in utilities.size():
 		for b in range(a + 1, utilities.size()):
 			for c in range(b + 1, utilities.size()):
@@ -159,10 +159,11 @@ func check_rewards_and_capacity() -> void:
 					if not build.acquired_ranks.has(id):
 						check(not build.apply_foundation(id).applied and not ids(hand).has(id), "full utility slots must reject every unacquired family in application and offers")
 	var extended := CATALOG.duplicate(true) as UpgradeTable
-	for index in range(4):
+	var future_effects := [UpgradeDefinition.Effect.ESCORT_DRONE, UpgradeDefinition.Effect.ORBITING_SATELLITES, UpgradeDefinition.Effect.IMPACT_EXPLOSIONS, UpgradeDefinition.Effect.RICOCHET]
+	for index in future_effects.size():
 		var extra := definition(&"side_shot").duplicate() as UpgradeDefinition
 		extra.id = StringName("test_offensive_%d" % index)
-		extra.effect = UpgradeDefinition.Effect.PIERCING + index
+		extra.effect = future_effects[index]
 		extended.upgrades.append(extra)
 	check(extended.foundation_errors(CONFIG).is_empty(), "synthetic future families are test fixtures only")
 	build = fresh(extended)
@@ -178,7 +179,7 @@ func check_offer_policy() -> void:
 		var random := rng(seed_value)
 		var hand := CATALOG.generate_offers(build.foundation_snapshot(), {"energy": 3, "shield": 0}, random, CONFIG, true)
 		var names := ids(hand)
-		check(names.size() == 3 and names.has(&"side_shot") and hand.fallback_score == 0, "first selection must offer an offensive when available")
+		check(names.size() == 3 and hand.offers.any(func(offer): return offer.category == UpgradeDefinition.Category.OFFENSIVE) and hand.fallback_score == 0, "first selection must offer an offensive when available")
 		var utility_count := 0
 		var seen := {}
 		for offer in hand.offers:

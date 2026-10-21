@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="UpgradeTable" load_steps=12 format=3]
+[gd_resource type="Resource" script_class="UpgradeTable" load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://data/upgrades/upgrade_table.gd" id="1"]
 [ext_resource type="Resource" path="res://data/upgrades/foundation/speed.tres" id="2"]
@@ -11,7 +11,11 @@
 [ext_resource type="Resource" path="res://data/upgrades/foundation/score.tres" id="9"]
 [ext_resource type="Resource" path="res://data/upgrades/foundation/beam_capacity.tres" id="10"]
 [ext_resource type="Resource" path="res://data/upgrades/foundation/beam_recharge.tres" id="11"]
+[ext_resource type="Resource" path="res://data/upgrades/beam_piercing.tres" id="12"]
+[ext_resource type="Resource" path="res://data/upgrades/critical_hits.tres" id="13"]
+[ext_resource type="Resource" path="res://data/upgrades/energy_chains.tres" id="14"]
+[ext_resource type="Resource" path="res://data/upgrades/micro_missiles.tres" id="15"]
 
 [resource]
 script = ExtResource("1")
-upgrades = Array[UpgradeDefinition]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10"), ExtResource("11")])
+upgrades = Array[UpgradeDefinition]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10"), ExtResource("11"), ExtResource("12"), ExtResource("13"), ExtResource("14"), ExtResource("15")])

@@ -1,0 +1,75 @@
+{ "frames": [
+   {
+    "filename": "critical_impact 0.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 24, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 48 },
+    "sourceSize": { "w": 24, "h": 48 },
+    "duration": 50
+   },
+   {
+    "filename": "critical_impact 1.aseprite",
+    "frame": { "x": 24, "y": 0, "w": 24, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 48 },
+    "sourceSize": { "w": 24, "h": 48 },
+    "duration": 50
+   },
+   {
+    "filename": "critical_impact 2.aseprite",
+    "frame": { "x": 48, "y": 0, "w": 24, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 48 },
+    "sourceSize": { "w": 24, "h": 48 },
+    "duration": 50
+   },
+   {
+    "filename": "critical_impact 3.aseprite",
+    "frame": { "x": 72, "y": 0, "w": 24, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 48 },
+    "sourceSize": { "w": 24, "h": 48 },
+    "duration": 50
+   },
+   {
+    "filename": "critical_impact 4.aseprite",
+    "frame": { "x": 96, "y": 0, "w": 24, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 48 },
+    "sourceSize": { "w": 24, "h": 48 },
+    "duration": 50
+   },
+   {
+    "filename": "critical_impact 5.aseprite",
+    "frame": { "x": 120, "y": 0, "w": 24, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 24, "h": 48 },
+    "sourceSize": { "w": 24, "h": 48 },
+    "duration": 50
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.3.17.2-x64",
+  "image": "critical_impact_sheet.png",
+  "format": "RGBA8888",
+  "size": { "w": 144, "h": 48 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "critical_impact", "from": 0, "to": 5, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Ivory critical star and owner fracture rays", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+   { "name": "player2_critical", "keys": [{ "frame": 0, "bounds": {"x": 0, "y": 24, "w": 24, "h": 24 }, "pivot": {"x": 12, "y": 12 } }] },
+   { "name": "player1_critical", "keys": [{ "frame": 0, "bounds": {"x": 0, "y": 0, "w": 24, "h": 24 }, "pivot": {"x": 12, "y": 12 } }] }
+  ]
+ }
+}

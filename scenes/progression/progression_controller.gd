@@ -43,6 +43,14 @@ func living_players() -> Array[Player]:
 func _spawn_xp(amount: int, world_position: Vector2) -> void:
 	if _running: pool.spawn(amount, world_position)
 
+func debug_gain_level() -> bool:
+	if not global.Debug or not _running or not is_inside_tree() or get_parent().is_queued_for_deletion() or get_tree().paused:
+		return false
+	if _scheduled or _batch_active or not offers.is_empty() or progression.pending_count() > 0 or living_players().is_empty():
+		return false
+	_collect_xp(progression.next_threshold() - progression.xp, &"")
+	return true
+
 func _collect_xp(amount: int, _collector_id: StringName) -> void:
 	if not _running:
 		return
@@ -85,7 +93,7 @@ func _advance_selection() -> void:
 		if not hands.has(id): continue
 		if hands[id].offers.is_empty():
 			global.add_score(hands[id].fallback_score)
-			Events.upgrade_feedback_requested.emit(String(id), "SALVAGE +%d" % hands[id].fallback_score, false)
+			Events.upgrade_feedback_requested.emit(String(id), "SALVAGE RECOVERED", false)
 		else:
 			offers[id] = hands[id].offers
 			display[id] = {"build": participants[id].build, "offers": hands[id].offers}

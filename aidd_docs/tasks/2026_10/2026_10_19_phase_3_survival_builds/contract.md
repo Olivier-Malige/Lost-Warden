@@ -1,6 +1,6 @@
 # Phase 3 delivery contract
 
-Planning checkpoint: 2026-10-19; preview approved and implementation requested 2026-10-20. Steps 1-4 are complete: production documentation, progression/loadout/offer models, native paused selection and atomic XP/foundation activation with paired art. Step 5 has automated measurements and one actual solo run; remaining human observations and numerical acceptance stay deferred. The maintainer subsequently authorized commits, publication and the next step: step 6 combat infrastructure is implemented and verified, with later offensive families still pending. The concise gameplay roadmap controls delivery order; this contract specifies Phase 3 only. No XP numerical target is revised by the instruction to proceed.
+Planning checkpoint: 2026-10-19; preview approved and implementation requested 2026-10-20. Steps 1-4, 6-8, the signature-beam piercing revision and standalone step 12 chains are implemented. The maintainer moved chains ahead of missiles and explicitly deferred effect balancing on 2026-10-21, then approved the missile checkpoint. Step 5 has automated measurements and one solo run; remaining human observations and numerical acceptance stay deferred. Steps 9-11 and 13-14 remain pending, including future explosion coexistence. Work after published step 6 is local. The concise gameplay roadmap controls delivery order; this contract specifies Phase 3 only. No XP numerical target is revised by the instruction to proceed.
 
 The maintainer approved the silent interactive visual preview with **Arsenal déployé** selected. This preview does not complete a numbered delivery step. The maintainer will provide all music and sound effects; no selection audio files have been supplied yet. Step 1 production references are [art_audio_inventory.md](art_audio_inventory.md) and [selection_audio_brief.md](selection_audio_brief.md).
 
@@ -8,7 +8,7 @@ The maintainer approved the silent interactive visual preview with **Arsenal dé
 
 - Borrow the XP, paused choices, growing power and build synergies of Vampire Survivors / Megabonk while retaining the existing shmup controls.
 - Each living player has four offensive family slots and three utility family slots. Acquiring a new family consumes one slot; increasing its rank consumes none. No replacement during a run.
-- Utilities are speed, damage, fire rate, XP attraction, plasma reserve and plasma recovery. Offensives are side shots and the eight new effects below. Repair, shield charges and fallback score consume no slots.
+- Utilities are speed, damage, fire rate, XP attraction, plasma reserve, plasma recovery and beam piercing. Offensives are side shots and the seven other new effects below. Repair, shield charges and fallback score consume no slots. The 2026-10-21 playtest revision retires cannon piercing from offers and assigns the requested nearest-target cannon arc to the planned `energy_chains` family.
 - XP is shared in co-op, choices and equipment are personal. A run ends only after all players die. Human co-op balance acceptance remains deferred until after the power-up and balance rework; verify technical co-op behavior throughout Phase 3.
 - Nomad starts with its current primary cannon and its manual secondary signature plasma beam, outside the four offensive slots. Preserve zero initial charge, base capacity 100, activation at 10, drain 20/second and full-reserve overdrive. The maintainer's charge upgrades below can expand personal capacity to 175 and cell recovery to x1.75. No beam unlock card, automatic beam or free permanent beam.
 - Future ships may have different signatures. Ship selection, ShipDefinition, unlocks, permanent progression, save-schema additions, rarity and weapon evolution remain outside this phase.
@@ -52,6 +52,7 @@ Minimum event interfaces: XP collection `(amount, collector_id)`, progression sn
 | orb_magnet | Utility | Base radius 24 px, four increments of 24 px; maximum 120 |
 | beam_capacity | Utility | Three capacity bonuses +25 / +50 / +75; personal limit 125 / 150 / 175, preserving existing absolute charge |
 | beam_recharge | Utility | Three cell-yield bonuses +25% / +50% / +75%; multiplier 1.25 / 1.50 / 1.75 applied once to each shared base plasma event |
+| beam_piercing | Utility | 1 / 2 / 3 extra targets; initial damage +20% / +30% / +40%, initial width +25% / +37.5% / +50%; subsequent damage and width x0.8 per crossed target; armor blocks |
 | side_shot | Offensive | Four authored base damages 0.4 / 0.6 / 0.8 / 1.0; first pair at rank 1, outer pair at rank 4 with multiplier 0.6 |
 | energy | Repeatable reward | Repair by two energy, immediately clamped to 12; eligible only below maximum |
 | shield | Repeatable reward | Add one charge, maximum three; eligible only below maximum; preserve existing charge consumption |
@@ -63,7 +64,7 @@ Update current speed_max 225 and shoot_delay_min 0.13 to the new 240 / 0.12 limi
 
 Autonomous direct damage receives the common DAMAGE multiplier once. FIRE_RATE scales missile/drone intervals by `current_manual_delay / 0.20` (minimum factor 0.6); for satellites it scales contact cooldown, not orbit speed. Never scale secondary-effect cooldowns or reapply DAMAGE to an already modified secondary amount.
 
-Keep F1-F8 and existing action names. Player upgrade cheats use the same eligibility rules and report full/capped slots. F9 may fill a deterministic valid maximum test build: side shots, piercing, critical hits, missiles; speed, damage, fire rate; full energy, shield and plasma. It must not silently create an impossible four-utility build. Block stat cheats while choice offers are outstanding.
+Keep F1-F8 and existing action names. Player upgrade cheats use the same eligibility rules and report full/capped slots. F9 may fill a deterministic valid maximum test build from completed families; never force an unavailable family or an impossible four-utility build. Block stat cheats while choice offers are outstanding. Debug L completes the current XP threshold through the normal queued-choice flow and is blocked outside an eligible active run or while selection is outstanding.
 
 ## XP rewards and collection
 
@@ -101,13 +102,12 @@ Only a direct projectile's first accepted impact may attempt secondary procs. Sn
 
 ## New offensive families
 
-All eight have three ranks, weight 10 and no rarity/prerequisite beyond slot eligibility. Numbers below are authored bases before common DAMAGE/FIRE_RATE adjustments.
+All seven have three ranks, weight 10 and no rarity/prerequisite beyond slot eligibility. Numbers below are authored bases before common DAMAGE/FIRE_RATE adjustments. Cannon piercing was moved to beam utility after playtest. Critical hits, micro-missiles and energy chains are live; the four other new offensive families remain pending. The maintainer explicitly defers effect balancing; these prototype values remain authored and visible in cards.
 
 | ID | Ranks 1 / 2 / 3 | Fixed limits |
 | --- | --- | --- |
-| piercing | 1 / 2 / 3 extra targets | Damage x0.8 after each accepted target; once per target/group; armor stops the shot |
 | critical_hits | 10 / 20 / 30% chance | Direct damage x2; secondary damage uses pre-critical base |
-| micro_missiles | Damage 0.9 / 1.1 / 1.3; intervals 1.10 / 0.95 / 0.80 s | One per emission, 3 active, range 220 px, speed 240 px/s, turn 240 deg/s, life 1.8 s |
+| micro_missiles | 1 / 2 / 3 per volley, small / medium / large sprites; damage 0.9 / 1.1 / 1.3; intervals 1.10 / 0.95 / 0.80 s | 3 active/reserved per owner; partial volleys use remaining capacity; range 220 px, speed 240 px/s, turn 240 deg/s, life 1.8 s; no electric chains |
 | escort_drone | Damage 0.6 / 0.75 / 0.9; intervals 0.65 / 0.55 / 0.45 s | One drone, range 180 px; straight bolt speed 360 px/s, life 1 s, 6 active bolts |
 | orbiting_satellites | Count 1 / 2 / 3; damage 1 / 1.25 / 1.5 | Orbit radius 32 px, period 2.5 s, contact radius 4 px; shared per-owner/group contact cooldown 0.50 s |
 | impact_explosions | Radius 20 / 26 / 32 px; damage x0.35 / x0.45 / x0.55 | At most 4 other targets; per-owner cooldown 0.30 s; exclude initial target/group |
@@ -116,10 +116,14 @@ All eight have three ranks, weight 10 and no rarity/prerequisite beyond slot eli
 
 | Modifier | Main/side cannons | Drone bolts | Missiles | Satellite contacts | Plasma/reflected enemy shots |
 | --- | --- | --- | --- | --- | --- |
-| Piercing, ricochet | Yes | Yes | No | No | Existing behavior only |
-| Crits, explosion, chain | Yes | Yes | Yes | Yes | No new modifier |
+| Ricochet | Yes | Yes | No | No | No new modifier |
+| Beam piercing | No | No | No | No | Manual plasma only; reflected shots excluded |
+| Crits, explosion | Yes | Yes | Yes | Yes | No new modifier |
+| Energy chains | Yes | Yes | No | Yes | No new modifier |
 
-Ricochet emits a separate secondary shard; it does not redirect the original projectile. A missile has no intrinsic splash; explosion requires that family. Missiles can reacquire once after target loss, otherwise fly straight to expiry. Weapons with no target retain one ready emission, never an accumulated burst. Saturated caps skip emission without backlog.
+Maintainer forward-targeting revision: missile acquisition, retained-target validation and the single reacquisition use a 90-degree screen-up cone (45 degrees either side of Nomad's forward axis). Closer side/rear enemies are excluded. A target leaving that cone is lost, so a passed target cannot cause a U-turn. Other weapons' targeting remains unrestricted unless their own contract says otherwise.
+
+Ricochet emits a separate secondary shard; it does not redirect the original projectile. A missile has no intrinsic splash; explosion requires that family. Following the maintainer's 2026-10-21 feedback, smaller native missile art grows by rank alongside 1/2/3-projectile volleys. Hull collisions follow 3x6 / 4x8 / 5x10 px at offsets (0,-1) / (0,-2) / (0,-3); no fractional sprite scaling is used. Missile impacts retain criticals but cannot trigger electric chains or consume their cooldown. Missiles can reacquire once after target loss, otherwise fly straight to expiry. Weapons with no target retain one ready emission, never an accumulated burst. Saturated caps skip emission without backlog; a volley may use fewer entries when only part of its capacity is free.
 
 All proc cooldowns are per owner across all compatible weapons; denied opportunities are discarded. Multiple different procs may accompany one eligible hit within the common boss-group rule. Pause freezes cooldowns. At owner DYING, stop new emissions/procs and remove drone/satellites; already flying shots complete their bounded lives. Game over/world removal cancels queued requests and clears owned objects.
 
@@ -139,6 +143,10 @@ Use one opening per contiguous queued-level batch, shared by both players. Later
 
 640x400 layout: shared title at x16/y12/w608/h20 and XP row y36/h12; co-op player panels x16 and x326, y60, w298/h328. Each co-op panel shows player identity, four offensive/three utility cells, three 274x66 cards at y130/204/278, then status/controls near y354. **Explicit visual revision, approved 2026-10-20:** Arsenal déployé replaces the former narrow centered solo panel with a wider solo panel and three horizontal cards. Final solo pixel coordinates and text wrapping are measured at step 3 against native screenshots; co-op retains personal stacked choices. Cards carry icon, name, current-to-next rank and two short numeric effect lines. Keep the fixed core centered when width expands. HUD shows seven icon/rank cells per player and the shared level below SURVIVAL in the right rail. **Maintainer feedback, 2026-10-20:** retain the shared level and its progress bar, removing only the numeric XP counter; preserve progression and the selection screen's XP information. XP pickups use a pulsing additive halo, larger for high-value orbs, with a radial ivory/gold/transparent amber gradient to separate them from scenery.
 
+## Approved gameplay readability revision — 2026-10-20
+
+The maintainer approved a stronger critical effect and replacing gameplay points/combo displays with a shared elimination count. The count resets each run and increases only once per player-owned enemy destruction, including one for a boss hull; asteroid hazards, optional boss parts, escapes, cleanup and score-only salvage do not increase it. Route updates through Events, without HUD-to-player coupling. Remove floating score/combo popups during gameplay; retain internal scoring, record compatibility and score on the existing results screens. Keep survival time, level and the nonnumeric level-progress bar. Use a 24px, six-frame, 300 ms owner-colored critical impact and a brief longer flash on the struck enemy/cannon. No floating damage numbers or new audio are enabled by this revision.
+
 ## Selection audio
 
 Plan a short energetic level-up sting (target 0.5-0.8 s), a compatible restrained synthwave/space selection loop (target 20-30 s before musical boundary editing), navigation/confirmation cues and a short return accent. Route musical assets through Music and UI cues through Sounds; honor their existing mute settings independently.
@@ -154,7 +162,7 @@ The foundation may be tested silently with null streams; existing UI cues may su
 - Run focused SceneTree suites in the existing addon-free isolated runtime with separate APPDATA. Check actual collision callbacks, deterministic traces, 0/1/2 eligible players, death plus XP in one tick, queued levels, no legacy drops, stale confirmations, pause overlays, restart and legacy saves.
 - Keep Alpha 9, elites, beam impact/fire/shield, boss parts/patterns and screen-transition coverage meaningful while replacing obsolete drop/rank assertions. Known baseline limits: historical enemy-feedback failures and inspector shutdown-resource warning; never claim all repository tests pass from the selected baseline.
 - Record economy metrics for seeds 0-99 under the same scripted destruction/collection fixture in both modes, then confirm with solo playtests. Separate simulation assumptions from real player behavior. Log first selection, next four intervals and XP produced/collected/lost. No density/health changes.
-- Compare precision (side/piercing/crits/missiles), propagation (side/explosion/chain/ricochet), autonomous (missiles/drone/satellites/crits), and proximity (satellites/explosion/chain/drone) builds on identical seeds and encounter data. Each must show a useful strength and observable tradeoff; no build should dominate every measured situation.
-- Enumerate the 126 possible four-offensive family sets for compatibility/cap fixtures; sample all four valid three-utility sets. Measure worst-case native solo/co-op load, active/parked counts and frame-time percentiles on the same machine. Require bounded objects/requests and no upward drift through repeated restart/death cycles. Human co-op balance acceptance stays in Phase 6.
+- Compare precision (side/crits/missiles plus beam utility), propagation (side/explosion/chain/ricochet), autonomous (missiles/drone/satellites/crits), and proximity (satellites/explosion/chain/drone) builds on identical seeds and encounter data. Each must show a useful strength and observable tradeoff; no build should dominate every measured situation.
+- Enumerate the 70 possible four-offensive family sets from eight total families for compatibility/cap fixtures; sample all 35 three-utility sets from seven families. Measure worst-case native solo/co-op load, active/parked counts and frame-time percentiles on the same machine. Require bounded objects/requests and no upward drift through repeated restart/death cycles. Human co-op balance acceptance stays in Phase 6.
 - Inspect actual native/wide screenshots and short effect sequences at each art delivery. Verify source/export palette, geometry, ownership, HUD/card readability and plasma identity. Do not infer visual quality or listening acceptance from code.
 - Finish each requested step before starting another. Update roadmap/validation evidence only for work actually delivered. Preserve existing local changes; no automatic commit, merge, publication or permanent progression.

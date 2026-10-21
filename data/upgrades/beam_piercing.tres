@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/upgrade_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/upgrade_miniatures.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="Icon"]
+atlas = ExtResource("2")
+region = Rect2(160, 0, 16, 16)
+
+[resource]
+script = ExtResource("1")
+icon = SubResource("Icon")
+id = &"beam_piercing"
+effect = 18
+weight = 10
+max_rank = 3
+display_name = "PIERCING BEAM"
+description = "A wider, stronger plasma beam crosses extra targets, narrowing and losing 20% damage per target. Armor blocks it."
+category = 0
+repeatable = false
+rank_values = PackedFloat32Array(1, 2, 3)
+damage_bonus_values = PackedFloat32Array(0.2, 0.3, 0.4)
+width_bonus_values = PackedFloat32Array(0.25, 0.375, 0.5)
+hud_label = &"BEAM PIERCE"
