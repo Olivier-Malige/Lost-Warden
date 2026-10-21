@@ -1,7 +1,7 @@
 class_name WeaponDefinition
 extends Resource
 
-enum Kind { PRIMARY, SIDE, MICRO_MISSILE }
+enum Kind { PRIMARY, SIDE, MICRO_MISSILE, DRONE_BOLT }
 
 @export var id: StringName
 @export var kind: Kind = Kind.PRIMARY

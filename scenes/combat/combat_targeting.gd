@@ -61,7 +61,7 @@ static func targets(world: Node2D, origin: Vector2, radius: float, excluded_grou
 			result.append(target)
 	return result
 
-# Nomad faces screen-up; a passed target must not pull a guided missile backward.
+# Nomad weapons face screen-up independently of their visual banking.
 static func in_forward_cone(origin: Vector2, point: Vector2, angle_degrees: float) -> bool:
 	var offset := point - origin
 	return offset.y < 0.0 and offset.normalized().dot(Vector2.UP) >= cos(deg_to_rad(angle_degrees * 0.5)) - 0.00001

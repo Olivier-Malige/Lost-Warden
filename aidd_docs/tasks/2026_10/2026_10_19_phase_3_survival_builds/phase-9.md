@@ -1,8 +1,8 @@
 ---
-status: pending
+status: done
 ---
 
-# Instruction: Add one autonomous escort drone with aimed bolts and dedicated art
+# Instruction: Add autonomous escort drones with aimed bolts and dedicated art
 
 ## Architecture projection
 
@@ -14,7 +14,7 @@ status: pending
 ├── data/upgrades/foundation_catalog.tres                   ✏️ completed-family registration
 ├── scenes/player/weapons/{escort_drone.gd,escort_drone.tscn} ✅ owned support and cadence
 ├── scenes/player/weapons/{drone_bolt.gd,drone_bolt.tscn}    ✅ pooled straight projectile
-├── scenes/player/{player_weapons,player_loadout,player_vitals}.gd ✏️ support acquisition and death cleanup
+├── scenes/player/{player_weapons,player,player_effects}.gd ✏️ support acquisition and death cleanup
 ├── scenes/combat/{combat_targeting,player_hit_snapshot,player_hit_effects}.gd ✏️ shared target/hit behavior
 ├── assets/sources/player/weapons/{escort_drone,drone_bolt}.aseprite ✅ hull, muzzle and bolt masters
 ├── assets/sprites/player/weapons/{escort_drone,drone_bolt}_sheet.{png,json} ✅ matching exports and mappings
@@ -48,7 +48,7 @@ journey
   section Setup
     Prepare two players and moving near and far targets => independent drone fixtures: 5: cli
   section Happy path
-    Acquire and rank the drone => exactly one support follows each equipped owner: 5: system
+    Acquire and rank the drone => one / one / two supports follow each equipped owner: 5: system
     Stop manual fire and use plasma => the drone retains its adjusted independent cadence: 5: system
     Move the aimed target after emission => the bolt follows its original straight vector: 5: system
   section Edge case - Modifier combination
@@ -65,10 +65,10 @@ journey
 
 ### `1)` Implement one following support and its straight weapon
 
-> Use `contract.md` drone ranks and caps; do not add extra drones as rank rewards.
+> Use `contract.md` drone ranks and caps. The maintainer approved one / one / two companions on 2026-10-21, with the second drone unlocked at rank three.
 
-1. Create one owner-attached support with a fixed local shoulder anchor at `(24, -12)`; mirror the horizontal anchor for P2. Keep it non-blocking and non-intercepting, including at playfield edges; the player's existing bounds stay unchanged.
-2. Acquire the nearest eligible visible target within the authored range from the drone emitter, using stable ordering. Aim once at emission and fly the bolt straight, without homing or leading the target.
+1. Create an owner-attached support with a fixed local shoulder anchor at `(24, -12)`; mirror the horizontal anchor for P2. At rank three add the companion on the opposite shoulder. Bank both sprites with player movement and synchronize reduced copies of the existing Nomad reactors; tuck visual emitters inside the arena at its edges. Keep it non-blocking and non-intercepting, including at playfield edges; the player's existing bounds stay unchanged.
+2. Acquire the nearest eligible visible target within the authored range and screen-up 90-degree cone from each drone emitter, using stable ordering. Aim once at emission and fly the bolt straight, without homing or leading the target.
 3. Apply the common damage multiplier once and the specified cadence factor. Enforce six active/reserved bolts per owner and the contracted bolt lifetime. No target retains one ready shot; saturation skips without backlog.
 4. Reuse the existing projectile pool, snapshot and accepted-hit rules rather than creating a separate damage implementation.
 
@@ -76,7 +76,7 @@ journey
 
 > A drone bolt is a compatible direct cannon-like source, not an unlimited trigger chain.
 
-1. Apply piercing and emission-time critical state to drone bolts with the same target/group and reset rules as manual guns. Keep future ricochet/explosion/chain support behind completed-family registration.
+1. Apply piercing and emission-time critical state to drone bolts with the same target/group and reset rules as manual guns. Exclude electric chains from drone bolts, as requested in the 2026-10-21 playtest; preserve cannon chains. Keep future ricochet/explosion support behind completed-family registration.
 2. Let the drone fire during manual inactivity or plasma use. Pause freezes its timer and existing bolt flight without removing the support.
 3. Remove the support safely and cancel new emissions/procs at owner DYING; let airborne bolts expire normally. Keep death cleanup separate from generic held-input reset so opening a choice overlay cannot destroy the drone.
 
@@ -92,6 +92,10 @@ journey
 
 | Task | Acceptance criteria |
 | ---- | ------------------- |
-| 1 | Each equipped living owner has exactly one non-blocking drone. Its measured cadence/damage, range, straight bolt speed and lifetime match the contract; active plus reserved bolts never exceed six and readiness never accumulates a burst. |
+| 1 | Each equipped living owner has one / one / two non-blocking drones by rank. Its measured cadence/damage, range, straight bolt speed and lifetime match the contract; active plus reserved bolts never exceed six and readiness never accumulates a burst. |
 | 2 | Actual drone contacts obey manual-equivalent piercing/critical behavior and the common boss-group exclusion. Pause preserves frozen support state; DYING removes support safely and prevents new owned effects without deleting another player's support. |
 | 3 | Editable sources, runtime exports and frame/anchor mappings are complete; native art and edge captures show distinct ownership and an unobstructed playfield. Target/critical replays and lifecycle fixtures pass before the card enters offers. |
+
+## Delivery evidence
+
+Implemented and verified on 2026-10-21, including the maintainer-approved rank-three second drone, movement banks and matched Nomad reactors. See [escort evidence](validation/escort_drone.md): 344 native checks, clean lifecycle exits, exact palette/source parity and inspected solo/co-op/wide captures. This checkpoint remains local for review; the overall Phase 3 plan stays in progress.

@@ -6,9 +6,14 @@ const EXTRA_SIDE_MIN_RANK := 4
 const EXTRA_SIDE_SPREAD_SPEED := 110.5
 const EXTRA_SIDE_DAMAGE_MULTIPLIER := 0.6
 const MISSILES: UpgradeDefinition = preload("res://data/upgrades/micro_missiles.tres")
+const DRONE := preload("res://scenes/player/weapons/escort_drone.tscn")
+const DRONE_UPGRADE: UpgradeDefinition = preload("res://data/upgrades/escort_drone.tres")
 
 var player: Player
 var missile_wait := 0.0
+var escorts: Array[Node2D] = []
+var escort: Node2D:
+	get: return escorts[0] if not escorts.is_empty() else null
 
 func _init(p_player: Player) -> void:
 	player = p_player
@@ -16,6 +21,9 @@ func _init(p_player: Player) -> void:
 func update_autonomous(delta: float) -> void:
 	if not is_instance_valid(player) or player.state >= Player.State.DYING:
 		return
+	sync_support()
+	for support in escorts:
+		support.tick(delta)
 	var rank := player.loadout.rank_for(UpgradeDefinition.Effect.MICRO_MISSILES)
 	if rank == 0:
 		missile_wait = 0.0
@@ -36,6 +44,30 @@ func update_autonomous(delta: float) -> void:
 		if not service.queue_missile(StringName(player.id_Player), MISSILES, rank, origin,
 			targets[0], player.loadout.direct_damage_multiplier, player.loadout.acquired_ranks, player.loadout.critical_chance):
 			break
+
+func sync_support() -> void:
+	var rank := player.loadout.rank_for(UpgradeDefinition.Effect.ESCORT_DRONE)
+	if player.state >= Player.State.DYING or rank == 0:
+		stop_support()
+		return
+	var desired := DRONE_UPGRADE.support_count(rank)
+	while escorts.size() > desired:
+		var support := escorts.pop_back() as Node2D
+		support.hide()
+		support.queue_free()
+	while escorts.size() < desired:
+		var support := DRONE.instantiate() as Node2D
+		support.position = Vector2((-24 if player.set_Player_2 else 24) * (1 if escorts.is_empty() else -1), -12)
+		escorts.append(support)
+		player.add_child(support)
+
+func stop_support() -> void:
+	for support in escorts:
+		if is_instance_valid(support):
+			support.hide()
+			support.set_process(false)
+			support.queue_free()
+	escorts.clear()
 
 func fire_primary() -> void:
 	if not is_instance_valid(player) or player.state >= Player.State.DYING:

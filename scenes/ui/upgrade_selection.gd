@@ -13,6 +13,7 @@ const MENU_ICON_IDS: Array[StringName] = [
 	&"beam_piercing", &"critical_hits",
 	&"energy_chains",
 	&"micro_missiles",
+	&"escort_drone",
 ]
 const INK := Color("101522")
 const WHITE := Color("f3ebdd")
@@ -317,6 +318,7 @@ func _effect_lines(offer: Dictionary) -> String:
 		&"critical_hits": return "%d%% CRITICAL CHANCE\nx2 DIRECT DAMAGE" % roundi(offer.next_value * 100.0)
 		&"energy_chains": return "%d ARC JUMPS / %d PX\n%d%% DAMAGE / %.1f SEC" % [roundi(offer.next_value), roundi(offer.next_range), roundi(offer.secondary_damage_scale * 100.0), offer.proc_cooldown]
 		&"micro_missiles": return "%d MISSILES / VOLLEY\n%.1f DMG / %.2f SEC" % [offer.next_projectile_count, offer.next_value, offer.next_interval]
+		&"escort_drone": return "%d FORWARD ESCORT%s\n%.2f DMG / %.2f SEC" % [offer.next_support_count, "S" if offer.next_support_count > 1 else "", offer.next_value, offer.next_interval]
 	return offer.description
 
 func _icon(parent: Control, id: StringName, rect: Rect2, menu_icon := false, team := 0) -> void:

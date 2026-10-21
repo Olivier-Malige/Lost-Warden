@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/upgrade_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/upgrade_miniatures.png" id="2"]
+[ext_resource type="Resource" path="res://data/weapons/drone_bolt.tres" id="3"]
+
+[sub_resource type="AtlasTexture" id="Icon"]
+atlas = ExtResource("2")
+region = Rect2(224, 0, 16, 16)
+
+[resource]
+script = ExtResource("1")
+icon = SubResource("Icon")
+id = &"escort_drone"
+effect = 11
+weight = 10
+max_rank = 3
+display_name = "ESCORT DRONE"
+description = "Shoulder companions bank and thrust with your ship, aiming straight bolts within a forward 90-degree cone. The final rank adds a second escort. Criticals apply; electric chains do not."
+category = 1
+repeatable = false
+rank_values = PackedFloat32Array(0.6, 0.75, 0.9)
+interval_values = PackedFloat32Array(0.65, 0.55, 0.45)
+support_counts = PackedInt32Array(1, 1, 2)
+weapon = ExtResource("3")
+hud_label = &"ESCORT"

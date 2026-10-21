@@ -52,7 +52,7 @@ func create_hit(owner_id: StringName, base: float, direct: float, modifiers: Dic
 		return null
 	_sequences[owner_id] = _sequences.get(owner_id, 0) + 1
 	var critical := false
-	if kind in [PlayerHitSnapshot.Kind.GUN, PlayerHitSnapshot.Kind.MISSILE] and critical_chance > 0.0:
+	if kind in [PlayerHitSnapshot.Kind.GUN, PlayerHitSnapshot.Kind.MISSILE, PlayerHitSnapshot.Kind.DRONE] and critical_chance > 0.0:
 		var random := combat_random(owner_id)
 		critical = random != null and is_critical_roll(random.randf(), critical_chance)
 	var hit := PlayerHitSnapshot.new(owner_id, _sequences[owner_id], base, direct, modifiers, kind, critical, _generation)
@@ -103,7 +103,7 @@ func resolve_hit(hit: PlayerHitSnapshot, target: Area2D, feedback := true, impac
 
 # Copy the impact and retain its root before the source projectile can be recycled.
 func _queue_chain(hit: PlayerHitSnapshot, target: Area2D, at: Vector2, local_impact: Vector2) -> void:
-	if hit.kind() == PlayerHitSnapshot.Kind.MISSILE:
+	if hit.kind() in [PlayerHitSnapshot.Kind.MISSILE, PlayerHitSnapshot.Kind.DRONE]:
 		return
 	var rank := clampi(hit.modifier_rank(&"energy_chains"), 0, _ChainDefinition.max_rank)
 	if rank == 0 or _chain_cooldowns.get(hit.owner_id(), 0.0) > 0.0 or not retain_root(hit):
@@ -198,6 +198,29 @@ func queue_missile(owner_id: StringName, upgrade: UpgradeDefinition, rank: int, 
 	_request_sequence += 1
 	_requests[_request_sequence] = {"id": _request_sequence, "generation": _generation, "hit": hit,
 		"packed": weapon.projectile, "position": position, "weapon": weapon, "rank": rank, "target": weakref(target), "key": key}
+	call_deferred("_materialize", _request_sequence)
+	return true
+
+func queue_drone_bolt(owner_id: StringName, upgrade: UpgradeDefinition, rank: int, position: Vector2, direction: Vector2, multiplier: float, modifiers: Dictionary, critical_chance: float) -> bool:
+	if rank < 1 or rank > upgrade.max_rank or not owner_alive(owner_id) or not direction.is_finite() or direction.is_zero_approx():
+		return false
+	var weapon := upgrade.weapon
+	if weapon == null:
+		return false
+	var key := StringName("%s:%s" % [owner_id, weapon.projectile.resource_path])
+	if int(_reservations.get(key, 0)) >= weapon.active_limit:
+		return false
+	var base := upgrade.rank_value(rank)
+	var allowed := modifiers.duplicate()
+	allowed.erase(&"energy_chains")
+	var hit := create_hit(owner_id, base, base * multiplier, allowed, PlayerHitSnapshot.Kind.DRONE, critical_chance)
+	if hit == null:
+		return false
+	_reservations[key] = int(_reservations.get(key, 0)) + 1
+	_request_sequence += 1
+	_requests[_request_sequence] = {"id": _request_sequence, "generation": _generation, "hit": hit,
+		"packed": weapon.projectile, "position": position, "velocity": direction.normalized() * weapon.projectile_speed,
+		"lifetime": weapon.projectile_lifetime, "key": key}
 	call_deferred("_materialize", _request_sequence)
 	return true
 

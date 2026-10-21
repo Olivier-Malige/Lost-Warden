@@ -31,6 +31,10 @@ enum Category { UTILITY, OFFENSIVE, REWARD, FALLBACK }
 @export var weapon: WeaponDefinition
 @export var interval_values: PackedFloat32Array = []
 @export var projectile_counts: PackedInt32Array = []
+@export var support_counts: PackedInt32Array = []
+
+func support_count(rank: int) -> int:
+	return support_counts[mini(rank, support_counts.size()) - 1] if rank > 0 and not support_counts.is_empty() else 0
 
 func projectile_count(rank: int) -> int:
 	return projectile_counts[mini(rank, projectile_counts.size()) - 1] if rank > 0 and not projectile_counts.is_empty() else 0
@@ -98,6 +102,28 @@ func foundation_errors() -> PackedStringArray:
 		for jumps in rank_values:
 			if jumps != roundf(jumps) or jumps > 3.0:
 				errors.append("Chain jump budgets must be whole numbers, at most three.")
+	if effect == Effect.ESCORT_DRONE:
+		if support_counts.size() != max_rank:
+			errors.append("Escort drones require an authored support count at every rank.")
+		var previous_supports := 0
+		for count in support_counts:
+			if count < 1 or count > 2 or count < previous_supports:
+				errors.append("Escort counts must be nondecreasing and bounded to two companions.")
+			previous_supports = count
+		if weapon == null or weapon.kind != WeaponDefinition.Kind.DRONE_BOLT or weapon.projectile == null:
+			errors.append("Escort drones require their authored bolt weapon and projectile.")
+		elif weapon.active_limit <= 0 or weapon.active_limit > 6 or not is_finite(weapon.target_range) or weapon.target_range <= 0.0 or not is_finite(weapon.projectile_speed) or weapon.projectile_speed <= 0.0 or not is_finite(weapon.projectile_lifetime) or weapon.projectile_lifetime <= 0.0:
+			errors.append("Drone bolt range, speed, lifetime and capacity must be positive and bounded.")
+		if weapon != null and (not is_finite(weapon.forward_angle_degrees) or weapon.forward_angle_degrees <= 0.0 or weapon.forward_angle_degrees > 180.0):
+			errors.append("Drone targeting requires a finite forward cone no wider than 180 degrees.")
+	if effect == Effect.MICRO_MISSILES or effect == Effect.ESCORT_DRONE:
+		if interval_values.size() != max_rank:
+			errors.append("Autonomous weapons require an authored interval for every rank.")
+		var previous_interval := INF
+		for interval in interval_values:
+			if not is_finite(interval) or interval <= 0.0 or interval > previous_interval:
+				errors.append("Autonomous intervals must be positive, finite and nonincreasing.")
+			previous_interval = interval
 	if effect == Effect.MICRO_MISSILES:
 		if projectile_counts.size() != max_rank:
 			errors.append("Micro-missiles require an authored volley count for every rank.")
@@ -110,8 +136,6 @@ func foundation_errors() -> PackedStringArray:
 			errors.append("Micro-missiles require their authored weapon and projectile.")
 		elif weapon.active_limit <= 0 or weapon.active_limit > 3 or not is_finite(weapon.target_range) or weapon.target_range <= 0.0 or not is_finite(weapon.projectile_speed) or weapon.projectile_speed <= 0.0 or not is_finite(weapon.turn_speed_degrees) or weapon.turn_speed_degrees <= 0.0 or not is_finite(weapon.projectile_lifetime) or weapon.projectile_lifetime <= 0.0:
 			errors.append("Missile guidance, lifetime and capacity must be positive and bounded.")
-		if interval_values.size() != max_rank:
-			errors.append("Micro-missiles require a fully authored interval for every rank.")
 		if weapon != null:
 			if not is_finite(weapon.forward_angle_degrees) or weapon.forward_angle_degrees <= 0.0 or weapon.forward_angle_degrees > 180.0:
 				errors.append("Missile targeting requires a finite forward cone no wider than 180 degrees.")
@@ -122,11 +146,6 @@ func foundation_errors() -> PackedStringArray:
 					errors.append("Missile collision sizes must be positive and finite.")
 			for offset in weapon.collision_offsets:
 				if not offset.is_finite(): errors.append("Missile collision offsets must be finite.")
-		var previous_interval := INF
-		for interval in interval_values:
-			if not is_finite(interval) or interval <= 0.0 or interval > previous_interval:
-				errors.append("Missile intervals must be positive, finite and nonincreasing.")
-			previous_interval = interval
 	if not is_family() and max_rank != 1:
 		errors.append("Rewards require one authored value and no acquired ranks.")
 	if not is_family() and not rank_values.is_empty() and not is_equal_approx(rank_values[0], roundf(rank_values[0])):
@@ -162,4 +181,5 @@ func offer_snapshot(rank: int) -> Dictionary:
 		"secondary_damage_scale": secondary_damage_scale, "proc_cooldown": proc_cooldown,
 		"next_interval": interval_value(next_rank),
 		"next_projectile_count": projectile_count(next_rank),
+		"next_support_count": support_count(next_rank),
 	}

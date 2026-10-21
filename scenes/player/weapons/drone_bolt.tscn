@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scenes/player/weapons/drone_bolt.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/weapons/drone_bolt_sheet.png" id="2"]
+
+[sub_resource type="RectangleShape2D" id="Bolt"]
+size = Vector2(3, 8)
+
+[node name="DroneBolt" type="Area2D"]
+script = ExtResource("1")
+playerShot = true
+damage = 0.6
+damage_Max = 10.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2")
+hframes = 4
+vframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("Bolt")
+
+[node name="anim" type="AnimationPlayer" parent="."]
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+rect = Rect2(-4, -8, 8, 16)
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_screen_exited"]

@@ -1,6 +1,6 @@
 # Phase 3 delivery contract
 
-Planning checkpoint: 2026-10-19; preview approved and implementation requested 2026-10-20. Steps 1-4, 6-8, the signature-beam piercing revision and standalone step 12 chains are implemented. The maintainer moved chains ahead of missiles and explicitly deferred effect balancing on 2026-10-21, then approved the missile checkpoint. Step 5 has automated measurements and one solo run; remaining human observations and numerical acceptance stay deferred. Steps 9-11 and 13-14 remain pending, including future explosion coexistence. Work after published step 6 is local. The concise gameplay roadmap controls delivery order; this contract specifies Phase 3 only. No XP numerical target is revised by the instruction to proceed.
+Planning checkpoint: 2026-10-19; preview approved and implementation requested 2026-10-20. Steps 1-4, 6-9, the signature-beam piercing revision and standalone step 12 chains are implemented. The maintainer moved chains ahead of missiles and explicitly deferred effect balancing on 2026-10-21, then approved the missile checkpoint. Step 5 has automated measurements and one solo run; remaining human observations and numerical acceptance stay deferred. Steps 10-11 and 13-14 remain pending, including future explosion coexistence. Work through the missile checkpoint and console corrections is committed locally as `30818a6`; the escort revision is the next local checkpoint. The concise gameplay roadmap controls delivery order; this contract specifies Phase 3 only. No XP numerical target is revised by the instruction to proceed.
 
 The maintainer approved the silent interactive visual preview with **Arsenal déployé** selected. This preview does not complete a numbered delivery step. The maintainer will provide all music and sound effects; no selection audio files have been supplied yet. Step 1 production references are [art_audio_inventory.md](art_audio_inventory.md) and [selection_audio_brief.md](selection_audio_brief.md).
 
@@ -102,13 +102,13 @@ Only a direct projectile's first accepted impact may attempt secondary procs. Sn
 
 ## New offensive families
 
-All seven have three ranks, weight 10 and no rarity/prerequisite beyond slot eligibility. Numbers below are authored bases before common DAMAGE/FIRE_RATE adjustments. Cannon piercing was moved to beam utility after playtest. Critical hits, micro-missiles and energy chains are live; the four other new offensive families remain pending. The maintainer explicitly defers effect balancing; these prototype values remain authored and visible in cards.
+All seven have three ranks, weight 10 and no rarity/prerequisite beyond slot eligibility. Numbers below are authored bases before common DAMAGE/FIRE_RATE adjustments. Cannon piercing was moved to beam utility after playtest. Critical hits, micro-missiles, escort drones and energy chains are live; the three other new offensive families remain pending. The maintainer explicitly defers effect balancing; these prototype values remain authored and visible in cards.
 
 | ID | Ranks 1 / 2 / 3 | Fixed limits |
 | --- | --- | --- |
 | critical_hits | 10 / 20 / 30% chance | Direct damage x2; secondary damage uses pre-critical base |
 | micro_missiles | 1 / 2 / 3 per volley, small / medium / large sprites; damage 0.9 / 1.1 / 1.3; intervals 1.10 / 0.95 / 0.80 s | 3 active/reserved per owner; partial volleys use remaining capacity; range 220 px, speed 240 px/s, turn 240 deg/s, life 1.8 s; no electric chains |
-| escort_drone | Damage 0.6 / 0.75 / 0.9; intervals 0.65 / 0.55 / 0.45 s | One drone, range 180 px; straight bolt speed 360 px/s, life 1 s, 6 active bolts |
+| escort_drone | 1 / 1 / 2 companions; damage 0.6 / 0.75 / 0.9 per bolt; intervals 0.65 / 0.55 / 0.45 s per companion | Range 180 px in a screen-up 90-degree cone; straight bolt speed 360 px/s, life 1 s; 6 active/reserved bolts shared per owner; no electric chains |
 | orbiting_satellites | Count 1 / 2 / 3; damage 1 / 1.25 / 1.5 | Orbit radius 32 px, period 2.5 s, contact radius 4 px; shared per-owner/group contact cooldown 0.50 s |
 | impact_explosions | Radius 20 / 26 / 32 px; damage x0.35 / x0.45 / x0.55 | At most 4 other targets; per-owner cooldown 0.30 s; exclude initial target/group |
 | energy_chains | 1 / 2 / 3 other targets; jump range 72 / 88 / 104 px | Each target receives x0.45 direct pre-critical base; per-owner cooldown 0.50 s; no repeats |
@@ -119,7 +119,7 @@ All seven have three ranks, weight 10 and no rarity/prerequisite beyond slot eli
 | Ricochet | Yes | Yes | No | No | No new modifier |
 | Beam piercing | No | No | No | No | Manual plasma only; reflected shots excluded |
 | Crits, explosion | Yes | Yes | Yes | Yes | No new modifier |
-| Energy chains | Yes | Yes | No | Yes | No new modifier |
+| Energy chains | Yes | No | No | Yes | No new modifier |
 
 Maintainer forward-targeting revision: missile acquisition, retained-target validation and the single reacquisition use a 90-degree screen-up cone (45 degrees either side of Nomad's forward axis). Closer side/rear enemies are excluded. A target leaving that cone is lost, so a passed target cannot cause a U-turn. Other weapons' targeting remains unrestricted unless their own contract says otherwise.
 
@@ -166,3 +166,11 @@ The foundation may be tested silently with null streams; existing UI cues may su
 - Enumerate the 70 possible four-offensive family sets from eight total families for compatibility/cap fixtures; sample all 35 three-utility sets from seven families. Measure worst-case native solo/co-op load, active/parked counts and frame-time percentiles on the same machine. Require bounded objects/requests and no upward drift through repeated restart/death cycles. Human co-op balance acceptance stays in Phase 6.
 - Inspect actual native/wide screenshots and short effect sequences at each art delivery. Verify source/export palette, geometry, ownership, HUD/card readability and plasma identity. Do not infer visual quality or listening acceptance from code.
 - Finish each requested step before starting another. Update roadmap/validation evidence only for work actually delivered. Preserve existing local changes; no automatic commit, merge, publication or permanent progression.
+
+The maintainer revised step 9 on 2026-10-21: escort hulls bank left/right with Nomad movement, their reduced twin reactors copy its current smoothed forward/idle/braking response and team gradients, and the final rank adds the opposite-shoulder companion. This replaces the original one-drone-at-every-rank clause without increasing the common six-bolt owner cap. Cannon piercing remains dormant; drone bolts preserve its compatibility in fixtures. The later maintainer revision below excludes electric chains from drone bolts.
+
+Forward-fire revision, 2026-10-21: each escort acquires only within its authored 90-degree screen-up cone (inclusive +/-45 degrees) from the actual muzzle. Visual banking does not rotate this cone. Rear/lateral-only targets preserve ready state and do not trigger a muzzle flash. Once emitted, the bolt retains its straight vector.
+
+Escort glide prototype, approved 2026-10-21: rendered hulls, emitters and twin reactors share a trailing displacement from actual owner movement, bounded to 8 px with exponential settling (responses 9 / 11 per second by shoulder). A deterministic independent hover adds at most 0.65px horizontally and 1.5px vertically. Rendering offsets round to native pixels before arena clamps; root shoulder anchors stay fixed. Pause freezes the effect and each fresh support starts without inherited lag. Forward targeting still originates at the displayed muzzle.
+
+Escort chain exclusion, approved 2026-10-21: drone bolts retain direct criticals but cannot trigger electric chains, emit arc visuals or consume the cannon chain cooldown. Strip the modifier at emission and guard the DRONE source kind at proc resolution, including unfiltered packets. Main/side cannon chains remain available immediately after drone impacts.

@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/player/weapons/escort_drone.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/weapons/escort_drone_sheet.png" id="2"]
+
+[node name="EscortDrone" type="Node2D"]
+z_index = 3
+script = ExtResource("1")
+
+[node name="Hull" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2")
+hframes = 6
+vframes = 6
+
+[node name="Muzzle" type="Marker2D" parent="."]
+position = Vector2(0, -7)

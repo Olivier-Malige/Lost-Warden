@@ -4,7 +4,7 @@ Updated: 2026-10-21.
 
 **Goal:** a continuous survival shmup with varied builds, enemies and formations, increasing pressure over time, solo and local co-op.
 
-**Next step:** Review playable step 8, autonomous homing micro-missiles, before requesting step 9, the escort drone. Steps 1-4, 6-8 and standalone step 12 chains are implemented. Missiles retain criticals but are explicitly excluded from electric chains; piercing belongs to the manual signature beam. Explosion coexistence remains with step 11. Step 5 still needs two solo observations and qualitative feedback. The maintainer explicitly defers effect balancing; prototype values remain recorded. Dedicated selection audio remains pending. See [Phase 3 evidence](phase_3_validation.md).
+**Next step:** Review playable step 9, escort drones, before requesting step 10, orbiting satellites. Steps 1-4, 6-9 and standalone step 12 chains are implemented. Missiles and drone bolts retain criticals but are explicitly excluded from electric chains; piercing belongs to the manual signature beam. Explosion coexistence remains with step 11. Step 5 still needs two solo observations and qualitative feedback. The maintainer explicitly defers effect balancing; prototype values remain recorded. Dedicated selection audio remains pending. See [Phase 3 evidence](phase_3_validation.md).
 
 ## Progress and delivery order
 
@@ -12,7 +12,7 @@ Updated: 2026-10-21.
 | --- | --- | --- |
 | Preparation, Phase 1 and art | Original identity, display, core combat, controls, plasma and graphics | Complete |
 | 2 — Continuous survival | Seeded encounters, elites, first boss, survival UI and records | Complete; solo accepted, co-op playtest deferred |
-| 3 — Experience and power-ups | XP, personal builds, original weapon sprites and audiovisual level-up choices | In progress; steps 1-4, 6-8 and standalone 12 implemented; plasma piercing, criticals, chains and micro-missiles playable; human XP acceptance deferred |
+| 3 — Experience and power-ups | XP, personal builds, original weapon sprites and audiovisual level-up choices | In progress; steps 1-4, 6-9 and standalone 12 implemented; plasma piercing, criticals, chains, micro-missiles and escort drones playable; human XP acceptance deferred |
 | 4 — Enemies and density | Redesign current enemies, add roles, enrich formations, increase pressure over time | Planned; after Phase 3 |
 | 5 — Combat effects | Impacts, explosions, collections and upgrade feedback | Planned |
 | 6 — Final balance | Complete solo/co-op runs, performance and regression checks | Planned; includes deferred co-op gameplay acceptance after power-up and balance rework |
@@ -45,13 +45,13 @@ No implementation remains in Phase 2. Carry the deferred co-op gameplay acceptan
 
 ## Phase 3 — Create varied survival builds
 
-The [detailed plan](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/plan.md) and its [delivery contract](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/contract.md) record the maintainer's direction and prototype values. Steps 1-4, 6-8 and standalone 12 are implemented. Automated XP measurement exists; human calibration acceptance and later offensive families remain pending. Execute only the requested numbered step, then verify and stop for review.
+The [detailed plan](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/plan.md) and its [delivery contract](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/contract.md) record the maintainer's direction and prototype values. Steps 1-4, 6-9 and standalone 12 are implemented. Automated XP measurement exists; human calibration acceptance and later offensive families remain pending. Execute only the requested numbered step, then verify and stop for review.
 
 Replace direct drops with pooled XP and paused choices inspired by Vampire Survivors / Megabonk. Share XP in co-op with personal offers and four offensive plus three utility family slots per player. Acquired families stay for the run; rarity remains deferred.
 
 Nomad retains its native manual secondary plasma beam and reserve, outside the offensive slots. Future ship signatures remain planning-only; no ship selection or permanent progression is included.
 
-Prepare dormant models and a complete animated selection screen before activating XP, rewards, foundation ranks and HUD together. Deliver each offensive family in bounded checkpoints with editable sources, runtime sprites and native visual verification. Following the maintainer's playtest, piercing belongs to the manual plasma beam as a utility. The cannon's nearest-target electric arc is now playable: 1/2/3 other targets within 72/88/104 px, 45% pre-critical damage per jump and a 0.5-second personal cooldown. Obstacles block the links; secondary effects cannot recurse. Missiles, drone, satellites, explosions and ricochets remain pending. See [chain evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/energy_chains.md).
+Prepare dormant models and a complete animated selection screen before activating XP, rewards, foundation ranks and HUD together. Deliver each offensive family in bounded checkpoints with editable sources, runtime sprites and native visual verification. Following the maintainer's playtest, piercing belongs to the manual plasma beam as a utility. The cannon's nearest-target electric arc is now playable: 1/2/3 other targets within 72/88/104 px, 45% pre-critical damage per jump and a 0.5-second personal cooldown. Obstacles block the links; secondary effects cannot recurse. Satellites, explosions and ricochets remain pending. See [chain evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/energy_chains.md).
 
 The three beam-piercing ranks cross 1/2/3 extra targets, add 20/30/40% initial damage and raise normal width from 8 to 10/11/12 px (overdrive 20/22/24 px). Each crossed target reduces subsequent damage and width to 80%. These prototype bonuses apply only with this utility, occupy one utility slot, grant no plasma and preserve manual drain and armor blocking. See [beam verification](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/beam_piercing.md).
 
@@ -66,6 +66,10 @@ Verify that different choices produce different, useful builds before redesignin
 Micro-missiles fire autonomously at nearby visible targets, including during manual cannon or plasma use. Three ranks provide 1/2/3 missiles per volley, increasing native sprite sizes, damage 0.9/1.1/1.3 and intervals 1.10/0.95/0.80 seconds before common DAMAGE/FIRE_RATE adjustments. Each owner has at most three active/reserved missiles, speed 240 px/s, turn limit 240 degrees/s, one reacquisition and 1.8-second lifetime. Physical impacts can critically strike but cannot trigger electric chains, piercing or ricochet; no intrinsic splash. Dedicated body/thrust/impact and card art ship together. See [missile evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/micro_missiles.md).
 
 Latest missile targeting revision: acquisition, target retention and reacquisition are restricted to the 90-degree screen-up cone. Rear/lateral enemies cannot trigger a launch or pull a missile into a U-turn. Cannon chains retain their existing targeting.
+
+### Step 9 escort checkpoint — 2026-10-21
+
+Escort drones fire straight aimed bolts independently of manual cannons/plasma. Ranks provide one / one / two companions (second drone at rank three), damage 0.6 / 0.75 / 0.9 and intervals 0.65 / 0.55 / 0.45 s before the common stat factors. Six active/reserved bolts are shared per owner; range is 180 px within a 90-degree screen-up cone (+/-45 degrees), speed 360 px/s and lifetime one second. Hulls bank with Nomad movement; reduced copies of its twin reactor effect share the current smoothed movement response and team palette. Visual emitters tuck inside the arena at the edges while player movement bounds remain unchanged. Drone impacts cannot trigger electric chains or consume the cannon chain cooldown; direct criticals remain available. Pause freezes support/flight; DYING removes both companions and cancels new owned emissions/procs. See [escort evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/escort_drone.md). Balancing remains deferred.
 
 ## Phase 4 — Redesign enemies, formations and density
 

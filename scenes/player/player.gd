@@ -283,6 +283,7 @@ func apply_upgrade(upgrade: UpgradeDefinition) -> UpgradeResult:
 			shield.power = applied.reward.amount
 	setShootingDelay()
 	update_beam_charge()
+	weapons.sync_support()
 	_publish_upgrade_result(canonical, result)
 	publish_build()
 	return result
@@ -365,6 +366,7 @@ func _on_player_area_entered(area: Area2D) -> void:
 func set_state(next_state: State) -> void:
 	state = next_state
 	if state >= State.DYING:
+		weapons.stop_support()
 		var hit_effects := PlayerHitEffects.find_service(self)
 		if hit_effects:
 			hit_effects.stop_owner(StringName(id_Player))

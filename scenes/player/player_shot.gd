@@ -70,7 +70,7 @@ func configure_hit(hit: PlayerHitSnapshot, effects: PlayerHitEffects, reservatio
 	hit_snapshot = hit.copy()
 	_hit_effects = weakref(effects)
 	_reservation_key = reservation
-	if hit.kind() == PlayerHitSnapshot.Kind.GUN:
+	if hit.kind() in [PlayerHitSnapshot.Kind.GUN, PlayerHitSnapshot.Kind.DRONE]:
 		remaining_penetrations = hit.modifier_rank(&"piercing")
 		if remaining_penetrations > 0 and piercing_texture:
 			_source_sprite.texture = piercing_texture

@@ -91,6 +91,25 @@ func update_reactor(vertical_motion: float, delta: float) -> void:
 		particles.amount_ratio = _reactor_amount_ratio
 		particles.speed_scale = _reactor_speed_scale
 
+func create_reactor_copy() -> Node2D:
+	if not _configured:
+		return null
+	var reactor := _reactor.duplicate() as Node2D
+	for particles in reactor.get_children():
+		if particles is GPUParticles2D:
+			particles.amount = maxi(4, roundi(particles.amount * 0.4))
+	return reactor
+
+func sync_reactor_copy(reactor: Node2D) -> void:
+	if not _configured:
+		return
+	reactor.scale = Vector2(1.0, _reactor_length_scale)
+	reactor.modulate.a = _reactor_brightness
+	for particles in reactor.get_children():
+		if particles is GPUParticles2D:
+			particles.amount_ratio = _reactor_amount_ratio
+			particles.speed_scale = _reactor_speed_scale
+
 func update_plasma_reserve(charge_ratio: float) -> void:
 	if not _configured:
 		return

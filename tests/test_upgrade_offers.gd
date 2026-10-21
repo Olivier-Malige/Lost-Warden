@@ -46,7 +46,7 @@ func subset(names: Array[StringName]) -> UpgradeTable:
 	return table
 
 func check_data_and_legacy() -> void:
-	check(CATALOG.foundation_errors(CONFIG).is_empty() and CATALOG.upgrades.size() == 14 and definition(&"piercing") == null and definition(&"beam_piercing") != null and definition(&"energy_chains") != null and definition(&"micro_missiles") != null, "only completed families including autonomous micro-missiles enter live offers")
+	check(CATALOG.foundation_errors(CONFIG).is_empty() and CATALOG.upgrades.size() == 15 and definition(&"piercing") == null and definition(&"beam_piercing") != null and definition(&"energy_chains") != null and definition(&"micro_missiles") != null and definition(&"escort_drone") != null, "only completed families including the escort drone enter live offers")
 	check([UpgradeDefinition.Effect.SPEED, UpgradeDefinition.Effect.FIRE_RATE, UpgradeDefinition.Effect.DAMAGE, UpgradeDefinition.Effect.SIDE_SHOT, UpgradeDefinition.Effect.SHIELD, UpgradeDefinition.Effect.ENERGY] == [0, 1, 2, 3, 4, 5], "legacy enum ordinals must remain stable")
 	check(LEGACY.upgrades.size() == 6 and STATS.speed_max == 240 and is_equal_approx(STATS.shoot_delay_min, 0.12), "legacy catalog stays readable while live stat limits use the activated foundation")
 	var legacy := PlayerLoadout.new(STATS)
@@ -159,7 +159,7 @@ func check_rewards_and_capacity() -> void:
 					if not build.acquired_ranks.has(id):
 						check(not build.apply_foundation(id).applied and not ids(hand).has(id), "full utility slots must reject every unacquired family in application and offers")
 	var extended := CATALOG.duplicate(true) as UpgradeTable
-	var future_effects := [UpgradeDefinition.Effect.ESCORT_DRONE, UpgradeDefinition.Effect.ORBITING_SATELLITES, UpgradeDefinition.Effect.IMPACT_EXPLOSIONS, UpgradeDefinition.Effect.RICOCHET]
+	var future_effects := [UpgradeDefinition.Effect.PIERCING, UpgradeDefinition.Effect.ORBITING_SATELLITES, UpgradeDefinition.Effect.IMPACT_EXPLOSIONS, UpgradeDefinition.Effect.RICOCHET]
 	for index in future_effects.size():
 		var extra := definition(&"side_shot").duplicate() as UpgradeDefinition
 		extra.id = StringName("test_offensive_%d" % index)

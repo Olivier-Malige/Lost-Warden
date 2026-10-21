@@ -1,7 +1,7 @@
 class_name PlayerHitSnapshot
 extends RefCounted
 
-enum Kind { GUN, PLASMA, REFLECTED, SECONDARY, MISSILE }
+enum Kind { GUN, PLASMA, REFLECTED, SECONDARY, MISSILE, DRONE }
 
 var _values: Dictionary
 
@@ -32,7 +32,7 @@ func kind() -> Kind:
 	return _values.kind
 
 func is_direct() -> bool:
-	return kind() == Kind.GUN or kind() == Kind.MISSILE
+	return kind() in [Kind.GUN, Kind.MISSILE, Kind.DRONE]
 
 func is_critical() -> bool:
 	return _values.critical
