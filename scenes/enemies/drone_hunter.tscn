@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/enemies/drone.tscn" id="1"]
 [ext_resource type="Script" path="res://scenes/enemies/drone_hunter.gd" id="2"]
 [ext_resource type="Texture2D" path="res://assets/sprites/enemies/animation_rework/razor_wing_hunter_sheet.png" id="3"]
 [ext_resource type="Resource" path="res://data/enemies/drone.tres" id="4"]
+
+[sub_resource type="ConvexPolygonShape2D" id="HunterHull"]
+points = PackedVector2Array(0, 13, 12, -4, 12, -10, -12, -10, -12, -4)
 
 [node name="DroneHunter" instance=ExtResource("1")]
 script = ExtResource("2")
@@ -11,6 +14,9 @@ definition = ExtResource("4")
 
 [node name="Sprite2D" parent="." index="0"]
 texture = ExtResource("3")
+
+[node name="CollisionShape2D" parent="." index="3"]
+shape = SubResource("HunterHull")
 
 [node name="droneReactorParticles" parent="." index="4"]
 position = Vector2(-4, -10)

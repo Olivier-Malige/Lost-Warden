@@ -1,0 +1,176 @@
+extends "res://tests/player/test_defensive_pack.gd"
+
+func real_body(path: String, at: Vector2) -> Variant:
+	var body = load(path).instantiate()
+	var context := EnemySpawnContext.new()
+	context.combat_id = &"contact_actor"
+	body.configure_spawn(context)
+	body.position = at
+	stage.add_child(body)
+	body.set_physics_process(false)
+	body.collision_mask = 0
+	for timer in body.find_children("*", "Timer", true, false): timer.stop()
+	for audio in body.find_children("*", "AudioStreamPlayer2D", true, false): audio.stream = null
+	return body
+
+func enable_contacts() -> void:
+	p1.collision_mask = CombatTargeting.Layers.ENEMY | CombatTargeting.Layers.ASTEROID
+
+func run() -> void:
+	setup_stage()
+	await reset_case()
+	enable_contacts()
+	var hunter = real_body("res://scenes/enemies/drone_hunter.tscn", p1.position + Vector2(0, -21))
+	await settle()
+	p1.defenses._physics_process(0)
+	check(p1.energy == 11, "the visible hunter nose reaching the player core must wound the hull")
+	hunter.speedX = 175
+	hunter.speedY = 0
+	hunter._update_ship_banking(0)
+	check(is_equal_approx(hunter.get_node("CollisionShape2D").rotation, hunter.get_node("Sprite2D").rotation), "the hunter collision footprint must follow its visible heading")
+	await reset_case()
+	enable_contacts()
+	equip(p1, SHIELD, 1)
+	var body = real_body("res://scenes/enemies/drone.tscn", p1.position)
+	var initial_life: float = body.life
+	await settle()
+	for step in 3: p1.defenses._physics_process(0.51 if step else 0.0)
+	check(p1.defenses.charges == 0 and p1.energy == 12, "the final body impact is fully absorbed")
+	p1.defenses._physics_process(1.0 / 60.0)
+	check(p1.energy == 11 and body.life == initial_life, "a shield body cooldown must not grant hull immunity on the next physics tick")
+	await sustained_contacts()
+	await hunter_headings()
+	await movement_passages()
+	await asteroid_contacts()
+	await boss_contacts()
+	if DisplayServer.get_name() != "headless": await native_contacts()
+	effects.cancel()
+	stage.free()
+	await settle()
+	print("Hull contacts: %d checks, %d failures" % [checks, failures])
+	quit(1 if failures else 0)
+
+func sustained_contacts() -> void:
+	await reset_case()
+	enable_contacts()
+	equip(p1, ARMOR, 3)
+	var body = real_body("res://scenes/enemies/drone.tscn", p1.position)
+	var life_before: float = body.life
+	await settle()
+	p1.defenses._physics_process(0)
+	check(p1.energy == 11, "ordinary central contact immediately wounds an unshielded player")
+	p1.defenses._physics_process(1.1)
+	p1._on_touchedReset_timeout()
+	check(p1.energy == 11 and p1.touched and p1.malusSpeed == 0, "armor grace outlasts hit slowdown without permitting an early body wound")
+	body.position.x += 80
+	await settle()
+	body.position = p1.position
+	await settle()
+	p1.defenses._physics_process(0.1)
+	check(p1.energy == 11, "exiting and reentering cannot bypass ordinary injury grace")
+	p1.defenses._physics_process(0.56)
+	check(p1.energy == 10 and body.life == life_before, "continued body overlap wounds again after armor grace, without ram damage")
+	paused = true
+	p1.defenses._physics_process(8)
+	check(p1.energy == 10 and p1.defenses.grace_left == 1.75, "pause freezes overlap wounds and grace")
+	paused = false
+	p1.set_state(p1.State.DYING)
+	p1.defenses._physics_process(8)
+	check(p1.energy == 10, "death stops body processing")
+	await reset_case()
+	enable_contacts()
+	equip(p1, SHIELD, 1)
+	for impact in 3: p1.defenses.take_hit()
+	real_body("res://scenes/enemies/drone.tscn", p1.position)
+	await settle()
+	p1.defenses._physics_process(8)
+	check(p1.energy == 12 and p1.defenses.charges == 2, "a returning sphere handles an existing body before exposing the hull")
+
+func hunter_headings() -> void:
+	for heading in [0.0, PI / 2, PI, -PI / 2, PI / 4]:
+		await reset_case()
+		enable_contacts()
+		var core: Vector2 = p1.collision_shape.global_position
+		var body = real_body("res://scenes/enemies/drone_hunter.tscn", core - Vector2(0, 20).rotated(heading))
+		var velocity := Vector2.DOWN.rotated(heading) * 175
+		body.speedX = velocity.x
+		body.speedY = velocity.y
+		body._update_ship_banking(0)
+		await settle()
+		p1.defenses._physics_process(0)
+		check(p1.energy == 11, "a rotated hunter nose touching the player core is dangerous at every heading")
+		check(body.get_node("CollisionShape2D").rotation == body.get_node("Sprite2D").rotation, "visible heading and physical contact surface remain aligned")
+	await reset_case()
+	enable_contacts()
+	real_body("res://scenes/enemies/drone_hunter.tscn", p1.position + Vector2(35, 0))
+	await settle()
+	p1.defenses._physics_process(0)
+	check(p1.energy == 12 and p1.collision_shape.shape.size == Vector2(16, 16) and p1.collision_shape.position == Vector2(0, -2), "a genuine near miss remains safe and the forgiving player core is unchanged")
+
+func movement_passages() -> void:
+	for path in ["drone.tscn", "drone_hunter.tscn", "interceptor.tscn"]:
+		for direction in [Vector2.DOWN, Vector2.RIGHT, Vector2(1, 1)]:
+			for speed in [180.0, 240.0]:
+				await reset_case()
+				enable_contacts()
+				var center := Vector2(300, 220)
+				var body = real_body("res://scenes/enemies/" + path, center)
+				var before: float = body.life
+				p1.position = center - direction * 48 + Vector2(0, 2)
+				for step in 40:
+					p1.position += direction * speed / 60.0
+					await physics_frame
+					await process_frame
+					p1.defenses._physics_process(1.0 / 60.0)
+				check(p1.energy < 12 and body.life == before, "front, side and diagonal passages through real hulls wound at authored movement speeds without ram damage")
+
+func asteroid_contacts() -> void:
+	await reset_case()
+	enable_contacts()
+	var asteroid = real_body("res://scenes/enemies/asteroid.tscn", p1.position)
+	asteroid.rotation = PI / 3
+	await settle()
+	p1.defenses._physics_process(0)
+	check(p1.energy == 11, "a real rotated asteroid wounds a central hull overlap")
+
+func boss_contacts() -> void:
+	await reset_case()
+	enable_contacts()
+	var data: BossDefinition = load("res://data/bosses/dread_ark.tres")
+	var boss = data.scene.instantiate()
+	boss.boss_data = data
+	var context := EnemySpawnContext.new()
+	context.combat_id = &"contact_boss"
+	boss.configure_spawn(context)
+	boss.position = p1.position
+	stage.add_child(boss)
+	boss.set_physics_process(false)
+	boss.attack = boss.Attack.IDLE
+	await settle()
+	p1.defenses._physics_process(0)
+	check(p1.energy == 11, "an unshielded overlap with the real boss wounds once across its logical parts")
+
+func native_contacts() -> void:
+	await reset_case()
+	enable_contacts()
+	root.mode = Window.MODE_WINDOWED
+	root.size = Vector2i(640, 400)
+	RenderingServer.set_default_clear_color(Color("101522"))
+	var body = real_body("res://scenes/enemies/drone_hunter.tscn", p1.position + Vector2(0, -42))
+	body.speedX = 0
+	body.speedY = 175
+	body._chase_committed = true
+	body._chase_exit_y = INF
+	var health := Label.new()
+	health.position = Vector2(140, 120)
+	stage.add_child(health)
+	for step in 30:
+		body._physics_process(1.0 / 60)
+		await physics_frame
+		await process_frame
+		p1.defenses._physics_process(1.0 / 60.0)
+		health.text = "CORE CONTACT: ENERGY %d / 12" % p1.energy
+		if step in [0, 8, 12, 16, 24]:
+			await RenderingServer.frame_post_draw
+			check(root.get_texture().get_image().save_webp(ProjectSettings.globalize_path("res://contact_native_%02d.webp" % step), true) == OK, "native contact evidence saves with visible hulls and actual energy")
+	check(p1.energy == 11, "a native moving hunter visibly wounds the hull once during its crossing")

@@ -14,13 +14,14 @@ func _ready() -> void:
 		$Sprite2D.texture = ELITE_TEXTURE
 		_elite_indicator.hide()
 
-# Rotate presentation only so the attack direction never changes the collision footprint.
+# Keep the native hull and its contact surface aligned throughout a chase.
 func _update_ship_banking(_delta: float) -> void:
 	var velocity := Vector2(speedX, speedY)
 	if _hit_sprite == null or velocity.is_zero_approx():
 		return
 	var heading := Vector2.DOWN.angle_to(velocity)
 	_hit_sprite.rotation = heading
+	$CollisionShape2D.rotation = heading
 	for index in _reactors.size():
 		_reactors[index].position = _reactor_offsets[index].rotated(heading)
 		_reactors[index].rotation = PI + heading

@@ -174,9 +174,10 @@ func _body_contacts() -> void:
 		if not alive(): return
 		if target.is_in_group(&"mounted_turret") or target.get("destroyed") == true or not target.is_visible_in_tree(): continue
 		var id := _body_id(target)
-		if seen.has(id) or _bodies.has(id): continue
+		if seen.has(id): continue
 		seen[id] = true
 		if active():
+			if _bodies.has(id): continue
 			_bodies[id] = {"left": SHIELD.contact_cooldown, "target": weakref(CombatTargeting.damage_group(target))}
 			_consume_charge()
 		elif target in hull:

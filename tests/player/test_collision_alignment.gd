@@ -42,6 +42,9 @@ func run() -> void:
 						for animation_name in animation_player.get_animation_list():
 							if "explode" in animation_name.to_lower() or animation_name == "RESET":
 								continue
+							# Hunters steer frame zero; inherited banking poses are never played.
+							if file == "drone_hunter.tscn" and animation_name in ["bank_left", "bank_right"]:
+								continue
 							var animation: Animation = animation_player.get_animation(animation_name)
 							for track in animation.get_track_count():
 								if str(animation.track_get_path(track)) != str(instance.get_path_to(sprite)) + ":frame":
