@@ -195,7 +195,7 @@ The preceding missile mapping is superseded by sixteen 16x48 source frames, expo
 
 Column 13 of the existing 896x128 card and 224x32 miniature atlases now depicts the three graded sizes, in layer `Ranked missile volleys`; all prior columns are unchanged. Exact source/export equality, Lost Warden 64 colors and binary alpha pass, with 1,172 opaque projectile pixels. Native rank-1/rank-3, co-op flight and updated cards were reviewed. See [current missile evidence](validation/micro_missiles.md).
 
-The baseline inspection used scene/resource/script references, PNG dimensions/alpha bounds, Aseprite binary metadata and animation JSON. Delivered checkpoints additionally verify real Godot screenshots, source/export parity, palette, collisions and interaction. Human economy acceptance, steps 10-11 and 13-14 artwork, dedicated audio and listening acceptance remain pending. See [validation evidence](../../../../docs/phase_3_validation.md).
+The baseline inspection used scene/resource/script references, PNG dimensions/alpha bounds, Aseprite binary metadata and animation JSON. Delivered checkpoints additionally verify real Godot screenshots, source/export parity, palette, collisions and interaction. Human economy acceptance, steps 13-14 artwork, dedicated audio and listening acceptance remain pending. See [validation evidence](../../../../docs/phase_3_validation.md).
 
 ### Escort drones, banking and matched reactors — 2026-10-21
 
@@ -204,3 +204,55 @@ The baseline inspection used scene/resource/script references, PNG dimensions/al
 - `assets/sources/player/weapons/drone_bolt.aseprite`: four 8x32 frames, exporting the 32x32 PNG/JSON pair. Owner cells are 8x16, pivot (4,8), red then blue rows; `flight` frames 0-3 at 60 ms. The 3x8 central collider follows a straight emission vector; generic finite contact feedback is reused.
 - Menu and miniature masters append column 14, layer `Nomad and aimed escort`. Exports are 960x128 / 240x32, with x896 / x224 owner cells and y0/64 / y0/16 team rows. The composition shows Nomad and the rank-three pair; all older columns remain pixel-identical.
 - Palette, source/export parity, native solo/co-op/wide, both banks, matched reactor states and edge presentation are recorded in [escort evidence](validation/escort_drone.md). Dedicated audio remains pending from the maintainer.
+
+### Orbiting contact satellites — 2026-10-21
+
+- `assets/sources/player/weapons/orbiting_satellites.aseprite`: eight 16x32 frames; matching PNG/JSON export `assets/sprites/player/weapons/orbiting_satellites_sheet` is 128x32. Runtime cells are 16x16, pivot (8,8). Row 0 is P1 and row 1 is P2: one canonical orientation each, with continuous scripted Sprite2D rotation. `orbit` frames 0-3 use 80ms, `contact` frames 4-7 use 50ms. Runtime frame is `team * 8 + animation_frame`. The radius-four collider does not rotate.
+- Beveled steel cores retain the radius-four contact circle. Four thin tapered spikes and finite contact sparks are decorative. The master separates steel hulls, asymmetric team inserts and accepted-contact glints into three editable layers. The owner-attached controller maintains exact 32px geometry; no interpolation or scale enlarges the collision footprint, and no bullet-interception layer is present.
+- Menu/miniature masters append column 15 in layer `Three contact orbiters around Nomad`. Exports are 1024x128 / 256x32 with x960 / x240 cells, and separate y0/64 / y0/16 team rows. Earlier fifteen columns remain identical to the published escort checkpoint. Long co-op card titles fit without colliding with rank text.
+- All three source/runtime pairs are pixel-identical, palette-exact Lost Warden 64 and binary alpha. Real Razor Wing proximity contacts, team colors, eight-way pixel orientation and native/wide/edge states are reviewed in [satellite evidence](validation/orbiting_satellites.md). No audio was added.
+
+### Impact explosions — 2026-10-21
+
+- `assets/sources/combat/impact_explosion.aseprite`: eight 64x384 frames at 40ms, tag `detonate` 0-7. Export `assets/sprites/combat/impact_explosion.png` is 512x384 with matching JSON; runtime cells are 64x64, centered pivot (32,32). Rows 0-2 are P1 ranks 1-3; rows 3-5 are P2 ranks 1-3. Runtime frame is `(team * 3 + rank - 1) * 8 + animation_frame`.
+- The sequence has a small ignition flash, expanding lobed fire front, hollowing blast and cooling fragments. Authored rank radii are 20/26/32px with no sprite scaling. The bright area stays within each damage radius; the animation itself has no collider and performs no damage. Lifetime is 320ms, with at most eight simultaneous visual instances.
+- Menu/miniature masters append column 16, layer `Nomad explosive impacts`, with real Nomad and an outgoing shot below the blast. Exports are 1088x128 / 272x32; owner cells start at x1024 / x256 and y0/64 / y0/16. All preceding visible pixels, including the incoming satellite column, are preserved; the first fifteen columns remain byte-identical to the published checkpoint.
+- Aseprite MCP authoring and fresh source/export composite audits report zero differing visible pixels for all three pairs. All opaque pixels match Lost Warden 64 exactly, with binary alpha. Solo/co-op/wide sequence and menu captures are reviewed in [explosion evidence](validation/impact_explosions.md). No new audio was supplied or generated.
+
+### Expanded explosion footprint — 2026-10-22
+
+Supersedes the preceding explosion grid: eight **96x576** source frames export **768x576** with six 96x96 runtime rows. Pivots are (48,48); P1 ranks occupy rows 0-2, P2 ranks rows 3-5. The same `detonate` 0-7 tag and 40ms timing remain. Native art is rebaked through Aseprite MCP to match radius **32/40/48px** without runtime sprite scaling; source/export audit reports zero differing visible pixels. Palette-exact Lost Warden 64 and binary alpha pass. The existing card/miniature columns are unchanged. Updated solo/co-op/wide screenshots show the larger footprint and percentage card text; no new audio is included.
+
+### Concentrated explosion footprint — 2026-10-22
+
+The final maintainer tuning reduces each 32/40/48px radius by one quarter to 24/30/36px. The source is rebaked through Aseprite MCP from the original editable animation, retaining the 96x96 native cells, (48,48) pivot, six owner/rank rows, 768x576 export and eight 40ms frames. No runtime scaling is used. Source/export visible pixels match exactly; palette and binary alpha pass. Refreshed solo/co-op/wide captures show the smaller blasts and doubled 70/90/110% damage values; card/miniature art remains unchanged.
+
+### Synchronized expanding wave — 2026-10-22
+
+The approved correction replaces the previous blast drawing with two editable Aseprite MCP layers: `Active expanding front` and `Inactive cooling fragments`. Source/export retain eight 96x576 frames / 768x576 sheet, six 96x96 owner/rank cells, pivot (48,48), Lost Warden 64 and binary alpha. `detonate` is 0-7, `active_wave` is 0-3, `cooling_fragments` is 4-7, all at 40ms. Active keyframes match radius fractions 25/50/75/100%; frames from 160ms use sparse dim clusters, without a bright damage-looking ring. The combat service supplies the elapsed time; visuals have no independent process clock or hit logic. Gameplay continues even when visual capacity is saturated.
+
+Fresh composite/export audit has zero differing visible pixels; palette/alpha/tag mapping pass. Native `explosion_wave_*` sequences show actual victims and local hit flashes in solo/co-op/wide, followed by the inactive tail. Cards say AREA and percentage bonuses, with no target-count claim. Existing icons/miniatures and audio remain unchanged. See [wave evidence](validation/impact_explosion_wave.md).
+
+### Steel satellite art and motion revision — 2026-10-22
+
+The maintainer requested metallic spiked satellites, faster orbits and independent body spin, then rejected the first flat cross-like draft. The replacement was authored and exported through the Aseprite MCP: native 16x16 cells, 128x256 sheet, unchanged `orbit`/`contact` frame timings and team rows. Layers are `Beveled steel core and four tapered spikes`, `Asymmetric player color inserts` and `Accepted contact glints and sparks`. The body has shaded metal bevels, needle tips and an asymmetric insert/rivet to reveal rotation; no runtime sprite rotation or scaling is used. The 1.25-second orbit and 0.625-second spin share the physics clock.
+
+The existing satellite column 15 is redrawn in both UI masters: three steel orbiters around actual Nomad art in the 64px card, one recognizable steel orbiter in the 16px miniature. Current full atlases remain 1088x128 and 272x32 after the explosion column. Every pixel outside satellite column 15 is identical to the incoming working tree. Source/export visible parity, exact Lost Warden 64 palette, binary alpha, eight distinct directions and animation metadata pass. No audio is added.
+
+### Scripted satellite rotation supersedes baked directions — 2026-10-22
+
+At the maintainer's request, Aseprite now retains only the canonical red and blue hulls from the refined art above. The source/export mapping at the start of the satellite entry is current: 16x32 source frames, 128x32 export, one orientation per team plus the retained eight-frame reflection/contact animation. The three editable layers and both UI illustrations are preserved. `Sprite2D.rotation` provides the continuous body spin independently of the unrotated collision circle; the earlier eight-direction atlas is superseded. Pixel identity of both retained hull rows is verified against the preceding source composite.
+
+### Satellite selection illustration follow-up — 2026-10-22
+
+The maintainer requested updating the satellite selection illustration after scripted rotation replaced baked directions. The Aseprite MCP redraws only column 15 of `upgrade_icons_64.aseprite` and its PNG export. Both team cards now feature the exact canonical gameplay hull enlarged by integer pixels in the foreground, with the real Nomad, two smaller rotated satellites and restrained orbital/spin marks. This improves identification at the existing 64px card size. All other columns and the miniature atlas are unchanged. Source/export parity, exact palette/binary alpha and native solo/co-op selection inspection pass; the selection regression passes all 48 checks.
+
+### Selection foreground size adjustment — 2026-10-22
+
+The maintainer found the foreground satellite too large. The Aseprite card now uses the canonical 16px hull at native size, matching the other two satellites, instead of the previous 32px enlargement. Its small rotation mark is resized accordingly; both team colors are updated. Source/export parity, exact palette/binary alpha and preservation of every other atlas column pass. This supersedes the larger foreground composition above.
+
+### Defensive survival pack — 2026-10-22
+
+The Aseprite MCP creates `assets/sources/player/reflector_sphere.aseprite` (eight 48x96 source frames, native 48px cells, two player rows) and `assets/sources/player/weapons/retaliation_pulse.aseprite` (eight 128x768 frames, six team/rank rows). Matching PNG/JSON exports are 384x96 and 1024x768. Sphere tags: idle 0-3, impact 4-5, rupture 6, return 7. Pulse tags: active_wave 0-3 and cooling_fragments 4-7, all 40ms. Gameplay and pulse presentation share the physical age.
+
+The two UI masters now have 19 columns (1216x128 cards, 304x32 miniatures), layer `Defensive survival builds`. Shield replaces column 6; armor and retaliation use columns 17/18. The canonical Nomad and player palette remain. All other incoming columns, including the latest reduced satellite foreground, are pixel-identical. Four source/export pairs, palette/binary alpha and native solo/co-op/wide states pass. Existing reflector sound is retained; optional rupture/return nodes await supplied audio. See [defensive validation](../2026_10_22_defensive_pack/validation.md).

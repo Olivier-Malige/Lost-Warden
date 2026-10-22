@@ -70,12 +70,16 @@ func is_enemy() -> bool:
 	return true
 
 func _on_shot_area_entered(area: Area2D) -> void:
-	if get_meta("pooled", false):
+	if get_meta("pooled", false) or get_tree().paused:
 		return
 	if area.is_in_group("player"):
-		if trowbackByShield or (area.has_node("shield") and area.get_node("shield").power > 0):
+		if trowbackByShield or PlayerDefenses.intercept_in_world(self):
 			return
-		_hit_area(area)
+		if area.get("vitals") != null:
+			area.vitals.hit(damage)
+		elif area.has_method("_hit_something"):
+			area._hit_something(damage)
+		ProjectilePool.despawn(self)
 	elif area.is_in_group("asteroid"):
 		_hit_area(area)
 	elif trowbackByShield and (area.is_in_group("enemy") or area.is_in_group("boss_hit_zone")) and not area.is_in_group(noDamageToGroup):

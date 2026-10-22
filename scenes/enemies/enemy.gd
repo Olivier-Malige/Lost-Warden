@@ -361,6 +361,7 @@ func _set_hit_flash(amount: float) -> void:
 	_hit_sprite.set_instance_shader_parameter(&"hit_flash", amount)
 
 func _on_area_entered(area: Area2D) -> void:
+	if area.is_in_group("player") and area.get("defenses") != null: return
 	if not destroyed and area.has_method("_hit_something"):
 		area._hit_something(hitSomething)
 

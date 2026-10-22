@@ -14,6 +14,9 @@ const MENU_ICON_IDS: Array[StringName] = [
 	&"energy_chains",
 	&"micro_missiles",
 	&"escort_drone",
+	&"orbiting_satellites",
+	&"impact_explosions",
+	&"reactive_armor", &"retaliation_pulse",
 ]
 const INK := Color("101522")
 const WHITE := Color("f3ebdd")
@@ -25,6 +28,7 @@ const ICON_IDS: Array[StringName] = [
 	&"impact_explosions", &"energy_chains", &"ricochet",
 	&"beam_capacity", &"beam_recharge",
 	&"beam_piercing",
+	&"reactive_armor", &"retaliation_pulse",
 ]
 
 var selection_id := 0
@@ -265,7 +269,9 @@ func _build_panel(player_id: StringName, team: int, solo: bool) -> void:
 			if selection_id == panel_selection_id: select_card(player_id, index)
 		)
 		_icon(card, offer.id, Rect2(62, 12, 64, 64) if solo else Rect2(6, 1, 64, 64), true, team)
-		_label(card, offer.display_name, Rect2(12 if solo else 76, 88 if solo else 5, 170 if solo else 132, 18), 12)
+		var title_width := 170 if solo else 132
+		var title_size := 10 if FONT.get_string_size(offer.display_name, HORIZONTAL_ALIGNMENT_LEFT, -1, 12).x > title_width else 12
+		_label(card, offer.display_name, Rect2(12 if solo else 76, 88 if solo else 5, title_width, 18), title_size)
 		var rank_text := "NEW" if offer.current_rank == 0 else "%d > %d" % [offer.current_rank, offer.next_rank]
 		if offer.repeatable: rank_text = "RECOVERY"
 		_label(card, rank_text, Rect2(12 if solo else 212, 112 if solo else 6, 170 if solo else 60, 14), 10, GOLD)
@@ -310,15 +316,21 @@ func _effect_lines(offer: Dictionary) -> String:
 		&"orb_magnet": return "+24 PX ATTRACTION\n%d PX RADIUS" % (24 + offer.next_value)
 		&"side_shot": return "PAIR DAMAGE %.2f\n%s" % [offer.next_value, "ADD OUTER PAIR" if offer.next_rank == 4 else "PAIRED SIDE CANNONS"]
 		&"energy": return "RESTORE 2 ENERGY\nUP TO 12 ENERGY"
-		&"shield": return "ADD 1 REFLECTOR\nUP TO 3 CHARGES"
+		&"shield": return "%d REFLECTOR CHARGES\n%.0f SEC RECHARGE" % [roundi(offer.next_value), offer.next_recharge]
+		&"reactive_armor": return "+%d%% HIT PROTECTION\n%.2f SEC AFTER INJURY" % [roundi(offer.next_value * 100), 1.0 + offer.next_value]
+		&"retaliation_pulse": return "%s / CLEAR SHOTS\n%.0f DMG / %.0f SEC" % ["BASE WAVE" if offer.next_rank == 1 else "+%d%% RADIUS" % roundi(offer.next_range_bonus * 100), offer.next_value, offer.proc_cooldown]
 		&"beam_capacity": return "+25 RESERVE\n%d MAX PLASMA" % roundi(PLAYER_STATS.beam_charge_max + offer.next_value)
 		&"beam_recharge": return "+25%% CELL CHARGE\nx%.2f PER CELL" % (1.0 + offer.next_value)
 		&"piercing": return "%d EXTRA TARGETS\n80%% DAMAGE RETAINED" % roundi(offer.next_value)
 		&"beam_piercing": return "%d EXTRA TARGETS\n+%d%% DAMAGE / +%s%% WIDTH" % [roundi(offer.next_value), roundi(offer.next_damage_bonus * 100.0), str(snappedf(offer.next_width_bonus * 100.0, 0.1)).trim_suffix(".0")]
 		&"critical_hits": return "%d%% CRITICAL CHANCE\nx2 DIRECT DAMAGE" % roundi(offer.next_value * 100.0)
-		&"energy_chains": return "%d ARC JUMPS / %d PX\n%d%% DAMAGE / %.1f SEC" % [roundi(offer.next_value), roundi(offer.next_range), roundi(offer.secondary_damage_scale * 100.0), offer.proc_cooldown]
+		&"energy_chains": return "MAIN: %d JUMPS / %d PX\n%d%% DAMAGE / %.1f SEC" % [roundi(offer.next_value), roundi(offer.next_range), roundi(offer.secondary_damage_scale * 100.0), offer.proc_cooldown]
 		&"micro_missiles": return "%d MISSILES / VOLLEY\n%.1f DMG / %.2f SEC" % [offer.next_projectile_count, offer.next_value, offer.next_interval]
 		&"escort_drone": return "%d FORWARD ESCORT%s\n%.2f DMG / %.2f SEC" % [offer.next_support_count, "S" if offer.next_support_count > 1 else "", offer.next_value, offer.next_interval]
+		&"orbiting_satellites": return "%d CONTACT SATELLITE%s\n%.2f DMG / %.2f SEC" % [offer.next_support_count, "S" if offer.next_support_count > 1 else "", offer.next_value, offer.contact_cooldown]
+		&"impact_explosions":
+			var radius_text := "+%d%% RADIUS" % roundi(offer.next_range_bonus * 100.0) if offer.next_range_bonus > 0.0 else "BASE BLAST"
+			return "%s / AREA\n%d%% DAMAGE / %.2f SEC" % [radius_text, roundi(offer.next_value * 100.0), offer.proc_cooldown]
 	return offer.description
 
 func _icon(parent: Control, id: StringName, rect: Rect2, menu_icon := false, team := 0) -> void:

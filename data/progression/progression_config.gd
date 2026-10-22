@@ -14,7 +14,6 @@ extends Resource
 @export var attraction_base: float = 24.0
 @export var attraction_max: float = 120.0
 @export var energy_max: int = 12
-@export var shield_max: int = 3
 
 func threshold_for_level(level: int) -> int:
 	return maxi(1, roundi(xp_base * pow(xp_growth, maxi(level, 1) - 1)))
@@ -30,6 +29,6 @@ func validation_errors() -> PackedStringArray:
 	for limits in [[speed_base, speed_max], [manual_delay_min, manual_delay_base], [attraction_base, attraction_max]]:
 		if not is_finite(limits[0]) or not is_finite(limits[1]) or limits[0] <= 0.0 or limits[1] < limits[0]:
 			errors.append("Foundation limits must be finite, positive and ordered.")
-	if energy_max <= 0 or shield_max <= 0:
+	if energy_max <= 0:
 		errors.append("Vital limits must be positive.")
 	return errors

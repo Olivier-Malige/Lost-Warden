@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://ceqyqqo3wyusn" path="res://assets/sprites/effects/animation_rework/nomad_explosion_sheet.png" id="2_explosion"]
 [ext_resource type="Texture2D" uid="uid://b838lx6vkv5y1" path="res://assets/sprites/player/player1_particle.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://cjnub1l06vqmy" path="res://assets/ui/reactor_pixel.png" id="3_qek5x"]
-[ext_resource type="PackedScene" uid="uid://bdi46wdq5h2r" path="res://scenes/player/shield.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/player/shield.tscn" id="4"]
 [ext_resource type="AudioStream" uid="uid://csueshfvpowmr" path="res://assets/audio/sfx/player/explode.wav" id="5"]
 [ext_resource type="AudioStream" uid="uid://bjigy5hr2o7g2" path="res://assets/audio/sfx/player/hit.wav" id="6"]
 [ext_resource type="AudioStream" uid="uid://bn3y2eil5kh8j" path="res://assets/audio/sfx/player/shot.wav" id="7"]
@@ -252,7 +252,7 @@ reactor_path = NodePath("../../Visuals/Reactor")
 charge_particles_path = NodePath("../../Visuals/BeamChargeParticles")
 
 [node name="shield" parent="." unique_id=879327603 instance=ExtResource("4")]
-position = Vector2(0, -19.5)
+position = Vector2(0, 0)
 scale = Vector2(1, 1)
 
 [node name="Audio" type="Node2D" parent="." unique_id=1994234792]
@@ -284,7 +284,6 @@ stream = ExtResource("7")
 bus = &"Sounds"
 area_mask = 1
 
-[connection signal="area_entered" from="." to="." method="_on_player_area_entered"]
 [connection signal="animation_finished" from="Runtime/anim" to="." method="_on_anim_animation_finished"]
 [connection signal="timeout" from="Runtime/touchedReset" to="." method="_on_touchedReset_timeout"]
 [connection signal="timeout" from="Runtime/ShootingDelay" to="." method="_on_ShootingDelay_timeout"]

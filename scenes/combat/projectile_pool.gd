@@ -6,6 +6,11 @@ class ProjectileBucket:
 	var nodes: Array[Node] = []
 
 var _free: Dictionary[String, ProjectileBucket] = {}
+var _spawn_sequence := 0
+
+func next_spawn_sequence() -> int:
+	_spawn_sequence += 1
+	return _spawn_sequence
 
 
 func _ready() -> void:
@@ -69,11 +74,12 @@ func release(node: Node) -> void:
 	node.set_physics_process(false)
 	if node is CanvasItem:
 		(node as CanvasItem).visible = false
-	call_deferred("_park", node)
+	call_deferred("_park", weakref(node))
 
 
 # Reparent after the physics callback so Area2D can leave the world safely.
-func _park(node: Node) -> void:
+func _park(reference: WeakRef) -> void:
+	var node: Node = reference.get_ref()
 	if not is_instance_valid(node):
 		return
 	if node is Area2D:
@@ -111,6 +117,8 @@ static func spawn(packed: PackedScene, world_pos: Vector2, parent: Node) -> Node
 		node = pool.acquire(packed)
 	else:
 		node = packed.instantiate()
+	if pool:
+		node.set_meta("spawn_sequence", pool.next_spawn_sequence())
 	parent.add_child(node)
 	if node is Node2D:
 		(node as Node2D).global_position = world_pos

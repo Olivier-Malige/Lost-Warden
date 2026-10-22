@@ -42,6 +42,7 @@ var set_Player_2 := false # set before add_child for P2 colors and stats
 var loadout: PlayerLoadout
 var weapons: PlayerWeapons
 var vitals: PlayerVitals
+var defenses: PlayerDefenses
 var energy: int
 var touched := false
 var canShooting := true
@@ -63,12 +64,16 @@ func _ready() -> void:
 	beam_charge = clampf(STATS.beam_charge_start, 0.0, STATS.beam_charge_max)
 	_setup_components()
 	_setup_player()
+	defenses.setup(self)
 
 func _setup_components() -> void:
 	loadout = PlayerLoadout.new(STATS)
 	loadout.initialize_foundation(PROGRESSION_CONFIG, FOUNDATION.upgrades)
 	weapons = PlayerWeapons.new(self)
 	vitals = PlayerVitals.new(self)
+	defenses = PlayerDefenses.new()
+	defenses.name = "Defenses"
+	$Runtime.add_child(defenses)
 
 func _setup_player() -> void:
 	id_Player = "player2" if set_Player_2 else "player1"
@@ -98,7 +103,7 @@ func get_debug_snapshot() -> Dictionary:
 	return {
 		"id": id_Player, "controller": controller, "state": State.keys()[state],
 		"position": global_position, "energy": energy, "energy_max": STATS.energy_max,
-		"shield": shield.power, "touched": touched, "hit_slowdown": malusSpeed,
+		"shield": defenses.charges, "defenses": defenses.snapshot(), "touched": touched, "hit_slowdown": malusSpeed,
 		"move_speed": loadout.move_speed(), "weapon_speed_multiplier": STATS.weapon_speed_multiplier,
 		"fire_delay": loadout.fire_delay, "can_fire": canShooting,
 		"primary_damage": WEAPON_PRIMARY.damage * loadout.direct_damage_multiplier,
@@ -243,17 +248,17 @@ func play_shot_recoil(amount := 1.0, duration := 0.07) -> void:
 	_recoil_tween.tween_property(ship_sprite, "position", _ship_rest_position, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 func _hit_something(dmg := 1) -> void:
-	vitals.hit(dmg)
+	defenses.take_hit(dmg)
 
 # Continuous hazards enforce their own cadence instead of the ordinary hit grace period.
 func _hit_by_beam() -> void:
-	vitals.hit(1, true)
+	defenses.take_hit(1, true)
 
 func _on_touchedReset_timeout() -> void:
-	touched = false
 	malusSpeed = 0
-	if state == State.HIT:
-		state = State.ACTIVE
+	if defenses.grace_left <= 0.0:
+		touched = false
+		if state == State.HIT: state = State.ACTIVE
 	ship_sprite.set_modulate(Color(1, 1, 1, 1))
 
 func setShootingDelay() -> void:
@@ -273,17 +278,16 @@ func apply_upgrade(upgrade: UpgradeDefinition) -> UpgradeResult:
 		if entry.id == upgrade.id: canonical = entry
 	if canonical == null:
 		return UpgradeResult.new(false, 0, 0, false)
-	var applied := loadout.apply_foundation(canonical.id, {"energy": energy, "shield": int(shield.power)})
+	var applied := loadout.apply_foundation(canonical.id, {"energy": energy})
 	var result := UpgradeResult.new(applied.applied, applied.rank, canonical.max_rank, applied.capped)
 	if result.applied and canonical.category == UpgradeDefinition.Category.REWARD:
 		if canonical.effect == UpgradeDefinition.Effect.ENERGY:
 			energy = applied.reward.value
 			update_energy()
-		else:
-			shield.power = applied.reward.amount
 	setShootingDelay()
 	update_beam_charge()
 	weapons.sync_support()
+	defenses.sync_loadout()
 	_publish_upgrade_result(canonical, result)
 	publish_build()
 	return result
@@ -320,7 +324,6 @@ func increase_SideShot() -> void:
 func increase_Shot() -> void:
 	apply_upgrade(UPGRADE_DAMAGE)
 
-# Setter adds to power rather than replacing it.
 func increase_Shield() -> void:
 	apply_upgrade(preload("res://data/upgrades/foundation/shield.tres"))
 
@@ -336,7 +339,7 @@ func debug_max_stats() -> void:
 			if not loadout.apply_foundation(upgrade.id).applied: break
 	energy = STATS.energy_max
 	beam_charge = loadout.beam_capacity
-	shield.power = PROGRESSION_CONFIG.shield_max
+	defenses.sync_loadout()
 	setShootingDelay()
 	update_energy()
 	update_beam_charge()
@@ -354,18 +357,10 @@ func play_death_effect() -> void:
 	explosion_sprite.visible = true
 	explosion_sprite.frame = 0
 
-func _on_player_area_entered(area: Area2D) -> void:
-	if state != State.ACTIVE and state != State.HIT:
-		return
-	if area.is_in_group("mounted_turret"):
-		return
-	if area.is_in_group("enemy") and area.has_method("_hit_something"):
-		_hit_something()
-		area._hit_something(10)
-
 func set_state(next_state: State) -> void:
 	state = next_state
 	if state >= State.DYING:
+		defenses.shutdown()
 		weapons.stop_support()
 		var hit_effects := PlayerHitEffects.find_service(self)
 		if hit_effects:

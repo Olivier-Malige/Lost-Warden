@@ -8,10 +8,12 @@ const EXTRA_SIDE_DAMAGE_MULTIPLIER := 0.6
 const MISSILES: UpgradeDefinition = preload("res://data/upgrades/micro_missiles.tres")
 const DRONE := preload("res://scenes/player/weapons/escort_drone.tscn")
 const DRONE_UPGRADE: UpgradeDefinition = preload("res://data/upgrades/escort_drone.tres")
+const SATELLITES := preload("res://scenes/player/weapons/orbiting_satellites.tscn")
 
 var player: Player
 var missile_wait := 0.0
 var escorts: Array[Node2D] = []
+var satellites: Node2D
 var escort: Node2D:
 	get: return escorts[0] if not escorts.is_empty() else null
 
@@ -46,9 +48,10 @@ func update_autonomous(delta: float) -> void:
 			break
 
 func sync_support() -> void:
+	_sync_satellites()
 	var rank := player.loadout.rank_for(UpgradeDefinition.Effect.ESCORT_DRONE)
 	if player.state >= Player.State.DYING or rank == 0:
-		stop_support()
+		_stop_escorts()
 		return
 	var desired := DRONE_UPGRADE.support_count(rank)
 	while escorts.size() > desired:
@@ -62,6 +65,23 @@ func sync_support() -> void:
 		player.add_child(support)
 
 func stop_support() -> void:
+	_stop_escorts()
+	if is_instance_valid(satellites):
+		satellites.shutdown()
+	satellites = null
+
+func _sync_satellites() -> void:
+	var rank := player.loadout.rank_for(UpgradeDefinition.Effect.ORBITING_SATELLITES)
+	if player.state >= Player.State.DYING or rank == 0:
+		if is_instance_valid(satellites): satellites.shutdown()
+		satellites = null
+		return
+	if not is_instance_valid(satellites):
+		satellites = SATELLITES.instantiate()
+		player.add_child(satellites)
+	satellites.sync_rank(rank)
+
+func _stop_escorts() -> void:
 	for support in escorts:
 		if is_instance_valid(support):
 			support.hide()
@@ -72,7 +92,7 @@ func stop_support() -> void:
 func fire_primary() -> void:
 	if not is_instance_valid(player) or player.state >= Player.State.DYING:
 		return
-	_spawn_gun(Player.WEAPON_PRIMARY.projectile, player.primary_origin, Player.WEAPON_PRIMARY.damage)
+	_spawn_gun(Player.WEAPON_PRIMARY.projectile, player.primary_origin, Player.WEAPON_PRIMARY.damage, PlayerHitSnapshot.Kind.GUN)
 	player.play_shot_recoil()
 	player.shooting_audio.playing = true
 	player.canShooting = false
@@ -83,14 +103,15 @@ func fire_primary() -> void:
 func _fire_side_shots() -> void:
 	var projectile := Player.WEAPON_SIDE.projectile
 	var authored_damage := player.loadout.side_base_damage
-	_spawn_gun(projectile, player.left_origin, authored_damage, SIDE_SPREAD_SPEED)
-	_spawn_gun(projectile, player.right_origin, authored_damage, -SIDE_SPREAD_SPEED)
+	_spawn_gun(projectile, player.left_origin, authored_damage, PlayerHitSnapshot.Kind.SIDE_GUN, SIDE_SPREAD_SPEED)
+	_spawn_gun(projectile, player.right_origin, authored_damage, PlayerHitSnapshot.Kind.SIDE_GUN, -SIDE_SPREAD_SPEED)
 	if player.loadout.rank_for(UpgradeDefinition.Effect.SIDE_SHOT) < EXTRA_SIDE_MIN_RANK:
 		return
 	_spawn_gun(
 		projectile,
 		player.left_origin,
 		authored_damage,
+		PlayerHitSnapshot.Kind.SIDE_GUN,
 		-EXTRA_SIDE_SPREAD_SPEED,
 		EXTRA_SIDE_DAMAGE_MULTIPLIER
 	)
@@ -98,6 +119,7 @@ func _fire_side_shots() -> void:
 		projectile,
 		player.right_origin,
 		authored_damage,
+		PlayerHitSnapshot.Kind.SIDE_GUN,
 		EXTRA_SIDE_SPREAD_SPEED,
 		EXTRA_SIDE_DAMAGE_MULTIPLIER
 	)
@@ -106,6 +128,7 @@ func _spawn_gun(
 	packed: PackedScene,
 	origin: Marker2D,
 	authored_damage: float,
+	source_kind: PlayerHitSnapshot.Kind,
 	speed_x: float = 0.0,
 	damage_multiplier: float = 1.0
 ) -> void:
@@ -117,7 +140,7 @@ func _spawn_gun(
 	shot.set_foundation_damage(authored_damage, player.loadout.direct_damage_multiplier * damage_multiplier, tier)
 	var effects := PlayerHitEffects.find_service(player)
 	if effects:
-		var hit := effects.create_hit(StringName(player.id_Player), minf(authored_damage, shot.damage_Max), shot.damage, player.loadout.acquired_ranks, PlayerHitSnapshot.Kind.GUN, player.loadout.critical_chance)
+		var hit := effects.create_hit(StringName(player.id_Player), minf(authored_damage, shot.damage_Max), shot.damage, player.loadout.acquired_ranks, source_kind, player.loadout.critical_chance)
 		if hit:
 			shot.configure_hit(hit, effects)
 	shot.speedX = speed_x

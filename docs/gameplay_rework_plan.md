@@ -1,10 +1,10 @@
 # Gameplay roadmap
 
-Updated: 2026-10-21.
+Updated: 2026-10-22.
 
 **Goal:** a continuous survival shmup with varied builds, enemies and formations, increasing pressure over time, solo and local co-op.
 
-**Next step:** Review playable step 9, escort drones, before requesting step 10, orbiting satellites. Steps 1-4, 6-9 and standalone step 12 chains are implemented. Missiles and drone bolts retain criticals but are explicitly excluded from electric chains; piercing belongs to the manual signature beam. Explosion coexistence remains with step 11. Step 5 still needs two solo observations and qualitative feedback. The maintainer explicitly defers effect balancing; prototype values remain recorded. Dedicated selection audio remains pending. See [Phase 3 evidence](phase_3_validation.md).
+**Next step:** Playtest the defensive close-range pack: regenerating reflector sphere, reactive armor and retaliation pulse. The maintainer approved this addition before step 13 ricochet shards, which still awaits a separate request. Steps 1-4 and 6-12 are implemented. Missiles, drone bolts and satellites retain criticals and explosions but remain excluded from electric chains; piercing belongs to the manual signature beam. Satellites and explosions remain local for playtest after published escort commit `f20c148`. Step 5 still needs two solo observations and qualitative feedback. The maintainer explicitly defers effect balancing; prototype values remain recorded. Dedicated selection audio remains pending. See [Phase 3 evidence](phase_3_validation.md).
 
 ## Progress and delivery order
 
@@ -12,7 +12,7 @@ Updated: 2026-10-21.
 | --- | --- | --- |
 | Preparation, Phase 1 and art | Original identity, display, core combat, controls, plasma and graphics | Complete |
 | 2 — Continuous survival | Seeded encounters, elites, first boss, survival UI and records | Complete; solo accepted, co-op playtest deferred |
-| 3 — Experience and power-ups | XP, personal builds, original weapon sprites and audiovisual level-up choices | In progress; steps 1-4, 6-9 and standalone 12 implemented; plasma piercing, criticals, chains, micro-missiles and escort drones playable; human XP acceptance deferred |
+| 3 — Experience and power-ups | XP, personal builds, original weapon sprites and audiovisual level-up choices | In progress; steps 1-4 and 6-12 implemented; plasma piercing, criticals, chains, micro-missiles, escort drones, orbiting satellites and impact explosions playable; human XP acceptance deferred |
 | 4 — Enemies and density | Redesign current enemies, add roles, enrich formations, increase pressure over time | Planned; after Phase 3 |
 | 5 — Combat effects | Impacts, explosions, collections and upgrade feedback | Planned |
 | 6 — Final balance | Complete solo/co-op runs, performance and regression checks | Planned; includes deferred co-op gameplay acceptance after power-up and balance rework |
@@ -45,13 +45,13 @@ No implementation remains in Phase 2. Carry the deferred co-op gameplay acceptan
 
 ## Phase 3 — Create varied survival builds
 
-The [detailed plan](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/plan.md) and its [delivery contract](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/contract.md) record the maintainer's direction and prototype values. Steps 1-4, 6-9 and standalone 12 are implemented. Automated XP measurement exists; human calibration acceptance and later offensive families remain pending. Execute only the requested numbered step, then verify and stop for review.
+The [detailed plan](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/plan.md) and its [delivery contract](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/contract.md) record the maintainer's direction and prototype values. Steps 1-4, 6-10 and standalone 12 are implemented. Automated XP measurement exists; human calibration acceptance and later offensive families remain pending. Execute only the requested numbered step, then verify and stop for review.
 
 Replace direct drops with pooled XP and paused choices inspired by Vampire Survivors / Megabonk. Share XP in co-op with personal offers and four offensive plus three utility family slots per player. Acquired families stay for the run; rarity remains deferred.
 
 Nomad retains its native manual secondary plasma beam and reserve, outside the offensive slots. Future ship signatures remain planning-only; no ship selection or permanent progression is included.
 
-Prepare dormant models and a complete animated selection screen before activating XP, rewards, foundation ranks and HUD together. Deliver each offensive family in bounded checkpoints with editable sources, runtime sprites and native visual verification. Following the maintainer's playtest, piercing belongs to the manual plasma beam as a utility. The cannon's nearest-target electric arc is now playable: 1/2/3 other targets within 72/88/104 px, 45% pre-critical damage per jump and a 0.5-second personal cooldown. Obstacles block the links; secondary effects cannot recurse. Satellites, explosions and ricochets remain pending. See [chain evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/energy_chains.md).
+Prepare dormant models and a complete animated selection screen before activating XP, rewards, foundation ranks and HUD together. Deliver each offensive family in bounded checkpoints with editable sources, runtime sprites and native visual verification. Following the maintainer's playtest, piercing belongs to the manual plasma beam as a utility. The cannon's nearest-target electric arc is now playable: 1/2/3 other targets within 72/88/104 px, 45% pre-critical damage per jump and a 0.5-second personal cooldown. Obstacles block the links; secondary effects cannot recurse. Impact explosions are playable; ricochet shards remain pending. See [chain evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/energy_chains.md).
 
 The three beam-piercing ranks cross 1/2/3 extra targets, add 20/30/40% initial damage and raise normal width from 8 to 10/11/12 px (overdrive 20/22/24 px). Each crossed target reduces subsequent damage and width to 80%. These prototype bonuses apply only with this utility, occupy one utility slot, grant no plasma and preserve manual drain and armor blocking. See [beam verification](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/beam_piercing.md).
 
@@ -71,6 +71,10 @@ Latest missile targeting revision: acquisition, target retention and reacquisiti
 
 Escort drones fire straight aimed bolts independently of manual cannons/plasma. Ranks provide one / one / two companions (second drone at rank three), damage 0.6 / 0.75 / 0.9 and intervals 0.65 / 0.55 / 0.45 s before the common stat factors. Six active/reserved bolts are shared per owner; range is 180 px within a 90-degree screen-up cone (+/-45 degrees), speed 360 px/s and lifetime one second. Hulls bank with Nomad movement; reduced copies of its twin reactor effect share the current smoothed movement response and team palette. Visual emitters tuck inside the arena at the edges while player movement bounds remain unchanged. Drone impacts cannot trigger electric chains or consume the cannon chain cooldown; direct criticals remain available. Pause freezes support/flight; DYING removes both companions and cancels new owned emissions/procs. See [escort evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/escort_drone.md). Balancing remains deferred.
 
+### Step 10 satellite checkpoint — 2026-10-21
+
+Ranks provide one / two / three contact orbiters at radius 32 px, fixed period 2.5 seconds and contact radius 4 px. Direct damage is 1 / 1.25 / 1.5 before common DAMAGE; FIRE_RATE only scales the 0.50-second owner/group cooldown. All boss parts share one group, while P1/P2 keep independent timers and critical streams. Satellites do not block enemy shots; criticals and impact explosions remain compatible; the final 2026-10-22 revision restricts electric chains to the main cannon only. Dedicated Aseprite orbit/contact art, cards and miniatures ship together. Pause and deferred DYING cleanup are verified through actual physics. See [satellite evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/orbiting_satellites.md). The preceding escort checkpoint is published as `f20c148`; this checkpoint remains local for playtest.
+
 ## Phase 4 — Redesign enemies, formations and density
 
 - Revisit every existing enemy family and asteroid hazards; define clear roles and varied movement/attack patterns.
@@ -89,3 +93,37 @@ Escort drones fire straight aimed bolts independently of manual cannons/plasma. 
 - [Technical requirements and history](gameplay_rework_reference.md): retained numerical rules and acceptance criteria. This concise roadmap controls current status and ordering.
 - [Phase 2 validation](phase_2_validation.md): implementation evidence and known issues.
 - [Sound design plan](sound_design_plan.md): separate audio workstream.
+
+### Step 11 impact explosion checkpoint — 2026-10-21
+
+The first accepted compatible direct impact can create one explosion: radius 24/30/36 px with real collision-shape overlap, 70/90/110% modified pre-critical damage and every additional hull reached by the brief expanding disk. Cannons, missiles, drone bolts and satellite contacts share a 0.30-second owner cooldown unaffected by FIRE_RATE. Secondary damage cannot recurse or critically strike; per-effect histories allow chain/blast stacking on ordinary hulls, while direct-target and boss exclusions remain shared. Dedicated eight-frame Aseprite explosions, cards and miniatures preserve Lost Warden 64 and personal ownership. [Explosion evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/impact_explosions.md) records the initial tuning checks; the [wave correction](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/impact_explosion_wave.md) adds 263 native checks after the approved expanding-wave revision and affected regressions. Cards show +25% / +50% radius over rank one. Broader final balancing and new audio remain deferred. Stop for playtest before step 13.
+
+### Explosion reach and effect compatibility revision — 2026-10-22
+
+The maintainer requested more effective splash and percentage-based descriptions. Explosion radii increase from 20/26/32 to 32/40/48px; a physics circle now intersects actual enemy hulls instead of filtering center positions. Ray checks preserve obstacle/armor occlusion and boss-group exclusions. The visual source/export grows to native 96px cells. Selection cards show base blast / +25% / +50% radius relative to rank one, without pixel units.
+
+`PlayerHitSnapshot` owns the explicit source/modifier policy. Electric chains are allowed only for main/side cannon hits. Missile, drone and satellite snapshots discard the chain modifier, while explosion/critical support remains separately authorized. Plasma, reflected, secondary and unregistered sources receive no combat effects by default. Queue guards use the same policy; future effects/sources must opt in. This fixes the remaining satellite lightning path without per-weapon exclusion patches. See the updated [explosion](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/impact_explosions.md) and [chain evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/energy_chains.md).
+
+### Final playtest tuning — 2026-10-22
+
+The maintainer also excludes side shots from electric chains. Main and side emissions now have distinct source kinds under the same centralized policy, including both extra side shots at the final rank. Only the main cannon can trigger lightning; main-only wording appears on its card. Explosion radii shrink by 25% at every rank and damage doubles: 24/30/36px, 70/90/110% pre-critical damage. Percentage-based radius descriptions and real hull-overlap detection remain. Native explosion (171), chain (200), selection (48) and activation (76) checks pass; affected regressions and 93 editor diagnostic documents are clean. Stop for playtest before step 13.
+
+### Approved expanding-wave correction — 2026-10-22
+
+The latest maintainer-approved plan replaces the instant capped splash with a physics-timed wave. Radius begins at 25%, reaches its authored 24/30/36 maximum in 120ms, damages all overlapping additional hulls once through 160ms, then leaves inactive fragments until 320ms. Damage stays 70/90/110% pre-critical; owner cooldown stays 0.30s. Ordinary hulls no longer shield their neighbors. Chain and blast damage stack on ordinary enemies, while direct-origin and boss-group exclusions stay shared. Main-only lightning and the centralized source policy are preserved.
+
+[Current wave evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/impact_explosion_wave.md) records 263 clean native checks, six moving enemies, both synergy orders, lifecycle/saturation, refreshed Aseprite art and clean diagnostics. Cards now describe an area rather than four targets. Stop for maintainer playtest before step 13; no commit/push is requested.
+
+### Steel satellite revision — 2026-10-22
+
+After accepting explosions for now, the maintainer approved metallic spiked satellites with a 1.25-second orbit and an independent 0.625-second spin. The first flat art draft was rejected during implementation; the delivered Aseprite MCP replacement has beveled steel cores, four tapered decorative spikes, asymmetric team inserts and separate editable source layers. Both icons match. Counts, radius-four core contacts, damage, cooldowns and main-only lightning remain unchanged. Final satellite **364 native checks**, affected regressions and **93 clean diagnostic documents** pass. See [current satellite evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/orbiting_satellites.md#steel-satellite-appearance-and-motion-revision--2026-10-22). Stop for this playtest; no ricochet work or commit/publication is included.
+
+### Satellite rotation simplification — 2026-10-22
+
+The maintainer requested one canonical satellite sprite per player, rotated by script. The runtime now rotates only Sprite2D continuously, retains reflection/contact frames and leaves the core collider unchanged. The Aseprite source has two team rows (16x32 frames, 128x32 sheet) rather than eight directions per team. Periods and combat remain unchanged. Native satellite 364 / explosion 263 checks and 93 clean diagnostic documents pass. See [current evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/orbiting_satellites.md#one-team-sprite-with-scripted-rotation--2026-10-22). Stop for satellite playtest.
+
+### Defensive utility pack checkpoint — 2026-10-22
+
+The maintainer-approved [defensive plan](../aidd_docs/tasks/2026_10/2026_10_22_defensive_pack/plan.md) is implemented locally. The former shield reward is now a three-rank sphere: 3/5/7 charges, recharge 8/6/4 seconds, radius 20, reverse-trajectory reflection, body and continuous-beam protection. Reactive armor adds +25/50/75% ordinary injury grace without longer slowdown/flash. Retaliation triggers on rupture/nonfatal injury: damage 2/3/4, radius 32/40/48, four-second owner cooldown, a synchronized 160ms active wave and inactive fragments through 320ms. It clears hostile shots without recursive effects. All three share existing utility slots; the catalog has 19 entries.
+
+Original Aseprite art, both team cards/miniatures, compact event-driven HUD state and safe ownership/pooling ship together. [Evidence](../aidd_docs/tasks/2026_10/2026_10_22_defensive_pack/validation.md): 292 native defensive checks, affected weapon/progression/boss regressions, 102 clean diagnostic documents and exact asset audits. The full historical collision sweep retains documented preexisting failures; targeted foundation geometry passes. Stop for maintainer playtest. No commit/push, extra slots, broad balance or ricochet work is included.

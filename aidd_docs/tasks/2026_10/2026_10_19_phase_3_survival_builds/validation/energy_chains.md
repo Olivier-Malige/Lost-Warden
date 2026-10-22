@@ -44,3 +44,19 @@ Godot 4.7.2, addon-free isolated runtime, separate APPDATA directories:
 The chain fixture covers all ranks, actual primary/side contacts, pre-critical math, no repeated group, exact range boundaries, deterministic distance ties, blocked/removed targets, no-target termination, slot/rank limits, emission snapshots and cross-player source reuse, independent cooldowns, FIRE_RATE exclusion, pause before deferred work, owner death/cancellation, boss armor and overlapping parts, normal kill rewards, visual saturation/expiry and five stable visual lifecycle cycles. Native solo and co-op world teardown also runs cleanly.
 
 The capped-offer activation fixture now caps the new completed family before asserting that side-shot rank four is its sole remaining offer. Old seeded economy evidence is historical; it was not rerun against the expanded catalog. No encounter/XP tuning, save-schema change, new audio, commit or push is included. Remaining step-5 solo observations, full build combinations, final performance/economy and human audio/balance acceptance are still pending.
+
+## Explicit source compatibility — 2026-10-22
+
+The maintainer reported lightning recurring on new upgrades. Satellite contacts were the remaining allowed support source; explosion SECONDARY packets already could not recurse. Chains are now explicitly limited to GUN (main/side cannon). PlayerHitSnapshot owns the source/modifier table, filters incompatible combat ranks even in raw packets and rejects unknown source/effect pairs by default. PlayerHitEffects and projectile piercing setup consult that same policy; missile/drone/satellite emitter erase lists are removed.
+
+**165 native chain checks PASS**, including all seven current source kinds, unknown source/effect rejection, independent explosion permission, raw snapshot filtering, main/side physical impacts, ownership, RNG/cooldown, moving anchors and boss behavior. **269 native satellite checks PASS** now expect no lightning or cannon-cooldown consumption from real orbit overlaps. Missile/drone regressions retain their criticals and planned independent effects. Native selection/progression and 93 clean diagnostic documents pass. Future procs must opt into the same policy rather than treating every direct hit as compatible.
+
+## Main cannon only — 2026-10-22
+
+The maintainer further excludes lateral fire. Append SIDE_GUN to the existing kind enum and require an explicit kind at each cannon emitter call. Primary GUN alone allows energy_chains; SIDE_GUN retains direct criticals/explosions and legacy/planned piercing/ricochet compatibility. Snapshot filtering and proc guards continue to consult the central policy, with no local exception list.
+
+**200 native checks PASS**, clean exit. Real P1/P2 side fire at ranks 1 and 4 validates both the ordinary pair and all four inner/outer shots: direct damage is unchanged, no chain/neighbor damage/cooldown is created, then that same volley’s primary shot triggers its chain normally. All eight kinds and unregistered sources are covered. The native card now reads MAIN before jump/range information. Regression captures and 93 clean diagnostic documents confirm integration.
+
+## Independent ordinary-target histories — 2026-10-22
+
+Under the approved expanding-wave plan, chains and explosions may each damage the same ordinary group once. `resolve_hit` and `visited_groups` use explicit secondary channels, with directly hit groups and boss history shared. This is damage stacking, not recursive procs: chain/explosion snapshots still have no critical or modifier capabilities. Main-only source authorization is unchanged. Both orderings against ordinary hulls and boss parts pass the new wave fixture; the existing chain suite passes **200 native checks**, clean exit. See [wave evidence](impact_explosion_wave.md).

@@ -17,4 +17,3 @@ manual_delay_min = 0.12
 attraction_base = 24.0
 attraction_max = 120.0
 energy_max = 12
-shield_max = 3

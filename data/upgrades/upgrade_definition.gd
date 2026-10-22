@@ -6,6 +6,7 @@ enum Effect {
 	ORB_MAGNET, SCORE, PIERCING, CRITICAL_HITS, MICRO_MISSILES, ESCORT_DRONE,
 	ORBITING_SATELLITES, IMPACT_EXPLOSIONS, ENERGY_CHAINS, RICOCHET,
 	BEAM_CAPACITY, BEAM_RECHARGE, BEAM_PIERCING,
+	REACTIVE_ARMOR, RETALIATION_PULSE,
 }
 enum Category { UTILITY, OFFENSIVE, REWARD, FALLBACK }
 
@@ -28,13 +29,27 @@ enum Category { UTILITY, OFFENSIVE, REWARD, FALLBACK }
 @export var range_values: PackedFloat32Array = []
 @export var secondary_damage_scale := 0.0
 @export var proc_cooldown := 0.0
+@export var target_limit := 0
+@export var blast_expansion_duration := 0.0
+@export var blast_active_duration := 0.0
+@export var blast_visual_duration := 0.0
 @export var weapon: WeaponDefinition
 @export var interval_values: PackedFloat32Array = []
 @export var projectile_counts: PackedInt32Array = []
 @export var support_counts: PackedInt32Array = []
+@export var orbit_radius := 0.0
+@export var orbit_period := 0.0
+@export var spin_period := 0.0
+@export var contact_radius := 0.0
+@export var contact_cooldown := 0.0
+@export var shield_radius := 0.0
+@export var recharge_values: PackedFloat32Array = []
 
 func support_count(rank: int) -> int:
 	return support_counts[mini(rank, support_counts.size()) - 1] if rank > 0 and not support_counts.is_empty() else 0
+
+func recharge_value(rank: int) -> float:
+	return recharge_values[mini(rank, recharge_values.size()) - 1] if rank > 0 and not recharge_values.is_empty() else 0.0
 
 func projectile_count(rank: int) -> int:
 	return projectile_counts[mini(rank, projectile_counts.size()) - 1] if rank > 0 and not projectile_counts.is_empty() else 0
@@ -44,6 +59,9 @@ func interval_value(rank: int) -> float:
 
 func range_value(rank: int) -> float:
 	return range_values[mini(rank, range_values.size()) - 1] if rank > 0 and not range_values.is_empty() else 0.0
+
+func blast_radius(rank: int, elapsed: float) -> float:
+	return range_value(rank) * lerpf(0.25, 1.0, clampf(elapsed / blast_expansion_duration, 0.0, 1.0))
 
 func damage_bonus(rank: int) -> float:
 	return damage_bonus_values[mini(rank, damage_bonus_values.size()) - 1] if rank > 0 and not damage_bonus_values.is_empty() else 0.0
@@ -71,12 +89,12 @@ func foundation_errors() -> PackedStringArray:
 			errors.append("Authored rank values must be finite, positive and nondecreasing.")
 		previous = amount
 	var expected := Category.OFFENSIVE
-	if effect < Effect.SPEED or effect > Effect.BEAM_PIERCING:
+	if effect < Effect.SPEED or effect > Effect.RETALIATION_PULSE:
 		errors.append("Unknown foundation effect.")
 	match effect:
-		Effect.SPEED, Effect.FIRE_RATE, Effect.DAMAGE, Effect.ORB_MAGNET, Effect.BEAM_CAPACITY, Effect.BEAM_RECHARGE, Effect.BEAM_PIERCING:
+		Effect.SPEED, Effect.FIRE_RATE, Effect.DAMAGE, Effect.ORB_MAGNET, Effect.BEAM_CAPACITY, Effect.BEAM_RECHARGE, Effect.BEAM_PIERCING, Effect.SHIELD, Effect.REACTIVE_ARMOR, Effect.RETALIATION_PULSE:
 			expected = Category.UTILITY
-		Effect.ENERGY, Effect.SHIELD:
+		Effect.ENERGY:
 			expected = Category.REWARD
 		Effect.SCORE:
 			expected = Category.FALLBACK
@@ -91,6 +109,29 @@ func foundation_errors() -> PackedStringArray:
 				if not is_finite(bonus) or bonus <= 0.0 or bonus < previous_bonus:
 					errors.append("Beam bonuses must be positive, finite and nondecreasing.")
 				previous_bonus = bonus
+	if effect == Effect.SHIELD:
+		if not is_finite(shield_radius) or shield_radius <= 0.0 or not is_finite(contact_cooldown) or contact_cooldown <= 0.0 or recharge_values.size() != max_rank:
+			errors.append("Shield geometry, body cadence and rank recharge data must be authored.")
+		var previous_recharge := INF
+		for duration in recharge_values:
+			if not is_finite(duration) or duration <= 0.0 or duration > previous_recharge:
+				errors.append("Shield recharge periods must be positive, finite and nonincreasing.")
+			previous_recharge = duration
+		for count in rank_values:
+			if count != roundf(count): errors.append("Shield capacities must be whole charges.")
+	if effect == Effect.REACTIVE_ARMOR:
+		for bonus in rank_values:
+			if bonus > 1.0: errors.append("Reactive armor grace bonuses must not exceed 100 percent.")
+	if effect == Effect.IMPACT_EXPLOSIONS or effect == Effect.RETALIATION_PULSE:
+		if range_values.size() != max_rank or not is_finite(proc_cooldown) or proc_cooldown <= 0.0 or target_limit != 0:
+			errors.append("Impact explosions require authored ranges, a positive cooldown and unlimited area targets.")
+		if not is_finite(blast_expansion_duration) or not is_finite(blast_active_duration) or not is_finite(blast_visual_duration) or blast_expansion_duration <= 0.0 or blast_active_duration < blast_expansion_duration or blast_visual_duration <= blast_active_duration:
+			errors.append("Blast timing must have a positive expansion, an active interval and a longer visual lifetime.")
+		var previous_range := 0.0
+		for radius in range_values:
+			if not is_finite(radius) or radius <= 0.0 or radius < previous_range:
+				errors.append("Explosion radii must be finite, positive and nondecreasing.")
+			previous_range = radius
 	if effect == Effect.ENERGY_CHAINS:
 		if range_values.size() != max_rank or not is_finite(secondary_damage_scale) or secondary_damage_scale <= 0.0 or not is_finite(proc_cooldown) or proc_cooldown <= 0.0:
 			errors.append("Energy chains require authored ranges, positive damage scale and cooldown.")
@@ -102,6 +143,17 @@ func foundation_errors() -> PackedStringArray:
 		for jumps in rank_values:
 			if jumps != roundf(jumps) or jumps > 3.0:
 				errors.append("Chain jump budgets must be whole numbers, at most three.")
+	if effect == Effect.ORBITING_SATELLITES:
+		if support_counts.size() != max_rank:
+			errors.append("Satellites require an authored count for every rank.")
+		var previous_count := 0
+		for count in support_counts:
+			if count < 1 or count > 3 or count < previous_count:
+				errors.append("Satellite counts must be nondecreasing and bounded to three.")
+			previous_count = count
+		for amount in [orbit_radius, orbit_period, spin_period, contact_radius, contact_cooldown]:
+			if not is_finite(amount) or amount <= 0.0:
+				errors.append("Satellite orbit and contact data must be positive and finite.")
 	if effect == Effect.ESCORT_DRONE:
 		if support_counts.size() != max_rank:
 			errors.append("Escort drones require an authored support count at every rank.")
@@ -161,10 +213,8 @@ func is_eligible(build: Dictionary, vitals: Dictionary, config: ProgressionConfi
 		var capacity := config.offensive_slots if category == Category.OFFENSIVE else config.utility_slots
 		return rank > 0 or int(build.get(count_key, 0)) < capacity
 	if category == Category.REWARD:
-		var key := "energy" if effect == Effect.ENERGY else "shield"
-		var maximum := config.energy_max if effect == Effect.ENERGY else config.shield_max
-		var current := int(vitals.get(key, maximum))
-		return current >= 0 and current < maximum
+		var current := int(vitals.get("energy", config.energy_max))
+		return current >= 0 and current < config.energy_max
 	return false
 
 func offer_snapshot(rank: int) -> Dictionary:
@@ -178,8 +228,13 @@ func offer_snapshot(rank: int) -> Dictionary:
 		"next_damage_bonus": damage_bonus(next_rank),
 		"next_width_bonus": width_bonus(next_rank),
 		"next_range": range_value(next_rank),
+		"next_range_bonus": range_value(next_rank) / range_value(1) - 1.0 if range_value(1) > 0.0 else 0.0,
 		"secondary_damage_scale": secondary_damage_scale, "proc_cooldown": proc_cooldown,
+		"target_limit": target_limit,
 		"next_interval": interval_value(next_rank),
 		"next_projectile_count": projectile_count(next_rank),
 		"next_support_count": support_count(next_rank),
+		"orbit_radius": orbit_radius, "orbit_period": orbit_period, "spin_period": spin_period,
+		"contact_radius": contact_radius, "contact_cooldown": contact_cooldown,
+		"shield_radius": shield_radius, "next_recharge": recharge_value(next_rank),
 	}

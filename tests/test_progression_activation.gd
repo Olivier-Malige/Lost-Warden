@@ -99,7 +99,7 @@ func run() -> void:
 	check(world.get_node("hud")._level_label.text == "LEVEL 6", "HUD must display shared progression through events")
 	check(world.get_node("hud/RightColumn/Progression").get_child_count() == 2 and not world.get_node("hud")._xp_bar.show_percentage, "HUD progression must show the level and its progress bar without a numeric XP counter")
 	check(is_equal_approx(world.get_node("hud")._xp_bar.value, controller.progression.xp) and is_equal_approx(world.get_node("hud")._xp_bar.max_value, controller.progression.next_threshold()), "level progress bar must reflect the shared XP remainder and next threshold")
-	check(world.get_node("hud")._build_controls.size() == 2, "HUD must maintain two personal seven-slot builds")
+	check(world.get_node("hud")._build_controls.size() == 2, "HUD must maintain two personal builds")
 	await capture("coop_hud")
 	p1.weapons.fire_primary()
 	p2.weapons.fire_primary()
@@ -151,7 +151,6 @@ func run() -> void:
 		for rank in 3: p1.apply_upgrade(load("res://data/upgrades/%s.tres" % id))
 	p1.energy = 12
 	p1.update_energy()
-	p1.shield.power = 3
 	var score_before: int = globals.score
 	events.xp_collected.emit(40, &"player1")
 	ui = await wait_ready()
@@ -161,7 +160,7 @@ func run() -> void:
 	await create_timer(0.2).timeout
 	check(not paused and main._selection == null and globals.score == score_before + 1000, "automatic fallback-only queued levels must still close the last visible selection")
 	p1.debug_max_stats()
-	check(p1.loadout.foundation_snapshot().utility_count == 3 and is_equal_approx(p1.loadout.direct_damage_multiplier, 2.25) and p1.shield.power == 3, "debug maximum must respect valid utility slots and foundation damage/shield caps")
+	check(p1.loadout.foundation_snapshot().utility_count == 3 and is_equal_approx(p1.loadout.direct_damage_multiplier, 2.25) and p1.defenses.charges == 0, "debug maximum must respect valid utility slots and foundation damage and acquired shield ranks")
 	check(is_equal_approx(p1.get_debug_snapshot().primary_damage, 2.25) and is_equal_approx(p1.get_debug_snapshot().side_damage, 2.25), "inspector weapon values must match actual foundation damage")
 	p1.weapons.fire_primary()
 	var shots := []

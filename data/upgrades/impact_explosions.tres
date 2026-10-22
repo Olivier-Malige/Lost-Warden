@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/upgrade_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/upgrade_miniatures.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="Icon"]
+atlas = ExtResource("2")
+region = Rect2(256, 0, 16, 16)
+
+[resource]
+script = ExtResource("1")
+icon = SubResource("Icon")
+id = &"impact_explosions"
+effect = 13
+weight = 10
+max_rank = 3
+display_name = "IMPACT EXPLOSIONS"
+description = "Direct impacts create a brief expanding blast that hits every nearby hull once. Higher ranks add +25% / +50% radius over rank one. Deals 70% / 90% / 110% pre-critical damage and combines with main cannon arcs."
+category = 1
+repeatable = false
+rank_values = PackedFloat32Array(0.7, 0.9, 1.1)
+range_values = PackedFloat32Array(24, 30, 36)
+proc_cooldown = 0.3
+target_limit = 0
+blast_expansion_duration = 0.12
+blast_active_duration = 0.16
+blast_visual_duration = 0.32
+hud_label = &"BLAST"

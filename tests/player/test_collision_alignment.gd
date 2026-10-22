@@ -12,7 +12,7 @@ func check(ok: bool, message: String) -> void:
 
 func sprite_bounds(sprite: Sprite2D) -> Rect2:
 	var frame_size := sprite.texture.get_size() / Vector2(sprite.hframes, sprite.vframes)
-	var origin := Vector2(sprite.frame % sprite.hframes, int(sprite.frame / sprite.hframes)) * frame_size
+	var origin := Vector2(sprite.frame % sprite.hframes, int(float(sprite.frame) / sprite.hframes)) * frame_size
 	var pixels := sprite.texture.get_image().get_region(Rect2i(origin, frame_size)).get_used_rect()
 	if sprite.flip_h:
 		pixels.position.x = int(frame_size.x) - pixels.end.x
@@ -88,30 +88,19 @@ func run() -> void:
 	world.add_child(player)
 	player.set_physics_process(false)
 	var shield = player.shield
-	await process_frame
-	await process_frame
-	check(shield.get_node("CollisionShape2D").disabled, "empty shield must not retain an invisible collider")
-	shield.power = 1
-	await process_frame
-	await process_frame
-	check(shield.monitoring and not shield.get_node("CollisionShape2D").disabled, "shield pickup must restore collision")
-	for team in ["player1", "player2"]:
-		player.id_Player = team
-		for tier in ["Smallest", "Small", "Normal", "Big", "Very_Big", "Full"]:
-			var animation = shield.get_node("AnimationPlayer")
-			animation.play(team + "_" + tier)
-			animation.advance(0.0)
-			var shape = shield.get_node("CollisionShape2D")
-			var bounds := sprite_bounds(shield.get_node("Sprite2D"))
-			check(shape.position.is_equal_approx(bounds.get_center()), "shield: guard must follow visible arc")
-			check(shape.shape.size.is_equal_approx(bounds.size), "shield: guard size must match its tier")
-			animation.play(team + "_" + tier + "_Hit")
-			animation.advance(0.0)
-			check(shape.shape.size.is_equal_approx(bounds.size), "shield: impact flash must not enlarge guard")
-	shield.power = -6
-	await process_frame
-	await process_frame
-	check(not shield.monitoring and shield.get_node("CollisionShape2D").disabled, "depleted shield must disable collision again")
+	player.defenses.set_physics_process(false)
+	check(not shield.visible and player.defenses.charges == 0, "an unacquired shield has no active protection")
+	for rank in range(1, 4):
+		player.apply_upgrade(load("res://data/upgrades/foundation/shield.tres"))
+		shield.advance(0.13)
+		var bounds := sprite_bounds(shield.get_node("Sprite2D"))
+		check(shield.position == Vector2.ZERO and shield.scale == Vector2.ONE, "the native sphere remains centered on the player")
+		check(player.defenses._circle.radius == 20 and bounds.size.x >= 39 and bounds.size.y >= 39, "the visible sphere agrees with the fixed protection radius at every rank")
+		player.defenses.take_hit()
+		check(player.defenses._circle.radius == 20, "contact feedback never changes the protection geometry")
+	while player.defenses.charges > 0: player.defenses.take_hit()
+	shield.advance(0.13)
+	check(not shield.visible and not player.defenses.active(), "depletion leaves no invisible active protection")
 	player.weapons.player = null
 	player.vitals.player = null
 	world.queue_free()

@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/upgrade_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/upgrade_miniatures.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="Icon"]
+atlas = ExtResource("2")
+region = Rect2(288, 0, 16, 16)
+
+[resource]
+script = ExtResource("1")
+icon = SubResource("Icon")
+id = &"retaliation_pulse"
+effect = 20
+weight = 10
+max_rank = 3
+display_name = "RETALIATION PULSE"
+description = "Shield rupture or a nonfatal hull injury releases a defensive wave. It damages nearby hulls and clears hostile shots. Higher ranks add +25/50% radius over rank one. No criticals or recursive effects."
+category = 0
+repeatable = false
+rank_values = PackedFloat32Array(2, 3, 4)
+range_values = PackedFloat32Array(32, 40, 48)
+proc_cooldown = 4.0
+target_limit = 0
+blast_expansion_duration = 0.12
+blast_active_duration = 0.16
+blast_visual_duration = 0.32
+hud_label = &"RIPOSTE"

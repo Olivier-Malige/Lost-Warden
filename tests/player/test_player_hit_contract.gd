@@ -83,7 +83,7 @@ func run() -> void:
 			for audio in player.find_children("*", kind, true, false):
 				audio.stream = null
 	effects.start([p1, p2], globals.run_random)
-	effects.hit_accepted.connect(func(hit, target, position, first): accepted.append({"hit": hit, "target": target, "position": position, "first": first}))
+	effects.hit_accepted.connect(func(hit, target_id, position, first): accepted.append({"hit": hit, "target": target_id, "position": position, "first": first}))
 	events.xp_spawn_requested.connect(func(_amount, _position): xp_events += 1)
 	var target = enemy(&"target_a", Vector2(200, 150))
 	check(not target.receive_player_hit(0.0) and not target.receive_player_hit(NAN) and target.life == 20, "nonpositive/nonfinite hits must reject without credit")
@@ -223,7 +223,7 @@ func check_plasma_and_reflection() -> void:
 	beam.free()
 	var reflected = ProjectilePool.spawn(load("res://scenes/combat/mother_ship_shot.tscn"), p2.shield.global_position, stage)
 	reflected.set_physics_process(false)
-	p2.shield.power = 1
+	p2.apply_upgrade(load("res://data/upgrades/foundation/shield.tres"))
 	await settle()
 	check(reflected.trowbackByShield and reflected.reflected_owner_id == &"player2" and reflected.hit_snapshot.kind() == PlayerHitSnapshot.Kind.REFLECTED, "actual shield contact snapshots the reflecting player's ownership")
 	var reflected_damage: float = reflected.damage

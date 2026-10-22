@@ -35,6 +35,11 @@ func run() -> void:
 	effects.hit_accepted.connect(func(hit, target, position, first): accepted.append({"hit": hit, "target": target, "position": position, "first": first}))
 	events.xp_spawn_requested.connect(func(_amount, _position): xp_events += 1)
 	check(CHAIN.foundation_errors().is_empty() and PackedFloat32Array(CHAIN.rank_values) == PackedFloat32Array([1, 2, 3]) and PackedFloat32Array(CHAIN.range_values) == PackedFloat32Array([72, 88, 104]) and is_equal_approx(CHAIN.secondary_damage_scale, 0.45) and CHAIN.proc_cooldown == 0.5, "chain prototype data must match the approved contract")
+	check(not PlayerHitSnapshot.allows_modifier(999, &"energy_chains") and not PlayerHitSnapshot.allows_modifier(999, &"impact_explosions") and not PlayerHitSnapshot.allows_modifier(PlayerHitSnapshot.Kind.GUN, &"future_effect"), "unregistered sources and effects require explicit compatibility before they can trigger")
+	for kind in PlayerHitSnapshot.Kind.values():
+		var snapshot := PlayerHitSnapshot.new(&"player1", 1, 1, 1, {&"energy_chains": 3, &"impact_explosions": 3}, kind)
+		check((snapshot.modifier_rank(&"energy_chains") == 3) == (kind == PlayerHitSnapshot.Kind.GUN), "source policy strips chains at snapshot creation, including raw packets")
+		check((snapshot.modifier_rank(&"impact_explosions") == 3) == (kind in [PlayerHitSnapshot.Kind.GUN, PlayerHitSnapshot.Kind.SIDE_GUN, PlayerHitSnapshot.Kind.MISSILE, PlayerHitSnapshot.Kind.DRONE, PlayerHitSnapshot.Kind.SATELLITE]), "explosion compatibility remains distinct from cannon-only chains")
 	for field in ["range_values", "secondary_damage_scale", "proc_cooldown", "rank_values"]:
 		var invalid := CHAIN.duplicate() as UpgradeDefinition
 		match field:
@@ -176,14 +181,14 @@ func cooldown_and_sources() -> void:
 	strike(packet(1), origin)
 	await settle()
 	check(is_equal_approx(next.life, before - 1.8), "the next eligible contact after 0.5 seconds can trigger again")
-	for kind in [PlayerHitSnapshot.Kind.PLASMA, PlayerHitSnapshot.Kind.REFLECTED, PlayerHitSnapshot.Kind.SECONDARY]:
+	for kind in [PlayerHitSnapshot.Kind.PLASMA, PlayerHitSnapshot.Kind.REFLECTED, PlayerHitSnapshot.Kind.SECONDARY, PlayerHitSnapshot.Kind.MISSILE, PlayerHitSnapshot.Kind.DRONE, PlayerHitSnapshot.Kind.SATELLITE, PlayerHitSnapshot.Kind.SIDE_GUN]:
 		await reset_case()
 		origin = enemy(&"origin", Vector2(240, 200))
 		next = enemy(&"next", Vector2(290, 200))
 		await settle()
 		strike(packet(3, kind), origin)
 		await settle()
-		check(next.life == 20.0 and get_nodes_in_group(&"energy_chain").is_empty(), "plasma, reflected and secondary sources cannot start chains")
+		check(next.life == 20.0 and get_nodes_in_group(&"energy_chain").is_empty(), "only cannon sources can start chains; supports and secondary effects cannot inherit them")
 	await reset_case()
 	origin = enemy(&"origin", Vector2(240, 200))
 	next = enemy(&"kill", Vector2(290, 200), 1.0)
@@ -251,25 +256,37 @@ func lifecycle_cases() -> void:
 	check(accepted.size() == 1 and effects.get_debug_snapshot().roots == 0 and get_nodes_in_group(&"energy_chain").is_empty(), "an isolated impact has no chain visual and cannot retain its empty request")
 
 func side_cannon() -> void:
-	await reset_case()
-	ranked(p1, 2)
-	p1.loadout.apply_foundation(&"side_shot")
-	for rank in 5: p1.loadout.apply_foundation(&"fire_rate")
-	var origin = enemy(&"side_origin", Vector2(240, 200))
-	var next = enemy(&"side_next", Vector2(290, 200))
-	await settle()
-	p1.weapons.fire_primary()
-	var side: Node2D = null
-	for shot in get_nodes_in_group("player_Shot"):
-		if shot.get_meta("pooled", false): continue
-		shot.set_physics_process(false)
-		if String(shot.get_meta("pool_key", "")).contains("side_shot") and side == null: side = shot
-		else: ProjectilePool.despawn(shot)
-	check(side != null and side.hit_snapshot.modifier_rank(&"energy_chains") == 2, "real side-cannon emission snapshots the same personal chain family")
-	side.position = origin.position
-	await settle()
-	check(is_equal_approx(origin.life, 19.6) and is_equal_approx(next.life, 19.82), "side shots trigger chains using their own lower authored damage")
-	check(effects._chain_cooldowns[&"player1"] > 0.4 and effects._chain_cooldowns[&"player1"] <= 0.5, "maximum FIRE_RATE does not shorten the shared chain cooldown")
+	for pilot in [p1, p2]:
+		for rank in [1, 4]:
+			await reset_case()
+			var owner_id := StringName(pilot.id_Player)
+			ranked(pilot, 2)
+			for value in rank: pilot.loadout.apply_foundation(&"side_shot")
+			for value in 5: pilot.loadout.apply_foundation(&"fire_rate")
+			var origin = enemy(&"side_origin", Vector2(240, 200))
+			var next = enemy(&"side_next", Vector2(290, 200))
+			await settle()
+			pilot.weapons.fire_primary()
+			var main: Node2D = null
+			var sides: Array[Node2D] = []
+			var side_damage := 0.0
+			for shot in get_nodes_in_group("player_Shot"):
+				if shot.get_meta("pooled", false): continue
+				shot.set_physics_process(false)
+				if shot.hit_snapshot.kind() == PlayerHitSnapshot.Kind.SIDE_GUN:
+					sides.append(shot)
+					side_damage += shot.hit_snapshot.damage()
+				else: main = shot
+			check(sides.size() == (4 if rank == 4 else 2) and main != null, "both owners emit separate main and side source identities, including the outer pair")
+			for side in sides:
+				check(side.hit_snapshot.modifier_rank(&"energy_chains") == 0, "each actual side snapshot discards lightning through the shared policy")
+				side.position = origin.position
+			await settle()
+			check(is_equal_approx(origin.life, 20 - side_damage) and next.life == 20 and effects._chain_cooldowns.is_empty() and get_nodes_in_group(&"energy_chain").is_empty(), "side pairs deal their normal direct damage without lightning or cooldown consumption")
+			main.position = origin.position
+			await settle()
+			check(is_equal_approx(next.life, 19.55) and accepted.back().hit.owner_id() == owner_id, "the same owner's main cannon can still trigger lightning immediately after its side shots")
+			check(effects._chain_cooldowns[owner_id] > 0.4 and effects._chain_cooldowns[owner_id] <= 0.5, "maximum FIRE_RATE preserves the main cannon chain cooldown")
 
 func boss_cases() -> void:
 	await reset_case()
@@ -416,7 +433,7 @@ func native_presentation() -> void:
 	var ui = load("res://scenes/ui/upgrade_selection.tscn").instantiate()
 	root.add_child(ui)
 	var offers := [CHAIN.offer_snapshot(2), load("res://data/upgrades/beam_piercing.tres").offer_snapshot(0), load("res://data/upgrades/critical_hits.tres").offer_snapshot(0)]
-	check(ui._effect_lines(offers[0]) == "3 ARC JUMPS / 104 PX\n45% DAMAGE / 0.5 SEC", "the native card must display the resource's exact rank-three prototype values")
+	check(ui._effect_lines(offers[0]) == "MAIN: 3 JUMPS / 104 PX\n45% DAMAGE / 0.5 SEC", "the native card must disclose the main-only source and exact rank-three prototype values")
 	ui.open(500, {&"player1": {"build": players[0].loadout.foundation_snapshot(), "offers": offers}, &"player2": {"build": players[1].loadout.foundation_snapshot(), "offers": offers}}, {"level": 4, "xp": 0, "next_threshold": 21})
 	await create_timer(0.5).timeout
 	await RenderingServer.frame_post_draw

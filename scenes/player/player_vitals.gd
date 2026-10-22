@@ -6,9 +6,9 @@ var player: Player
 func _init(p_player: Player) -> void:
 	player = p_player
 
-func hit(_dmg := 1, continuous_damage := false) -> void:
-	if player.state >= Player.State.DYING or (player.touched and not continuous_damage):
-		return
+func hit(_dmg := 1, continuous_damage := false) -> bool:
+	if player.get_tree().paused or player.state >= Player.State.DYING or (player.touched and not continuous_damage):
+		return false
 	if player.energy > 1:
 		player.hit_audio.playing = true
 		player.energy -= 1
@@ -18,6 +18,7 @@ func hit(_dmg := 1, continuous_damage := false) -> void:
 		player.malusSpeed = player.STATS.malus_speed
 		player.touched = true
 		player.set_state(Player.State.HIT)
+		player.defenses.hull_damaged()
 		Events.screen_shake_requested.emit(18.0, 0.28)
 		Events.screen_flash_requested.emit(Color(0.88, 0.12, 0.16, 0.2), 0.14)
 	else:
@@ -36,6 +37,4 @@ func hit(_dmg := 1, continuous_damage := false) -> void:
 		player.collision_shape.set_deferred("disabled", true)
 		player.set_deferred("monitoring", false)
 		player.set_deferred("monitorable", false)
-		player.shield.power = -player.shield.power
-		player.shield.set_deferred("monitoring", false)
-		player.shield.set_deferred("monitorable", false)
+	return true

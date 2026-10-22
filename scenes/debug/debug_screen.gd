@@ -168,6 +168,9 @@ func _players_text(data: Dictionary) -> String:
 	for player in data.players:
 		lines.append("[color=#d6d653]%s / %s / %s[/color]" % [player.id.to_upper(), player.controller, player.state])
 		lines.append("Position %s   Health %d/%d   Shield %d" % [player.position, player.energy, player.energy_max, player.shield])
+		var defenses: Dictionary = player.get("defenses", {})
+		if not defenses.is_empty():
+			lines.append("Sphere %d/%d   Recharge %.2fs   Grace %.2fs   Retaliation %.2fs" % [defenses.charges, defenses.maximum, defenses.recharge_left, defenses.grace_left, defenses.pulse_cooldown])
 		lines.append("Speed %.1f   Weapon movement x%.2f   Hit malus %d" % [player.move_speed, player.weapon_speed_multiplier, player.hit_slowdown])
 		lines.append("Primary damage %.2f   Interval %.3fs   Ready %s" % [player.primary_damage, player.fire_delay, player.can_fire])
 		lines.append("Side shots %s   Side damage %.2f   Hit protection %s" % [player.side_shot, player.side_damage, player.touched])

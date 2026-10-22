@@ -146,9 +146,8 @@ func apply_foundation(id: StringName, vitals: Dictionary = {}) -> Dictionary:
 		result.rank = rank + 1
 		_derive_foundation_stats()
 	else:
-		var key := "energy" if upgrade.effect == UpgradeDefinition.Effect.ENERGY else "shield"
-		var maximum := _foundation_config.energy_max if key == "energy" else _foundation_config.shield_max
-		var current := int(vitals[key])
+		var maximum := _foundation_config.energy_max
+		var current := int(vitals["energy"])
 		var next := mini(current + int(upgrade.rank_value(1)), maximum)
 		result.reward = {"effect": upgrade.effect, "amount": next - current, "value": next}
 	return result

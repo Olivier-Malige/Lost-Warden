@@ -1,6 +1,6 @@
 # Phase 3 delivery contract
 
-Planning checkpoint: 2026-10-19; preview approved and implementation requested 2026-10-20. Steps 1-4, 6-9, the signature-beam piercing revision and standalone step 12 chains are implemented. The maintainer moved chains ahead of missiles and explicitly deferred effect balancing on 2026-10-21, then approved the missile checkpoint. Step 5 has automated measurements and one solo run; remaining human observations and numerical acceptance stay deferred. Steps 10-11 and 13-14 remain pending, including future explosion coexistence. Work through the missile checkpoint and console corrections is committed locally as `30818a6`; the escort revision is the next local checkpoint. The concise gameplay roadmap controls delivery order; this contract specifies Phase 3 only. No XP numerical target is revised by the instruction to proceed.
+Planning checkpoint: 2026-10-19; preview approved and implementation requested 2026-10-20. Steps 1-4 and 6-12, including the signature-beam piercing revision, are implemented. The maintainer moved chains ahead of missiles and explicitly deferred effect balancing on 2026-10-21, then approved the missile checkpoint. Step 5 has automated measurements and one solo run; remaining human observations and numerical acceptance stay deferred. Steps 13-14 remain pending; explosions now coexist with direct weapons and chains under shared root exclusions. Work through escort drones is published as `f20c148`; the satellite and impact-explosion checkpoints are verified locally for playtest. The concise gameplay roadmap controls delivery order; this contract specifies Phase 3 only. No XP numerical target is revised by the instruction to proceed.
 
 The maintainer approved the silent interactive visual preview with **Arsenal déployé** selected. This preview does not complete a numbered delivery step. The maintainer will provide all music and sound effects; no selection audio files have been supplied yet. Step 1 production references are [art_audio_inventory.md](art_audio_inventory.md) and [selection_audio_brief.md](selection_audio_brief.md).
 
@@ -8,7 +8,7 @@ The maintainer approved the silent interactive visual preview with **Arsenal dé
 
 - Borrow the XP, paused choices, growing power and build synergies of Vampire Survivors / Megabonk while retaining the existing shmup controls.
 - Each living player has four offensive family slots and three utility family slots. Acquiring a new family consumes one slot; increasing its rank consumes none. No replacement during a run.
-- Utilities are speed, damage, fire rate, XP attraction, plasma reserve, plasma recovery and beam piercing. Offensives are side shots and the seven other new effects below. Repair, shield charges and fallback score consume no slots. The 2026-10-21 playtest revision retires cannon piercing from offers and assigns the requested nearest-target cannon arc to the planned `energy_chains` family.
+- Utilities are speed, damage, fire rate, XP attraction, plasma reserve, plasma recovery, beam piercing, reflector sphere, reactive armor and retaliation pulse. Offensives are side shots and the seven other new effects below. Repair and fallback score consume no slots. The 2026-10-21 playtest revision retires cannon piercing from offers and assigns the requested nearest-target cannon arc to the `energy_chains` family.
 - XP is shared in co-op, choices and equipment are personal. A run ends only after all players die. Human co-op balance acceptance remains deferred until after the power-up and balance rework; verify technical co-op behavior throughout Phase 3.
 - Nomad starts with its current primary cannon and its manual secondary signature plasma beam, outside the four offensive slots. Preserve zero initial charge, base capacity 100, activation at 10, drain 20/second and full-reserve overdrive. The maintainer's charge upgrades below can expand personal capacity to 175 and cell recovery to x1.75. No beam unlock card, automatic beam or free permanent beam.
 - Future ships may have different signatures. Ship selection, ShipDefinition, unlocks, permanent progression, save-schema additions, rarity and weapon evolution remain outside this phase.
@@ -55,7 +55,9 @@ Minimum event interfaces: XP collection `(amount, collector_id)`, progression sn
 | beam_piercing | Utility | 1 / 2 / 3 extra targets; initial damage +20% / +30% / +40%, initial width +25% / +37.5% / +50%; subsequent damage and width x0.8 per crossed target; armor blocks |
 | side_shot | Offensive | Four authored base damages 0.4 / 0.6 / 0.8 / 1.0; first pair at rank 1, outer pair at rank 4 with multiplier 0.6 |
 | energy | Repeatable reward | Repair by two energy, immediately clamped to 12; eligible only below maximum |
-| shield | Repeatable reward | Add one charge, maximum three; eligible only below maximum; preserve existing charge consumption |
+| shield | Utility | Three ranks: 3/5/7 reflector charges, full recharge in 8/6/4 s after depletion; radius 20; body cooldown 0.5 s |
+| reactive_armor | Utility | +25/50/75% ordinary injury grace; slowdown/flash remain one second; continuous hazards keep their cadence |
+| retaliation_pulse | Utility | Damage 2/3/4, radius 32/40/48, four-second owner cooldown; 120ms expansion/160ms activity/320ms visual lifetime; no criticals/recursive modifiers |
 | score | Fallback reward | 500 points, automatically only when no eligible offer remains |
 
 The maintainer approved larger reserves and more efficient cells on 2026-10-20. Both new families consume one personal utility slot and reset with the run. Capacity/recovery selection grants no immediate charge. Shared plasma events retain authored base amounts, then each living player applies their own recovery multiplier and clamps to their current capacity. Full-reserve overdrive uses the upgraded capacity; activation threshold, drain, damage and overdrive duration remain unchanged. Charge values are prototype tuning for subsequent economy/build measurement.
@@ -102,24 +104,24 @@ Only a direct projectile's first accepted impact may attempt secondary procs. Sn
 
 ## New offensive families
 
-All seven have three ranks, weight 10 and no rarity/prerequisite beyond slot eligibility. Numbers below are authored bases before common DAMAGE/FIRE_RATE adjustments. Cannon piercing was moved to beam utility after playtest. Critical hits, micro-missiles, escort drones and energy chains are live; the three other new offensive families remain pending. The maintainer explicitly defers effect balancing; these prototype values remain authored and visible in cards.
+All seven have three ranks, weight 10 and no rarity/prerequisite beyond slot eligibility. Numbers below are authored bases before common DAMAGE/FIRE_RATE adjustments. Cannon piercing was moved to beam utility after playtest. Critical hits, micro-missiles, escort drones, orbiting satellites, impact explosions and energy chains are live; ricochet remains pending. The maintainer explicitly defers effect balancing; these prototype values remain authored and visible in cards.
 
 | ID | Ranks 1 / 2 / 3 | Fixed limits |
 | --- | --- | --- |
 | critical_hits | 10 / 20 / 30% chance | Direct damage x2; secondary damage uses pre-critical base |
 | micro_missiles | 1 / 2 / 3 per volley, small / medium / large sprites; damage 0.9 / 1.1 / 1.3; intervals 1.10 / 0.95 / 0.80 s | 3 active/reserved per owner; partial volleys use remaining capacity; range 220 px, speed 240 px/s, turn 240 deg/s, life 1.8 s; no electric chains |
 | escort_drone | 1 / 1 / 2 companions; damage 0.6 / 0.75 / 0.9 per bolt; intervals 0.65 / 0.55 / 0.45 s per companion | Range 180 px in a screen-up 90-degree cone; straight bolt speed 360 px/s, life 1 s; 6 active/reserved bolts shared per owner; no electric chains |
-| orbiting_satellites | Count 1 / 2 / 3; damage 1 / 1.25 / 1.5 | Orbit radius 32 px, period 2.5 s, contact radius 4 px; shared per-owner/group contact cooldown 0.50 s |
-| impact_explosions | Radius 20 / 26 / 32 px; damage x0.35 / x0.45 / x0.55 | At most 4 other targets; per-owner cooldown 0.30 s; exclude initial target/group |
+| orbiting_satellites | Count 1 / 2 / 3; damage 1 / 1.25 / 1.5 | Orbit radius 32 px, period 1.25 s, independent spin period 0.625 s, contact radius 4 px; shared per-owner/group contact cooldown 0.50 s |
+| impact_explosions | Radius 24 / 30 / 36 px; damage x0.70 / x0.90 / x1.10 | All overlapping additional targets; 160ms active wave; per-owner cooldown 0.30 s; exclude initial target/group |
 | energy_chains | 1 / 2 / 3 other targets; jump range 72 / 88 / 104 px | Each target receives x0.45 direct pre-critical base; per-owner cooldown 0.50 s; no repeats |
 | ricochet | One shard reaches 1 / 2 / 3 other targets | Speed 300 px/s, range 88 px, initial damage x0.55 then x0.8 per rebound; life 1.2 s; 4 active shards; per-owner cooldown 0.40 s |
 
-| Modifier | Main/side cannons | Drone bolts | Missiles | Satellite contacts | Plasma/reflected enemy shots |
-| --- | --- | --- | --- | --- | --- |
-| Ricochet | Yes | Yes | No | No | No new modifier |
-| Beam piercing | No | No | No | No | Manual plasma only; reflected shots excluded |
-| Crits, explosion | Yes | Yes | Yes | Yes | No new modifier |
-| Energy chains | Yes | No | No | Yes | No new modifier |
+| Modifier | Main cannon | Side cannons | Drone bolts | Missiles | Satellite contacts | Plasma/reflected enemy shots |
+| --- | --- | --- | --- | --- | --- | --- |
+| Ricochet | Yes | Yes | Yes | No | No | No new modifier |
+| Beam piercing | No | No | No | No | No | Manual plasma only; reflected shots excluded |
+| Crits, explosion | Yes | Yes | Yes | Yes | Yes | No new modifier |
+| Energy chains | Yes | No | No | No | No | No new modifier |
 
 Maintainer forward-targeting revision: missile acquisition, retained-target validation and the single reacquisition use a 90-degree screen-up cone (45 degrees either side of Nomad's forward axis). Closer side/rear enemies are excluded. A target leaving that cone is lost, so a passed target cannot cause a U-turn. Other weapons' targeting remains unrestricted unless their own contract says otherwise.
 
@@ -131,7 +133,7 @@ All proc cooldowns are per owner across all compatible weapons; denied opportuni
 
 Use native 640x400 layout and Lost Warden 64; historical x4 exports or 24-color rules are not current. Keep red/blue ownership, readable silhouettes, pivots, collision agreement and integer pixel placement. Deliver each source with its runtime export and explicit frame/tag mapping.
 
-Foundation art inventory: refreshed primary/side lasers, preserved signature plasma normal/overdrive presentation, ordinary/high-value XP silhouettes with visible gold halos, a dedicated plasma-cell sprite, sixteen upgrade/reward icons, seven-slot strips and reusable card focus/ready states. The HUD uses the exported bar for level progress without a numeric XP counter. New effect art ships inside each matching combat step: piercing treatment, critical impact, missile/thrust/impact, drone/muzzle/bolt, satellites/contact, explosion, energy segments/anchors and ricochet shard/impact.
+Foundation art inventory: refreshed primary/side lasers, preserved signature plasma normal/overdrive presentation, ordinary/high-value XP silhouettes with visible gold halos, a dedicated plasma-cell sprite, seventeen upgrade/reward icons, seven-slot strips and reusable card focus/ready states. The HUD uses the exported bar for level progress without a numeric XP counter. New effect art ships inside each matching combat step: piercing treatment, critical impact, missile/thrust/impact, drone/muzzle/bolt, satellites/contact, explosion, energy segments/anchors and ricochet shard/impact.
 
 **Latest maintainer menu-art revision, 2026-10-20:** replace the preceding 32px equipment symbols with **64x64 effect compositions**, authored through the Aseprite MCP using the actual Nomad and projectile sprites. Show the effect in context: long engine exhaust for speed, a stronger primary pulse for damage, a short pulse train for cadence, collectible attraction paths, paired forward wing shots, hull repair, the native reflector and salvage collection. Provide red/blue ownership variants using the real ship/shot assets, with exact Lost Warden 64 colors. Display at native 64px in solo and co-op; keep card text clear. Existing 16px HUD/build miniatures and gameplay pickup footprints remain separate from this menu artwork.
 
@@ -174,3 +176,39 @@ Forward-fire revision, 2026-10-21: each escort acquires only within its authored
 Escort glide prototype, approved 2026-10-21: rendered hulls, emitters and twin reactors share a trailing displacement from actual owner movement, bounded to 8 px with exponential settling (responses 9 / 11 per second by shoulder). A deterministic independent hover adds at most 0.65px horizontally and 1.5px vertically. Rendering offsets round to native pixels before arena clamps; root shoulder anchors stay fixed. Pause freezes the effect and each fresh support starts without inherited lag. Forward targeting still originates at the displayed muzzle.
 
 Escort chain exclusion, approved 2026-10-21: drone bolts retain direct criticals but cannot trigger electric chains, emit arc visuals or consume the cannon chain cooldown. Strip the modifier at emission and guard the DRONE source kind at proc resolution, including unfiltered packets. Main/side cannon chains remain available immediately after drone impacts.
+
+Step 10 implementation checkpoint, 2026-10-21 (chain compatibility superseded on 2026-10-22): satellite contact initially remained compatible with direct criticals and the already completed chain family. Cooldowns belong to each owner/logical target group, expire without retained actors and are not bypassed by re-entry or multiple orbiters. Pause and actual physics-callback death cleanup are verified. The maintainer's preceding drone/missile chain exclusions remain intact.
+
+### Step 11 coexistence checkpoint — 2026-10-21
+
+Explosion requests snapshot the impact center, pre-critical amount, owner, rank, origin exclusions and visited groups before deferral. Chains retain their existing resolution order, followed by explosions; both consult the shared root history, so a target group already reached by one cannot receive the same root again. Each splash ray starts at the original impact and requires visibility; it does not propagate from a previous victim. Its four-target budget counts accepted additional groups only. Even isolated accepted impacts show one finite explosion and consume the 0.30-second personal cooldown. No backlog is retained. Visuals are fresh non-colliding instances with a 320ms lifetime and an eight-instance global cap; no VFX pool or projectile reference is retained.
+
+### Maintainer playtest revision — 2026-10-22
+
+Explosion radius is now 32/40/48px (+25%/+50% relative to rank one), with 35/45/55% modified pre-critical damage unchanged. Selection text uses percentage radius bonuses rather than pixels. Acquire actual collision-shape overlaps with a circular physics query, bounded to 512 surfaces (above the director's active budget), then require line of sight and sort by nearest visible surface distance and spawn identity. Preserve the four accepted additional groups, origin exclusions, boss grouping and owner cooldown. Fresh 96px native animation cells match the expanded footprint.
+
+The shared source/modifier policy lives in `PlayerHitSnapshot.SOURCE_MODIFIERS` and `allows_modifier`. Only GUN (main/side) can trigger electric chains. Satellites lose their earlier chain compatibility; missile/drone exclusions are retained. Criticals/explosions remain explicitly enabled for gun/missile/drone/satellite direct sources. Legacy cannon/drone piercing and planned ricochet compatibility stay separate. Snapshot construction strips incompatible combat modifiers and rejects critical flags on disallowed sources; service queue guards consult the same policy. New sources and effect identifiers default to no authorization, so future procs must explicitly opt in. Remove per-emitter erase lists rather than extending a denylist with every new weapon. Secondary hits cannot trigger any modifier.
+
+### Final concentrated-blast and main-cannon revision — 2026-10-22
+
+The maintainer explicitly excludes side shots from lightning and requests smaller, harder-hitting explosions. This supersedes the preceding source/radius tuning: GUN now means the main cannon only; append SIDE_GUN without changing existing enum ordinals. Every inner/outer side emission explicitly uses SIDE_GUN. Its policy retains criticals, explosions and legacy/planned piercing/ricochet, but forbids chains. Only GUN can start or consume the chain cooldown. New cannon emission call sites must supply a source kind explicitly.
+
+Explosion radius becomes 24/30/36px (25% smaller than 32/40/48), with damage 70/90/110% of modified pre-critical direct damage (twice 35/45/55%). Rank radius bonuses remain +25%/+50% relative to rank one. Real hull overlap, four other groups, visibility/armor, boss exclusions, non-recursion and 0.30-second owner cooldown are unchanged. Aseprite art is rebaked to the smaller footprint on the same 96px grid.
+
+### Approved expanding-wave correction — 2026-10-22
+
+The maintainer approved the replacement plan after the compact instant blast still felt ineffective. This supersedes earlier four-target and shared-secondary-history clauses for step 11. Preserve radii 24/30/36, factors 0.70/0.90/1.10 and 0.30s cooldown. A service-owned physics wave expands from 25% to full radius over 0.12s, remains damaging through 0.16s and leaves only visual fragments through 0.32s. It repeatedly queries real hull overlaps, damages each additional group once and has no four-target cap (`target_limit = 0`). Ordinary hulls/asteroids cannot occlude the blast; explicit armor still can.
+
+Ordinary groups now have independent energy-chain and explosion histories, so the two effects stack once each in either order. Directly hit groups remain excluded and boss history is global across channels. Secondary hits remain non-critical/non-recursive. `resolve_hit` gains an optional `channel` defaulting to `root`; existing callers retain their behavior. A copied hit is retained only through the active interval; the service also owns the visual clock and cleanup. Visual limits cannot suppress damage. See [wave evidence](validation/impact_explosion_wave.md) for the 263 native checks, real moving formations and current art/diagnostics.
+
+### Approved steel satellite revision — 2026-10-22
+
+The maintainer accepted the explosion checkpoint for now and approved revisiting contact satellites before ricochets. All ranks orbit in 1.25 seconds and spin independently in 0.625 seconds, clockwise with deterministic per-orbiter orientation offsets. Both phases survive rank changes and freeze with the physics clock during pause. `UpgradeDefinition.spin_period` is authored, included in offers and validated as positive and finite for satellites only. Counts, damage, cooldown, radius-four core contacts, ownership and source compatibility remain unchanged. Four tapered steel spikes are decorative. The maintainer rejected the first flat cross-like art during implementation; the delivered replacement uses a beveled core, thin spikes and separate editable metal, insert and contact layers. This supersedes the earlier 2.5-second orbit and outward-only presentation.
+
+### Satellite sprite rotation simplification — 2026-10-22
+
+The maintainer requested one hull orientation per player with scripted rotation. Use one red and one blue 16px sprite orientation plus the existing reflection/contact frames, rotating only Sprite2D continuously. This replaces the baked eight-way art mapping without changing orbital/spin periods, combat or collision geometry. The Aseprite source and runtime export now use two team rows.
+
+### Maintainer-approved defensive utility pack — 2026-10-22
+
+The approved [defensive pack](../2026_10_22_defensive_pack/plan.md) supersedes the earlier consumable-shield clauses. The existing `shield` ID is now a three-rank regenerating sphere, joined by reactive armor and retaliation pulse as ordinary utility families. They share the existing three slots; no extra category, permanent progression or ricochet is introduced. Exact delivered behavior and acceptance evidence are in [the defensive validation](../2026_10_22_defensive_pack/validation.md). The live catalog has 19 entries; energy remains the repeatable reward.

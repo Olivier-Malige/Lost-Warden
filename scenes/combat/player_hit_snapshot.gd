@@ -1,14 +1,30 @@
 class_name PlayerHitSnapshot
 extends RefCounted
 
-enum Kind { GUN, PLASMA, REFLECTED, SECONDARY, MISSILE, DRONE }
+enum Kind { GUN, PLASMA, REFLECTED, SECONDARY, MISSILE, DRONE, SATELLITE, SIDE_GUN }
+
+const COMBAT_MODIFIERS: Array[StringName] = [&"piercing", &"critical_hits", &"energy_chains", &"impact_explosions", &"ricochet"]
+const SOURCE_MODIFIERS := {
+	Kind.GUN: [&"piercing", &"critical_hits", &"energy_chains", &"impact_explosions", &"ricochet"],
+	Kind.SIDE_GUN: [&"piercing", &"critical_hits", &"impact_explosions", &"ricochet"],
+	Kind.MISSILE: [&"critical_hits", &"impact_explosions"],
+	Kind.DRONE: [&"piercing", &"critical_hits", &"impact_explosions", &"ricochet"],
+	Kind.SATELLITE: [&"critical_hits", &"impact_explosions"],
+}
 
 var _values: Dictionary
+
+# New attack sources receive no combat modifiers until explicitly registered here.
+static func allows_modifier(source_kind: int, modifier: StringName) -> bool:
+	return modifier in SOURCE_MODIFIERS.get(source_kind, [])
 
 func _init(owner: StringName, sequence: int, base_damage: float, pre_critical: float, modifiers: Dictionary = {}, hit_kind: Kind = Kind.GUN, critical := false, generation := 0) -> void:
 	_values = {"owner": owner, "sequence": sequence, "base": base_damage,
 		"pre_critical": pre_critical, "modifiers": modifiers.duplicate(true),
-		"kind": hit_kind, "critical": critical, "generation": generation}
+		"kind": hit_kind, "critical": critical and allows_modifier(hit_kind, &"critical_hits"), "generation": generation}
+	for modifier in COMBAT_MODIFIERS:
+		if not allows_modifier(hit_kind, modifier):
+			_values.modifiers.erase(modifier)
 
 func owner_id() -> StringName:
 	return _values.owner
@@ -32,7 +48,7 @@ func kind() -> Kind:
 	return _values.kind
 
 func is_direct() -> bool:
-	return kind() in [Kind.GUN, Kind.MISSILE, Kind.DRONE]
+	return kind() in [Kind.GUN, Kind.SIDE_GUN, Kind.MISSILE, Kind.DRONE, Kind.SATELLITE]
 
 func is_critical() -> bool:
 	return _values.critical

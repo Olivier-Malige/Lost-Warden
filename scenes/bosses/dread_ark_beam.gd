@@ -34,7 +34,7 @@ func stop() -> void:
 	hide()
 
 func _physics_process(delta: float) -> void:
-	if not visible:
+	if not visible or get_tree().paused:
 		return
 	_elapsed += delta
 	queue_redraw()
@@ -56,7 +56,9 @@ func _physics_process(delta: float) -> void:
 		for offset in offsets:
 			var lane_width := central_width if is_zero_approx(offset) else width
 			var beam_rect := Rect2(global_position + Vector2(offset - lane_width * 0.5, 0), Vector2(lane_width, _length()))
-			if beam_rect.intersects(player_rect):
+			var defenses: Node = player.get("defenses")
+			var intersects: bool = defenses.intersects_beam(beam_rect, player_rect) if defenses != null else beam_rect.intersects(player_rect)
+			if intersects:
 				var id := player.get_instance_id()
 				if not _contact_cooldowns.has(id):
 					_contact_cooldowns[id] = damage_interval

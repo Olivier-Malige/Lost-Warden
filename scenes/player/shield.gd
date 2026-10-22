@@ -1,56 +1,51 @@
-extends Area2D
-const Layers := preload("res://core/collision_layers.gd")
-const CONFIG: ProgressionConfig = preload("res://data/progression/progression_config.tres")
+extends Node2D
 
-var power = 0: set = _set_Power
-var animPower
+const SHEET := preload("res://assets/sprites/player/reflector_sphere.png")
 
-const POWER_ANIMS := ["", "_Smallest", "_Small", "_Normal", "_Big", "_Very_Big", "_Full"]
+var _team := 0
+var _age := 0.0
+var _charges := 0
+var _flash := 0.0
+var _rupture := 0.0
+var _return := 0.0
 
+func setup() -> void:
+	_team = 1 if get_parent().set_Player_2 else 0
+	present(0)
 
-func _ready() -> void:
-	collision_layer = Layers.PLAYER
-	collision_mask = Layers.ENEMY_SHOT
-	_set_AnimPower()
+func present(charges: int) -> void:
+	_charges = charges
+	_render()
 
-# Thrown-back shots must be able to hit the enemy that fired them.
-func _on_shield_area_entered(shot: Shot) -> void:
-	if shot.is_in_group("enemy_Shot") and power > 0 and not shot.trowbackByShield:
-		shot.noDamageToGroup = ""
-		$sound_trowback.playing = true
-		shot.trowbackByShield = true
-		if shot.has_method("set_reflected_owner"):
-			shot.set_reflected_owner(get_parent())
-		shot.speedY = -shot.speedY
-		shot.speedX = -shot.speedX
-		if $ChargeUseTimer.is_stopped():
-			$ChargeUseTimer.start()
-		if $AnimationPlayer.current_animation != get_parent().id_Player + animPower + "_Hit":
-			$AnimationPlayer.play(get_parent().id_Player + animPower + "_Hit")
+func advance(delta: float) -> void:
+	_age += delta
+	_flash = maxf(0.0, _flash - delta)
+	_rupture = maxf(0.0, _rupture - delta)
+	_return = maxf(0.0, _return - delta)
+	_render()
 
-func _set_AnimPower() -> void:
-	visible = power > 0
-	$CollisionShape2D.set_deferred("disabled", power <= 0)
-	set_deferred("monitoring", power > 0)
-	if power > 0:
-		animPower = POWER_ANIMS[power]
+func impacted() -> void:
+	_flash = 0.12
 
-func _set_Power(up: int) -> void:
-	$ChargeUseTimer.stop()
-	$AnimationPlayer.stop()
-	$ThrowbackEcho.self_modulate.a = 0.0
-	power = clampi(power + up, 0, CONFIG.shield_max)
-	_set_AnimPower()
-	if power > 0:
-		$AnimationPlayer.play(get_parent().id_Player + animPower)
+func reflected() -> void:
+	if not $sound_trowback.playing: $sound_trowback.play()
 
+func ruptured() -> void:
+	_rupture = 0.12
+	if $SoundBreak.stream: $SoundBreak.play()
 
-func _on_AnimationPlayer_animation_finished(n: StringName) -> void:
-	if n == get_parent().id_Player + animPower + "_Hit":
-		$ThrowbackEcho.self_modulate.a = 0.0
-		if power > 0:
-			$AnimationPlayer.play(get_parent().id_Player + animPower)
+func returned() -> void:
+	_return = 0.12
+	if $SoundReturn.stream: $SoundReturn.play()
 
-# Keep the original charge-use window independent of the shorter visual response.
-func _on_charge_use_timer_timeout() -> void:
-	self.power = -1
+func _render() -> void:
+	visible = _charges > 0 or _rupture > 0.0
+	var frame := int(_age / 0.08) % 4
+	if _charges == 0:
+		frame = 6
+	elif _flash > 0.0:
+		frame = 4 if _flash > 0.06 else 5
+	elif _return > 0.0:
+		frame = 7
+	$Sprite2D.frame = _team * 8 + frame
+	modulate.a = _rupture / 0.12 if _charges == 0 else 1.0

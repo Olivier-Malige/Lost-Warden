@@ -86,7 +86,7 @@ func _advance_selection() -> void:
 	confirmed.clear()
 	var participants := {}
 	for player in eligible:
-		participants[StringName(player.id_Player)] = {"build": player.loadout.foundation_snapshot(), "vitals": {"energy": player.energy, "shield": int(player.shield.power)}}
+		participants[StringName(player.id_Player)] = {"build": player.loadout.foundation_snapshot(), "vitals": {"energy": player.energy}}
 	var hands := CATALOG.generate_player_offers(participants, _random, CONFIG, level == 2)
 	var display := {}
 	for id in [&"player1", &"player2"]:

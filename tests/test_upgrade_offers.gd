@@ -46,7 +46,7 @@ func subset(names: Array[StringName]) -> UpgradeTable:
 	return table
 
 func check_data_and_legacy() -> void:
-	check(CATALOG.foundation_errors(CONFIG).is_empty() and CATALOG.upgrades.size() == 15 and definition(&"piercing") == null and definition(&"beam_piercing") != null and definition(&"energy_chains") != null and definition(&"micro_missiles") != null and definition(&"escort_drone") != null, "only completed families including the escort drone enter live offers")
+	check(CATALOG.foundation_errors(CONFIG).is_empty() and CATALOG.upgrades.size() == 19 and definition(&"piercing") == null and definition(&"beam_piercing") != null and definition(&"energy_chains") != null and definition(&"micro_missiles") != null and definition(&"escort_drone") != null and definition(&"orbiting_satellites") != null and definition(&"impact_explosions") != null, "only completed families including orbital contacts and impact explosions enter live offers")
 	check([UpgradeDefinition.Effect.SPEED, UpgradeDefinition.Effect.FIRE_RATE, UpgradeDefinition.Effect.DAMAGE, UpgradeDefinition.Effect.SIDE_SHOT, UpgradeDefinition.Effect.SHIELD, UpgradeDefinition.Effect.ENERGY] == [0, 1, 2, 3, 4, 5], "legacy enum ordinals must remain stable")
 	check(LEGACY.upgrades.size() == 6 and STATS.speed_max == 240 and is_equal_approx(STATS.shoot_delay_min, 0.12), "legacy catalog stays readable while live stat limits use the activated foundation")
 	var legacy := PlayerLoadout.new(STATS)
@@ -135,19 +135,19 @@ func check_foundation_stats() -> void:
 
 func check_rewards_and_capacity() -> void:
 	var build := fresh()
-	check(not build.can_apply_foundation(&"energy", FULL) and not build.can_apply_foundation(&"shield", FULL), "full vitals must suppress reward offers")
-	check(not build.can_apply_foundation(&"energy") and not build.can_apply_foundation(&"shield"), "missing vital snapshots must not grant rewards")
+	check(not build.can_apply_foundation(&"energy", FULL) and build.can_apply_foundation(&"shield", FULL), "full vitals must suppress reward offers")
+	check(not build.can_apply_foundation(&"energy") and build.can_apply_foundation(&"shield"), "reflector acquisition is independent of consumable vital snapshots")
 	var vitals := {"energy": 11, "shield": 2}
 	var repair := build.apply_foundation(&"energy", vitals)
 	var shield := build.apply_foundation(&"shield", vitals)
 	check(repair.applied and repair.reward.value == 12 and repair.reward.amount == 1, "repair must clamp immediately to twelve")
-	check(shield.applied and shield.reward.value == 3 and shield.reward.amount == 1, "shield must add one charge up to three")
+	check(shield.applied and shield.rank == 1 and shield.reward.is_empty(), "shield acquisition must occupy a ranked utility instead of returning a consumable update")
 	check(vitals == {"energy": 11, "shield": 2}, "reward application must return updates without mutating caller-owned vitals")
 	for index in 5:
 		check(build.apply_foundation(&"energy", {"energy": 3}).reward.value == 5, "repairs must remain repeatable without acquiring ranks")
-	check(build.acquired_ranks.is_empty() and build.ranks.is_empty() and build.foundation_snapshot().utility_count == 0, "repeatable consumables must never occupy family slots")
+	check(build.acquired_ranks == {&"shield": 1} and build.foundation_snapshot().utility_count == 1, "repairs do not add ranks while the reflector occupies one utility slot")
 	check(not build.apply_foundation(&"score").applied, "score fallback must never be manually applied as a normal family/reward")
-	var utilities: Array[StringName] = [&"speed", &"damage", &"fire_rate", &"orb_magnet", &"beam_capacity", &"beam_recharge", &"beam_piercing"]
+	var utilities: Array[StringName] = [&"speed", &"damage", &"fire_rate", &"orb_magnet", &"beam_capacity", &"beam_recharge", &"beam_piercing", &"shield", &"reactive_armor", &"retaliation_pulse"]
 	for a in utilities.size():
 		for b in range(a + 1, utilities.size()):
 			for c in range(b + 1, utilities.size()):
@@ -158,26 +158,19 @@ func check_rewards_and_capacity() -> void:
 				for id in utilities:
 					if not build.acquired_ranks.has(id):
 						check(not build.apply_foundation(id).applied and not ids(hand).has(id), "full utility slots must reject every unacquired family in application and offers")
-	var extended := CATALOG.duplicate(true) as UpgradeTable
-	var future_effects := [UpgradeDefinition.Effect.PIERCING, UpgradeDefinition.Effect.ORBITING_SATELLITES, UpgradeDefinition.Effect.IMPACT_EXPLOSIONS, UpgradeDefinition.Effect.RICOCHET]
-	for index in future_effects.size():
-		var extra := definition(&"side_shot").duplicate() as UpgradeDefinition
-		extra.id = StringName("test_offensive_%d" % index)
-		extra.effect = future_effects[index]
-		extended.upgrades.append(extra)
-	check(extended.foundation_errors(CONFIG).is_empty(), "synthetic future families are test fixtures only")
-	build = fresh(extended)
-	for id in [&"side_shot", &"test_offensive_0", &"test_offensive_1", &"test_offensive_2"]:
+	check(CATALOG.foundation_errors(CONFIG).is_empty(), "completed offensive families validate before the capacity fixture")
+	build = fresh()
+	for id in [&"side_shot", &"critical_hits", &"micro_missiles", &"escort_drone"]:
 		check(build.apply_foundation(id).applied, "four offensive families must fit")
-	check(not build.apply_foundation(&"test_offensive_3").applied and build.foundation_snapshot().offensive_count == 4, "a fifth offensive cannot replace an existing slot")
+	check(not build.apply_foundation(&"orbiting_satellites").applied and build.foundation_snapshot().offensive_count == 4, "a fifth offensive cannot replace an existing slot")
 	check(build.apply_foundation(&"side_shot").applied and build.foundation_snapshot().offensive_count == 4, "an acquired family may increase rank at full capacity")
-	check(not ids(extended.generate_offers(build.foundation_snapshot(), FULL, rng(11), CONFIG)).has(&"test_offensive_3"), "full offensive slots must also filter new-family offers")
+	check(not ids(CATALOG.generate_offers(build.foundation_snapshot(), FULL, rng(11), CONFIG)).has(&"orbiting_satellites"), "full offensive slots must also filter new-family offers")
 
 func check_offer_policy() -> void:
 	var build := fresh()
 	for seed_value in range(100):
-		var random := rng(seed_value)
-		var hand := CATALOG.generate_offers(build.foundation_snapshot(), {"energy": 3, "shield": 0}, random, CONFIG, true)
+		var offer_rng := rng(seed_value)
+		var hand := CATALOG.generate_offers(build.foundation_snapshot(), {"energy": 3, "shield": 0}, offer_rng, CONFIG, true)
 		var names := ids(hand)
 		check(names.size() == 3 and hand.offers.any(func(offer): return offer.category == UpgradeDefinition.Category.OFFENSIVE) and hand.fallback_score == 0, "first selection must offer an offensive when available")
 		var utility_count := 0
@@ -187,11 +180,11 @@ func check_offer_policy() -> void:
 			seen[offer.id] = true
 			check(build.can_apply_foundation(offer.id, {"energy": 3, "shield": 0}), "every drawn offer must be personally eligible")
 		check(utility_count > 0 and seen.size() == 3, "first offers must reserve a utility and have distinct IDs")
-		var state := random.state
+		var state := offer_rng.state
 		var copy: Dictionary = hand.offers[0].duplicate(true)
 		copy.rank_values[0] = 999
 		copy.next_value = 999
-		check(random.state == state and definition(hand.offers[0].id).rank_value(1) < 999, "presentation snapshots must not mutate authored values or consume RNG")
+		check(offer_rng.state == state and definition(hand.offers[0].id).rank_value(1) < 999, "presentation snapshots must not mutate authored values or consume RNG")
 	build.apply_foundation(&"damage")
 	for first_selection in [false, true]:
 		for seed_value in range(100):
@@ -218,7 +211,7 @@ func check_offer_policy() -> void:
 	var before := random.state
 	var fallback := exhausted.generate_offers(capped.foundation_snapshot(), FULL, random, CONFIG)
 	check(fallback.offers.is_empty() and fallback.fallback_score == 500 and random.state == before, "zero candidates alone must return automatic 500 score without drawing RNG")
-	var reward_only := subset([&"energy", &"shield"])
+	var reward_only := subset([&"energy"])
 	var reward_build := fresh(reward_only)
 	check(reward_only.generate_offers(reward_build.foundation_snapshot(), FULL, rng(1), CONFIG).fallback_score == 500, "inapplicable rewards must not compete with automatic fallback")
 	check(reward_only.generate_offers(reward_build.foundation_snapshot(), {"energy": 11, "shield": 3}, rng(1), CONFIG).offers.size() == 1, "only applicable repeatable rewards may appear")

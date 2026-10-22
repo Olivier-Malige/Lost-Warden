@@ -7,6 +7,7 @@ var _scenes := {}
 var _feedback_tweens := {}
 var _beam_tweens := {}
 var _build_controls := {}
+var _defense_controls := {}
 var _level_label: Label
 var _xp_bar: ProgressBar
 const FONT := preload("res://assets/fonts/slkscr.ttf")
@@ -18,6 +19,7 @@ func _ready() -> void:
 	_on_eliminations_changed(global.eliminations)
 	Events.run_time_changed.connect(_on_run_time_changed)
 	Events.energy_changed.connect(_on_energy_changed)
+	Events.defense_state_changed.connect(_on_defense_state_changed)
 	Events.beam_charge_changed.connect(_on_beam_charge_changed)
 	Events.build_changed.connect(_on_build_changed)
 	Events.progression_changed.connect(_on_progression_changed)
@@ -25,6 +27,38 @@ func _ready() -> void:
 
 func _on_eliminations_changed(count: int) -> void:
 	$LeftColumn/Eliminations.text = "ELIMINATIONS\n%d" % count
+
+func _on_defense_state_changed(player_id: StringName, snapshot: Dictionary) -> void:
+	var column := get_node("LeftColumn" if player_id == &"player1" else "RightColumn")
+	if not _defense_controls.has(player_id):
+		var new_holder := VBoxContainer.new()
+		new_holder.name = "Defense" + String(player_id).capitalize().replace(" ", "")
+		new_holder.add_theme_constant_override("separation", 1)
+		var label := _text("", 8)
+		label.name = "State"
+		new_holder.add_child(label)
+		var new_bar := ProgressBar.new()
+		new_bar.name = "Recharge"
+		new_bar.custom_minimum_size = Vector2(84, 4)
+		new_bar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		new_bar.show_percentage = false
+		for state in ["background", "fill"]:
+			var style := StyleBoxFlat.new()
+			style.bg_color = Color("222735") if state == "background" else (Color("ff5a4d") if player_id == &"player1" else Color("7ad9ff"))
+			new_bar.add_theme_stylebox_override(state, style)
+		new_holder.add_child(new_bar)
+		column.add_child(new_holder)
+		var plasma := column.get_node("plasma_holder_" + String(player_id))
+		column.move_child(new_holder, plasma.get_index() + 1)
+		_defense_controls[player_id] = new_holder
+	var holder: VBoxContainer = _defense_controls[player_id]
+	holder.visible = snapshot.alive and snapshot.rank > 0 and (player_id == &"player1" or global.coop)
+	var charging: bool = snapshot.recharge_left > 0.0
+	holder.get_node("State").text = "SHIELD RECHARGE" if charging else "SHIELD %d/%d" % [snapshot.charges, snapshot.maximum]
+	var bar := holder.get_node("Recharge") as ProgressBar
+	bar.visible = charging
+	bar.max_value = maxf(snapshot.recharge_duration, 0.001)
+	bar.value = snapshot.recharge_duration - snapshot.recharge_left
 
 func _on_run_time_changed(survival_seconds: float) -> void:
 	var text := "SURVIVAL\n" + global.format_survival_time(survival_seconds)

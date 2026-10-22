@@ -1,5 +1,5 @@
 ---
-status: pending
+status: done
 ---
 
 # Instruction: Add orbiting damage satellites with shared contact limits and dedicated art
@@ -13,8 +13,8 @@ status: pending
 ├── data/upgrades/orbiting_satellites.tres                   ✅ authored counts and contact damage
 ├── data/upgrades/foundation_catalog.tres                   ✏️ completed-family registration
 ├── scenes/player/weapons/{orbiting_satellites.gd,orbiting_satellites.tscn} ✅ owned orbit/contact controller
-├── scenes/player/{player_weapons,player_loadout,player_vitals}.gd ✏️ rank synchronization and death cleanup
-├── scenes/combat/{combat_targeting,player_hit_snapshot,player_hit_effects}.gd ✏️ deterministic direct contacts
+├── scenes/player/player_weapons.gd ✏️ rank synchronization and death cleanup
+├── scenes/combat/{player_hit_snapshot,player_hit_effects}.gd ✏️ deterministic direct contacts
 ├── assets/sources/player/weapons/orbiting_satellites.aseprite ✅ orbiter and contact master
 ├── assets/sprites/player/weapons/orbiting_satellites_sheet.{png,json} ✅ matching runtime export and mapping
 ├── tests/player/test_orbiting_satellites.gd                 ✅ real overlaps, orbit and group cooldowns
@@ -94,3 +94,17 @@ journey
 | 1 | Each rank has the contracted count and measured orbit/contact geometry. FIRE_RATE changes contact intervals but never rotation. Simultaneous orbiters cannot bypass a group cooldown, and separate players do not suppress each other's contacts. |
 | 2 | Only accepted direct contacts draw a critical result and start cooldowns. All boss parts share one owner cooldown; satellites cannot pierce, ricochet or intercept shots. Actual pause/death callbacks produce no illegal collision removal or retained world state. |
 | 3 | Source/export pairs, explicit mappings and native proximity/edge review are complete. Physics, seeded RNG and lifecycle fixtures pass with bounded cooldown records before offers include the family. |
+
+## Delivery evidence
+
+Implemented locally on 2026-10-21. [Satellite evidence](validation/orbiting_satellites.md) records 269 native physics/geometry/lifecycle/RNG checks, clean regressions, exact palette/source parity and inspected hunter-contact, edge and solo/co-op/wide card captures. Stop for playtest before step 11.
+
+## Approved satellite appearance and motion revision — 2026-10-22
+
+Status: done locally, awaiting maintainer playtest. The approved replacement gives every rank a 1.25-second orbit and an independent 0.625-second clockwise body spin, with deterministic per-orbiter offsets and preserved phases through rank changes. The first flat art draft was rejected during implementation and replaced through the Aseprite MCP with beveled metal cores, four tapered decorative spikes, small personal-color inserts and three editable source layers. Card and miniature column 15 matches the new silhouette; other atlas columns are preserved.
+
+Counts, core hitboxes, damage, shared contact cooldowns and main-only chain policy are unchanged. Final native satellite checks: **364 PASS**, including real moving enemies at each rank for either owner; affected explosion, chain, selection and offer regressions pass. Editor diagnostics: **93 documents, zero issues**. See [current evidence](validation/orbiting_satellites.md#steel-satellite-appearance-and-motion-revision--2026-10-22). No commit or step 13 work is included.
+
+### Maintainer follow-up: scripted satellite rotation — 2026-10-22
+
+Done locally: replace the baked eight-way atlas with one canonical hull per player and continuous Sprite2D rotation. Retain the contact/reflection animation, native filtering, independent spin phase and unrotated collider. Source frames are 16x32; export is 128x32. Native satellite 364 and explosion 263 checks pass; 93 diagnostic documents are clean. The current source mapping and evidence supersede the eight-direction implementation above.

@@ -110,11 +110,14 @@ func _run() -> void:
 	stage.add_child(player)
 	player.position = Vector2(500, 350)
 	player.set_physics_process(false)
-	player.shield.power = 1
+	player.apply_upgrade(load("res://data/upgrades/foundation/shield.tres"))
 	player.shield.get_node("sound_trowback").stream = null
 	orb.speedX = 35.0
 	orb.speedY = 145.0
-	player.shield._on_shield_area_entered(orb)
+	orb.position = player.position + Vector2(0, -18)
+	await physics_frame
+	await process_frame
+	player.defenses.intercept_projectile(orb)
 	_check(orb.trowbackByShield and orb.speedX == -35.0 and orb.speedY == -145.0, "the shield reflects a round projectile through the normal velocity path")
 	var health: float = boss.life
 	orb._on_shot_area_entered(boss)
