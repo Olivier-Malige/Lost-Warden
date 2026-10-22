@@ -6,7 +6,7 @@
 script = ExtResource("1")
 xp_base = 10
 xp_growth = 1.28
-offensive_slots = 4
+offensive_slots = 3
 utility_slots = 3
 family_weight = 10
 reward_weight = 5

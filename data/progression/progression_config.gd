@@ -3,7 +3,7 @@ extends Resource
 
 @export var xp_base: int = 10
 @export var xp_growth: float = 1.28
-@export var offensive_slots: int = 4
+@export var offensive_slots: int = 3
 @export var utility_slots: int = 3
 @export var family_weight: int = 10
 @export var reward_weight: int = 5

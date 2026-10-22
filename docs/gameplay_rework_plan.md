@@ -4,7 +4,7 @@ Updated: 2026-10-22.
 
 **Goal:** a continuous survival shmup with varied builds, enemies and formations, increasing pressure over time, solo and local co-op.
 
-**Next step:** Playtest the defensive close-range pack: regenerating reflector sphere, reactive armor and retaliation pulse. The maintainer approved this addition before step 13 ricochet shards, which still awaits a separate request. Steps 1-4 and 6-12 are implemented. Missiles, drone bolts and satellites retain criticals and explosions but remain excluded from electric chains; piercing belongs to the manual signature beam. Satellites and explosions remain local for playtest after published escort commit `f20c148`. Step 5 still needs two solo observations and qualitative feedback. The maintainer explicitly defers effect balancing; prototype values remain recorded. Dedicated selection audio remains pending. See [Phase 3 evidence](phase_3_validation.md).
+**Next step:** Playtest corrected hull contacts and three-offensive/three-utility builds, including the defensive close-range pack. The maintainer approved this addition before step 13 ricochet shards, which still awaits a separate request. Steps 1-4 and 6-12 are implemented. Missiles, drone bolts and satellites retain criticals and explosions but remain excluded from electric chains; piercing belongs to the manual signature beam. The current playtest checkpoint adds satellites, explosions, defensive utilities and contact/build corrections after the published escort checkpoint. Step 5 still needs two solo observations and qualitative feedback. The maintainer explicitly defers effect balancing; prototype values remain recorded. Dedicated selection audio remains pending. See [Phase 3 evidence](phase_3_validation.md).
 
 ## Progress and delivery order
 
@@ -47,7 +47,7 @@ No implementation remains in Phase 2. Carry the deferred co-op gameplay acceptan
 
 The [detailed plan](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/plan.md) and its [delivery contract](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/contract.md) record the maintainer's direction and prototype values. Steps 1-4, 6-10 and standalone 12 are implemented. Automated XP measurement exists; human calibration acceptance and later offensive families remain pending. Execute only the requested numbered step, then verify and stop for review.
 
-Replace direct drops with pooled XP and paused choices inspired by Vampire Survivors / Megabonk. Share XP in co-op with personal offers and four offensive plus three utility family slots per player. Acquired families stay for the run; rarity remains deferred.
+Replace direct drops with pooled XP and paused choices inspired by Vampire Survivors / Megabonk. Share XP in co-op with personal offers and three offensive plus three utility family slots per player. Acquired families stay for the run; rarity remains deferred.
 
 Nomad retains its native manual secondary plasma beam and reserve, outside the offensive slots. Future ship signatures remain planning-only; no ship selection or permanent progression is included.
 
@@ -127,3 +127,9 @@ The maintainer requested one canonical satellite sprite per player, rotated by s
 The maintainer-approved [defensive plan](../aidd_docs/tasks/2026_10/2026_10_22_defensive_pack/plan.md) is implemented locally. The former shield reward is now a three-rank sphere: 3/5/7 charges, recharge 8/6/4 seconds, radius 20, reverse-trajectory reflection, body and continuous-beam protection. Reactive armor adds +25/50/75% ordinary injury grace without longer slowdown/flash. Retaliation triggers on rupture/nonfatal injury: damage 2/3/4, radius 32/40/48, four-second owner cooldown, a synchronized 160ms active wave and inactive fragments through 320ms. It clears hostile shots without recursive effects. All three share existing utility slots; the catalog has 19 entries.
 
 Original Aseprite art, both team cards/miniatures, compact event-driven HUD state and safe ownership/pooling ship together. [Evidence](../aidd_docs/tasks/2026_10/2026_10_22_defensive_pack/validation.md): 292 native defensive checks, affected weapon/progression/boss regressions, 102 clean diagnostic documents and exact asset audits. The full historical collision sweep retains documented preexisting failures; targeted foundation geometry passes. Stop for maintainer playtest. No commit/push, extra slots, broad balance or ricochet work is included.
+
+### Hull contact and build capacity checkpoint — 2026-10-22
+
+The maintainer-approved [contact reliability plan](../aidd_docs/tasks/2026_10/2026_10_22_contact_reliability/plan.md) fixes the hunter's undersized stationary collision hull and prevents shield body cooldown from granting immunity after rupture. The player's forgiving central hitbox and last-impact absorption remain. Three offensive plus three utility slots now apply in data, offers, debug, personal co-op builds, selection and HUD; owned ranks remain upgradeable. No weapon category, damage, speed or sprite changes are included.
+
+[Validation](../aidd_docs/tasks/2026_10/2026_10_22_contact_reliability/validation.md): 5,401 native checks pass, 104 diagnostic documents are clean and native contact/selection states are inspected. Seven historical hunter geometry failures disappear; 31 unrelated historical assertions remain, with no new errors. Playtest a fresh defensive build with the reduced offensive capacity before ricochet.

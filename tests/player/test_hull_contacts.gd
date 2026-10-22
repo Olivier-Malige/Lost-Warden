@@ -43,6 +43,7 @@ func run() -> void:
 	await movement_passages()
 	await asteroid_contacts()
 	await boss_contacts()
+	await build_capacity()
 	if DisplayServer.get_name() != "headless": await native_contacts()
 	effects.cancel()
 	stage.free()
@@ -174,3 +175,17 @@ func native_contacts() -> void:
 			await RenderingServer.frame_post_draw
 			check(root.get_texture().get_image().save_webp(ProjectSettings.globalize_path("res://contact_native_%02d.webp" % step), true) == OK, "native contact evidence saves with visible hulls and actual energy")
 	check(p1.energy == 11, "a native moving hunter visibly wounds the hull once during its crossing")
+
+func build_capacity() -> void:
+	await reset_case()
+	for id in [&"critical_hits", &"energy_chains", &"impact_explosions"]:
+		check(p1.apply_upgrade(load("res://data/upgrades/%s.tres" % id)).applied, "criticals, chains and explosions each occupy one offensive family")
+	for id in [&"micro_missiles", &"escort_drone", &"orbiting_satellites"]:
+		check(p2.apply_upgrade(load("res://data/upgrades/%s.tres" % id)).applied, "the co-op partner independently acquires three different offensive families")
+	p1.increase_SideShot()
+	p1.debug_max_stats()
+	check(not p1.loadout.side_shot and p1.loadout.foundation_snapshot().offensive_count == 3 and p1.loadout.foundation_snapshot().utility_count == 3, "debug side shots and maximum cannot add a fourth offensive or extra utilities")
+	check(p2.loadout.foundation_snapshot().offensive_count == 3 and not p2.apply_upgrade(load("res://data/upgrades/critical_hits.tres")).applied, "a full co-op build rejects a fourth offensive independently")
+	check(p1.apply_upgrade(load("res://data/upgrades/critical_hits.tres")).rank == 2 and p2.apply_upgrade(load("res://data/upgrades/micro_missiles.tres")).rank == 2, "both owners can rank acquired families at full capacity")
+	p1._update_beam(0.01, true)
+	check(p1.beam_active and p1.continuous_beam.overdrive and p1.loadout.foundation_snapshot().offensive_count == 3, "the full-reserve signature remains available outside the three offensive slots")

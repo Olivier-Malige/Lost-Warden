@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 const PLAYER_STATS: PlayerStats = preload("res://data/player/player_stats.tres")
+const PROGRESSION: ProgressionConfig = preload("res://data/progression/progression_config.tres")
 
 var _pips := {}
 var _scenes := {}
@@ -142,7 +143,8 @@ func _on_build_changed(player_id: StringName, snapshot: Dictionary) -> void:
 		var equipped := []
 		for family in snapshot.families:
 			if family.category == category: equipped.append(family)
-		for index in (4 if category == UpgradeDefinition.Category.OFFENSIVE else 3):
+		var capacity: int = snapshot.get("offensive_capacity", PROGRESSION.offensive_slots) if category == UpgradeDefinition.Category.OFFENSIVE else snapshot.get("utility_capacity", PROGRESSION.utility_slots)
+		for index in capacity:
 			var slot := TextureRect.new()
 			slot.custom_minimum_size = Vector2(18, 24)
 			slot.texture = _atlas(Rect2(96 if category == UpgradeDefinition.Category.OFFENSIVE else 112, 32, 16, 16))

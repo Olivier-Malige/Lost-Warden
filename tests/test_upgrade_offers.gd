@@ -159,12 +159,19 @@ func check_rewards_and_capacity() -> void:
 					if not build.acquired_ranks.has(id):
 						check(not build.apply_foundation(id).applied and not ids(hand).has(id), "full utility slots must reject every unacquired family in application and offers")
 	check(CATALOG.foundation_errors(CONFIG).is_empty(), "completed offensive families validate before the capacity fixture")
-	build = fresh()
-	for id in [&"side_shot", &"critical_hits", &"micro_missiles", &"escort_drone"]:
-		check(build.apply_foundation(id).applied, "four offensive families must fit")
-	check(not build.apply_foundation(&"orbiting_satellites").applied and build.foundation_snapshot().offensive_count == 4, "a fifth offensive cannot replace an existing slot")
-	check(build.apply_foundation(&"side_shot").applied and build.foundation_snapshot().offensive_count == 4, "an acquired family may increase rank at full capacity")
-	check(not ids(CATALOG.generate_offers(build.foundation_snapshot(), FULL, rng(11), CONFIG)).has(&"orbiting_satellites"), "full offensive slots must also filter new-family offers")
+	var offensives: Array[StringName] = [&"side_shot", &"critical_hits", &"energy_chains", &"micro_missiles", &"escort_drone", &"orbiting_satellites", &"impact_explosions"]
+	for a in offensives.size():
+		for b in range(a + 1, offensives.size()):
+			for c in range(b + 1, offensives.size()):
+				build = fresh()
+				var chosen: Array[StringName] = [offensives[a], offensives[b], offensives[c]]
+				for id in chosen: check(build.apply_foundation(id).applied, "every three-offensive combination must fit")
+				var hand := CATALOG.generate_offers(build.foundation_snapshot(), FULL, rng(11), CONFIG)
+				for id in offensives:
+					if id not in chosen:
+						check(not build.apply_foundation(id).applied and not ids(hand).has(id), "a fourth offensive must be rejected by acquisition and offers")
+				check(build.apply_foundation(chosen[0]).applied and build.foundation_snapshot().offensive_count == 3, "an acquired offensive may rank up at full capacity")
+				check(build.foundation_snapshot().offensive_capacity == 3 and build.foundation_snapshot().utility_capacity == 3, "build snapshots expose the approved three plus three capacity")
 
 func check_offer_policy() -> void:
 	var build := fresh()

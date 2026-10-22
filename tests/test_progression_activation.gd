@@ -95,11 +95,14 @@ func run() -> void:
 	for frame in 3: await process_frame
 	check(not paused and main._selection == null and controller.progression.level == 6 and controller.progression.xp == 13, "final queued choice must close and resume without losing excess XP")
 	check(world.get_node("music").playing and not world.get_node("music").stream_paused, "real gameplay music must resume after the selection pause releases")
-	check(p1.loadout.foundation_snapshot().utility_count <= 3 and p2.loadout.foundation_snapshot().offensive_count <= 4, "live choices must obey personal slot caps")
+	check(p1.loadout.foundation_snapshot().utility_count <= 3 and p2.loadout.foundation_snapshot().offensive_count <= 3, "live choices must obey personal slot caps")
 	check(world.get_node("hud")._level_label.text == "LEVEL 6", "HUD must display shared progression through events")
 	check(world.get_node("hud/RightColumn/Progression").get_child_count() == 2 and not world.get_node("hud")._xp_bar.show_percentage, "HUD progression must show the level and its progress bar without a numeric XP counter")
 	check(is_equal_approx(world.get_node("hud")._xp_bar.value, controller.progression.xp) and is_equal_approx(world.get_node("hud")._xp_bar.max_value, controller.progression.next_threshold()), "level progress bar must reflect the shared XP remainder and next threshold")
 	check(world.get_node("hud")._build_controls.size() == 2, "HUD must maintain two personal builds")
+	for holder in world.get_node("hud")._build_controls.values():
+		for row in holder.find_children("*", "HBoxContainer", false, false):
+			check(row.get_child_count() == 3, "each personal HUD category draws three slots from its build capacity")
 	await capture("coop_hud")
 	p1.weapons.fire_primary()
 	p2.weapons.fire_primary()
@@ -147,7 +150,7 @@ func run() -> void:
 		var upgrade = load("res://data/upgrades/foundation/%s.tres" % file)
 		for rank in upgrade.max_rank: p1.apply_upgrade(upgrade)
 	for rank in 3: p1.apply_upgrade(load("res://data/upgrades/foundation/side_shot.tres"))
-	for id in ["critical_hits", "energy_chains", "micro_missiles"]:
+	for id in ["critical_hits", "energy_chains"]:
 		for rank in 3: p1.apply_upgrade(load("res://data/upgrades/%s.tres" % id))
 	p1.energy = 12
 	p1.update_energy()
@@ -179,7 +182,7 @@ func run() -> void:
 	p1._stop_beam()
 	p1.beam_charge = 100
 	p1._update_beam(0.01, true)
-	check(p1.continuous_beam.overdrive and p1.loadout.foundation_snapshot().offensive_count == 4, "full-reserve overdrive must remain native and outside offensive slots")
+	check(p1.continuous_beam.overdrive and p1.loadout.foundation_snapshot().offensive_count == 3, "full-reserve overdrive must remain native and outside offensive slots")
 	await capture("plasma_overdrive")
 	p1._stop_beam()
 	controller.pool.spawn(1, p1.global_position + Vector2(-32, -160))

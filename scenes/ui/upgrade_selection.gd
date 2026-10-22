@@ -7,6 +7,7 @@ const FONT := preload("res://assets/fonts/slkscr.ttf")
 const MENU_ICONS := preload("res://assets/sprites/ui/upgrade_icons_64.png")
 const MINI_ICONS := preload("res://assets/sprites/ui/upgrade_miniatures.png")
 const PLAYER_STATS := preload("res://data/player/player_stats.tres")
+const PROGRESSION: ProgressionConfig = preload("res://data/progression/progression_config.tres")
 const MENU_ICON_IDS: Array[StringName] = [
 	&"speed", &"damage", &"fire_rate", &"orb_magnet", &"side_shot", &"energy", &"shield", &"score",
 	&"beam_capacity", &"beam_recharge",
@@ -235,7 +236,7 @@ func _build_panel(player_id: StringName, team: int, solo: bool) -> void:
 	var family_ranks: Dictionary = build.get("ranks", {})
 	var slot_index := 0
 	for category in [UpgradeDefinition.Category.OFFENSIVE, UpgradeDefinition.Category.UTILITY]:
-		var capacity := 4 if category == UpgradeDefinition.Category.OFFENSIVE else 3
+		var capacity: int = build.get("offensive_capacity", PROGRESSION.offensive_slots) if category == UpgradeDefinition.Category.OFFENSIVE else build.get("utility_capacity", PROGRESSION.utility_slots)
 		var equipped := []
 		for family in build.get("families", []):
 			if family.category == category:
@@ -253,7 +254,7 @@ func _build_panel(player_id: StringName, team: int, solo: bool) -> void:
 				_label(slot, str(family_ranks[equipped[cell]]), Rect2(6, 12, 12, 10), 8, GOLD)
 			slot_index += 1
 	_label(panel, "OFF", Rect2(12, 54, 78, 10), 8)
-	_label(panel, "UTIL", Rect2(98, 54, 66, 10), 8)
+	_label(panel, "UTIL", Rect2(18 + int(build.get("offensive_capacity", PROGRESSION.offensive_slots)) * 20, 54, 66, 10), 8)
 	var cards: Array[Button] = []
 	var offers: Array = participants[player_id].offers
 	for index in offers.size():

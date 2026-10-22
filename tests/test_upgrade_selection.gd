@@ -88,6 +88,7 @@ func run() -> void:
 	await capture("coop")
 	check(is_equal_approx(ui._dim.color.a, 0.65), "opening must settle to the authored dim alpha")
 	for panel in ui._panels.values():
+		check(panel.find_children("BuildSlot*", "Panel", false, false).size() == 6 and panel.get_node_or_null("BuildSlot6") == null, "each co-op selection draws three offensive and three utility slots")
 		for card in panel.get_meta("cards"):
 			check(Rect2(Vector2.ZERO, panel.size).encloses(Rect2(card.position, card.size)), "native cards must remain inside their personal panel")
 			var icon: TextureRect = card.get_node("Icon")
@@ -147,6 +148,7 @@ func run() -> void:
 	ui = main._selection
 	await wait_until_armed(ui)
 	check(ui._panels.size() == 1 and ui._panels.player1.size.x == 608, "solo must use the approved horizontal wide panel")
+	check(ui._panels.player1.find_children("BuildSlot*", "Panel", false, false).size() == 6, "solo draws the same six configured family slots")
 	var solo_icon: TextureRect = ui._panels.player1.get_meta("cards")[0].get_node("Icon")
 	check(solo_icon.texture.region.size == Vector2(64, 64) and solo_icon.size == Vector2(64, 64), "solo menu must display 64px Nomad effect artwork at native scale")
 	await capture("solo")
