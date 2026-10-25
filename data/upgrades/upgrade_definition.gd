@@ -7,6 +7,7 @@ enum Effect {
 	ORBITING_SATELLITES, IMPACT_EXPLOSIONS, ENERGY_CHAINS, RICOCHET,
 	BEAM_CAPACITY, BEAM_RECHARGE, BEAM_PIERCING,
 	REACTIVE_ARMOR, RETALIATION_PULSE,
+	GUARD_BLADES,
 }
 enum Category { UTILITY, OFFENSIVE, REWARD, FALLBACK }
 
@@ -44,6 +45,14 @@ enum Category { UTILITY, OFFENSIVE, REWARD, FALLBACK }
 @export var contact_cooldown := 0.0
 @export var shield_radius := 0.0
 @export var recharge_values: PackedFloat32Array = []
+@export var sweep_inner_radius := 0.0
+@export var sweep_width_degrees := 0.0
+@export var sweep_start_angles := Vector2.ZERO
+@export var sweep_end_angles := Vector2.ZERO
+@export var sweep_motion_duration := 0.0
+@export var sweep_duration := 0.0
+@export var sweep_visual_duration := 0.0
+@export var sweep_warning_duration := 0.0
 
 func support_count(rank: int) -> int:
 	return support_counts[mini(rank, support_counts.size()) - 1] if rank > 0 and not support_counts.is_empty() else 0
@@ -89,7 +98,7 @@ func foundation_errors() -> PackedStringArray:
 			errors.append("Authored rank values must be finite, positive and nondecreasing.")
 		previous = amount
 	var expected := Category.OFFENSIVE
-	if effect < Effect.SPEED or effect > Effect.RETALIATION_PULSE:
+	if effect < Effect.SPEED or effect > Effect.GUARD_BLADES:
 		errors.append("Unknown foundation effect.")
 	match effect:
 		Effect.SPEED, Effect.FIRE_RATE, Effect.DAMAGE, Effect.ORB_MAGNET, Effect.BEAM_CAPACITY, Effect.BEAM_RECHARGE, Effect.BEAM_PIERCING, Effect.SHIELD, Effect.REACTIVE_ARMOR, Effect.RETALIATION_PULSE:
@@ -122,6 +131,32 @@ func foundation_errors() -> PackedStringArray:
 	if effect == Effect.REACTIVE_ARMOR:
 		for bonus in rank_values:
 			if bonus > 1.0: errors.append("Reactive armor grace bonuses must not exceed 100 percent.")
+	if effect == Effect.GUARD_BLADES:
+		if range_values.size() != max_rank or interval_values.size() != max_rank:
+			errors.append("Guard blades require radius and interval data for every rank.")
+		if not is_finite(sweep_inner_radius) or sweep_inner_radius <= 0.0 or not is_finite(sweep_width_degrees) or sweep_width_degrees <= 0.0 or sweep_width_degrees > 90.0:
+			errors.append("Guard blade geometry must be positive, finite and forward-facing.")
+		if not is_finite(sweep_duration) or sweep_duration <= 0.0 or not is_finite(sweep_visual_duration) or sweep_visual_duration <= sweep_duration:
+			errors.append("Guard blades require a positive active duration and longer visual duration.")
+		if not is_finite(sweep_motion_duration) or sweep_motion_duration <= 0.0 or sweep_motion_duration >= sweep_duration:
+			errors.append("Guard blade motion must be positive, finite and leave an active overlap hold.")
+		if not is_finite(sweep_warning_duration) or sweep_warning_duration <= 0.0:
+			errors.append("Guard blades require a positive finite warning duration.")
+		if not sweep_start_angles.is_finite() or not sweep_end_angles.is_finite():
+			errors.append("Guard blade sweep angles must be finite.")
+		for angle in [sweep_start_angles.x, sweep_start_angles.y, sweep_end_angles.x, sweep_end_angles.y]:
+			if angle - sweep_width_degrees * 0.5 < -180.0 or angle + sweep_width_degrees * 0.5 > 0.0:
+				errors.append("Guard blade sectors must stay in the forward half-plane.")
+		var previous_radius := sweep_inner_radius
+		for radius in range_values:
+			if not is_finite(radius) or radius <= sweep_inner_radius or radius < previous_radius:
+				errors.append("Guard blade outer radii must exceed their inner radius and be nondecreasing.")
+			previous_radius = radius
+		var previous_interval := INF
+		for duration in interval_values:
+			if not is_finite(duration) or duration < sweep_visual_duration + sweep_warning_duration or duration > previous_interval:
+				errors.append("Guard blade intervals must be finite, nonincreasing and cover their visual and warning lifetimes.")
+			previous_interval = duration
 	if effect == Effect.IMPACT_EXPLOSIONS or effect == Effect.RETALIATION_PULSE:
 		if range_values.size() != max_rank or not is_finite(proc_cooldown) or proc_cooldown <= 0.0 or target_limit != 0:
 			errors.append("Impact explosions require authored ranges, a positive cooldown and unlimited area targets.")

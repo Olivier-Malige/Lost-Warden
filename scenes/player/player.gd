@@ -104,6 +104,7 @@ func get_debug_snapshot() -> Dictionary:
 		"id": id_Player, "controller": controller, "state": State.keys()[state],
 		"position": global_position, "energy": energy, "energy_max": STATS.energy_max,
 		"shield": defenses.charges, "defenses": defenses.snapshot(), "touched": touched, "hit_slowdown": malusSpeed,
+		"guard_blades": weapons.guard_blades.snapshot() if is_instance_valid(weapons.guard_blades) else {},
 		"move_speed": loadout.move_speed(), "weapon_speed_multiplier": STATS.weapon_speed_multiplier,
 		"fire_delay": loadout.fire_delay, "can_fire": canShooting,
 		"primary_damage": WEAPON_PRIMARY.damage * loadout.direct_damage_multiplier,

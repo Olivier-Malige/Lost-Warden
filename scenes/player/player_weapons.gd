@@ -9,11 +9,13 @@ const MISSILES: UpgradeDefinition = preload("res://data/upgrades/micro_missiles.
 const DRONE := preload("res://scenes/player/weapons/escort_drone.tscn")
 const DRONE_UPGRADE: UpgradeDefinition = preload("res://data/upgrades/escort_drone.tres")
 const SATELLITES := preload("res://scenes/player/weapons/orbiting_satellites.tscn")
+const GUARD_BLADES := preload("res://scenes/player/weapons/guard_blades.tscn")
 
 var player: Player
 var missile_wait := 0.0
 var escorts: Array[Node2D] = []
 var satellites: Node2D
+var guard_blades: Node2D
 var escort: Node2D:
 	get: return escorts[0] if not escorts.is_empty() else null
 
@@ -49,6 +51,7 @@ func update_autonomous(delta: float) -> void:
 
 func sync_support() -> void:
 	_sync_satellites()
+	_sync_guard_blades()
 	var rank := player.loadout.rank_for(UpgradeDefinition.Effect.ESCORT_DRONE)
 	if player.state >= Player.State.DYING or rank == 0:
 		_stop_escorts()
@@ -69,6 +72,19 @@ func stop_support() -> void:
 	if is_instance_valid(satellites):
 		satellites.shutdown()
 	satellites = null
+	if is_instance_valid(guard_blades): guard_blades.shutdown()
+	guard_blades = null
+
+func _sync_guard_blades() -> void:
+	var rank := player.loadout.rank_for(UpgradeDefinition.Effect.GUARD_BLADES)
+	if player.state >= Player.State.DYING or rank == 0:
+		if is_instance_valid(guard_blades): guard_blades.shutdown()
+		guard_blades = null
+		return
+	if not is_instance_valid(guard_blades):
+		guard_blades = GUARD_BLADES.instantiate()
+		player.add_child(guard_blades)
+	guard_blades.sync_rank(rank)
 
 func _sync_satellites() -> void:
 	var rank := player.loadout.rank_for(UpgradeDefinition.Effect.ORBITING_SATELLITES)

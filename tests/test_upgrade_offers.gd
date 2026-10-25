@@ -46,7 +46,7 @@ func subset(names: Array[StringName]) -> UpgradeTable:
 	return table
 
 func check_data_and_legacy() -> void:
-	check(CATALOG.foundation_errors(CONFIG).is_empty() and CATALOG.upgrades.size() == 19 and definition(&"piercing") == null and definition(&"beam_piercing") != null and definition(&"energy_chains") != null and definition(&"micro_missiles") != null and definition(&"escort_drone") != null and definition(&"orbiting_satellites") != null and definition(&"impact_explosions") != null, "only completed families including orbital contacts and impact explosions enter live offers")
+	check(CATALOG.foundation_errors(CONFIG).is_empty() and CATALOG.upgrades.size() == 20 and definition(&"piercing") == null and definition(&"beam_piercing") != null and definition(&"energy_chains") != null and definition(&"micro_missiles") != null and definition(&"escort_drone") != null and definition(&"orbiting_satellites") != null and definition(&"impact_explosions") != null and definition(&"guard_blades") != null, "only completed families including guard blades enter live offers")
 	check([UpgradeDefinition.Effect.SPEED, UpgradeDefinition.Effect.FIRE_RATE, UpgradeDefinition.Effect.DAMAGE, UpgradeDefinition.Effect.SIDE_SHOT, UpgradeDefinition.Effect.SHIELD, UpgradeDefinition.Effect.ENERGY] == [0, 1, 2, 3, 4, 5], "legacy enum ordinals must remain stable")
 	check(LEGACY.upgrades.size() == 6 and STATS.speed_max == 240 and is_equal_approx(STATS.shoot_delay_min, 0.12), "legacy catalog stays readable while live stat limits use the activated foundation")
 	var legacy := PlayerLoadout.new(STATS)
@@ -159,7 +159,7 @@ func check_rewards_and_capacity() -> void:
 					if not build.acquired_ranks.has(id):
 						check(not build.apply_foundation(id).applied and not ids(hand).has(id), "full utility slots must reject every unacquired family in application and offers")
 	check(CATALOG.foundation_errors(CONFIG).is_empty(), "completed offensive families validate before the capacity fixture")
-	var offensives: Array[StringName] = [&"side_shot", &"critical_hits", &"energy_chains", &"micro_missiles", &"escort_drone", &"orbiting_satellites", &"impact_explosions"]
+	var offensives: Array[StringName] = [&"side_shot", &"critical_hits", &"energy_chains", &"micro_missiles", &"escort_drone", &"orbiting_satellites", &"impact_explosions", &"guard_blades"]
 	for a in offensives.size():
 		for b in range(a + 1, offensives.size()):
 			for c in range(b + 1, offensives.size()):

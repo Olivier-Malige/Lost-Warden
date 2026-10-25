@@ -18,6 +18,7 @@ const MENU_ICON_IDS: Array[StringName] = [
 	&"orbiting_satellites",
 	&"impact_explosions",
 	&"reactive_armor", &"retaliation_pulse",
+	&"guard_blades",
 ]
 const INK := Color("101522")
 const WHITE := Color("f3ebdd")
@@ -30,6 +31,7 @@ const ICON_IDS: Array[StringName] = [
 	&"beam_capacity", &"beam_recharge",
 	&"beam_piercing",
 	&"reactive_armor", &"retaliation_pulse",
+	&"guard_blades",
 ]
 
 var selection_id := 0
@@ -328,6 +330,7 @@ func _effect_lines(offer: Dictionary) -> String:
 		&"energy_chains": return "MAIN: %d JUMPS / %d PX\n%d%% DAMAGE / %.1f SEC" % [roundi(offer.next_value), roundi(offer.next_range), roundi(offer.secondary_damage_scale * 100.0), offer.proc_cooldown]
 		&"micro_missiles": return "%d MISSILES / VOLLEY\n%.1f DMG / %.2f SEC" % [offer.next_projectile_count, offer.next_value, offer.next_interval]
 		&"escort_drone": return "%d FORWARD ESCORT%s\n%.2f DMG / %.2f SEC" % [offer.next_support_count, "S" if offer.next_support_count > 1 else "", offer.next_value, offer.next_interval]
+		&"guard_blades": return "%d DMG / %.1f SEC\nREACH +%d%% / CLEAR SHOTS" % [roundi(offer.next_value), offer.next_interval, roundi(offer.next_range_bonus * 100)]
 		&"orbiting_satellites": return "%d CONTACT SATELLITE%s\n%.2f DMG / %.2f SEC" % [offer.next_support_count, "S" if offer.next_support_count > 1 else "", offer.next_value, offer.contact_cooldown]
 		&"impact_explosions":
 			var radius_text := "+%d%% RADIUS" % roundi(offer.next_range_bonus * 100.0) if offer.next_range_bonus > 0.0 else "BASE BLAST"

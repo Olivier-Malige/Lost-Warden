@@ -1,10 +1,10 @@
 # Gameplay roadmap
 
-Updated: 2026-10-22.
+Updated: 2026-10-25.
 
 **Goal:** a continuous survival shmup with varied builds, enemies and formations, increasing pressure over time, solo and local co-op.
 
-**Next step:** Playtest corrected hull contacts and three-offensive/three-utility builds, including the defensive close-range pack. The maintainer approved this addition before step 13 ricochet shards, which still awaits a separate request. Steps 1-4 and 6-12 are implemented. Missiles, drone bolts and satellites retain criticals and explosions but remain excluded from electric chains; piercing belongs to the manual signature beam. The current playtest checkpoint adds satellites, explosions, defensive utilities and contact/build corrections after the published escort checkpoint. Step 5 still needs two solo observations and qualitative feedback. The maintainer explicitly defers effect balancing; prototype values remain recorded. Dedicated selection audio remains pending. See [Phase 3 evidence](phase_3_validation.md).
+**Next step:** Playtest Guard Blades with the defensive close-range build, retaining three offensive and three utility slots. The maintainer approved this addition before step 13 ricochet shards, which still awaits a separate request. Steps 1-4 and 6-12 are implemented. Missiles, drone bolts and satellites retain criticals and explosions but remain excluded from electric chains; piercing belongs to the manual signature beam. The current playtest checkpoint adds satellites, explosions, defensive utilities and contact/build corrections after the published escort checkpoint. Step 5 still needs two solo observations and qualitative feedback. The maintainer explicitly defers effect balancing; prototype values remain recorded. Dedicated selection audio remains pending. See [Phase 3 evidence](phase_3_validation.md).
 
 ## Progress and delivery order
 
@@ -12,7 +12,7 @@ Updated: 2026-10-22.
 | --- | --- | --- |
 | Preparation, Phase 1 and art | Original identity, display, core combat, controls, plasma and graphics | Complete |
 | 2 — Continuous survival | Seeded encounters, elites, first boss, survival UI and records | Complete; solo accepted, co-op playtest deferred |
-| 3 — Experience and power-ups | XP, personal builds, original weapon sprites and audiovisual level-up choices | In progress; steps 1-4 and 6-12 implemented; plasma piercing, criticals, chains, micro-missiles, escort drones, orbiting satellites and impact explosions playable; human XP acceptance deferred |
+| 3 — Experience and power-ups | XP, personal builds, original weapon sprites and audiovisual level-up choices | In progress; steps 1-4 and 6-12 implemented; plasma piercing, criticals, chains, micro-missiles, escort drones, orbiting satellites, impact explosions and guard blades playable; human XP acceptance deferred |
 | 4 — Enemies and density | Redesign current enemies, add roles, enrich formations, increase pressure over time | Planned; after Phase 3 |
 | 5 — Combat effects | Impacts, explosions, collections and upgrade feedback | Planned |
 | 6 — Final balance | Complete solo/co-op runs, performance and regression checks | Planned; includes deferred co-op gameplay acceptance after power-up and balance rework |
@@ -133,3 +133,17 @@ Original Aseprite art, both team cards/miniatures, compact event-driven HUD stat
 The maintainer-approved [contact reliability plan](../aidd_docs/tasks/2026_10/2026_10_22_contact_reliability/plan.md) fixes the hunter's undersized stationary collision hull and prevents shield body cooldown from granting immunity after rupture. The player's forgiving central hitbox and last-impact absorption remain. Three offensive plus three utility slots now apply in data, offers, debug, personal co-op builds, selection and HUD; owned ranks remain upgradeable. No weapon category, damage, speed or sprite changes are included.
 
 [Validation](../aidd_docs/tasks/2026_10/2026_10_22_contact_reliability/validation.md): 5,401 native checks pass, 104 diagnostic documents are clean and native contact/selection states are inspected. Seven historical hunter geometry failures disappear; 31 unrelated historical assertions remain, with no new errors. Playtest a fresh defensive build with the reduced offensive capacity before ricochet.
+
+### Guard blades checkpoint — 2026-10-24
+
+The maintainer-approved [guard blades plan](../aidd_docs/tasks/2026_10/2026_10_24_guard_blades/plan.md) adds the final requested close-range defensive attack as an ordinary offensive family. Two screen-up, player-following blades sweep the front over 280ms, then leave 120ms of inactive fragments. Ranks deal 2/3/4 damage at 3/2.5/2-second intervals; common DAMAGE applies once, FIRE_RATE does not. Both blades share one accepted hit per hull/boss group, clear covered hostile shots and respect armor. Crits, chains, explosions and ricochet never trigger. Reflected/friendly shots and continuous beams remain intact.
+
+Original Aseprite effects, paired team cards/miniatures, ordinary offers/HUD slots, debug state and an optional empty audio hook are implemented locally. The live catalog has 20 entries and still enforces three offensive/three utility families. [Evidence](../aidd_docs/tasks/2026_10/2026_10_24_guard_blades/validation.md): 228 dedicated native checks, 5,323 native checks including affected regressions, 106 clean diagnostic documents, exact source/export/runtime texture parity and all nineteen prior atlas columns preserved. Stop for guard-build playtest before ricochet; no new commit/push or broad balancing is requested.
+
+Guard-blade size playtest revision: outer reach is now 60 instead of 44 (+36.4%), with the inner gap still 16 and unchanged damage/timing. MCP Aseprite effects and guard icons match the new geometry. The refreshed dedicated fixture passes 240 native checks, including hull damage and hostile-shot clearing in the added reach; palette/export/import audits pass. Stop for the next maintainer playtest.
+
+The next maintainer-requested guard revision supersedes that fixed reach: ranks now reach 60/72/84 (+0/+20/+40%) at 3/2/1.5-second start intervals, preserving the inner gap and damage. A tiny personal bar fills above the ship in the last 0.6 seconds before activation, including acquisition; recurring warnings fit inside the interval. It has no numeric time or text. Native rank art, card percentages and tests are updated. Fresh 280 guard, 3,781 offer and 51 selection checks pass; 106 diagnostic documents and art/export/import audits are clean. Stop for playtest before ricochet.
+
+Guard convergence follow-up (2026-10-25): both arcs end at -90 degrees, superimposing screen-up instead of crossing beyond each other. Their geometry and animation share this new endpoint; other values stay unchanged. All 286 refreshed native guard checks pass, including equal final rotation/center/frame at every rank, with inspected convergence/cooling captures. Stop for playtest before ricochet.
+
+Visible meeting correction after playtest feedback: the endpoint-only change aligned the arcs too late, when the bright edge vanished. They now converge in 160ms and remain identically superimposed, bright and active for 120ms. MCP Aseprite terminal/cooling frames and right-hand mirroring match this hold; damage/cadence/reach and total lifetimes stay unchanged. Fresh 300 guard and 3,781 offer checks pass, 106 diagnostic documents are clean, and palette/source/export/import audits pass. A native before/after preview is recorded in the guard evidence. Stop for the next maintainer playtest.

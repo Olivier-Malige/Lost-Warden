@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/upgrade_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/upgrade_miniatures.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="Icon"]
+atlas = ExtResource("2")
+region = Rect2(304, 0, 16, 16)
+
+[resource]
+script = ExtResource("1")
+icon = SubResource("Icon")
+id = &"guard_blades"
+effect = 21
+weight = 10
+max_rank = 3
+display_name = "GUARD BLADES"
+description = "Two forward energy blades sweep nearby hulls and clear hostile shots. Each enemy is hit once per salvo. No criticals or other combat effects."
+category = 1
+repeatable = false
+rank_values = PackedFloat32Array(2, 3, 4)
+range_values = PackedFloat32Array(60, 72, 84)
+interval_values = PackedFloat32Array(3, 2, 1.5)
+sweep_inner_radius = 16.0
+sweep_width_degrees = 40.0
+sweep_start_angles = Vector2(-160, -20)
+sweep_end_angles = Vector2(-90, -90)
+sweep_motion_duration = 0.16
+sweep_duration = 0.28
+sweep_visual_duration = 0.4
+sweep_warning_duration = 0.6
+hud_label = &"GUARD"

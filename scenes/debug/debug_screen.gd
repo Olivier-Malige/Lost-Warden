@@ -175,6 +175,9 @@ func _players_text(data: Dictionary) -> String:
 		lines.append("Primary damage %.2f   Interval %.3fs   Ready %s" % [player.primary_damage, player.fire_delay, player.can_fire])
 		lines.append("Side shots %s   Side damage %.2f   Hit protection %s" % [player.side_shot, player.side_damage, player.touched])
 		lines.append("Plasma %.1f/%.1f   Beam %s   Overdrive %.2fs" % [player.plasma, player.plasma_max, player.beam_active, player.overdrive_left])
+		var blades: Dictionary = player.get("guard_blades", {})
+		if not blades.is_empty():
+			lines.append("Guard blades %d   Next %.2fs   Sweep %.2fs   Active %s" % [blades.rank, blades.cooldown_left, blades.age, blades.active])
 		var ranks: Array[String] = []
 		for effect in player.ranks:
 			ranks.append("%s %d" % [effect, player.ranks[effect]])

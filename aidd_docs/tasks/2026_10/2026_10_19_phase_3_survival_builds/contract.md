@@ -8,7 +8,7 @@ The maintainer approved the silent interactive visual preview with **Arsenal dé
 
 - Borrow the XP, paused choices, growing power and build synergies of Vampire Survivors / Megabonk while retaining the existing shmup controls.
 - Each living player has three offensive family slots and three utility family slots (maintainer-approved reduction, 2026-10-22). Acquiring a new family consumes one slot; increasing its rank consumes none. No replacement during a run.
-- Utilities are speed, damage, fire rate, XP attraction, plasma reserve, plasma recovery, beam piercing, reflector sphere, reactive armor and retaliation pulse. Offensives are side shots and the seven other new effects below. Repair and fallback score consume no slots. The 2026-10-21 playtest revision retires cannon piercing from offers and assigns the requested nearest-target cannon arc to the `energy_chains` family.
+- Utilities are speed, damage, fire rate, XP attraction, plasma reserve, plasma recovery, beam piercing, reflector sphere, reactive armor and retaliation pulse. Offensives are side shots and the additional families below, including guard blades. Repair and fallback score consume no slots. The 2026-10-21 playtest revision retires cannon piercing from offers and assigns the requested nearest-target cannon arc to the `energy_chains` family.
 - XP is shared in co-op, choices and equipment are personal. A run ends only after all players die. Human co-op balance acceptance remains deferred until after the power-up and balance rework; verify technical co-op behavior throughout Phase 3.
 - Nomad starts with its current primary cannon and its manual secondary signature plasma beam, outside the three offensive slots. Preserve zero initial charge, base capacity 100, activation at 10, drain 20/second and full-reserve overdrive. The maintainer's charge upgrades below can expand personal capacity to 175 and cell recovery to x1.75. No beam unlock card, automatic beam or free permanent beam.
 - Future ships may have different signatures. Ship selection, ShipDefinition, unlocks, permanent progression, save-schema additions, rarity and weapon evolution remain outside this phase.
@@ -104,7 +104,7 @@ Only a direct projectile's first accepted impact may attempt secondary procs. Sn
 
 ## New offensive families
 
-All seven have three ranks, weight 10 and no rarity/prerequisite beyond slot eligibility. Numbers below are authored bases before common DAMAGE/FIRE_RATE adjustments. Cannon piercing was moved to beam utility after playtest. Critical hits, micro-missiles, escort drones, orbiting satellites, impact explosions and energy chains are live; ricochet remains pending. The maintainer explicitly defers effect balancing; these prototype values remain authored and visible in cards.
+These families have three ranks, weight 10 and no rarity/prerequisite beyond slot eligibility. Numbers below are authored bases before supported common stat adjustments. Cannon piercing was moved to beam utility after playtest. Critical hits, micro-missiles, escort drones, orbiting satellites, impact explosions, energy chains and guard blades are live; ricochet remains pending. The maintainer explicitly defers effect balancing; these prototype values remain authored and visible in cards.
 
 | ID | Ranks 1 / 2 / 3 | Fixed limits |
 | --- | --- | --- |
@@ -114,6 +114,7 @@ All seven have three ranks, weight 10 and no rarity/prerequisite beyond slot eli
 | orbiting_satellites | Count 1 / 2 / 3; damage 1 / 1.25 / 1.5 | Orbit radius 32 px, period 1.25 s, independent spin period 0.625 s, contact radius 4 px; shared per-owner/group contact cooldown 0.50 s |
 | impact_explosions | Radius 24 / 30 / 36 px; damage x0.70 / x0.90 / x1.10 | All overlapping additional targets; 160ms active wave; per-owner cooldown 0.30 s; exclude initial target/group |
 | energy_chains | 1 / 2 / 3 other targets; jump range 72 / 88 / 104 px | Each target receives x0.45 direct pre-critical base; per-owner cooldown 0.50 s; no repeats |
+| guard_blades | Damage 2 / 3 / 4; start intervals 3 / 2 / 1.5 s | Inner gap 16, outer reach 60 / 72 / 84; two forward 40-degree sectors, left center -160 to -90 and right -20 to -90 degrees in 160ms, then 120ms bright active overlap; 280ms active/400ms visual; 0.6s anticipation before each salvo (inside recurring intervals); one hit per hull/boss group and hostile-shot clearing; DAMAGE once, no FIRE_RATE/crit/procs |
 | ricochet | One shard reaches 1 / 2 / 3 other targets | Speed 300 px/s, range 88 px, initial damage x0.55 then x0.8 per rebound; life 1.2 s; 4 active shards; per-owner cooldown 0.40 s |
 
 | Modifier | Main cannon | Side cannons | Drone bolts | Missiles | Satellite contacts | Plasma/reflected enemy shots |
@@ -122,6 +123,8 @@ All seven have three ranks, weight 10 and no rarity/prerequisite beyond slot eli
 | Beam piercing | No | No | No | No | No | Manual plasma only; reflected shots excluded |
 | Crits, explosion | Yes | Yes | Yes | Yes | Yes | No new modifier |
 | Energy chains | Yes | No | No | No | No | No new modifier |
+
+Guard blades are an offensive family whose independent salvos use the SECONDARY hit kind. They receive no modifier in the compatibility table: no criticals, electric chains, explosions, piercing or ricochet. Their shared salvo root retains kill ownership and one accepted surface per boss. Explicit armor blocks damage/shot clearing; reflected or allied shots and continuous beams survive. See the approved [guard-blade contract and validation](../2026_10_24_guard_blades/validation.md).
 
 Maintainer forward-targeting revision: missile acquisition, retained-target validation and the single reacquisition use a 90-degree screen-up cone (45 degrees either side of Nomad's forward axis). Closer side/rear enemies are excluded. A target leaving that cone is lost, so a passed target cannot cause a U-turn. Other weapons' targeting remains unrestricted unless their own contract says otherwise.
 
