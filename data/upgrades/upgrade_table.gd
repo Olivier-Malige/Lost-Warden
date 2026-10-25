@@ -44,7 +44,7 @@ func foundation_errors(config: ProgressionConfig) -> PackedStringArray:
 		errors.append("Foundation catalogs require exactly one automatic score fallback.")
 	return errors
 
-func generate_offers(build: Dictionary, vitals: Dictionary, rng: RandomNumberGenerator, config: ProgressionConfig, first_selection := false) -> Dictionary:
+func generate_offers(build: Dictionary, vitals: Dictionary, rng: RandomNumberGenerator, config: ProgressionConfig, _first_selection := false) -> Dictionary:
 	var offers: Array[Dictionary] = []
 	var errors := foundation_errors(config)
 	if rng == null:
@@ -77,7 +77,7 @@ func generate_offers(build: Dictionary, vitals: Dictionary, rng: RandomNumberGen
 	if candidates.is_empty():
 		return {"offers": offers, "fallback_score": fallback_score}
 	var selected: Array[UpgradeDefinition] = []
-	if first_selection and not offensive.is_empty() and not utility.is_empty():
+	if not offensive.is_empty() and not utility.is_empty():
 		_reserve_offer(offensive, selected, rng)
 		_reserve_offer(utility, selected, rng)
 	if not acquired.is_empty() and not new_families.is_empty():

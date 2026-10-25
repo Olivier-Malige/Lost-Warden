@@ -230,6 +230,39 @@ func check_offer_policy() -> void:
 		var hand := weighted.generate_offers(weighted_build.foundation_snapshot(), {"energy": 3}, rng(seed_value), CONFIG)
 		check(hand.offers[0].id == expected_id, "family/reward draws must use the exact authored 10:5 weights")
 
+func check_category_choices() -> void:
+	var builds: Array[PlayerLoadout] = [fresh()]
+	for owned in [[&"damage"], [&"guard_blades"], [&"guard_blades", &"critical_hits", &"energy_chains", &"shield", &"speed", &"reactive_armor"]]:
+		var build := fresh()
+		for id in owned: build.apply_foundation(id)
+		builds.append(build)
+	for build in builds:
+		for seed_value in range(50):
+			var hand := CATALOG.generate_offers(build.foundation_snapshot(), {"energy": 3}, rng(seed_value), CONFIG)
+			var seen := {}
+			for offer in hand.offers: seen[offer.id] = true
+			check(hand.offers.any(func(offer): return offer.category == UpgradeDefinition.Category.OFFENSIVE) and hand.offers.any(func(offer): return offer.category == UpgradeDefinition.Category.UTILITY), "every level offers both eligible categories, including at full family capacity")
+			check(ids(hand).size() == 3 and seen.size() == 3, "category reservations preserve three distinct choices")
+			check(hand.offers.all(func(offer): return build.can_apply_foundation(offer.id, {"energy": 3})), "category reservations never bypass personal eligibility")
+			if not build.acquired_ranks.is_empty() and build.foundation_snapshot().offensive_count < 3:
+				check(hand.offers.any(func(offer): return offer.current_rank > 0) and hand.offers.any(func(offer): return offer.current_rank == 0 and offer.category != UpgradeDefinition.Category.REWARD), "category guarantees retain owned-rank and new-family choices whenever available")
+	for category in [UpgradeDefinition.Category.OFFENSIVE, UpgradeDefinition.Category.UTILITY]:
+		var build := fresh()
+		var chosen := [&"guard_blades", &"critical_hits", &"energy_chains"] if category == UpgradeDefinition.Category.OFFENSIVE else [&"shield", &"speed", &"reactive_armor"]
+		for id in chosen:
+			for rank in definition(id).max_rank: build.apply_foundation(id)
+		for seed_value in range(20):
+			var hand := CATALOG.generate_offers(build.foundation_snapshot(), FULL, rng(seed_value), CONFIG)
+			check(hand.offers.size() == 3 and hand.offers.all(func(offer): return offer.category != category), "an exhausted category is never fabricated or allowed to exceed slot capacity")
+	var two := subset([&"guard_blades", &"shield"])
+	var player_one := fresh(two)
+	var player_two := fresh(two)
+	for rank in definition(&"guard_blades").max_rank: player_two.apply_foundation(&"guard_blades")
+	var participants := {&"player1": {"build": player_one.foundation_snapshot(), "vitals": FULL}, &"player2": {"build": player_two.foundation_snapshot(), "vitals": FULL}}
+	var hands := two.generate_player_offers(participants, rng(88), CONFIG)
+	check(hands.player1.offers.size() == 2 and hands.player1.offers.any(func(offer): return offer.category == UpgradeDefinition.Category.OFFENSIVE) and hands.player1.offers.any(func(offer): return offer.category == UpgradeDefinition.Category.UTILITY), "a small catalog still offers both available categories after the first level")
+	check(hands.player2.offers.size() == 1 and hands.player2.offers[0].id == &"shield", "co-op category availability remains personal rather than copied from the partner")
+
 func check_beam_stats() -> void:
 	var build := fresh()
 	check(is_equal_approx(build.beam_capacity, 100) and is_equal_approx(build.plasma_pickup_multiplier, 1), "base beam values must preserve the native reserve and cell charge")
@@ -315,6 +348,7 @@ func run() -> void:
 	check_foundation_stats()
 	check_rewards_and_capacity()
 	check_offer_policy()
+	check_category_choices()
 	check_beam_stats()
 	check_determinism_and_queue()
 	print("Upgrade offers: %d checks, %d failures" % [checks, failures])

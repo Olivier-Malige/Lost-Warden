@@ -276,9 +276,13 @@ func _build_panel(player_id: StringName, team: int, solo: bool) -> void:
 		var title_size := 10 if FONT.get_string_size(offer.display_name, HORIZONTAL_ALIGNMENT_LEFT, -1, 12).x > title_width else 12
 		_label(card, offer.display_name, Rect2(12 if solo else 76, 88 if solo else 5, title_width, 18), title_size)
 		var rank_text := "NEW" if offer.current_rank == 0 else "%d > %d" % [offer.current_rank, offer.next_rank]
-		if offer.repeatable: rank_text = "RECOVERY"
-		_label(card, rank_text, Rect2(12 if solo else 212, 112 if solo else 6, 170 if solo else 60, 14), 10, GOLD)
-		_label(card, _effect_lines(offer), Rect2(12 if solo else 76, 138 if solo else 26, 166 if solo else 188, 50 if solo else 38), 10)
+		if offer.repeatable: rank_text = ""
+		var category_color: Color = GOLD if offer.category == UpgradeDefinition.Category.OFFENSIVE else TEAM[team] if offer.category == UpgradeDefinition.Category.UTILITY else WHITE
+		var category := _label(card, _category_text(offer.category), Rect2(12 if solo else 76, 110 if solo else 51, 166 if solo else 188, 12), 8, category_color)
+		category.name = "Category"
+		category.size = Vector2(166 if solo else 188, 12)
+		_label(card, rank_text, Rect2(12 if solo else 212, 126 if solo else 6, 170 if solo else 60, 14), 10, GOLD)
+		_label(card, _effect_lines(offer), Rect2(12 if solo else 76, 149 if solo else 26, 166 if solo else 188, 38), 10)
 		cards.append(card)
 	panel.set_meta("cards", cards)
 	var confirm := Button.new()
@@ -310,6 +314,13 @@ func _refresh_panel(player_id: StringName) -> void:
 		cards[index].disabled = ready_players[player_id]
 	panel.get_node("Confirm").text = "READY" if ready_players[player_id] else "CONFIRM"
 	panel.get_node("Confirm").disabled = ready_players[player_id]
+
+func _category_text(category: UpgradeDefinition.Category) -> String:
+	match category:
+		UpgradeDefinition.Category.OFFENSIVE: return "OFFENSIVE"
+		UpgradeDefinition.Category.UTILITY: return "UTILITY"
+		UpgradeDefinition.Category.REWARD: return "RECOVERY"
+	return "BONUS"
 
 func _effect_lines(offer: Dictionary) -> String:
 	match offer.id:

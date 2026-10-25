@@ -33,12 +33,13 @@ Open selection deferred after physics. Snapshot only players in ACTIVE/HIT state
 
 Offer policy:
 
-1. Build A from acquired families below maximum rank, N from unacquired families with a free slot, and C from applicable repair/shield rewards.
-2. When A and N are both nonempty, reserve one weighted unique pick from each, then fill to three from remaining A/N/C. At the first selection, reserve an offensive and utility when both are available.
+1. Build A from acquired families below maximum rank, N from unacquired families with a free slot, and C from applicable energy repairs. Shield remains a permanent utility family.
+2. At every selection, reserve one weighted offensive and one weighted utility when both have eligible candidates. Then, when A and N are both nonempty, ensure an acquired-family rank and a new family are represented within the same three-card limit. Fill remaining positions with weighted unique picks from A/N/C. An exhausted or slot-blocked category must not fabricate an ineligible offer.
 3. Use weight 10 for each permanent family and 5 for each applicable consumable. No reroll, replacement or rarity rules.
 4. Show one/two offers when only one/two are eligible. Zero candidates grants 500 score automatically; never insert salvage to compete with a useful card.
 5. Generate P1 then P2 offers once, before either confirmation; the players may receive the same upgrade, but each player's cards are unique. Navigation, drawing and confirmation order consume no extra offer RNG.
 6. Confirm using selection ID, player ID and upgrade ID. Reject stale, duplicate and ineligible confirmations. Recompute eligibility for each queued level after prior choices apply.
+7. Every card identifies its authored category: OFFENSIVE, UTILITY or RECOVERY for consumable energy. Labels must fit solo and co-op cards. Recovery does not satisfy the utility-family guarantee or consume a build slot.
 
 Minimum event interfaces: XP collection `(amount, collector_id)`, progression snapshot `(level, xp, next_threshold, pending_count)`, selection request `(selection_id, per_player_offers)` and choice request `(selection_id, player_id, upgrade_id)`, with completion/cancellation routed back to main. Preserve existing parameterless player_died and powerup_collected; the latter announces a confirmed applied choice.
 

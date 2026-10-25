@@ -57,6 +57,17 @@ func capture(label: String) -> void:
 	var image := root.get_texture().get_image()
 	check(image.save_webp(ProjectSettings.globalize_path("res://phase3_selection_%s.webp" % label), true) == OK, "native selection capture must save")
 
+func check_categories(ui: Variant) -> void:
+	for player_id in ui._panels:
+		var cards: Array = ui._panels[player_id].get_meta("cards")
+		for index in cards.size():
+			var card: Button = cards[index]
+			var offer: Dictionary = ui.participants[player_id].offers[index]
+			var category := card.get_node("Category") as Label
+			check(category.text == ui._category_text(offer.category) and category.text in ["OFFENSIVE", "UTILITY", "RECOVERY"], "each card exposes its authored category in solo and co-op")
+			check(Rect2(Vector2.ZERO, card.size).encloses(Rect2(category.position, category.size)) and category.get_minimum_size().x <= category.size.x, "category labels fit their cards without clipping")
+	check(ui._category_text(UpgradeDefinition.Category.REWARD) == "RECOVERY", "consumable energy is not presented as a utility family")
+
 func run() -> void:
 	events = root.get_node("Events")
 	globals = root.get_node("global")
@@ -86,6 +97,7 @@ func run() -> void:
 	await create_timer(0.34).timeout
 	await wait_until_armed(ui)
 	await capture("coop")
+	check_categories(ui)
 	check(is_equal_approx(ui._dim.color.a, 0.65), "opening must settle to the authored dim alpha")
 	for panel in ui._panels.values():
 		check(panel.find_children("BuildSlot*", "Panel", false, false).size() == 6 and panel.get_node_or_null("BuildSlot6") == null, "each co-op selection draws three offensive and three utility slots")
@@ -152,6 +164,7 @@ func run() -> void:
 	var solo_icon: TextureRect = ui._panels.player1.get_meta("cards")[0].get_node("Icon")
 	check(solo_icon.texture.region.size == Vector2(64, 64) and solo_icon.size == Vector2(64, 64), "solo menu must display 64px Nomad effect artwork at native scale")
 	await capture("solo")
+	check_categories(ui)
 	if DisplayServer.get_name() != "headless":
 		root.size = Vector2i(960, 400)
 		await process_frame
