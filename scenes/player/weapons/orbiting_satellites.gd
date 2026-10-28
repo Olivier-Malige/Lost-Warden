@@ -60,6 +60,10 @@ func _rebuild_orbiters() -> void:
 		add_child(orb)
 		_orbiters.append(orb)
 		_flashes.append(0.0)
+	var size_factor := UPGRADE.size_scale(rank)
+	for orb in _orbiters:
+		(orb.get_child(0) as CollisionShape2D).shape.radius = UPGRADE.contact_radius * size_factor
+		(orb.get_child(1) as Sprite2D).scale = Vector2.ONE * size_factor
 	_sync_positions()
 
 func _sync_positions() -> void:

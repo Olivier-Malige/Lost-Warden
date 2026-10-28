@@ -39,6 +39,7 @@ enum Category { UTILITY, OFFENSIVE, REWARD, FALLBACK }
 @export var interval_values: PackedFloat32Array = []
 @export var projectile_counts: PackedInt32Array = []
 @export var support_counts: PackedInt32Array = []
+@export var size_scales: PackedFloat32Array = []
 @export var orbit_radius := 0.0
 @export var orbit_period := 0.0
 @export var spin_period := 0.0
@@ -57,6 +58,9 @@ enum Category { UTILITY, OFFENSIVE, REWARD, FALLBACK }
 
 func support_count(rank: int) -> int:
 	return support_counts[mini(rank, support_counts.size()) - 1] if rank > 0 and not support_counts.is_empty() else 0
+
+func size_scale(rank: int) -> float:
+	return size_scales[mini(rank, size_scales.size()) - 1] if rank > 0 and not size_scales.is_empty() else 1.0
 
 func recharge_value(rank: int) -> float:
 	return recharge_values[mini(rank, recharge_values.size()) - 1] if rank > 0 and not recharge_values.is_empty() else 0.0
@@ -197,13 +201,16 @@ func foundation_errors() -> PackedStringArray:
 			if jumps != roundf(jumps) or jumps > 3.0:
 				errors.append("Chain jump budgets must be whole numbers, at most three.")
 	if effect == Effect.ORBITING_SATELLITES:
-		if support_counts.size() != max_rank:
-			errors.append("Satellites require an authored count for every rank.")
-		var previous_count := 0
+		if support_counts.size() != max_rank or size_scales.size() != max_rank:
+			errors.append("Satellites require authored counts and sizes for every rank.")
 		for count in support_counts:
-			if count < 1 or count > 3 or count < previous_count:
-				errors.append("Satellite counts must be nondecreasing and bounded to three.")
-			previous_count = count
+			if count != 3:
+				errors.append("Every satellite rank requires exactly three orbiters.")
+		var previous_size := 0.0
+		for scale_value in size_scales:
+			if not is_finite(scale_value) or scale_value <= 0.0 or scale_value < previous_size:
+				errors.append("Satellite sizes must be finite, positive and nondecreasing.")
+			previous_size = scale_value
 		for amount in [orbit_radius, orbit_period, spin_period, contact_radius, contact_cooldown]:
 			if not is_finite(amount) or amount <= 0.0:
 				errors.append("Satellite orbit and contact data must be positive and finite.")
@@ -287,6 +294,7 @@ func offer_snapshot(rank: int) -> Dictionary:
 		"next_interval": interval_value(next_rank),
 		"next_projectile_count": projectile_count(next_rank),
 		"next_support_count": support_count(next_rank),
+		"next_size_scale": size_scale(next_rank),
 		"orbit_radius": orbit_radius, "orbit_period": orbit_period, "spin_period": spin_period,
 		"contact_radius": contact_radius, "contact_cooldown": contact_cooldown,
 		"shield_radius": shield_radius, "next_recharge": recharge_value(next_rank),

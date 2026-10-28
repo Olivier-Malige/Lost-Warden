@@ -351,7 +351,7 @@ func _effect_lines(offer: Dictionary) -> String:
 		&"micro_missiles": return "%d MISSILES / VOLLEY\n%.1f DMG / %.2f SEC" % [offer.next_projectile_count, offer.next_value, offer.next_interval]
 		&"escort_drone": return "%d FORWARD ESCORT%s\n%.2f DMG / %.2f SEC" % [offer.next_support_count, "S" if offer.next_support_count > 1 else "", offer.next_value, offer.next_interval]
 		&"guard_blades": return "%d DMG / %.1f SEC\nREACH +%d%% / CLEAR SHOTS" % [roundi(offer.next_value), offer.next_interval, roundi(offer.next_range_bonus * 100)]
-		&"orbiting_satellites": return "%d CONTACT SATELLITE%s\n%.2f DMG / %.2f SEC" % [offer.next_support_count, "S" if offer.next_support_count > 1 else "", offer.next_value, offer.contact_cooldown]
+		&"orbiting_satellites": return "%d SATELLITES / %s\n%.2f DMG / %.2f SEC" % [offer.next_support_count, "BASE SIZE" if is_equal_approx(offer.next_size_scale, 1.0) else "SIZE +%d%%" % roundi((offer.next_size_scale - 1.0) * 100), offer.next_value, offer.contact_cooldown]
 		&"impact_explosions":
 			var radius_text := "+%d%% RADIUS" % roundi(offer.next_range_bonus * 100.0) if offer.next_range_bonus > 0.0 else "BASE BLAST"
 			return "%s / AREA\n%d%% DAMAGE / %.2f SEC" % [radius_text, roundi(offer.next_value * 100.0), offer.proc_cooldown]

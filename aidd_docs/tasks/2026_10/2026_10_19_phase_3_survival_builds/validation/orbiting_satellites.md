@@ -1,5 +1,7 @@
 # Step 10 — orbiting satellites
 
+Historical checkpoint: the [2026-10-28 three-satellite growth revision](../../2026_10_28_satellite_growth/validation.md) supersedes the rank-based counts, damage and fixed contact size below. Later steel art, orbit/spin periods and scripted sprite rotation remain in use.
+
 Implemented and verified on 2026-10-21 with Godot 4.7.2. The maintainer accepted and requested publication of step 9 before authorizing this checkpoint. Commit `f20c148` is verified on both local HEAD and `origin/codex/phase-3-survival-builds`; this new satellite checkpoint remains local for playtest.
 
 ## Playable behavior

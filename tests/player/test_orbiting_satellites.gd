@@ -61,7 +61,7 @@ func run() -> void:
 	effects.hit_accepted.connect(func(hit, target, at, first): accepted.append({"hit": hit, "target": target, "position": at, "first": first}))
 	events.xp_spawn_requested.connect(func(_amount, _at): xp_events += 1)
 	await reset_case()
-	check(UPGRADE.foundation_errors().is_empty() and PackedInt32Array(UPGRADE.support_counts) == PackedInt32Array([1, 2, 3]) and PackedFloat32Array(UPGRADE.rank_values) == PackedFloat32Array([1, 1.25, 1.5]), "the completed family authors the contracted counts and direct damage")
+	check(UPGRADE.foundation_errors().is_empty() and PackedInt32Array(UPGRADE.support_counts) == PackedInt32Array([3, 3, 3]) and PackedFloat32Array(UPGRADE.rank_values) == PackedFloat32Array([1, 1.5, 2]) and PackedFloat32Array(UPGRADE.size_scales) == PackedFloat32Array([1, 1.25, 1.5]), "all ranks keep three satellites while size and direct damage grow")
 	check(UPGRADE.orbit_period == 1.25 and UPGRADE.spin_period == 0.625 and UPGRADE.offer_snapshot(0).spin_period == 0.625, "the resource and offer author independent orbit and spin periods")
 	for field in ["orbit_radius", "orbit_period", "spin_period", "contact_radius", "contact_cooldown"]:
 		var invalid := UPGRADE.duplicate() as UpgradeDefinition
@@ -71,11 +71,16 @@ func run() -> void:
 		var invalid := UPGRADE.duplicate() as UpgradeDefinition
 		invalid.spin_period = period
 		check(not invalid.foundation_errors().is_empty(), "satellite spin rejects nonpositive or infinite periods")
-	for count in [0, 4]:
+	for count in [0, 1, 2, 4]:
 		var invalid := UPGRADE.duplicate() as UpgradeDefinition
-		invalid.support_counts = PackedInt32Array([1, 2, count])
-		check(not invalid.foundation_errors().is_empty(), "satellites cannot author zero or more than three contacts")
+		invalid.support_counts = PackedInt32Array([3, 3, count])
+		check(not invalid.foundation_errors().is_empty(), "every rank must retain exactly three satellites")
+	for sizes in [PackedFloat32Array(), PackedFloat32Array([1, 1.25]), PackedFloat32Array([1, NAN, 1.5]), PackedFloat32Array([1, 0, 1.5]), PackedFloat32Array([1, 1.5, 1.25])]:
+		var invalid := UPGRADE.duplicate() as UpgradeDefinition
+		invalid.size_scales = sizes
+		check(not invalid.foundation_errors().is_empty(), "missing or malformed rank sizes reject before offers")
 	await geometry()
+	await rank_growth_contacts()
 	for value in range(1, 4):
 		for boosted in [false, true]: await contact_cadence(value, boosted)
 	await independent_owners()
@@ -97,18 +102,23 @@ func geometry() -> void:
 	var satellites = await equip(p1, 1)
 	satellites.phase = 0.37
 	satellites.spin_phase = 0.61
+	var initial_orbiters: Array = satellites._orbiters.duplicate()
 	for value in range(1, 4):
 		if value > 1:
-			check(p1.apply_upgrade(UPGRADE).applied, "ranking adds one orbiter without replacing the orbit controller")
+			check(p1.apply_upgrade(UPGRADE).applied, "ranking upgrades the three existing orbiters")
 			await settle()
-		check(p1.weapons.satellites == satellites and satellites._orbiters.size() == value and is_equal_approx(satellites.phase, 0.37) and is_equal_approx(satellites.spin_phase, 0.61), "rank changes preserve the deterministic orbit and spin phases")
+		check(p1.weapons.satellites == satellites and satellites._orbiters == initial_orbiters and satellites._orbiters.size() == 3 and is_equal_approx(satellites.phase, 0.37) and is_equal_approx(satellites.spin_phase, 0.61), "rank changes preserve all three orbiters and their deterministic orbit and spin phases")
 		satellites._sync_positions()
-		for index in value:
+		for index in 3:
 			var orb = satellites._orbiters[index]
-			check(orb.position.is_equal_approx(Vector2.from_angle(0.37 + TAU * index / value) * 32), "orbiters remain evenly spaced on the exact thirty-two-pixel circle")
-			check(orb.collision_layer == 0 and orb.collision_mask == CombatTargeting.Layers.ENEMY | CombatTargeting.Layers.ASTEROID and not orb.monitorable and orb.get_child(0).shape.radius == 4, "the four-pixel contact mask only observes enemy and asteroid surfaces")
+			check(orb.position.is_equal_approx(Vector2.from_angle(0.37 + TAU * index / 3) * 32), "all three orbiters remain evenly spaced on the exact thirty-two-pixel circle")
+			check(orb.collision_layer == 0 and orb.collision_mask == CombatTargeting.Layers.ENEMY | CombatTargeting.Layers.ASTEROID and not orb.monitorable and orb.get_child(0).shape.radius == [4, 5, 6][value - 1] and orb.scale == Vector2.ONE, "contact radii grow per rank without scaling the collider node or changing its mask")
 			var sprite: Sprite2D = orb.get_child(1)
-			check(absf(angle_difference(sprite.rotation, 0.61 + TAU * index / value)) < 0.0001 and sprite.vframes == 2 and int(sprite.frame / 8.0) == 0 and orb.rotation == 0.0, "one red hull rotates continuously by script without rotating its contact collider")
+			check(sprite.scale == Vector2.ONE * [1.0, 1.25, 1.5][value - 1] and absf(angle_difference(sprite.rotation, 0.61 + TAU * index / 3)) < 0.0001 and sprite.vframes == 2 and int(sprite.frame / 8.0) == 0 and orb.rotation == 0.0, "each larger red hull keeps its scripted spin and independent contact collider")
+		var selector = load("res://scenes/ui/upgrade_selection.gd").new()
+		var copy: String = selector._effect_lines(UPGRADE.offer_snapshot(value - 1))
+		selector.free()
+		check(copy.contains("3 SATELLITES") and copy.contains("%.2f DMG" % UPGRADE.rank_value(value)) and copy.contains("BASE SIZE" if value == 1 else "SIZE +%d%%" % ((value - 1) * 25)), "the selection card explains fixed count, increased size and authored damage")
 		var initial_phase: float = satellites.phase
 		var initial_spin: float = satellites.spin_phase
 		satellites._physics_process(0.3125)
@@ -127,6 +137,24 @@ func geometry() -> void:
 	for index in 3:
 		var sprite: Sprite2D = other._orbiters[index].get_child(1)
 		check(int(sprite.frame / 8.0) == 1 and absf(angle_difference(sprite.rotation, PI + TAU * index / 3)) < 0.0001, "P2 uses one blue hull with an independent scripted angle")
+
+func rank_growth_contacts() -> void:
+	await reset_case()
+	var satellites = await equip(p1, 1)
+	var at: Vector2 = satellites._orbiters[0].global_position
+	var target = contact_enemy(&"growth_contact", at + Vector2(5.25, 0), 100, 0.5)
+	await settle()
+	satellites._resolve_contacts()
+	check(accepted.is_empty() and target.life == 100, "a contact beyond the base core does not damage an enemy")
+	check(p1.apply_upgrade(UPGRADE).applied, "the size upgrade applies through ordinary progression")
+	await settle()
+	satellites._resolve_contacts()
+	check(accepted.size() == 1 and is_equal_approx(target.life, 98.5), "the enlarged rank-two core reaches the same real enemy and deals upgraded damage")
+	var remaining: float = satellites._cooldowns[&"growth_contact"].left
+	check(p1.apply_upgrade(UPGRADE).applied, "the final size and damage upgrade applies")
+	await settle()
+	satellites._resolve_contacts()
+	check(accepted.size() == 1 and is_equal_approx(target.life, 98.5) and satellites._cooldowns[&"growth_contact"].left == remaining, "growing existing satellites cannot reset the shared contact cooldown or grant an extra hit")
 
 func contact_cadence(value: int, boosted: bool) -> void:
 	await reset_case()
@@ -165,7 +193,7 @@ func independent_owners() -> void:
 	await settle()
 	left._resolve_contacts()
 	right._resolve_contacts()
-	check(is_equal_approx(target.life, 997) and accepted.size() == 2, "both owners have an independent contact cooldown on the same enemy")
+	check(is_equal_approx(target.life, 996) and accepted.size() == 2, "both owners have an independent contact cooldown on the same enemy")
 	check(accepted[0].hit.owner_id() == &"player1" and accepted[1].hit.owner_id() == &"player2" and is_equal_approx(right.phase, PI), "P2 ownership and deterministic initial phase remain distinct")
 
 func crossing_and_reentry() -> void:
@@ -272,7 +300,7 @@ func boss_and_rejections() -> void:
 	expected_rng.randf()
 	satellites._resolve_contacts()
 	check(accepted.size() == 1 and satellites._cooldowns.size() == 1 and effects.combat_random(&"player1").state == expected_rng.state, "all overlapping boss parts share one contact cooldown and one critical roll")
-	check(is_equal_approx(boss.life + boss.get_node("PortCannon").life + boss.get_node("StarboardCannon").life, total - 3), "the logical boss receives exactly one direct critical amount")
+	check(is_equal_approx(boss.life + boss.get_node("PortCannon").life + boss.get_node("StarboardCannon").life, total - 4), "the logical boss receives exactly one direct critical amount")
 	for retry in 3: satellites._resolve_contacts()
 	check(accepted.size() == 1, "another orbiter or boss part cannot multiply the same tick")
 	boss.free()
@@ -376,7 +404,14 @@ func native_presentation() -> void:
 			var player = players[index]
 			player.position = Vector2((220 if index == 0 else 420) + side_width, 290)
 			player.set_physics_process(false)
-			await equip(player, 3)
+			await equip(player, 1)
+		for value in range(1, 4):
+			if value > 1:
+				for player in players: check(player.apply_upgrade(UPGRADE).applied, "native ranking upgrades size and damage without adding orbiters")
+				await settle()
+			await RenderingServer.frame_post_draw
+			check(players.all(func(player): return player.weapons.satellites._orbiters.size() == 3), "native solo and co-op builds retain three satellites at every rank")
+			check(root.get_texture().get_image().save_webp(ProjectSettings.globalize_path("res://satellites_rank_%d_%s.webp" % [value, layout]), true) == OK, "native satellite count and size progression save at each rank")
 		var hunter = load("res://scenes/enemies/drone_hunter.tscn").instantiate()
 		hunter.definition = hunter.definition.duplicate()
 		hunter.definition.max_health = 100
