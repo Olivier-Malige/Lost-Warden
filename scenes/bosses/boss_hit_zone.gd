@@ -20,7 +20,13 @@ func _ready() -> void:
 	add_to_group("boss_hit_zone")
 	collision_layer = Layers.ENEMY
 	collision_mask = Layers.PLAYER
-	area_entered.connect(get_parent()._on_area_entered)
+	area_entered.connect(_on_area_entered)
+
+func _on_area_entered(area: Area2D) -> void:
+	if area.is_in_group("player") and area.get("defenses") != null:
+		area.defenses.contact_body(self)
+	else:
+		get_parent()._on_area_entered(area)
 
 func configure(health: float) -> void:
 	life = health

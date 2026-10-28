@@ -1,5 +1,12 @@
 extends "res://tests/player/test_defensive_pack.gd"
 
+class ContactCrossing extends Node:
+	var player: Node2D
+	var enemy: Node2D
+	func _physics_process(delta: float) -> void:
+		player.position += Vector2(240, 0) * delta
+		enemy.position += Vector2(0, 300) * delta
+
 func real_body(path: String, at: Vector2) -> Variant:
 	var body = load(path).instantiate()
 	var context := EnemySpawnContext.new()
@@ -34,15 +41,16 @@ func run() -> void:
 	var body = real_body("res://scenes/enemies/drone.tscn", p1.position)
 	var initial_life: float = body.life
 	await settle()
-	for step in 3: p1.defenses._physics_process(0.51 if step else 0.0)
-	check(p1.defenses.charges == 0 and p1.energy == 12, "the final body impact is fully absorbed")
-	p1.defenses._physics_process(1.0 / 60.0)
-	check(p1.energy == 11 and body.life == initial_life, "a shield body cooldown must not grant hull immunity on the next physics tick")
+	p1.defenses._physics_process(0)
+	check(p1.defenses.charges == 0 and p1.energy == 11 and body.life == initial_life, "an enemy hull breaks reflection and damages the player without ram damage")
 	await sustained_contacts()
 	await hunter_headings()
 	await movement_passages()
+	await transient_pulse_contacts()
+	await callback_defenses()
 	await asteroid_contacts()
 	await boss_contacts()
+	await boss_callback_contacts()
 	await build_capacity()
 	if DisplayServer.get_name() != "headless": await native_contacts()
 	effects.cancel()
@@ -60,20 +68,20 @@ func sustained_contacts() -> void:
 	await settle()
 	p1.defenses._physics_process(0)
 	check(p1.energy == 11, "ordinary central contact immediately wounds an unshielded player")
-	p1.defenses._physics_process(1.1)
+	p1.defenses._physics_process(0.9)
 	p1._on_touchedReset_timeout()
-	check(p1.energy == 11 and p1.touched and p1.malusSpeed == 0, "armor grace outlasts hit slowdown without permitting an early body wound")
+	check(p1.energy == 11 and p1.touched and p1.malusSpeed == 0, "ordinary grace still prevents an early repeated wound while repair waits")
 	body.position.x += 80
 	await settle()
 	body.position = p1.position
 	await settle()
-	p1.defenses._physics_process(0.1)
+	p1.defenses._physics_process(0.05)
 	check(p1.energy == 11, "exiting and reentering cannot bypass ordinary injury grace")
-	p1.defenses._physics_process(0.56)
-	check(p1.energy == 10 and body.life == life_before, "continued body overlap wounds again after armor grace, without ram damage")
+	p1.defenses._physics_process(0.06)
+	check(p1.energy == 10 and body.life == life_before and p1.defenses.repair_left == 4, "continued contact wounds after ordinary grace and restarts repair without ram damage")
 	paused = true
 	p1.defenses._physics_process(8)
-	check(p1.energy == 10 and p1.defenses.grace_left == 1.75, "pause freezes overlap wounds and grace")
+	check(p1.energy == 10 and p1.defenses.grace_left == 1 and p1.defenses.repair_left == 4, "pause freezes overlap wounds, grace and repair")
 	paused = false
 	p1.set_state(p1.State.DYING)
 	p1.defenses._physics_process(8)
@@ -85,7 +93,7 @@ func sustained_contacts() -> void:
 	real_body("res://scenes/enemies/drone.tscn", p1.position)
 	await settle()
 	p1.defenses._physics_process(8)
-	check(p1.energy == 12 and p1.defenses.charges == 2, "a returning sphere handles an existing body before exposing the hull")
+	check(p1.energy == 11 and p1.defenses.charges == 0, "a returning projectile sphere cannot protect an already overlapping enemy hull")
 
 func hunter_headings() -> void:
 	for heading in [0.0, PI / 2, PI, -PI / 2, PI / 4]:
@@ -125,6 +133,61 @@ func movement_passages() -> void:
 					p1.defenses._physics_process(1.0 / 60.0)
 				check(p1.energy < 12 and body.life == before, "front, side and diagonal passages through real hulls wound at authored movement speeds without ram damage")
 
+func transient_pulse_contacts() -> void:
+	for mode in ["none", "ready", "cooldown"]:
+		await reset_case()
+		enable_contacts()
+		if mode != "none": equip(p1, RIPOSTE, 1)
+		if mode == "cooldown": p1.defenses.pulse_cooldown = 10
+		p1.position = Vector2(280, 270)
+		p1.monitorable = true
+		var body = real_body("res://scenes/enemies/drone_hunter.tscn", Vector2(320, 190))
+		body.life = 1000
+		body.collision_mask = CombatTargeting.Layers.PLAYER
+		var contacts := {"count": 0}
+		p1.area_entered.connect(func(area: Area2D):
+			if area == body: contacts.count += 1
+		)
+		var crossing := ContactCrossing.new()
+		crossing.player = p1
+		crossing.enemy = body
+		stage.add_child(crossing)
+		stage.move_child(crossing, 2)
+		p1.defenses.set_physics_process(true)
+		for tick in 24:
+			await physics_frame
+			await process_frame
+		crossing.set_physics_process(false)
+		p1.defenses.set_physics_process(false)
+		check(contacts.count > 0, "the moving hulls produce a real physics overlap during the grazing crossing")
+		if mode == "ready":
+			check(p1.energy == 12 and p1.defenses.pulse_cooldown > 0, "a transient enemy overlap triggers the ready pulse even after the hull has moved away")
+		else:
+			check(p1.energy == 11 and p1.defenses.pulse_protection_left == 0, "a transient enemy overlap wounds once without a ready pulse, including during recharge")
+
+func callback_defenses() -> void:
+	await reset_case()
+	equip(p1, RIPOSTE, 1)
+	var body = real_body("res://scenes/enemies/drone.tscn", p1.position)
+	p1.collision_mask = CombatTargeting.Layers.ASTEROID
+	body._on_area_entered(p1)
+	check(p1.energy == 12 and p1.defenses.pulse_cooldown == 0, "enemy callbacks cannot override a player mask that excludes enemy bodies")
+	enable_contacts()
+	body._on_area_entered(p1)
+	check(p1.energy == 12 and p1.defenses.pulse_cooldown > 0, "an allowed body callback triggers the ready contact countermeasure")
+	await reset_case()
+	enable_contacts()
+	equip(p1, SHIELD, 1)
+	equip(p1, RIPOSTE, 1)
+	body = real_body("res://scenes/enemies/drone.tscn", p1.position)
+	await settle()
+	body._on_area_entered(p1)
+	p1.defenses._physics_process(0)
+	check(p1.energy == 12 and p1.defenses.charges == 0 and p1.defenses.pulse_cooldown > 0, "body callbacks break reflection while retaliation provides the contact protection")
+	body._on_area_entered(p1)
+	p1.defenses._physics_process(0)
+	check(p1.defenses.charges == 0 and p1.energy == 12 and p1.defenses._pulses.size() <= 1, "callback and polling cannot duplicate a body-triggered retaliation")
+
 func asteroid_contacts() -> void:
 	await reset_case()
 	enable_contacts()
@@ -133,6 +196,19 @@ func asteroid_contacts() -> void:
 	await settle()
 	p1.defenses._physics_process(0)
 	check(p1.energy == 11, "a real rotated asteroid wounds a central hull overlap")
+	for path in ["asteroid", "big_asteroid"]:
+		for layer in [CombatTargeting.Layers.ENEMY, CombatTargeting.Layers.ASTEROID]:
+			await reset_case()
+			equip(p1, RIPOSTE, 1)
+			var body = real_body("res://scenes/enemies/%s.tscn" % path, p1.position)
+			body.collision_layer = layer
+			body._on_area_entered(p1)
+			check(p1.energy == 12 and p1.defenses.pulse_cooldown == 0, "asteroid callbacks respect a player mask that excludes their layer")
+			p1.collision_mask = layer
+			body._on_area_entered(p1)
+			check(p1.energy == 12 and p1.defenses._pulse_pending and p1.defenses.pulse_cooldown > 0, "small and large asteroid callbacks activate retaliation on either body layer")
+			body._on_area_entered(p1)
+			check(p1.energy == 12 and p1.defenses.pulse_cooldown == RIPOSTE.recharge_value(1), "duplicate asteroid callbacks cannot restart protection or recharge")
 
 func boss_contacts() -> void:
 	await reset_case()
@@ -150,6 +226,28 @@ func boss_contacts() -> void:
 	await settle()
 	p1.defenses._physics_process(0)
 	check(p1.energy == 11, "an unshielded overlap with the real boss wounds once across its logical parts")
+
+func boss_callback_contacts() -> void:
+	await reset_case()
+	enable_contacts()
+	equip(p1, RIPOSTE, 1)
+	var data: BossDefinition = load("res://data/bosses/dread_ark.tres")
+	var boss = data.scene.instantiate()
+	boss.boss_data = data
+	var context := EnemySpawnContext.new()
+	context.combat_id = &"callback_boss"
+	boss.configure_spawn(context)
+	stage.add_child(boss)
+	boss.set_physics_process(false)
+	boss.attack = boss.Attack.IDLE
+	var cannon: Area2D = boss.get_node("PortCannon")
+	p1.position = cannon.global_position
+	cannon.destroyed = true
+	cannon.area_entered.emit(p1)
+	check(p1.energy == 12 and p1.defenses.pulse_cooldown == 0, "a queued callback from a broken boss part cannot become a live boss hull contact")
+	cannon.destroyed = false
+	cannon.area_entered.emit(p1)
+	check(p1.energy == 12 and p1.defenses.pulse_cooldown > 0, "a live boss part forwards its actual surface to the contact countermeasure")
 
 func native_contacts() -> void:
 	await reset_case()

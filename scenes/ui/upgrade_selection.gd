@@ -330,9 +330,9 @@ func _effect_lines(offer: Dictionary) -> String:
 		&"orb_magnet": return "+24 PX ATTRACTION\n%d PX RADIUS" % (24 + offer.next_value)
 		&"side_shot": return "PAIR DAMAGE %.2f\n%s" % [offer.next_value, "ADD OUTER PAIR" if offer.next_rank == 4 else "PAIRED SIDE CANNONS"]
 		&"energy": return "RESTORE 2 ENERGY\nUP TO 12 ENERGY"
-		&"shield": return "%d REFLECTOR CHARGES\n%.0f SEC RECHARGE" % [roundi(offer.next_value), offer.next_recharge]
-		&"reactive_armor": return "+%d%% HIT PROTECTION\n%.2f SEC AFTER INJURY" % [roundi(offer.next_value * 100), 1.0 + offer.next_value]
-		&"retaliation_pulse": return "%s / CLEAR SHOTS\n%.0f DMG / %.0f SEC" % ["BASE WAVE" if offer.next_rank == 1 else "+%d%% RADIUS" % roundi(offer.next_range_bonus * 100), offer.next_value, offer.proc_cooldown]
+		&"shield": return "PROJECTILES ONLY / %d SHOTS\nBODY BREAKS / %.0fS RELOAD" % [roundi(offer.next_value), offer.next_recharge]
+		&"reactive_armor": return "HULL HIT: REPAIR 1 HP\nAFTER %.0fS WITHOUT DAMAGE" % offer.next_interval
+		&"retaliation_pulse": return "BODY CONTACT / %.1fS SAFE\n%.0f DMG / %.0fPX / %.0fS CD" % [offer.protection_duration, offer.next_value, offer.next_range, offer.next_recharge]
 		&"beam_capacity": return "+25 RESERVE\n%d MAX PLASMA" % roundi(PLAYER_STATS.beam_charge_max + offer.next_value)
 		&"beam_recharge": return "+25%% CELL CHARGE\nx%.2f PER CELL" % (1.0 + offer.next_value)
 		&"piercing": return "%d EXTRA TARGETS\n80%% DAMAGE RETAINED" % roundi(offer.next_value)

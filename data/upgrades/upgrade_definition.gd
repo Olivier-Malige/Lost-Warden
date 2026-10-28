@@ -34,6 +34,7 @@ enum Category { UTILITY, OFFENSIVE, REWARD, FALLBACK }
 @export var blast_expansion_duration := 0.0
 @export var blast_active_duration := 0.0
 @export var blast_visual_duration := 0.0
+@export var protection_duration := 0.0
 @export var weapon: WeaponDefinition
 @export var interval_values: PackedFloat32Array = []
 @export var projectile_counts: PackedInt32Array = []
@@ -119,8 +120,8 @@ func foundation_errors() -> PackedStringArray:
 					errors.append("Beam bonuses must be positive, finite and nondecreasing.")
 				previous_bonus = bonus
 	if effect == Effect.SHIELD:
-		if not is_finite(shield_radius) or shield_radius <= 0.0 or not is_finite(contact_cooldown) or contact_cooldown <= 0.0 or recharge_values.size() != max_rank:
-			errors.append("Shield geometry, body cadence and rank recharge data must be authored.")
+		if not is_finite(shield_radius) or shield_radius <= 0.0 or recharge_values.size() != max_rank:
+			errors.append("Reflector geometry and rank recharge data must be authored.")
 		var previous_recharge := INF
 		for duration in recharge_values:
 			if not is_finite(duration) or duration <= 0.0 or duration > previous_recharge:
@@ -129,8 +130,15 @@ func foundation_errors() -> PackedStringArray:
 		for count in rank_values:
 			if count != roundf(count): errors.append("Shield capacities must be whole charges.")
 	if effect == Effect.REACTIVE_ARMOR:
-		for bonus in rank_values:
-			if bonus > 1.0: errors.append("Reactive armor grace bonuses must not exceed 100 percent.")
+		if interval_values.size() != max_rank:
+			errors.append("Reactive armor requires a repair delay for every rank.")
+		for amount in rank_values:
+			if amount != 1.0: errors.append("Reactive armor restores exactly one hull point per injury.")
+		var previous_delay := INF
+		for delay in interval_values:
+			if not is_finite(delay) or delay <= 0.0 or delay > previous_delay:
+				errors.append("Repair delays must be finite, positive and nonincreasing.")
+			previous_delay = delay
 	if effect == Effect.GUARD_BLADES:
 		if range_values.size() != max_rank or interval_values.size() != max_rank:
 			errors.append("Guard blades require radius and interval data for every rank.")
@@ -158,8 +166,10 @@ func foundation_errors() -> PackedStringArray:
 				errors.append("Guard blade intervals must be finite, nonincreasing and cover their visual and warning lifetimes.")
 			previous_interval = duration
 	if effect == Effect.IMPACT_EXPLOSIONS or effect == Effect.RETALIATION_PULSE:
-		if range_values.size() != max_rank or not is_finite(proc_cooldown) or proc_cooldown <= 0.0 or target_limit != 0:
-			errors.append("Impact explosions require authored ranges, a positive cooldown and unlimited area targets.")
+		if range_values.size() != max_rank or target_limit != 0:
+			errors.append("Blasts require authored ranges and unlimited area targets.")
+		if effect == Effect.IMPACT_EXPLOSIONS and (not is_finite(proc_cooldown) or proc_cooldown <= 0.0):
+			errors.append("Impact explosions require a positive finite cooldown.")
 		if not is_finite(blast_expansion_duration) or not is_finite(blast_active_duration) or not is_finite(blast_visual_duration) or blast_expansion_duration <= 0.0 or blast_active_duration < blast_expansion_duration or blast_visual_duration <= blast_active_duration:
 			errors.append("Blast timing must have a positive expansion, an active interval and a longer visual lifetime.")
 		var previous_range := 0.0
@@ -167,6 +177,14 @@ func foundation_errors() -> PackedStringArray:
 			if not is_finite(radius) or radius <= 0.0 or radius < previous_range:
 				errors.append("Explosion radii must be finite, positive and nondecreasing.")
 			previous_range = radius
+	if effect == Effect.RETALIATION_PULSE:
+		if recharge_values.size() != max_rank or not is_finite(protection_duration) or protection_duration <= 0.0:
+			errors.append("Retaliation requires rank recharge data and a positive finite protection duration.")
+		var previous_recharge := INF
+		for duration in recharge_values:
+			if not is_finite(duration) or duration <= protection_duration or duration < blast_visual_duration or duration > previous_recharge:
+				errors.append("Retaliation recharge must be finite, nonincreasing and longer than its protection and visuals.")
+			previous_recharge = duration
 	if effect == Effect.ENERGY_CHAINS:
 		if range_values.size() != max_rank or not is_finite(secondary_damage_scale) or secondary_damage_scale <= 0.0 or not is_finite(proc_cooldown) or proc_cooldown <= 0.0:
 			errors.append("Energy chains require authored ranges, positive damage scale and cooldown.")
@@ -272,4 +290,5 @@ func offer_snapshot(rank: int) -> Dictionary:
 		"orbit_radius": orbit_radius, "orbit_period": orbit_period, "spin_period": spin_period,
 		"contact_radius": contact_radius, "contact_cooldown": contact_cooldown,
 		"shield_radius": shield_radius, "next_recharge": recharge_value(next_rank),
+		"protection_duration": protection_duration,
 	}

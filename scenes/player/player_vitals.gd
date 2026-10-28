@@ -6,8 +6,17 @@ var player: Player
 func _init(p_player: Player) -> void:
 	player = p_player
 
-func hit(_dmg := 1, continuous_damage := false) -> bool:
-	if player.get_tree().paused or player.state >= Player.State.DYING or (player.touched and not continuous_damage):
+func repair_hull(amount: int) -> bool:
+	if amount <= 0 or player.get_tree().paused or player.state >= Player.State.DYING or player.energy <= 0 or player.energy >= player.STATS.energy_max:
+		return false
+	player.energy = mini(player.STATS.energy_max, player.energy + amount)
+	player.update_energy()
+	return true
+
+func hit(_dmg := 1, continuous_damage := false, body_contact := false) -> bool:
+	if _dmg <= 0 or player.get_tree().paused or player.state >= Player.State.DYING or (player.touched and not continuous_damage):
+		return false
+	if player.defenses.absorb_hull_hit(body_contact):
 		return false
 	if player.energy > 1:
 		player.hit_audio.playing = true

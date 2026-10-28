@@ -55,6 +55,9 @@ func pulse_now() -> Node2D:
 	pulse.set_physics_process(false)
 	return pulse
 
+func contact_hit(player: Node) -> void:
+	player.defenses.take_hit(1, false, true)
+
 func setup_stage() -> void:
 	globals = root.get_node("global")
 	events = root.get_node("Events")
@@ -75,7 +78,7 @@ func run() -> void:
 	setup_stage()
 	await reset_case()
 	for data in [SHIELD, ARMOR, RIPOSTE]: check(data.foundation_errors().is_empty() and data.category == UpgradeDefinition.Category.UTILITY and not data.repeatable, "all defensive definitions are valid three-rank utility families")
-	for field in ["shield_radius", "contact_cooldown"]:
+	for field in ["shield_radius"]:
 		var bad_geometry := SHIELD.duplicate() as UpgradeDefinition
 		bad_geometry.set(field, NAN)
 		check(not bad_geometry.foundation_errors().is_empty(), "invalid defensive geometry or cadence is rejected")
@@ -88,6 +91,9 @@ func run() -> void:
 	await real_callbacks()
 	await body_contacts()
 	await beam_contacts()
+	await countermeasure_protection()
+	await countermeasure_contacts()
+	await countermeasure_ranks()
 	for value in range(1, 4): await reactive_armor(value)
 	for value in range(1, 4): await pulse_damage(value)
 	await pulse_timing_and_armor()
@@ -194,30 +200,20 @@ func body_contacts() -> void:
 	await reset_case()
 	equip(p1, SHIELD, 1)
 	p1.collision_mask = CombatTargeting.Layers.ENEMY | CombatTargeting.Layers.ASTEROID
-	var body := target(&"body", p1.position + Vector2(18, 0))
+	var body := target(&"body", p1.position + Vector2(24, 0))
 	await settle()
 	p1.defenses._physics_process(0)
-	check(p1.defenses.charges == 2 and p1.energy == 12 and body.get("life") == 100, "a real body touches the sphere before the hull and takes no automatic ram damage")
-	for retry in 4: p1.defenses._physics_process(0.1)
-	check(p1.defenses.charges == 2, "sustained body overlap cannot consume faster than its shared half-second cadence")
-	p1.defenses._physics_process(0.11)
-	check(p1.defenses.charges == 1, "a persistent logical body consumes one more charge after half a second")
-	body.position.x += 70
-	await settle()
+	check(p1.defenses.charges == 3 and p1.energy == 12, "a near miss through the visual sphere cannot consume charges or harm the hull")
 	body.position = p1.position
 	await settle()
 	p1.defenses._physics_process(0)
-	check(p1.defenses.charges == 1, "leaving and reentering cannot bypass a body's cooldown")
-	p1.defenses._physics_process(0.51)
-	check(p1.defenses.charges == 0 and p1.energy == 12, "the last body charge absorbs the complete collision")
-	p1.defenses._physics_process(0.51)
-	check(p1.energy == 11 and body.get("life") == 100, "a body still overlapping the hull becomes dangerous after rupture")
+	check(p1.defenses.charges == 0 and p1.energy == 11 and body.get("life") == 100, "direct hull contact shatters every reflector charge and remains dangerous")
 	p1.defenses._physics_process(1.01)
-	check(p1.energy == 10, "continued hull contact remains dangerous at ordinary invulnerability cadence")
+	check(p1.energy == 10, "continued hull contact retains ordinary injury cadence")
 	body.free()
 	await settle()
-	p1.defenses._physics_process(8)
-	check(p1.defenses.charges == 3 and p1.defenses._bodies.is_empty(), "recharge recovers and freed body references are cleared")
+	p1.defenses._physics_process(p1.defenses.recharge_left + 0.01)
+	check(p1.defenses.charges == 3, "the reflector fully recharges after body rupture")
 	var asteroid = load("res://scenes/enemies/asteroid.tscn").instantiate()
 	asteroid.position = p1.position + Vector2(70, 0)
 	stage.add_child(asteroid)
@@ -227,8 +223,7 @@ func body_contacts() -> void:
 	asteroid.get_node("CollisionShape2D").position.x = -55
 	await settle()
 	p1.defenses._physics_process(0)
-	check(p1.defenses.charges == 2 and p1.energy == 10, "an offset asteroid hitbox intercepts the sphere even when its actor center is outside")
-
+	check(p1.defenses.charges == 0 and p1.energy == 9, "an offset asteroid hull breaks reflection based on its actual collision shape")
 func beam_contacts() -> void:
 	await reset_case()
 	p1.position = Vector2(320, 300)
@@ -240,32 +235,164 @@ func beam_contacts() -> void:
 	beam.set_physics_process(false)
 	beam.fire()
 	beam._physics_process(0.01)
-	check(p1.defenses.charges == 2 and p1.energy == 12, "a continuous beam consumes a shield charge instead of hull energy")
+	check(p1.defenses.charges == 3 and p1.energy == 11, "continuous beams bypass reflection without spending a projectile charge")
 	beam._physics_process(0.34)
-	check(p1.defenses.charges == 2, "the shield respects the beam's existing interval")
+	check(p1.energy == 11, "continuous beams retain their existing damage cadence")
 	beam._physics_process(0.02)
-	beam._physics_process(0.36)
-	check(p1.defenses.charges == 0 and p1.energy == 12, "the last beam charge fully absorbs its damage tick")
-	beam._physics_process(0.36)
-	beam._physics_process(0.36)
-	check(p1.energy == 10 and p2.energy == 12, "unshielded continuous damage bypasses ordinary grace without sharing owner cooldowns")
+	check(p1.energy == 10 and p1.defenses.charges == 3 and p2.energy == 12, "later beam ticks remain dangerous despite a charged reflector")
 	beam.stop()
-
 func reactive_armor(value: int) -> void:
 	await reset_case()
 	equip(p1, ARMOR, value)
 	p1._hit_something()
-	check(p1.energy == 11 and is_equal_approx(p1.defenses.grace_left, 1 + ARMOR.rank_value(value)) and is_equal_approx(p1.touched_reset_timer.wait_time, 1), "armor lengthens only ordinary injury grace with its authored bonus")
+	check(p1.energy == 11 and p1.defenses.grace_left == 1 and p1.defenses.repair_left == ARMOR.interval_value(value) and is_equal_approx(p1.touched_reset_timer.wait_time, 1), "armor schedules repair while keeping ordinary one-second injury grace")
 	p1.defenses._physics_process(1.01)
 	p1._on_touchedReset_timeout()
-	check(p1.touched and p1.malusSpeed == 0 and p1.ship_sprite.modulate == Color.WHITE, "slowdown and hit color end before the extended protection")
+	check(not p1.touched and p1.malusSpeed == 0 and p1.ship_sprite.modulate == Color.WHITE, "repair armor does not extend ordinary invulnerability or hit feedback")
 	p1._hit_something()
-	check(p1.energy == 11, "ordinary damage cannot bypass the remaining armor grace")
+	check(p1.energy == 10 and p1.defenses.repair_left == ARMOR.interval_value(value), "another ordinary wound restarts the repair delay")
 	p1._hit_by_beam()
-	check(p1.energy == 10, "armor does not protect against the next continuous beam tick")
-	p1.defenses._physics_process(1 + ARMOR.rank_value(value) + 0.01)
-	p1._hit_something()
-	check(p1.energy == 9, "ordinary damage resumes after the full armor interval")
+	check(p1.energy == 9 and p1.defenses.repair_left == ARMOR.interval_value(value), "continuous beam wounds also restart repair without being absorbed")
+	p1.defenses._physics_process(ARMOR.interval_value(value) + 0.01)
+	check(p1.energy == 10 and p1.defenses.repair_left == 0 and p1.defenses.repair_flash_left > 0, "the full quiet interval repairs one point once")
+
+func countermeasure_protection() -> void:
+	await reset_case()
+	equip(p1, RIPOSTE, 1)
+	var guard = p1.defenses
+	p1.energy = 1
+	p1.vitals.hit(0)
+	check(guard.pulse_cooldown == 0 and not guard._pulse_pending, "zero damage cannot consume the emergency charge")
+	paused = true
+	contact_hit(p1)
+	check(guard.pulse_cooldown == 0 and p1.energy == 1, "a paused hit cannot consume the emergency charge")
+	paused = false
+	p1.touched = true
+	contact_hit(p1)
+	check(guard.pulse_cooldown == 0, "an ordinary hit already covered by injury grace preserves the ready charge")
+	p1.touched = false
+	contact_hit(p1)
+	check(p1.energy == 1 and p1.state == p1.State.ACTIVE and not p1.touched and p1.malusSpeed == 0 and p1.ship_sprite.modulate == Color.WHITE, "the emergency charge cancels a lethal enemy contact before injury, slowdown or death effects")
+	check(guard.pulse_cooldown == 12 and is_equal_approx(guard.pulse_protection_left, 0.6), "enemy contact starts the authored protection and recharge")
+	var pulse := pulse_now()
+	var shot := hostile(p1.position)
+	shot._on_shot_area_entered(p1)
+	check(p1.energy == 1 and shot.get_meta("pooled", false), "projectiles remain blocked during protection already triggered by enemy contact")
+	var rank: int = p1.loadout.rank_for(UpgradeDefinition.Effect.RETALIATION_PULSE)
+	for source in 5:
+		contact_hit(p1)
+		p1._hit_by_beam()
+	check(p1.energy == 1 and guard._pulses.size() == 1 and rank == 1, "simultaneous hull and continuous hits cannot bypass protection or emit extra waves")
+	var snapshot: Dictionary = guard.snapshot()
+	var alpha: float = p1.get_node("RetaliationIndicator").modulate.a
+	paused = true
+	guard._physics_process(2)
+	check(guard.snapshot() == snapshot and p1.get_node("RetaliationIndicator").modulate.a == alpha, "pause freezes protection, recharge and presentation together")
+	paused = false
+	guard._physics_process(0.59)
+	p1._hit_by_beam()
+	check(p1.energy == 1 and guard.pulse_protection_left > 0, "continuous hazards are blocked throughout the short escape window")
+	guard._physics_process(0.02)
+	check(not p1.get_node("RetaliationIndicator").visible, "the protection indicator ends while the emergency charge remains cooling")
+	contact_hit(p1)
+	check(p1.energy == 0 and p1.state == p1.State.DYING and guard.pulse_protection_left == 0 and pulse._cancelled, "a subsequent lethal hit remains lethal during recharge and cancels the active wave")
+	await reset_case()
+	for data in [SHIELD, RIPOSTE, ARMOR]: equip(p1, data, 1)
+	contact_hit(p1)
+	check(p1.defenses.charges == 0 and p1.energy == 12 and p1.defenses.pulse_protection_left > 0 and p1.defenses.grace_left == 0, "a body breaks reflection and immediately triggers the independent contact countermeasure")
+	p1.defenses._physics_process(0.61)
+	contact_hit(p1)
+	check(p1.energy == 11 and p1.defenses.grace_left == 1 and p1.defenses.repair_left == ARMOR.interval_value(1), "ordinary injury schedules repair after pulse protection ends")
+
+func countermeasure_contacts() -> void:
+	await reset_case()
+	equip(p1, RIPOSTE, 1)
+	p1.monitorable = true
+	p1.collision_mask = CombatTargeting.Layers.ENEMY_SHOT
+	p1.defenses.set_physics_process(true)
+	for index in 5: hostile(p1.position + Vector2(index % 3 - 1, 0))
+	await settle()
+	p1.defenses.set_physics_process(false)
+	check(p1.energy == 11 and p1.defenses._pulses.is_empty() and p1.defenses.pulse_cooldown == 0 and not p1.defenses._pulse_pending, "five actual projectile callbacks injure the hull without triggering or consuming the ready pulse")
+	await reset_case()
+	equip(p1, RIPOSTE, 1)
+	p1.energy = 1
+	var lethal := hostile(p1.position)
+	lethal._on_shot_area_entered(p1)
+	check(p1.energy == 0 and p1.state == p1.State.DYING and p1.defenses._pulses.is_empty() and not p1.defenses._pulse_pending, "even a lethal projectile cannot trigger the contact-only pulse")
+	await reset_case()
+	equip(p1, RIPOSTE, 1)
+	p1.energy = 1
+	p1.collision_mask = CombatTargeting.Layers.ENEMY
+	target(&"countermeasure_body", p1.position)
+	await settle()
+	p1.defenses._physics_process(0)
+	check(p1.energy == 1 and p1.defenses._pulse_pending, "the body-contact query protects a hull even though it enters vitals directly")
+	for value in range(1, 4):
+		for scene in ["asteroid", "big_asteroid"]:
+			await reset_case()
+			equip(p1, RIPOSTE, value)
+			p1.collision_mask = CombatTargeting.Layers.ENEMY | CombatTargeting.Layers.ASTEROID
+			var asteroid = load("res://scenes/enemies/%s.tscn" % scene).instantiate()
+			stage.add_child(asteroid)
+			asteroid.position = p1.position
+			asteroid.collision_mask = 0
+			asteroid.set_physics_process(false)
+			await settle()
+			p1.defenses._physics_process(0)
+			check(p1.energy == 12 and p1.defenses.pulse_cooldown == RIPOSTE.recharge_value(value) and p1.defenses._pulse_pending, "small and large asteroid hulls trigger the contact countermeasure at every rank")
+	await reset_case()
+	equip(p1, RIPOSTE, 1)
+	var beam = load("res://scenes/bosses/dread_ark_beam.gd").new()
+	stage.add_child(beam)
+	beam.position = p1.position - Vector2(0, 100)
+	beam.offsets = PackedFloat32Array([0])
+	beam.set_physics_process(false)
+	beam.fire()
+	beam._physics_process(0.01)
+	beam._physics_process(0.36)
+	check(p1.energy == 10 and p1.defenses.pulse_cooldown == 0 and p1.defenses.pulse_protection_left == 0 and not p1.defenses._pulse_pending, "a real boss beam retains its damage cadence without triggering the ready pulse")
+	p1.defenses._physics_process(1.01)
+	contact_hit(p1)
+	beam._physics_process(0.36)
+	check(p1.energy == 10 and p1.defenses.pulse_protection_left > 0, "enemy contact activates protection against later beam ticks")
+	p1.defenses._physics_process(0.61)
+	beam._physics_process(0.36)
+	check(p1.energy == 9 and p1.defenses.pulse_cooldown > 0, "continuous beam damage resumes after contact-triggered protection expires")
+	beam.stop()
+
+func countermeasure_ranks() -> void:
+	await reset_case()
+	var menu = load("res://scenes/ui/upgrade_selection.tscn").instantiate()
+	var offer := RIPOSTE.offer_snapshot(2)
+	var copy: String = menu._effect_lines(offer)
+	check(offer.next_recharge == 8 and is_equal_approx(offer.protection_duration, 0.6) and copy.contains("CONTACT") and copy.contains("96PX") and copy.contains("8S CD"), "the selection card explains protection, upgraded reach and the actual rank cooldown")
+	menu.free()
+	for invalid_value in [0.0, -0.1, NAN, INF]:
+		var invalid := RIPOSTE.duplicate() as UpgradeDefinition
+		invalid.protection_duration = invalid_value
+		check(not invalid.foundation_errors().is_empty(), "invalid emergency protection durations are rejected")
+	for periods in [PackedFloat32Array([12, 10]), PackedFloat32Array([12, 13, 8]), PackedFloat32Array([12, 10, 0.5]), PackedFloat32Array([12, NAN, 8])]:
+		var invalid := RIPOSTE.duplicate() as UpgradeDefinition
+		invalid.recharge_values = periods
+		check(not invalid.foundation_errors().is_empty(), "rank recharge data must be complete, finite and decreasing beyond protection")
+	equip(p1, RIPOSTE, 1)
+	contact_hit(p1)
+	p1.defenses._physics_process(3)
+	equip(p1, RIPOSTE, 1)
+	check(is_equal_approx(p1.defenses.pulse_cooldown, 7.5) and p1.defenses.pulse_recharge_duration == 10, "rank two preserves the completed quarter of a twelve-second recharge")
+	equip(p1, RIPOSTE, 1)
+	check(is_equal_approx(p1.defenses.pulse_cooldown, 6) and p1.defenses.pulse_recharge_duration == 8, "rank three preserves recharge progress instead of granting a new charge")
+	p1.defenses._physics_process(5.99)
+	check(not p1.get_node("RetaliationIndicator").visible, "the ready indicator waits for the entire remaining recharge")
+	p1.defenses._physics_process(0.02)
+	check(p1.get_node("RetaliationIndicator").visible and p1.defenses.pulse_cooldown == 0, "the ready indicator returns exactly when the charge is usable")
+	await reset_case()
+	equip(p1, RIPOSTE, 1)
+	contact_hit(p1)
+	p1.defenses._physics_process(0.2)
+	equip(p1, RIPOSTE, 1)
+	check(is_equal_approx(p1.defenses.pulse_protection_left, 0.4), "ranking during protection never restarts or lengthens the escape window")
 
 func pulse_damage(value: int) -> void:
 	await reset_case()
@@ -275,29 +402,41 @@ func pulse_damage(value: int) -> void:
 	p1.loadout.critical_chance = 1
 	var bodies: Array[Area2D] = []
 	for index in 6: bodies.append(target(StringName("pulse_%d" % index), p1.position + Vector2(12 + (index % 3) * 6, -5 + floori(index / 3.0) * 10)))
+	var edge := target(&"pulse_edge", p1.position + Vector2(0, -RIPOSTE.range_value(value) + 3))
+	var outside := target(&"pulse_outside", p1.position + Vector2(0, RIPOSTE.range_value(value) + 8))
 	var erased := hostile(p1.position + Vector2(12, 0))
 	var kept := hostile(p1.position + Vector2(-12, 0))
 	kept.trowbackByShield = true
 	await settle()
 	var random_state: int = effects.combat_random(&"player1").state
-	p1._hit_something()
+	contact_hit(p1)
 	var pulse := pulse_now()
-	for tick in 10: pulse._advance(0.016)
+	var native_scale := true
+	for tick in 10:
+		pulse._advance(RIPOSTE.blast_active_duration / 10)
+		native_scale = native_scale and pulse._sprite.scale.x <= 1.0 and pulse._sprite.scale.y <= 1.0
+	check(native_scale, "each rank expands without magnifying the golden artwork")
+	pulse._advance(0.001)
 	for body in bodies: check(is_equal_approx(body.get("life"), 100 - RIPOSTE.rank_value(value) * 2.25), "every aligned victim takes exactly one retaliation hit with common DAMAGE once")
+	check(is_equal_approx(edge.get("life"), 100 - RIPOSTE.rank_value(value) * 2.25) and outside.get("life") == 100, "each rank reaches its larger authored radius without damaging hulls beyond it")
 	check(erased.get_meta("pooled", false) and not kept.get_meta("pooled", false), "the wave erases hostile shots while preserving reflected projectiles")
-	check(accepted.size() == 6 and accepted.all(func(entry): return entry.hit.kind() == PlayerHitSnapshot.Kind.SECONDARY and not entry.hit.is_critical() and not entry.first) and effects.combat_random(&"player1").state == random_state, "retaliation cannot critically strike, recurse or consume combat RNG")
+	check(accepted.size() == 7 and accepted.all(func(entry): return entry.hit.kind() == PlayerHitSnapshot.Kind.SECONDARY and not entry.hit.is_critical() and not entry.first) and effects.combat_random(&"player1").state == random_state, "retaliation cannot critically strike, recurse or consume combat RNG")
 	check(effects._chain_cooldowns.is_empty() and effects._explosion_cooldowns.is_empty() and effects.get_debug_snapshot().roots == 0, "pulse activity releases its root and never consumes offensive proc cooldowns")
 	p1.defenses.request_pulse()
-	check(p1.defenses._pulses.size() == 1 and p1.defenses.pulse_cooldown == 4, "the owner pulse cooldown prevents duplicate rupture or injury triggers")
-	pulse._advance(0.17)
+	check(p1.defenses._pulses.size() == 1 and p1.defenses.pulse_cooldown == RIPOSTE.recharge_value(value), "the owner pulse cooldown prevents duplicate emergency triggers")
+	pulse._advance(RIPOSTE.blast_visual_duration - pulse.age + 0.01)
 	await settle()
 	check(get_nodes_in_group(&"retaliation_pulse").is_empty(), "inactive fragments end without retaining a root or node")
 
 func pulse_timing_and_armor() -> void:
 	await reset_case()
 	equip(p1, RIPOSTE, 1)
-	var late := target(&"late", p1.position + Vector2(60, 0))
-	var entering := target(&"entering", p1.position + Vector2(60, -8))
+	var late := target(&"late", p1.position + Vector2(100, 0))
+	var entering := target(&"entering", p1.position + Vector2(100, -8))
+	var following := target(&"following", p1.position + Vector2(100, 8))
+	var following_shot := hostile(p1.position + Vector2(100, 0))
+	var old_edge := target(&"old_rank_one_edge", p1.position + Vector2(60, 0))
+	var old_edge_shot := hostile(p1.position + Vector2(60, 6))
 	var wall := ArmorWall.new()
 	wall.collision_layer = CombatTargeting.Layers.ENEMY
 	wall.collision_mask = 0
@@ -311,25 +450,31 @@ func pulse_timing_and_armor() -> void:
 	var blocked := target(&"blocked", p1.position + Vector2(-22, 0))
 	var blocked_shot := hostile(p1.position + Vector2(-20, 4))
 	await settle()
-	p1._hit_something()
+	contact_hit(p1)
 	var origin: Vector2 = p1.position
 	var pulse := pulse_now()
 	p1.position.x += 70
 	pulse._advance(0.04)
 	entering.position = origin + Vector2(25, 0)
 	await settle()
-	pulse._advance(0.08)
-	check(entering.get("life") == 98 and pulse.position == origin, "an enemy entering during expansion is hit at the fixed injury position")
+	pulse._advance(0.16)
+	check(entering.get("life") == 96 and pulse.position == origin and is_equal_approx(pulse.visual_radius, RIPOSTE.range_value(1)), "expansion hits at the fixed protection origin and the burst reaches its authored radius")
 	entering.position.x += 70
 	await settle()
 	entering.position = origin + Vector2(25, 0)
 	await settle()
-	pulse._advance(0.04)
-	check(entering.get("life") == 98 and blocked.get("life") == 100 and not blocked_shot.get_meta("pooled", false), "reentry cannot multiply damage and explicit armor protects hulls and hostile shots")
+	following.position = origin + Vector2(39, -12)
+	following_shot.position = origin + Vector2(39, 0)
+	await settle()
+	pulse._advance(0.08)
+	check(following.get("life") == 96 and following_shot.get_meta("pooled", false) and pulse._hit != null, "the full-size burst keeps clearing later arrivals during its active hold")
+	check(RIPOSTE.range_value(1) == 48 and old_edge.get("life") == 100 and not old_edge_shot.get_meta("pooled", false), "rank one no longer damages hulls or clears shots at the former sixty-pixel edge")
+	pulse._advance(0.07)
+	check(entering.get("life") == 96 and blocked.get("life") == 100 and not blocked_shot.get_meta("pooled", false), "reentry cannot multiply damage and explicit armor protects hulls and hostile shots")
 	late.position = origin
 	await settle()
 	pulse._advance(0.04)
-	check(late.get("life") == 100, "entering during inactive fragments causes no damage")
+	check(late.get("life") == 100 and pulse._hit == null, "entering during inactive fragments causes no damage")
 
 func boss_exclusion() -> void:
 	await reset_case()
@@ -341,7 +486,7 @@ func boss_exclusion() -> void:
 	var context := EnemySpawnContext.new()
 	context.combat_id = &"defense_boss"
 	boss.configure_spawn(context)
-	boss.position = p1.position + Vector2(15, 0)
+	boss.position = p1.position + Vector2(6, 0)
 	stage.add_child(boss)
 	boss.set_physics_process(false)
 	boss.attack = boss.Attack.IDLE
@@ -356,12 +501,11 @@ func boss_exclusion() -> void:
 	p1.collision_mask = CombatTargeting.Layers.ENEMY
 	await settle()
 	p1.defenses._physics_process(0)
-	check(p1.defenses.charges == 2 and p1.defenses._bodies.size() == 1, "all overlapping boss parts share one shield contact charge")
-	for impact in 2: p1.defenses.take_hit()
+	check(p1.defenses.charges == 0 and p1.energy == 12 and p1.defenses.pulse_cooldown > 0, "boss contact breaks reflection and triggers retaliation once across its parts")
 	var before: float = boss.life + boss.get_node("PortCannon").life + boss.get_node("StarboardCannon").life
 	var pulse := pulse_now()
 	pulse._advance(0.12)
-	check(is_equal_approx(boss.life + boss.get_node("PortCannon").life + boss.get_node("StarboardCannon").life, before - 2), "one defensive wave damages at most one piece of a logical boss")
+	check(is_equal_approx(boss.life + boss.get_node("PortCannon").life + boss.get_node("StarboardCannon").life, before - 4), "one defensive wave damages at most one piece of a logical boss")
 
 func saturation_and_pending() -> void:
 	await reset_case()
@@ -376,14 +520,14 @@ func saturation_and_pending() -> void:
 		stage.add_child(pulse)
 		pulse.set_physics_process(false)
 		pulses.append(pulse)
-	check(pulses.filter(func(pulse: Node2D): return pulse.get_child(0).visible).size() == 4, "the native pulse visual budget remains bounded")
+	check(pulses.filter(func(pulse: Node2D): return pulse.visible).size() == 4, "the native pulse visual budget remains bounded")
 	for pulse in pulses: pulse._advance(0.12)
-	check(victim.get("life") == 80, "visual saturation cannot suppress any wave's gameplay damage")
-	for pulse in pulses: pulse._advance(0.21)
+	check(victim.get("life") == 60, "visual saturation cannot suppress any wave's gameplay damage")
+	for pulse in pulses: pulse._advance(0.49)
 	await settle()
 	check(effects.get_debug_snapshot().roots == 0 and get_nodes_in_group(&"retaliation_pulse").is_empty(), "saturated waves release all roots and visuals")
 	var origin: Vector2 = p1.position
-	p1._hit_something()
+	contact_hit(p1)
 	p1.position.x += 70
 	paused = true
 	await process_frame
@@ -401,18 +545,18 @@ func independent_pulses() -> void:
 	equip(p2, RIPOSTE, 1)
 	var victim := target(&"both_pulses", p1.position + Vector2(24, 0))
 	await settle()
-	p1._hit_something()
-	p2._hit_something()
+	contact_hit(p1)
+	contact_hit(p2)
 	var left := pulse_now()
 	p2.defenses._spawn_pulse()
 	var right: Node2D = p2.defenses._pulses.back().get_ref()
 	right.set_physics_process(false)
 	left._advance(0.12)
 	right._advance(0.12)
-	check(victim.get("life") == 96 and accepted.size() == 2 and accepted[0].hit.owner_id() == &"player1" and accepted[1].hit.owner_id() == &"player2", "both owners can retaliate independently against the same hull")
+	check(victim.get("life") == 92 and accepted.size() == 2 and accepted[0].hit.owner_id() == &"player1" and accepted[1].hit.owner_id() == &"player2", "both owners can retaliate independently against the same hull")
 	p1.set_state(p1.State.DYING)
-	right._advance(0.04)
-	check(not right._cancelled and effects.get_debug_snapshot().roots == 0 and p2.defenses.pulse_cooldown == 4, "one owner's death cannot cancel the partner's active or cooling wave")
+	right._advance(0.24)
+	check(not right._cancelled and effects.get_debug_snapshot().roots == 0 and p2.defenses.pulse_cooldown == 12 and p2.defenses.pulse_protection_left > 0, "one owner's death cannot cancel the partner's wave, protection or recharge")
 
 func death_during_acceptance() -> void:
 	await reset_case()
@@ -421,9 +565,9 @@ func death_during_acceptance() -> void:
 	var next := target(&"cleanup_b", p1.position + Vector2(6, 1))
 	await settle()
 	effects.hit_accepted.connect(func(_packet, _id, _at, _first): p1.set_state(p1.State.DYING), CONNECT_ONE_SHOT)
-	p1._hit_something()
+	contact_hit(p1)
 	p1.defenses._spawn_pulse()
-	check(first.get("life") == 98 and next.get("life") == 100 and p1.state == p1.State.DYING and effects.get_debug_snapshot().roots == 0, "death during accepted-hit notification cancels remaining pulse damage and releases the active root")
+	check(first.get("life") == 96 and next.get("life") == 100 and p1.state == p1.State.DYING and effects.get_debug_snapshot().roots == 0, "death during accepted-hit notification cancels remaining pulse damage and releases the active root")
 	await settle()
 	check(get_nodes_in_group(&"retaliation_pulse").is_empty(), "a wave cancelled during its own startup leaves no deferred node or reference")
 
@@ -431,16 +575,16 @@ func lifecycle() -> void:
 	await reset_case()
 	equip(p1, SHIELD, 1)
 	equip(p1, RIPOSTE, 1)
-	for impact in 3: p1.defenses.take_hit()
+	for impact in 4: contact_hit(p1)
 	var pulse := pulse_now()
 	var snapshot: Dictionary = p1.defenses.snapshot()
 	paused = true
 	p1.defenses._physics_process(2)
 	pulse._physics_process(0.2)
-	check(p1.defenses.snapshot() == snapshot and pulse.age == 0, "selection pause freezes shield recharge, pulse cooldown and active wave")
+	check(p1.defenses.snapshot() == snapshot and pulse.age == 0, "selection pause freezes shield recharge, pulse protection, cooldown and active wave")
 	paused = false
 	p1.set_state(p1.State.DYING)
-	check(p1.defenses.charges == 0 and p1.defenses.recharge_left == 0 and not p1.shield.visible and effects.get_debug_snapshot().roots == 0, "owner death stops shield, recharge, pending waves and roots immediately")
+	check(p1.defenses.charges == 0 and p1.defenses.recharge_left == 0 and p1.defenses.pulse_protection_left == 0 and not p1.shield.visible and not p1.get_node("RetaliationIndicator").visible and effects.get_debug_snapshot().roots == 0, "owner death stops shield, protection, recharge, pending waves and roots immediately")
 	await settle()
 	check(get_nodes_in_group(&"retaliation_pulse").is_empty(), "owner death releases pulse references and nodes")
 	await reset_case()
@@ -452,7 +596,7 @@ func lifecycle() -> void:
 		var player = world.progression.players[0]
 		player.apply_upgrade(SHIELD)
 		player.apply_upgrade(RIPOSTE)
-		for impact in 3: player.defenses.take_hit()
+		for impact in 4: contact_hit(player)
 		world.free()
 		await settle()
 		check(get_node_count() == baseline and get_nodes_in_group(&"retaliation_pulse").is_empty(), "world teardown cancels both pending and active defensive state")
@@ -488,15 +632,20 @@ func native_presentation() -> void:
 		await RenderingServer.frame_post_draw
 		capture("defense_%s_ready" % layout)
 		var shots: Array[Shot] = []
-		for index in 7:
+		for index in 5:
 			var shot := hostile(players[0].position + Vector2(index % 3 - 1, -8))
 			shot.speedX = 0
 			shot.set_physics_process(true)
 			shots.append(shot)
 		stage = previous
 		await settle()
-		check(players[0].defenses.charges == 0 and players[0].energy == 11, "native simultaneous hostile impacts deplete five charges and cause one actual hull injury")
+		check(players[0].defenses.charges == 0 and players[0].energy == 12 and players[0].defenses.pulse_cooldown == 0, "native projectile impacts deplete five sphere charges while preserving the contact-only pulse")
 		check(shots.filter(func(item: Shot): return item.trowbackByShield).size() == 5, "native field reflection preserves exactly its authored capacity")
+		victims[0].position = players[0].position
+		await settle()
+		players[0].defenses._physics_process(0)
+		await settle()
+		check(players[0].energy == 12 and players[0].defenses.pulse_protection_left > 0 and players[0].defenses.pulse_cooldown > 0, "a native enemy hull collision triggers the preserved pulse and protection")
 		await RenderingServer.frame_post_draw
 		capture("defense_%s_impact" % layout)
 		for sample in 5:
@@ -507,6 +656,7 @@ func native_presentation() -> void:
 			await RenderingServer.frame_post_draw
 			capture("defense_%s_wave_%d" % [layout, sample])
 		check(victims.all(func(body: Area2D): return body.get("life") <= 97), "all six visible native hulls receive the retaliation damage")
+		victims[0].position = players[0].position + Vector2(34, 0)
 		for tick in 12:
 			await physics_frame
 			await process_frame
@@ -525,6 +675,7 @@ func native_presentation() -> void:
 			stage = previous
 			await settle()
 			for impact in 5: players[1].defenses.take_hit()
+			contact_hit(players[1])
 			players[1].defenses._spawn_pulse()
 			var blue: Node2D = players[1].defenses._pulses.back().get_ref()
 			blue.set_physics_process(false)
@@ -532,10 +683,10 @@ func native_presentation() -> void:
 				blue._advance(0.04)
 				await RenderingServer.frame_post_draw
 				capture("defense_%s_blue_%d" % [layout, sample])
-			check(blue_victims.all(func(body: Area2D): return body.get("life") == 97), "native blue-team victims receive the same authored wave damage")
-			blue._advance(0.17)
+			check(blue_victims.all(func(body: Area2D): return body.get("life") == 94), "native blue-team victims receive the same authored wave damage")
+			blue._advance(0.45)
 			players[1].defenses._physics_process(players[1].defenses.recharge_left + 0.01)
-			check(players[1].defenses.charges == 3 and players[1].energy == 12, "a returning native sphere immediately intercepts two bodies already inside its radius")
+			check(players[1].defenses.charges == 5 and players[1].energy == 12, "nearby bodies outside the hull cannot consume a projectile-only sphere")
 		var menu = load("res://scenes/ui/upgrade_selection.tscn").instantiate()
 		root.add_child(menu)
 		var participants := {}

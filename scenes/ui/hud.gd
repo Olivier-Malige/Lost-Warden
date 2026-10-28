@@ -48,18 +48,39 @@ func _on_defense_state_changed(player_id: StringName, snapshot: Dictionary) -> v
 			style.bg_color = Color("222735") if state == "background" else (Color("ff5a4d") if player_id == &"player1" else Color("7ad9ff"))
 			new_bar.add_theme_stylebox_override(state, style)
 		new_holder.add_child(new_bar)
+		var repair_label := _text("", 8)
+		repair_label.name = "RepairState"
+		repair_label.add_theme_color_override("font_color", Color("8ce0b0"))
+		new_holder.add_child(repair_label)
+		var repair_bar := new_bar.duplicate() as ProgressBar
+		repair_bar.name = "RepairProgress"
+		var repair_fill := StyleBoxFlat.new()
+		repair_fill.bg_color = Color("8ce0b0")
+		repair_bar.add_theme_stylebox_override("fill", repair_fill)
+		new_holder.add_child(repair_bar)
 		column.add_child(new_holder)
 		var plasma := column.get_node("plasma_holder_" + String(player_id))
 		column.move_child(new_holder, plasma.get_index() + 1)
 		_defense_controls[player_id] = new_holder
 	var holder: VBoxContainer = _defense_controls[player_id]
-	holder.visible = snapshot.alive and snapshot.rank > 0 and (player_id == &"player1" or global.coop)
+	var shield_owned: bool = snapshot.rank > 0
+	var repairing: bool = snapshot.get("repair_left", 0.0) > 0.0
+	var repaired: bool = snapshot.get("repair_flash_left", 0.0) > 0.0
+	holder.visible = snapshot.alive and (shield_owned or repairing or repaired) and (player_id == &"player1" or global.coop)
 	var charging: bool = snapshot.recharge_left > 0.0
+	holder.get_node("State").visible = shield_owned
 	holder.get_node("State").text = "SHIELD RECHARGE" if charging else "SHIELD %d/%d" % [snapshot.charges, snapshot.maximum]
 	var bar := holder.get_node("Recharge") as ProgressBar
-	bar.visible = charging
+	bar.visible = shield_owned and charging
 	bar.max_value = maxf(snapshot.recharge_duration, 0.001)
 	bar.value = snapshot.recharge_duration - snapshot.recharge_left
+	var repair_state := holder.get_node("RepairState") as Label
+	repair_state.visible = repairing or repaired
+	repair_state.text = "REPAIR %.1fS" % snapshot.get("repair_left", 0.0) if repairing else "REPAIRED +1"
+	var repair_bar := holder.get_node("RepairProgress") as ProgressBar
+	repair_bar.visible = repairing
+	repair_bar.max_value = maxf(snapshot.get("repair_duration", 0.0), 0.001)
+	repair_bar.value = repair_bar.max_value - snapshot.get("repair_left", 0.0)
 
 func _on_run_time_changed(survival_seconds: float) -> void:
 	var text := "SURVIVAL\n" + global.format_survival_time(survival_seconds)
