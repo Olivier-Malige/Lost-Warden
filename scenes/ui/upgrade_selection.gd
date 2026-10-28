@@ -146,15 +146,24 @@ func refresh_bindings() -> void:
 	for player_id in participants:
 		_bindings[player_id] = String(global.saveData.config.player1 if player_id == &"player1" else global.saveData.config.player2) if global.coop else "all"
 		_blocked[player_id] = []
-		for suffix in ["fire", "up", "down", "left", "right"]:
+		for suffix in ["upgrade_confirm", "up", "down", "left", "right"]:
 			var action := StringName(_bindings[player_id] + "_" + suffix)
 			if Input.is_action_pressed(action):
 				_blocked[player_id].append(action)
-		if Input.is_key_pressed(KEY_ENTER):
-			_blocked[player_id].append(&"enter")
 		if _panels.has(player_id):
 			var hint := _panels[player_id].get_node_or_null("ControlsHint") as Label
-			if hint: hint.text = "D-PAD / FIRE" if _bindings[player_id].begins_with("gamepad") else "ARROWS / FIRE"
+			if hint: hint.text = _controls_hint(player_id)
+
+func _controls_hint(player_id: StringName) -> String:
+	if _bindings[player_id] == "all": return "ARROWS / ENTER\nD-PAD / START"
+	return "D-PAD / START" if _bindings[player_id].begins_with("gamepad") else "ARROWS / ENTER"
+
+# An unassigned controller must not turn a confirmation press into a nested pause menu.
+func is_confirmation_event(event: InputEvent) -> bool:
+	for prefix in ["all", "keyboard", "gamepad1", "gamepad2"]:
+		if event.is_action_pressed(prefix + "_upgrade_confirm"):
+			return true
+	return false
 
 func set_suspended(value: bool, menu_open := false) -> void:
 	suspended = value
@@ -165,7 +174,7 @@ func handle_input(event: InputEvent) -> void:
 		return
 	for player_id in participants:
 		for action in _blocked[player_id].duplicate():
-			if (action == &"enter" and event is InputEventKey and event.keycode == KEY_ENTER and not event.pressed) or (action != &"enter" and event.is_action_released(action)):
+			if event.is_action_released(action):
 				_blocked[player_id].erase(action)
 		if not _can_interact(player_id):
 			continue
@@ -174,7 +183,7 @@ func handle_input(event: InputEvent) -> void:
 			select_card(player_id, posmod(int(cursors[player_id]) - 1, participants[player_id].offers.size()))
 		elif event.is_action_pressed(prefix + "_down") or event.is_action_pressed(prefix + "_right"):
 			select_card(player_id, posmod(int(cursors[player_id]) + 1, participants[player_id].offers.size()))
-		elif event.is_action_pressed(prefix + "_fire") or (prefix in ["all", "keyboard"] and event is InputEventKey and event.keycode == KEY_ENTER and event.pressed):
+		elif event.is_action_pressed(prefix + "_upgrade_confirm"):
 			confirm_choice(selection_id, player_id, participants[player_id].offers[cursors[player_id]].id)
 
 func _can_interact(player_id: StringName) -> bool:
@@ -298,7 +307,7 @@ func _build_panel(player_id: StringName, team: int, solo: bool) -> void:
 	confirm.pressed.connect(func():
 		if not offers.is_empty(): confirm_choice(panel_selection_id, player_id, offers[cursors[player_id]].id)
 	)
-	var hint := _label(panel, "D-PAD / FIRE" if _bindings[player_id].begins_with("gamepad") else "ARROWS / FIRE", Rect2(12, 282, panel.size.x - 112, 36), 10)
+	var hint := _label(panel, _controls_hint(player_id), Rect2(12, 282, panel.size.x - 112, 36), 10)
 	hint.name = "ControlsHint"
 	_refresh_panel(player_id)
 

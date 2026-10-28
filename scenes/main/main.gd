@@ -88,7 +88,10 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 		if not menuShow and event.is_action_pressed("start") and not event.is_echo():
-			set_Pause()
+			if _selection_pause and is_instance_valid(_selection) and _selection.is_confirmation_event(event):
+				_selection.handle_input(event)
+			else:
+				set_Pause()
 			get_viewport().set_input_as_handled()
 			return
 		if menuShow:
