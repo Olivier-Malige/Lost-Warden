@@ -131,11 +131,11 @@ func check_upgrades_and_rewards() -> void:
 		player.apply_upgrade(SIDE)
 	var before := stage.get_child_count()
 	player.weapons.fire_primary()
-	check(stage.get_child_count() - before == 3, "side rank three must fire three projectiles")
+	check(stage.get_child_count() - before == 5, "side rank three must retain both side pairs plus the primary")
 	player.apply_upgrade(SIDE)
 	before = stage.get_child_count()
 	player.weapons.fire_primary()
-	check(stage.get_child_count() - before == 5, "side rank four must unlock the extra two projectiles")
+	check(stage.get_child_count() - before == 5, "side rank four must retain both side pairs plus the primary")
 	player.hit_audio.stream = null
 	player.explosion_audio.stream = null
 	for remaining_health in [2, 1, 0]:

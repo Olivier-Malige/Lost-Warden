@@ -277,7 +277,7 @@ func side_cannon() -> void:
 					sides.append(shot)
 					side_damage += shot.hit_snapshot.damage()
 				else: main = shot
-			check(sides.size() == (4 if rank == 4 else 2) and main != null, "both owners emit separate main and side source identities, including the outer pair")
+			check(sides.size() == (4 if rank >= 2 else 2) and main != null, "both owners emit separate main and side source identities, including the outer pair")
 			for side in sides:
 				check(side.hit_snapshot.modifier_rank(&"energy_chains") == 0, "each actual side snapshot discards lightning through the shared policy")
 				side.position = origin.position

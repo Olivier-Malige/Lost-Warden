@@ -116,7 +116,7 @@ func check_foundation_stats() -> void:
 	for rank in range(1, 5):
 		check(build.apply_foundation(&"side_shot").applied, "an offensive may be acquired with full utility slots")
 		check(is_equal_approx(build.side_base_damage, [0.4, 0.6, 0.8, 1.0][rank - 1]), "side-shot damage must use authored bases")
-		check(build.outer_side_pair == (rank == 4), "only side rank four must enable the outer pair")
+		check(build.outer_side_pair == (rank >= 2), "side rank two and later must enable the outer pair")
 	check(build.side_shot and build.rank_for(UpgradeDefinition.Effect.SIDE_SHOT) == 4 and build.side_damage_bonus == 0.0, "foundation adapters must not double-apply legacy side damage")
 	var snapshot := build.foundation_snapshot()
 	snapshot.ranks[&"side_shot"] = 99

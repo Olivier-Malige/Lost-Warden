@@ -337,7 +337,10 @@ func _effect_lines(offer: Dictionary) -> String:
 		&"damage": return "+25%% DIRECT DAMAGE\nx%.2f DAMAGE" % (1.0 + offer.next_value)
 		&"fire_rate": return "DELAY -0.016 SEC\n%.3f SEC / SHOT" % (0.2 - offer.next_value)
 		&"orb_magnet": return "+24 PX ATTRACTION\n%d PX RADIUS" % (24 + offer.next_value)
-		&"side_shot": return "PAIR DAMAGE %.2f\n%s" % [offer.next_value, "ADD OUTER PAIR" if offer.next_rank == 4 else "PAIRED SIDE CANNONS"]
+		&"side_shot":
+			if offer.next_projectile_count < 4: return "2 SHOTS / %.2f DMG\nPAIRED SIDE CANNONS" % offer.next_value
+			var outer_size := "SMALL" if offer.next_secondary_visual_tier == 0 else "MEDIUM" if offer.next_secondary_visual_tier < 4 else "FULL"
+			return "4 SHOTS / PAIR %.2f\n%s OUTER / %.2f DMG" % [offer.next_value, outer_size, offer.next_value * offer.secondary_damage_scale]
 		&"energy": return "RESTORE 2 ENERGY\nUP TO 12 ENERGY"
 		&"shield": return "PROJECTILES ONLY / %d SHOTS\nBODY BREAKS / %.0fS RELOAD" % [roundi(offer.next_value), offer.next_recharge]
 		&"reactive_armor": return "HULL HIT: REPAIR 1 HP\nAFTER %.0fS WITHOUT DAMAGE" % offer.next_interval

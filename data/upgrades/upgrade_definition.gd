@@ -38,6 +38,7 @@ enum Category { UTILITY, OFFENSIVE, REWARD, FALLBACK }
 @export var weapon: WeaponDefinition
 @export var interval_values: PackedFloat32Array = []
 @export var projectile_counts: PackedInt32Array = []
+@export var secondary_visual_tiers: PackedInt32Array = []
 @export var support_counts: PackedInt32Array = []
 @export var size_scales: PackedFloat32Array = []
 @export var orbit_radius := 0.0
@@ -67,6 +68,9 @@ func recharge_value(rank: int) -> float:
 
 func projectile_count(rank: int) -> int:
 	return projectile_counts[mini(rank, projectile_counts.size()) - 1] if rank > 0 and not projectile_counts.is_empty() else 0
+
+func secondary_visual_tier(rank: int) -> int:
+	return secondary_visual_tiers[mini(rank, secondary_visual_tiers.size()) - 1] if rank > 0 and not secondary_visual_tiers.is_empty() else 0
 
 func interval_value(rank: int) -> float:
 	return interval_values[mini(rank, interval_values.size()) - 1] if rank > 0 and not interval_values.is_empty() else 0.0
@@ -133,6 +137,18 @@ func foundation_errors() -> PackedStringArray:
 			previous_recharge = duration
 		for count in rank_values:
 			if count != roundf(count): errors.append("Shield capacities must be whole charges.")
+	if effect == Effect.SIDE_SHOT:
+		if projectile_counts.size() != max_rank or secondary_visual_tiers.size() != max_rank:
+			errors.append("Side cannons require projectile counts and secondary visual tiers for every rank.")
+		for count in projectile_counts:
+			if count not in [2, 4]: errors.append("Side cannons require one or two symmetric pairs.")
+		var previous_tier := 0
+		for tier in secondary_visual_tiers:
+			if tier < previous_tier or tier > 4:
+				errors.append("Secondary cannon tiers must be nondecreasing native frames from zero to four.")
+			previous_tier = tier
+		if not is_finite(secondary_damage_scale) or secondary_damage_scale <= 0.0 or secondary_damage_scale > 1.0:
+			errors.append("Secondary cannons require a positive damage fraction no greater than one.")
 	if effect == Effect.REACTIVE_ARMOR:
 		if interval_values.size() != max_rank:
 			errors.append("Reactive armor requires a repair delay for every rank.")
@@ -293,6 +309,7 @@ func offer_snapshot(rank: int) -> Dictionary:
 		"target_limit": target_limit,
 		"next_interval": interval_value(next_rank),
 		"next_projectile_count": projectile_count(next_rank),
+		"next_secondary_visual_tier": secondary_visual_tier(next_rank),
 		"next_support_count": support_count(next_rank),
 		"next_size_scale": size_scale(next_rank),
 		"orbit_radius": orbit_radius, "orbit_period": orbit_period, "spin_period": spin_period,

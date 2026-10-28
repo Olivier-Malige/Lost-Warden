@@ -2,9 +2,8 @@ class_name PlayerWeapons
 extends RefCounted
 
 const SIDE_SPREAD_SPEED := 51.0
-const EXTRA_SIDE_MIN_RANK := 4
 const EXTRA_SIDE_SPREAD_SPEED := 110.5
-const EXTRA_SIDE_DAMAGE_MULTIPLIER := 0.6
+const SIDE_UPGRADE: UpgradeDefinition = preload("res://data/upgrades/foundation/side_shot.tres")
 const MISSILES: UpgradeDefinition = preload("res://data/upgrades/micro_missiles.tres")
 const DRONE := preload("res://scenes/player/weapons/escort_drone.tscn")
 const DRONE_UPGRADE: UpgradeDefinition = preload("res://data/upgrades/escort_drone.tres")
@@ -121,7 +120,8 @@ func _fire_side_shots() -> void:
 	var authored_damage := player.loadout.side_base_damage
 	_spawn_gun(projectile, player.left_origin, authored_damage, PlayerHitSnapshot.Kind.SIDE_GUN, SIDE_SPREAD_SPEED)
 	_spawn_gun(projectile, player.right_origin, authored_damage, PlayerHitSnapshot.Kind.SIDE_GUN, -SIDE_SPREAD_SPEED)
-	if player.loadout.rank_for(UpgradeDefinition.Effect.SIDE_SHOT) < EXTRA_SIDE_MIN_RANK:
+	var rank := player.loadout.rank_for(UpgradeDefinition.Effect.SIDE_SHOT)
+	if SIDE_UPGRADE.projectile_count(rank) < 4:
 		return
 	_spawn_gun(
 		projectile,
@@ -129,7 +129,8 @@ func _fire_side_shots() -> void:
 		authored_damage,
 		PlayerHitSnapshot.Kind.SIDE_GUN,
 		-EXTRA_SIDE_SPREAD_SPEED,
-		EXTRA_SIDE_DAMAGE_MULTIPLIER
+		SIDE_UPGRADE.secondary_damage_scale,
+		SIDE_UPGRADE.secondary_visual_tier(rank)
 	)
 	_spawn_gun(
 		projectile,
@@ -137,7 +138,8 @@ func _fire_side_shots() -> void:
 		authored_damage,
 		PlayerHitSnapshot.Kind.SIDE_GUN,
 		EXTRA_SIDE_SPREAD_SPEED,
-		EXTRA_SIDE_DAMAGE_MULTIPLIER
+		SIDE_UPGRADE.secondary_damage_scale,
+		SIDE_UPGRADE.secondary_visual_tier(rank)
 	)
 
 func _spawn_gun(
@@ -146,13 +148,15 @@ func _spawn_gun(
 	authored_damage: float,
 	source_kind: PlayerHitSnapshot.Kind,
 	speed_x: float = 0.0,
-	damage_multiplier: float = 1.0
+	damage_multiplier: float = 1.0,
+	visual_tier: int = -1
 ) -> void:
 	var shot := ProjectilePool.spawn(packed, origin.global_position, player.get_parent())
 	shot.player_Id = player.id_Player
 	var tier := mini(player.loadout.rank_for(UpgradeDefinition.Effect.DAMAGE), 4)
 	if packed == Player.WEAPON_SIDE.projectile:
 		tier = [0, 1, 2, 4][clampi(player.loadout.rank_for(UpgradeDefinition.Effect.SIDE_SHOT) - 1, 0, 3)]
+	if visual_tier >= 0: tier = visual_tier
 	shot.set_foundation_damage(authored_damage, player.loadout.direct_damage_multiplier * damage_multiplier, tier)
 	var effects := PlayerHitEffects.find_service(player)
 	if effects:

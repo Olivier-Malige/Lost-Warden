@@ -176,7 +176,7 @@ func _derive_foundation_stats() -> void:
 	side_shot = rank_for(UpgradeDefinition.Effect.SIDE_SHOT) > 0
 	side_base_damage = _foundation_value(UpgradeDefinition.Effect.SIDE_SHOT)
 	side_damage_bonus = 0.0
-	outer_side_pair = rank_for(UpgradeDefinition.Effect.SIDE_SHOT) >= 4
+	outer_side_pair = false
 	attraction_radius = minf(
 		_foundation_config.attraction_base + _foundation_value(UpgradeDefinition.Effect.ORB_MAGNET),
 		_foundation_config.attraction_max
@@ -189,6 +189,8 @@ func _derive_foundation_stats() -> void:
 	beam_width_multiplier = 1.0
 	for id in _foundation_definitions:
 		var definition := _foundation_definitions[id]
+		if definition.effect == UpgradeDefinition.Effect.SIDE_SHOT:
+			outer_side_pair = definition.projectile_count(int(acquired_ranks.get(id, 0))) > 2
 		if definition.effect == UpgradeDefinition.Effect.BEAM_PIERCING:
 			beam_damage_multiplier += definition.damage_bonus(int(acquired_ranks.get(id, 0)))
 			beam_width_multiplier += definition.width_bonus(int(acquired_ranks.get(id, 0)))
