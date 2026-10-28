@@ -1,5 +1,7 @@
 # Autonomous micro-missiles — 2026-10-21
 
+Historical checkpoint: the [2026-10-26 targeting follow-up](../../2026_10_26_input_and_missile_followups/validation.md) supersedes the single reacquisition limit and the replacement target's 90-degree cone below.
+
 Step 8 delivered locally after the maintainer approved the described next checkpoint. Effect balancing remains deferred; no XP/encounter tuning is included. The family is available through ordinary offers and occupies one personal offensive slot, regardless of its three acquired ranks.
 
 Latest playtest revision: missiles are smaller at rank one, grow through three native sprite sizes and launch 1/2/3 entries per volley. Missile hits retain criticals but cannot trigger lightning. This supersedes the initial one-size/one-projectile delivery and its missile/chain compatibility. The hard cap remains three active/reserved missiles per player; a volley uses only remaining free capacity and cannot create a backlog.

@@ -1,12 +1,15 @@
 extends Shot
 
 const Impact := preload("res://scenes/player/weapons/micro_missile_impact.gd")
+const RETARGET_INTERVAL := 0.1
 
 var hit_snapshot: PlayerHitSnapshot
 var _hit_effects: WeakRef
 var _reservation_key: StringName = &""
 var steering_target: WeakRef
 var reacquired := false
+var _missed_groups := {}
+var _retarget_wait := 0.0
 var remaining_lifetime := 0.0
 var flight_speed := 0.0
 var turn_speed := 0.0
@@ -71,7 +74,10 @@ func reset_hit_state() -> void:
 	_reservation_key = &""
 	steering_target = null
 	reacquired = false
+	_missed_groups.clear()
+	_retarget_wait = 0.0
 
+# Excluding missed groups prevents repeated locks from steering back around the same target.
 func _physics_process(delta: float) -> void:
 	if get_meta("pooled", false):
 		return
@@ -79,20 +85,24 @@ func _physics_process(delta: float) -> void:
 	if remaining_lifetime <= 0.0:
 		ProjectilePool.despawn(self)
 		return
+	var had_target := steering_target != null
 	var target: Area2D = steering_target.get_ref() if steering_target else null
-	if not CombatTargeting.eligible(get_parent(), target) or not CombatTargeting.in_forward_cone(global_position, target.global_position, forward_angle_degrees):
+	var guidance_angle := 180.0 if reacquired else forward_angle_degrees
+	if not CombatTargeting.eligible(get_parent(), target) or not CombatTargeting.in_forward_cone(global_position, target.global_position, guidance_angle):
 		steering_target = null
-		if not reacquired:
+		_retarget_wait = maxf(0.0, _retarget_wait - delta)
+		if had_target or _retarget_wait == 0.0:
 			reacquired = true
+			_retarget_wait = RETARGET_INTERVAL
 			var exclusions: Array[RID] = []
-			if is_instance_valid(target) and not CombatTargeting.eligible(get_parent(), target):
-				exclusions = CombatTargeting.origin_exclusions(target)
-			var targets := CombatTargeting.targets(get_parent(), global_position, target_range, {}, true, exclusions, forward_angle_degrees)
+			if is_instance_valid(target):
+				_missed_groups[CombatTargeting.group_identity(target)] = true
+				if not CombatTargeting.eligible(get_parent(), target):
+					exclusions = CombatTargeting.origin_exclusions(target)
+			var targets := CombatTargeting.targets(get_parent(), global_position, target_range, _missed_groups, true, exclusions, 180.0)
 			if not targets.is_empty():
 				steering_target = weakref(targets[0])
-			target = steering_target.get_ref() if steering_target else null
-		else:
-			target = null
+		target = steering_target.get_ref() if steering_target else null
 	if is_instance_valid(target):
 		var desired := Vector2.UP.angle_to(global_position.direction_to(target.global_position))
 		rotation = rotate_toward(rotation, desired, turn_speed * delta)

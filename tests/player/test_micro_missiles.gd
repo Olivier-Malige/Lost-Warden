@@ -56,6 +56,7 @@ func run() -> void:
 	await flight_and_reacquisition()
 	await acquisition_and_manual_weapons()
 	await forward_targeting()
+	await missed_target_reacquisition()
 	await destroyed_target_reacquisition()
 	await critical_streams()
 	await contact_and_reuse()
@@ -193,11 +194,11 @@ func flight_and_reacquisition() -> void:
 	await settle()
 	target.free()
 	shot._physics_process(1.0 / 60.0)
-	check(shot.reacquired and shot.steering_target.get_ref() == replacement, "first target loss reacquires the nearest valid target once")
+	check(shot.reacquired and shot.steering_target.get_ref() == replacement, "first target loss reacquires the nearest valid target above")
 	replacement.free()
 	var heading: float = shot.rotation
 	shot._physics_process(1.0 / 60.0)
-	check(shot.steering_target == null and shot.reacquired and shot.rotation == heading and later.life == 20.0, "later target loss flies straight without another acquisition or teleported damage")
+	check(shot.steering_target.get_ref() == later and shot.reacquired and absf(wrapf(shot.rotation - heading, -PI, PI)) <= deg_to_rad(4) + 0.00001 and later.life == 20.0, "later target loss reacquires again with bounded turning and no remote damage")
 	shot._physics_process(1.8)
 	check(shot.get_meta("pooled", false) and effects.get_debug_snapshot().reservations == 0, "guided or straight flight always expires")
 	await reset_case()
@@ -229,11 +230,11 @@ func flight_and_reacquisition() -> void:
 	shot = active()[0]
 	target.free()
 	shot._physics_process(1.0 / 60.0)
-	check(shot.reacquired and shot.steering_target == null, "a failed first reacquisition consumes the single allowed attempt")
-	enemy(&"too_late", Vector2(250, 200))
+	check(shot.reacquired and shot.steering_target == null, "a targetless missile continues flying while awaiting another visible target above")
+	var late_target = enemy(&"late_replacement", Vector2(250, 200))
 	await settle()
-	shot._physics_process(1.0 / 60.0)
-	check(shot.steering_target == null and shot.rotation == 0, "later arrivals cannot grant another attempt after a failed reacquisition")
+	shot._physics_process(0.1)
+	check(shot.steering_target.get_ref() == late_target and shot.rotation > 0, "a later arrival can be acquired on the bounded retry interval")
 
 func acquisition_and_manual_weapons() -> void:
 	await reset_case()
@@ -299,8 +300,13 @@ func forward_targeting() -> void:
 	var replacement = enemy(&"forward_replacement", shot.global_position + Vector2(40, -100))
 	await settle()
 	shot._physics_process(1.0 / 60.0)
-	check(shot.reacquired and shot.steering_target.get_ref() == replacement, "a target crossing behind the missile consumes its one attempt and reacquires only in front")
-	replacement.position = shot.global_position + Vector2(-25, 25)
+	check(shot.reacquired and shot.steering_target.get_ref() == outside, "after a miss the closest upper target wins even outside the launch cone")
+	outside.position = shot.global_position + Vector2(-25, 25)
+	await settle()
+	shot._physics_process(1.0 / 60.0)
+	check(shot.steering_target.get_ref() == replacement and outside.life == 20 and boundary.life == 20, "a second miss acquires another upper target without remote damage")
+	replacement.position = shot.global_position + Vector2(25, 25)
+	await settle()
 	var heading: float = shot.rotation
 	shot._physics_process(1.0 / 60.0)
 	check(shot.steering_target == null and shot.rotation == heading and replacement.life == 20 and boundary.life == 20, "a passed replacement is abandoned without a backward turn, new target or remote damage")
@@ -309,6 +315,30 @@ func forward_targeting() -> void:
 	invalid.weapon.forward_angle_degrees = 181
 	check(not invalid.foundation_errors().is_empty(), "a missile definition cannot enable a rear-facing acquisition cone")
 
+func missed_target_reacquisition() -> void:
+	await reset_case()
+	var missed = enemy(&"missed", Vector2(200, 200))
+	var nearest = enemy(&"nearest_upper", Vector2(240, 185))
+	var farther = enemy(&"farther_upper", Vector2(200, 120))
+	var below = enemy(&"closer_below", Vector2(205, 195))
+	var level = enemy(&"same_height", Vector2(205, 190))
+	await settle()
+	queue(missed)
+	materialize()
+	var shot = active()[0]
+	shot.position = Vector2(200, 190)
+	var lifetime: float = shot.remaining_lifetime
+	shot._physics_process(1.0 / 60.0)
+	check(shot.steering_target.get_ref() == nearest and is_equal_approx(shot.remaining_lifetime, lifetime - 1.0 / 60.0), "a missile past its living target chooses the nearest enemy strictly above without renewing its lifetime")
+	check([missed, nearest, farther, below, level].all(func(body): return body.life == 20), "switching targets never applies damage without physical contact")
+	missed.position = shot.position + Vector2(60, -12)
+	nearest.position = shot.position + Vector2(0, 20)
+	below.position.y += 30
+	level.position.y += 30
+	await settle()
+	shot._physics_process(1.0 / 60.0)
+	check(shot.steering_target.get_ref() == farther and shot.speedY < 0, "another miss excludes the previously missed target and continues steering upward")
+
 func destroyed_target_reacquisition() -> void:
 	await reset_case()
 	rank_up(p1, 3)
@@ -316,7 +346,7 @@ func destroyed_target_reacquisition() -> void:
 	target.life = 0.5
 	var near = enemy(&"near_replacement", Vector2(240, 180))
 	var farther = enemy(&"farther_replacement", Vector2(300, 140))
-	var side = enemy(&"side_replacement", Vector2(250, 330))
+	var side = enemy(&"side_replacement", Vector2(250, 360))
 	var behind = enemy(&"rear_replacement", Vector2(250, 370))
 	await settle()
 	p1.weapons.update_autonomous(0)
@@ -383,7 +413,7 @@ func contact_and_reuse() -> void:
 	queue(next, 1, &"player2", Vector2(450, 300))
 	materialize()
 	var reused = active()[0]
-	check(reused == shot and reused.player_Id == "player2" and reused.get_node("Sprite2D").frame == 16 and reused.upgrade_rank == 1 and reused.get_node("CollisionShape2D").shape.size == Vector2(3, 6) and not reused.reacquired and reused.rotation == 0 and reused.remaining_lifetime == 1.8, "cross-player pool reuse resets rank size, owner art, heading, guidance latch and lifetime")
+	check(reused == shot and reused.player_Id == "player2" and reused.get_node("Sprite2D").frame == 16 and reused.upgrade_rank == 1 and reused.get_node("CollisionShape2D").shape.size == Vector2(3, 6) and not reused.reacquired and reused._missed_groups.is_empty() and reused._retarget_wait == 0 and reused.rotation == 0 and reused.remaining_lifetime == 1.8, "cross-player pool reuse resets rank size, owner art, heading, missed targets, retry timer and lifetime")
 	check(reused.steering_target.get_ref() == next and not reused.hit_snapshot.is_critical() and reused.hit_snapshot.modifier_rank(&"energy_chains") == 0 and is_equal_approx(reused.damage, 0.9), "recycled missiles cannot retain the previous owner's damage, critical or proc state")
 	ProjectilePool.despawn(reused)
 	await settle()
