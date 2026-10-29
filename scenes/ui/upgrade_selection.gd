@@ -19,6 +19,7 @@ const MENU_ICON_IDS: Array[StringName] = [
 	&"impact_explosions",
 	&"reactive_armor", &"retaliation_pulse",
 	&"guard_blades",
+	&"ricochet",
 ]
 const INK := Color("101522")
 const WHITE := Color("f3ebdd")
@@ -351,6 +352,7 @@ func _effect_lines(offer: Dictionary) -> String:
 		&"beam_piercing": return "%d EXTRA TARGETS\n+%d%% DAMAGE / +%s%% WIDTH" % [roundi(offer.next_value), roundi(offer.next_damage_bonus * 100.0), str(snappedf(offer.next_width_bonus * 100.0, 0.1)).trim_suffix(".0")]
 		&"critical_hits": return "%d%% CRITICAL CHANCE\nx2 DIRECT DAMAGE" % roundi(offer.next_value * 100.0)
 		&"energy_chains": return "MAIN: %d JUMPS / %d PX\n%d%% DAMAGE / %.1f SEC" % [roundi(offer.next_value), roundi(offer.next_range), roundi(offer.secondary_damage_scale * 100.0), offer.proc_cooldown]
+		&"ricochet": return "%d SHARDS / %d BOUNCES\n%d%% DMG / %d%% RETAINED" % [offer.next_projectile_count, roundi(offer.next_value), roundi(offer.secondary_damage_scale * 100), roundi(offer.secondary_damage_retention * 100)]
 		&"micro_missiles": return "%d MISSILES / VOLLEY\n%.1f DMG / %.2f SEC" % [offer.next_projectile_count, offer.next_value, offer.next_interval]
 		&"escort_drone": return "%d FORWARD ESCORT%s\n%.2f DMG / %.2f SEC" % [offer.next_support_count, "S" if offer.next_support_count > 1 else "", offer.next_value, offer.next_interval]
 		&"guard_blades": return "%d DMG / %.1f SEC\nREACH +%d%% / CLEAR SHOTS" % [roundi(offer.next_value), offer.next_interval, roundi(offer.next_range_bonus * 100)]

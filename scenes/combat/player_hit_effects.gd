@@ -9,6 +9,10 @@ const _ChainDefinition: UpgradeDefinition = preload("res://data/upgrades/energy_
 const _ImpactExplosion := preload("res://scenes/combat/impact_explosion.tscn")
 const _ExplosionDefinition: UpgradeDefinition = preload("res://data/upgrades/impact_explosions.tres")
 const _Feedback := preload("res://scenes/effects/combat_feedback.gd")
+const _Ricochet := preload("res://scenes/combat/ricochet_shard.tscn")
+const _RicochetDefinition: UpgradeDefinition = preload("res://data/upgrades/ricochet.tres")
+
+var _ricochet_cooldowns: Dictionary[StringName, float] = {}
 
 var _players: Dictionary[StringName, WeakRef] = {}
 var _sequences: Dictionary[StringName, int] = {}
@@ -63,7 +67,7 @@ func create_hit(owner_id: StringName, base: float, direct: float, modifiers: Dic
 		critical = random != null and is_critical_roll(random.randf(), critical_chance)
 	var hit := PlayerHitSnapshot.new(owner_id, _sequences[owner_id], base, direct, modifiers, kind, critical, _generation)
 	_roots[hit.root_id()] = {"leases": 1, "groups": {}, "direct_groups": {}, "boss_groups": {},
-		"channels": {&"energy_chains": {}, &"impact_explosions": {}}, "first": true}
+		"channels": {&"energy_chains": {}, &"impact_explosions": {}, &"ricochet": {}}, "first": true}
 	return hit
 
 static func is_critical_roll(roll: float, chance: float) -> bool:
@@ -89,6 +93,8 @@ func visited_groups(hit: PlayerHitSnapshot, channel: StringName = &"root") -> Di
 	if hit == null or not _roots.has(hit.root_id()):
 		return {}
 	var entry: Dictionary = _roots[hit.root_id()]
+	if channel == &"ricochet":
+		return entry.boss_groups.duplicate()
 	if channel == &"root":
 		return entry.groups.duplicate()
 	var result: Dictionary = entry.direct_groups.duplicate()
@@ -99,7 +105,7 @@ func visited_groups(hit: PlayerHitSnapshot, channel: StringName = &"root") -> Di
 func resolve_hit(hit: PlayerHitSnapshot, target: Area2D, feedback := true, impact_position := Vector2.INF, channel: StringName = &"root") -> bool:
 	if not _running or hit == null or not _roots.has(hit.root_id()) or not is_instance_valid(target) or not get_parent().is_ancestor_of(target) or not target.has_method("receive_player_hit"):
 		return false
-	if channel != &"root" and (hit.kind() != PlayerHitSnapshot.Kind.SECONDARY or channel not in [&"energy_chains", &"impact_explosions"]):
+	if channel != &"root" and (hit.kind() != PlayerHitSnapshot.Kind.SECONDARY or channel not in [&"energy_chains", &"impact_explosions", &"ricochet"]):
 		return false
 	var entry: Dictionary = _roots[hit.root_id()]
 	var group := CombatTargeting.group_identity(target)
@@ -122,6 +128,7 @@ func resolve_hit(hit: PlayerHitSnapshot, target: Area2D, feedback := true, impac
 	if first:
 		_queue_chain(hit, target, position, local_impact)
 		_queue_explosion(hit, target, position)
+		_queue_ricochet(hit, target, position)
 	hit_accepted.emit(hit.copy(), CombatTargeting.identity(target), position, first)
 	if hit.is_critical() and hit.is_direct():
 		_CriticalImpact.spawn(get_parent(), position, hit.owner_id())
@@ -147,6 +154,8 @@ func _queue_chain(hit: PlayerHitSnapshot, target: Area2D, at: Vector2, local_imp
 func _physics_process(delta: float) -> void:
 	if get_tree().paused:
 		return
+	for owner_id in _ricochet_cooldowns.keys():
+		_ricochet_cooldowns[owner_id] = maxf(0.0, _ricochet_cooldowns[owner_id] - delta)
 	for owner_id in _chain_cooldowns.keys():
 		_chain_cooldowns[owner_id] = maxf(0.0, _chain_cooldowns[owner_id] - delta)
 	for owner_id in _explosion_cooldowns.keys():
@@ -353,6 +362,9 @@ func _materialize(id: int) -> void:
 		release_root(request.hit)
 		return
 	var shot := ProjectilePool.spawn(request.packed, request.position, get_parent())
+	if request.has("ricochet_budget"):
+		shot.configure(request.hit, self, request.key, request.ricochet_budget, request.exclude, request.target, request.origin_group)
+		return
 	if request.has("weapon"):
 		shot.configure_missile(request.hit, self, request.key, request.weapon, request.target, request.rank)
 		return
@@ -378,6 +390,7 @@ func release_reservation(key: StringName) -> void:
 
 func stop_owner(owner_id: StringName) -> void:
 	_disabled_owners[owner_id] = true
+	_ricochet_cooldowns.erase(owner_id)
 	_chain_cooldowns.erase(owner_id)
 	_explosion_cooldowns.erase(owner_id)
 	for id in _active_explosions.keys():
@@ -402,6 +415,7 @@ func stop_owner(owner_id: StringName) -> void:
 
 func cancel() -> void:
 	_running = false
+	_ricochet_cooldowns.clear()
 	_generation += 1
 	for id in _active_explosions.keys():
 		_finish_explosion(id)
@@ -426,3 +440,26 @@ func get_debug_snapshot() -> Dictionary:
 
 func _exit_tree() -> void:
 	cancel()
+
+# Reserve before deferral so simultaneous first impacts cannot exceed the owner cap.
+func _queue_ricochet(hit: PlayerHitSnapshot, target: Area2D, at: Vector2) -> void:
+	if not PlayerHitSnapshot.allows_modifier(hit.kind(), &"ricochet"):
+		return
+	var rank := clampi(hit.modifier_rank(&"ricochet"), 0, _RicochetDefinition.max_rank)
+	var key := StringName("%s:%s" % [hit.owner_id(), _Ricochet.resource_path])
+	if rank == 0 or _ricochet_cooldowns.get(hit.owner_id(), 0.0) > 0.0 or int(_reservations.get(key, 0)) >= _RicochetDefinition.weapon.active_limit:
+		return
+	var exclude := CombatTargeting.origin_exclusions(target)
+	var candidates := CombatTargeting.targets(get_parent(), at, _RicochetDefinition.range_value(rank), visited_groups(hit), true, exclude)
+	var count := mini(_RicochetDefinition.projectile_count(rank), _RicochetDefinition.weapon.active_limit - int(_reservations.get(key, 0)))
+	count = mini(count, candidates.size())
+	if count == 0:
+		return
+	_ricochet_cooldowns[hit.owner_id()] = _RicochetDefinition.proc_cooldown
+	for index in count:
+		if not retain_root(hit): break
+		_reservations[key] = int(_reservations.get(key, 0)) + 1
+		_request_sequence += 1
+		_requests[_request_sequence] = {"generation": _generation, "hit": hit.secondary_hit(hit.pre_critical_damage() * _RicochetDefinition.secondary_damage_scale),
+			"packed": _Ricochet, "position": at, "key": key, "ricochet_budget": int(_RicochetDefinition.rank_value(rank)), "exclude": exclude, "target": weakref(candidates[index]), "origin_group": CombatTargeting.group_identity(target)}
+		call_deferred("_materialize", _request_sequence)

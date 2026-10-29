@@ -1,5 +1,5 @@
 ---
-status: pending
+status: done
 ---
 
 # Instruction: Add bounded ricochet shards and their art
@@ -93,3 +93,7 @@ journey
 | 1 | Damage follows the initial 0.55 factor and subsequent 0.8 reductions once; visited groups, armor and boss surfaces cannot produce extra or recursive hits. |
 | 2 | Real collision/reuse checks produce no physics-flush errors or stale owners/targets; pause, death and restart keep requests and objects bounded. |
 | 2 | Editable/export mapping and native travel/impact sequences preserve collision agreement and ownership; slot/rank eligibility exposes the completed family correctly. |
+
+## Delivery checkpoint — 2026-10-29
+
+Implemented locally after explicit maintainer authorization. See [ricochet evidence](validation/ricochet_shards.md) for focused checks, affected regressions, asset parity and native rendering. No commit or push requested. Stop for playtest before step 14.

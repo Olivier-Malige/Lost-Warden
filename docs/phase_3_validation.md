@@ -251,3 +251,9 @@ Guard rank/anticipation follow-up supersedes fixed reach: outer radii **60/72/84
 ## Upgrade categories and personal choices — 2026-10-25
 
 Every card now shows OFFENSIVE or UTILITY; energy recovery shows RECOVERY. Every selection reserves an eligible offensive and utility whenever both remain available, preserving acquired/new ranks, three unique cards, personal slots and deterministic co-op drawing. Exhausted categories never create invalid offers. [Category evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/upgrade_categories.md): **4,531 offer / 71 selection / 80 activation native checks PASS**, clean exits; **106 diagnostic documents / zero issues**. Inspected solo/co-op/wide cards have readable bounded category labels. Stop for playtest before ricochet.
+
+## Step 13 ricochet checkpoint — 2026-10-29
+
+The maintainer authorized ricochet shards after the guard checkpoint. [Ricochet evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/ricochet_shards.md): 101 headless / 103 native focused checks, 4,923 offer checks and affected combat/selection regressions pass. Editable exports match runtime PNGs and all previous icon columns remain unchanged. Catalog: 21 entries, three offensive/three utility slots. Human playtest and final balancing remain pending; stop before step 14. No commit or push requested.
+
+Ricochet return revision (2026-10-29): maintainer-approved ordinary repeat contacts now alternate groups when fresh targets run out. Focused headless checks: 200 pass; chain/explosion/player-hit regressions: 188/203/41 pass. Rank budgets, decay and shared boss exclusions remain. See [current evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/ricochet_shards.md#returning-ricochets--2026-10-29). Human playtest pending.

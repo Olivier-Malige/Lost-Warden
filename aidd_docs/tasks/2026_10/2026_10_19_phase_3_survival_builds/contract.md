@@ -216,3 +216,11 @@ The maintainer requested one hull orientation per player with scripted rotation.
 ### Maintainer-approved defensive utility pack — 2026-10-22
 
 The approved [defensive pack](../2026_10_22_defensive_pack/plan.md) supersedes the earlier consumable-shield clauses. The existing `shield` ID is now a three-rank regenerating sphere, joined by reactive armor and retaliation pulse as ordinary utility families. They share the existing three slots; no extra category, permanent progression or ricochet is introduced. Exact delivered behavior and acceptance evidence are in [the defensive validation](../2026_10_22_defensive_pack/validation.md). The live catalog has 19 entries; energy remains the repeatable reward.
+
+## Maintainer ricochet revision — 2026-10-29
+
+Supersede the original single-shard budgets with 1/2/3 shards and 3/4/5 accepted additional groups per shard at ranks one/two/three. Initial destinations are distinct; all children retain shared root histories and boss exclusions. Partial volleys respect available targets and the unchanged four active/reserved shards per owner. Speed, range, lifetime, damage factors and owner cooldown remain unchanged. Brighter native 16px combat cells and visible card/miniature cells for both teams accompany the revision. See [current validation](validation/ricochet_shards.md#maintainer-playtest-revision--2026-10-29).
+
+## Approved returning ricochets — 2026-10-29
+
+The maintainer approved returns to previously hit ordinary enemies when few targets remain. Each shard prefers locally unvisited targets and may fall back to a visited survivor after contacting another group; it never hits the same group twice consecutively. Direct origin hulls may be revisited after an intervening hit. The 3/4/5 impact budgets, 1/2/3 shard counts and all numerical flight/damage/cap values remain unchanged. Shared boss-root exclusions remain effective, so cannons/core cannot form repeat routes or receive extra boss damage. This supersedes ordinary unique-group constraints from prior checkpoints. [Current evidence](validation/ricochet_shards.md#returning-ricochets--2026-10-29).

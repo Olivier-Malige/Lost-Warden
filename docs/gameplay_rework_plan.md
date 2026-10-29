@@ -1,6 +1,6 @@
 # Gameplay roadmap
 
-Updated: 2026-10-28.
+Updated: 2026-10-29.
 
 **Goal:** a continuous survival shmup with varied builds, enemies and formations, increasing pressure over time, solo and local co-op.
 
@@ -16,7 +16,7 @@ The split is implemented locally. [Validation](../aidd_docs/tasks/2026_10/2026_1
 
 **Current Reactive Armor contract (2026-10-28):** the maintainer approved replacing extra injury invulnerability with delayed hull repair. A nonfatal hull injury starts one repair: restore one energy point after 8/6/4 seconds without further hull damage. New damage restarts the delay; one completed recovery restores only one point. Reflected or Retaliation-protected hits do not start or reset it. Ordinary one-second injury grace remains. A green personal HUD progress bar/countdown and `REPAIRED +1` feedback explain the effect, with explicit hull-damage and quiet-delay copy on the card. [Implementation and validation](../aidd_docs/tasks/2026_10/2026_10_28_reactive_repair/validation.md): 74 headless and 122 native repair checks pass, plus affected defense, collision, offer and selection regressions. Earlier extra-grace checkpoints below are historical. Await maintainer playtest.
 
-**Next step:** Playtest Guard Blades with the defensive close-range build, retaining three offensive and three utility slots. The maintainer approved this addition before step 13 ricochet shards, which still awaits a separate request. Steps 1-4 and 6-12 are implemented. Missiles, drone bolts and satellites retain criticals and explosions but remain excluded from electric chains; piercing belongs to the manual signature beam. The current playtest checkpoint adds satellites, explosions, defensive utilities and contact/build corrections after the published escort checkpoint. Step 5 still needs two solo observations and qualitative feedback. The maintainer explicitly defers effect balancing; prototype values remain recorded. Dedicated selection audio remains pending. See [Phase 3 evidence](phase_3_validation.md).
+**Next step:** Playtest step 13 ricochet shards and combined builds, retaining three offensive and three utility slots. The maintainer explicitly authorized ricochet on 2026-10-29; steps 1-4 and 6-13 are implemented. See [ricochet evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/ricochet_shards.md). Stop before step 14. Step 5 still needs two solo observations and qualitative feedback; effect balancing remains deferred and dedicated selection audio remains pending. See [Phase 3 evidence](phase_3_validation.md).
 
 ## Progress and delivery order
 
@@ -24,7 +24,7 @@ The split is implemented locally. [Validation](../aidd_docs/tasks/2026_10/2026_1
 | --- | --- | --- |
 | Preparation, Phase 1 and art | Original identity, display, core combat, controls, plasma and graphics | Complete |
 | 2 — Continuous survival | Seeded encounters, elites, first boss, survival UI and records | Complete; solo accepted, co-op playtest deferred |
-| 3 — Experience and power-ups | XP, personal builds, original weapon sprites and audiovisual level-up choices | In progress; steps 1-4 and 6-12 implemented; plasma piercing, criticals, chains, micro-missiles, escort drones, orbiting satellites, impact explosions and guard blades playable; human XP acceptance deferred |
+| 3 — Experience and power-ups | XP, personal builds, original weapon sprites and audiovisual level-up choices | In progress; steps 1-4 and 6-13 implemented; plasma piercing, criticals, chains, micro-missiles, escort drones, orbiting satellites, impact explosions, guard blades and ricochet shards playable; human XP acceptance deferred |
 | 4 — Enemies and density | Redesign current enemies, add roles, enrich formations, increase pressure over time | Planned; after Phase 3 |
 | 5 — Combat effects | Impacts, explosions, collections and upgrade feedback | Planned |
 | 6 — Final balance | Complete solo/co-op runs, performance and regression checks | Planned; includes deferred co-op gameplay acceptance after power-up and balance rework |
@@ -173,3 +173,11 @@ Visible meeting correction after playtest feedback: the endpoint-only change ali
 ### Upgrade category choices — 2026-10-25
 
 The maintainer requests visible categories and an offensive/utility choice at every level. All cards now identify OFFENSIVE or UTILITY; consumable energy identifies RECOVERY. Every personal hand reserves an eligible offensive and utility whenever both categories remain available, including rank upgrades at full slot capacity. Existing acquired/new guarantees, three distinct offers, slot limits, weighted draws and co-op RNG isolation remain. Exhausted categories yield only the remaining eligible offers. See [category validation](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/upgrade_categories.md). Stop for playtest before ricochet.
+
+### Ricochet propagation playtest revision — 2026-10-29
+
+The maintainer requested more rebounds and more shards per rank after finding the original effect too close to lightning. Ranks now emit 1/2/3 independently traveling shards with 3/4/5 accepted-target budgets each, shared root/boss exclusions, distinct initial targets and partial volleys under the unchanged four-shard owner cap. Native 16px travel/impact art is more visible. The missing player-one selection icon is corrected in both source atlases and imported textures. See [current ricochet evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/ricochet_shards.md#maintainer-playtest-revision--2026-10-29). Stop for playtest before step 14.
+
+### Returning ricochets — 2026-10-29
+
+Approved after the selection illustration revision: ricochets prefer new targets but can return to previously hit surviving ordinary hulls after an intervening hit. Two enemies support alternating physical returns; a lone enemy cannot self-loop. Existing 3/4/5 impact budgets, decay, flight limits and shared boss exclusions remain. Lightning retains unique-target propagation. See [return validation](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/ricochet_shards.md#returning-ricochets--2026-10-29). Await playtest before step 14.

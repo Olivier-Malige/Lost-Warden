@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="UpgradeDefinition" load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://data/upgrades/upgrade_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/upgrade_miniatures.png" id="2"]
+[ext_resource type="Script" path="res://data/weapons/weapon_definition.gd" id="3"]
+
+[sub_resource type="Resource" id="Flight"]
+script = ExtResource("3")
+id = &"ricochet_shard"
+projectile_speed = 300.0
+projectile_lifetime = 1.2
+active_limit = 4
+
+[sub_resource type="AtlasTexture" id="Icon"]
+atlas = ExtResource("2")
+region = Rect2(320, 0, 16, 16)
+
+[resource]
+script = ExtResource("1")
+icon = SubResource("Icon")
+id = &"ricochet"
+effect = 15
+weight = 10
+max_rank = 3
+display_name = "RICOCHET SHARDS"
+description = "Main and side cannons and escort bolts release 1/2/3 separate shards on their first impact. Each shard makes up to 3/4/5 impacts, preferring new targets and returning to surviving enemies after hitting another hull for 55% pre-critical damage, retaining 80% per rebound. Cooldown: 0.4 seconds."
+category = 1
+repeatable = false
+rank_values = PackedFloat32Array(3, 4, 5)
+projectile_counts = PackedInt32Array(1, 2, 3)
+range_values = PackedFloat32Array(88, 88, 88)
+secondary_damage_scale = 0.55
+secondary_damage_retention = 0.8
+weapon = SubResource("Flight")
+proc_cooldown = 0.4
+hud_label = &"RICO"

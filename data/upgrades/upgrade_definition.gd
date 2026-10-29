@@ -29,6 +29,7 @@ enum Category { UTILITY, OFFENSIVE, REWARD, FALLBACK }
 @export var width_bonus_values: PackedFloat32Array = []
 @export var range_values: PackedFloat32Array = []
 @export var secondary_damage_scale := 0.0
+@export var secondary_damage_retention := 1.0
 @export var proc_cooldown := 0.0
 @export var target_limit := 0
 @export var blast_expansion_duration := 0.0
@@ -205,7 +206,7 @@ func foundation_errors() -> PackedStringArray:
 			if not is_finite(duration) or duration <= protection_duration or duration < blast_visual_duration or duration > previous_recharge:
 				errors.append("Retaliation recharge must be finite, nonincreasing and longer than its protection and visuals.")
 			previous_recharge = duration
-	if effect == Effect.ENERGY_CHAINS:
+	if effect in [Effect.ENERGY_CHAINS, Effect.RICOCHET]:
 		if range_values.size() != max_rank or not is_finite(secondary_damage_scale) or secondary_damage_scale <= 0.0 or not is_finite(proc_cooldown) or proc_cooldown <= 0.0:
 			errors.append("Energy chains require authored ranges, positive damage scale and cooldown.")
 		var previous_range := 0.0
@@ -214,8 +215,17 @@ func foundation_errors() -> PackedStringArray:
 				errors.append("Chain ranges must be finite, positive and nondecreasing.")
 			previous_range = radius
 		for jumps in rank_values:
-			if jumps != roundf(jumps) or jumps > 3.0:
-				errors.append("Chain jump budgets must be whole numbers, at most three.")
+			if jumps != roundf(jumps) or jumps > (5.0 if effect == Effect.RICOCHET else 3.0):
+				errors.append("Propagation budgets must be whole numbers within the effect limit.")
+	if effect == Effect.RICOCHET:
+		if projectile_counts.size() != max_rank:
+			errors.append("Ricochet requires a shard count for every rank.")
+		for count in projectile_counts:
+			if count <= 0 or count > 3: errors.append("Ricochet volleys require one to three shards.")
+		if weapon == null or not is_finite(weapon.projectile_speed) or weapon.projectile_speed <= 0.0 or not is_finite(weapon.projectile_lifetime) or weapon.projectile_lifetime <= 0.0 or weapon.active_limit <= 0:
+			errors.append("Ricochet requires positive finite speed, lifetime and owner capacity.")
+		if not is_finite(secondary_damage_retention) or secondary_damage_retention <= 0.0 or secondary_damage_retention > 1.0:
+			errors.append("Ricochet damage retention must be positive and at most one.")
 	if effect == Effect.ORBITING_SATELLITES:
 		if support_counts.size() != max_rank or size_scales.size() != max_rank:
 			errors.append("Satellites require authored counts and sizes for every rank.")
@@ -306,6 +316,7 @@ func offer_snapshot(rank: int) -> Dictionary:
 		"next_range": range_value(next_rank),
 		"next_range_bonus": range_value(next_rank) / range_value(1) - 1.0 if range_value(1) > 0.0 else 0.0,
 		"secondary_damage_scale": secondary_damage_scale, "proc_cooldown": proc_cooldown,
+		"secondary_damage_retention": secondary_damage_retention,
 		"target_limit": target_limit,
 		"next_interval": interval_value(next_rank),
 		"next_projectile_count": projectile_count(next_rank),
