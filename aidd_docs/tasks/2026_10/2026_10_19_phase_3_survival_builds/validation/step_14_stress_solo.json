@@ -1,0 +1,10188 @@
+{
+	"boss_defeated": true,
+	"boss_patterns": [
+		"0:",
+		"0:RINGS",
+		"0:AIMED",
+		"0:SPIRAL",
+		"0:DRONES",
+		"1:",
+		"1:RINGS",
+		"1:AIMED",
+		"1:SPIRAL",
+		"1:BEAM",
+		"1:DRONES"
+	],
+	"boss_phase_changed": true,
+	"duration_wall_seconds": 300.006943,
+	"failures": [],
+	"frame_cap": 120,
+	"frame_ms": {
+		"0.5": 8.853,
+		"0.95": 27.894,
+		"0.99": 47.714
+	},
+	"frames": 26174,
+	"gpu": "NVIDIA GeForce RTX 3060",
+	"mode": "solo",
+	"native": true,
+	"peaks": {
+		"bolts": 6,
+		"missiles": 3,
+		"nodes": 1184,
+		"parked": 165,
+		"requests": 1,
+		"roots": 28,
+		"shards": 1,
+		"xp": 5
+	},
+	"renderer": "gl_compatibility",
+	"resolution": [
+		640,
+		400
+	],
+	"samples": [
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 185.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {},
+				"parked": 0
+			},
+			"seconds": 0.243111,
+			"xp": {
+				"active": 0,
+				"collected": 0,
+				"emitted": 0,
+				"lost": 0,
+				"parked": 0,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 335.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 5
+			},
+			"seconds": 1.008594,
+			"xp": {
+				"active": 0,
+				"collected": 0,
+				"emitted": 0,
+				"lost": 0,
+				"parked": 0,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 335.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 5
+			},
+			"seconds": 2.017609,
+			"xp": {
+				"active": 0,
+				"collected": 0,
+				"emitted": 0,
+				"lost": 0,
+				"parked": 0,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 344.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 5
+			},
+			"seconds": 3.073274,
+			"xp": {
+				"active": 0,
+				"collected": 0,
+				"emitted": 0,
+				"lost": 0,
+				"parked": 0,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 24
+			},
+			"nodes": 362.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 24
+				},
+				"buckets": {
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 6
+			},
+			"seconds": 4.017874,
+			"xp": {
+				"active": 0,
+				"collected": 0,
+				"emitted": 0,
+				"lost": 0,
+				"parked": 0,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 2,
+				"roots": 27
+			},
+			"nodes": 372.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 27
+				},
+				"buckets": {
+					"micro_missile.tscn": 1,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 6
+			},
+			"seconds": 5.014071,
+			"xp": {
+				"active": 0,
+				"collected": 0,
+				"emitted": 0,
+				"lost": 0,
+				"parked": 0,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 375.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 8
+			},
+			"seconds": 6.008849,
+			"xp": {
+				"active": 0,
+				"collected": 0,
+				"emitted": 0,
+				"lost": 0,
+				"parked": 0,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 361.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 8
+			},
+			"seconds": 7.008835,
+			"xp": {
+				"active": 0,
+				"collected": 0,
+				"emitted": 0,
+				"lost": 0,
+				"parked": 0,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 395.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 8
+			},
+			"seconds": 8.014525,
+			"xp": {
+				"active": 1,
+				"collected": 0,
+				"emitted": 1,
+				"lost": 0,
+				"parked": 0,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 387.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 0
+				},
+				"parked": 4
+			},
+			"seconds": 9.007847,
+			"xp": {
+				"active": 1,
+				"collected": 0,
+				"emitted": 1,
+				"lost": 0,
+				"parked": 0,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 27
+			},
+			"nodes": 378.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 27
+				},
+				"buckets": {
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 6
+			},
+			"seconds": 10.00284,
+			"xp": {
+				"active": 2,
+				"collected": 0,
+				"emitted": 2,
+				"lost": 0,
+				"parked": 0,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 24
+			},
+			"nodes": 391.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 24
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 9
+			},
+			"seconds": 11.005916,
+			"xp": {
+				"active": 2,
+				"collected": 0,
+				"emitted": 2,
+				"lost": 0,
+				"parked": 0,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 27
+			},
+			"nodes": 384.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 27
+				},
+				"buckets": {
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 6
+			},
+			"seconds": 12.017737,
+			"xp": {
+				"active": 1,
+				"collected": 1,
+				"emitted": 2,
+				"lost": 0,
+				"parked": 1,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 24
+			},
+			"nodes": 385.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 24
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 9
+			},
+			"seconds": 13.009471,
+			"xp": {
+				"active": 1,
+				"collected": 2,
+				"emitted": 3,
+				"lost": 0,
+				"parked": 1,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 28
+			},
+			"nodes": 385.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 28
+				},
+				"buckets": {
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 0
+				},
+				"parked": 1
+			},
+			"seconds": 14.003809,
+			"xp": {
+				"active": 0,
+				"collected": 3,
+				"emitted": 3,
+				"lost": 0,
+				"parked": 2,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 27
+			},
+			"nodes": 394.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 27
+				},
+				"buckets": {
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 6
+			},
+			"seconds": 15.00403,
+			"xp": {
+				"active": 1,
+				"collected": 3,
+				"emitted": 4,
+				"lost": 0,
+				"parked": 1,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 24
+			},
+			"nodes": 376.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 24
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 9
+			},
+			"seconds": 16.000313,
+			"xp": {
+				"active": 2,
+				"collected": 4,
+				"emitted": 6,
+				"lost": 0,
+				"parked": 1,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 24
+			},
+			"nodes": 369.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 24
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 9
+			},
+			"seconds": 17.004538,
+			"xp": {
+				"active": 2,
+				"collected": 4,
+				"emitted": 6,
+				"lost": 0,
+				"parked": 1,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 24
+			},
+			"nodes": 383.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 24
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 9
+			},
+			"seconds": 18.014261,
+			"xp": {
+				"active": 2,
+				"collected": 4,
+				"emitted": 6,
+				"lost": 0,
+				"parked": 1,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 369.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 8
+			},
+			"seconds": 19.009453,
+			"xp": {
+				"active": 2,
+				"collected": 4,
+				"emitted": 6,
+				"lost": 0,
+				"parked": 1,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 400.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 8
+			},
+			"seconds": 20.004537,
+			"xp": {
+				"active": 2,
+				"collected": 4,
+				"emitted": 6,
+				"lost": 0,
+				"parked": 1,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 427.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 8
+			},
+			"seconds": 21.009988,
+			"xp": {
+				"active": 5,
+				"collected": 4,
+				"emitted": 9,
+				"lost": 0,
+				"parked": 0,
+				"reserved": 0,
+				"value": 5
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 23
+			},
+			"nodes": 393.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 23
+				},
+				"buckets": {
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 8
+				},
+				"parked": 10
+			},
+			"seconds": 22.001305,
+			"xp": {
+				"active": 5,
+				"collected": 4,
+				"emitted": 9,
+				"lost": 0,
+				"parked": 0,
+				"reserved": 0,
+				"value": 5
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 21
+			},
+			"nodes": 394.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 21
+				},
+				"buckets": {
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 10
+				},
+				"parked": 12
+			},
+			"seconds": 23.011681,
+			"xp": {
+				"active": 4,
+				"collected": 5,
+				"emitted": 10,
+				"lost": 1,
+				"parked": 1,
+				"reserved": 0,
+				"value": 4
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 24
+			},
+			"nodes": 415.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 24
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 9
+			},
+			"seconds": 24.013605,
+			"xp": {
+				"active": 3,
+				"collected": 6,
+				"emitted": 10,
+				"lost": 1,
+				"parked": 2,
+				"reserved": 0,
+				"value": 3
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 20
+			},
+			"nodes": 408.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 20
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 8
+				},
+				"parked": 13
+			},
+			"seconds": 25.009575,
+			"xp": {
+				"active": 3,
+				"collected": 6,
+				"emitted": 10,
+				"lost": 1,
+				"parked": 2,
+				"reserved": 0,
+				"value": 3
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 27
+			},
+			"nodes": 408.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 27
+				},
+				"buckets": {
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 6
+			},
+			"seconds": 26.010474,
+			"xp": {
+				"active": 3,
+				"collected": 6,
+				"emitted": 10,
+				"lost": 1,
+				"parked": 2,
+				"reserved": 0,
+				"value": 3
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 24
+			},
+			"nodes": 418.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 24
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 9
+			},
+			"seconds": 27.002543,
+			"xp": {
+				"active": 3,
+				"collected": 6,
+				"emitted": 10,
+				"lost": 1,
+				"parked": 2,
+				"reserved": 0,
+				"value": 3
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 393.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 8
+			},
+			"seconds": 28.01751,
+			"xp": {
+				"active": 1,
+				"collected": 8,
+				"emitted": 11,
+				"lost": 2,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 20
+			},
+			"nodes": 386.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 20
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 8
+				},
+				"parked": 13
+			},
+			"seconds": 29.000601,
+			"xp": {
+				"active": 1,
+				"collected": 8,
+				"emitted": 11,
+				"lost": 2,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"capture": true,
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 24
+			},
+			"nodes": 413.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 24
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 9
+			},
+			"seconds": 30.016474,
+			"xp": {
+				"active": 1,
+				"collected": 8,
+				"emitted": 11,
+				"lost": 2,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 27
+			},
+			"nodes": 408.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 27
+				},
+				"buckets": {
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 6
+			},
+			"seconds": 31.02952,
+			"xp": {
+				"active": 1,
+				"collected": 8,
+				"emitted": 11,
+				"lost": 2,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 26
+			},
+			"nodes": 391.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 26
+				},
+				"buckets": {
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 6
+				},
+				"parked": 7
+			},
+			"seconds": 32.008571,
+			"xp": {
+				"active": 1,
+				"collected": 9,
+				"emitted": 12,
+				"lost": 2,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 384.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 8
+			},
+			"seconds": 33.012906,
+			"xp": {
+				"active": 1,
+				"collected": 10,
+				"emitted": 13,
+				"lost": 2,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 24
+			},
+			"nodes": 405.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 24
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 9
+			},
+			"seconds": 34.019288,
+			"xp": {
+				"active": 3,
+				"collected": 10,
+				"emitted": 15,
+				"lost": 2,
+				"parked": 2,
+				"reserved": 0,
+				"value": 3
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 372.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 8
+			},
+			"seconds": 35.010122,
+			"xp": {
+				"active": 3,
+				"collected": 10,
+				"emitted": 15,
+				"lost": 2,
+				"parked": 2,
+				"reserved": 0,
+				"value": 3
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 382.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 8
+			},
+			"seconds": 36.021384,
+			"xp": {
+				"active": 2,
+				"collected": 11,
+				"emitted": 15,
+				"lost": 2,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 397.0,
+			"pool": {
+				"active": {
+					"enemy": 1,
+					"player": 25
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4
+				},
+				"parked": 8
+			},
+			"seconds": 37.016827,
+			"xp": {
+				"active": 2,
+				"collected": 11,
+				"emitted": 15,
+				"lost": 2,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 387.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 0,
+					"tie_shot.tscn": 1
+				},
+				"parked": 5
+			},
+			"seconds": 38.004668,
+			"xp": {
+				"active": 2,
+				"collected": 11,
+				"emitted": 15,
+				"lost": 2,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 387.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 1
+				},
+				"parked": 9
+			},
+			"seconds": 39.016648,
+			"xp": {
+				"active": 2,
+				"collected": 11,
+				"emitted": 15,
+				"lost": 2,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 28
+			},
+			"nodes": 414.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 28
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 1,
+					"tie_shot.tscn": 1
+				},
+				"parked": 6
+			},
+			"seconds": 40.000242,
+			"xp": {
+				"active": 2,
+				"collected": 11,
+				"emitted": 16,
+				"lost": 3,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 27
+			},
+			"nodes": 395.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 27
+				},
+				"buckets": {
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 1
+				},
+				"parked": 7
+			},
+			"seconds": 41.012503,
+			"xp": {
+				"active": 1,
+				"collected": 11,
+				"emitted": 16,
+				"lost": 4,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 2,
+				"roots": 27
+			},
+			"nodes": 377.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 27
+				},
+				"buckets": {
+					"micro_missile.tscn": 1,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 1
+				},
+				"parked": 7
+			},
+			"seconds": 42.00485,
+			"xp": {
+				"active": 2,
+				"collected": 11,
+				"emitted": 17,
+				"lost": 4,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 399.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 1
+				},
+				"parked": 9
+			},
+			"seconds": 43.017301,
+			"xp": {
+				"active": 1,
+				"collected": 12,
+				"emitted": 17,
+				"lost": 4,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 20
+			},
+			"nodes": 384.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 20
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 8,
+					"tie_shot.tscn": 1
+				},
+				"parked": 14
+			},
+			"seconds": 44.02396,
+			"xp": {
+				"active": 3,
+				"collected": 12,
+				"emitted": 19,
+				"lost": 4,
+				"parked": 2,
+				"reserved": 0,
+				"value": 3
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 24
+			},
+			"nodes": 387.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 24
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 1
+				},
+				"parked": 10
+			},
+			"seconds": 45.001262,
+			"xp": {
+				"active": 2,
+				"collected": 13,
+				"emitted": 19,
+				"lost": 4,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 24
+			},
+			"nodes": 432.0,
+			"pool": {
+				"active": {
+					"enemy": 4,
+					"player": 24
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 0
+				},
+				"parked": 9
+			},
+			"seconds": 46.000668,
+			"xp": {
+				"active": 2,
+				"collected": 13,
+				"emitted": 19,
+				"lost": 4,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 2,
+				"roots": 26
+			},
+			"nodes": 434.0,
+			"pool": {
+				"active": {
+					"enemy": 1,
+					"player": 26
+				},
+				"buckets": {
+					"micro_missile.tscn": 1,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 3
+				},
+				"parked": 10
+			},
+			"seconds": 47.01931,
+			"xp": {
+				"active": 4,
+				"collected": 13,
+				"emitted": 21,
+				"lost": 4,
+				"parked": 1,
+				"reserved": 0,
+				"value": 4
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 412.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 4
+				},
+				"parked": 12
+			},
+			"seconds": 48.003808,
+			"xp": {
+				"active": 4,
+				"collected": 13,
+				"emitted": 21,
+				"lost": 4,
+				"parked": 1,
+				"reserved": 0,
+				"value": 4
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 24
+			},
+			"nodes": 432.0,
+			"pool": {
+				"active": {
+					"enemy": 1,
+					"player": 24
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 3
+				},
+				"parked": 11
+			},
+			"seconds": 49.005001,
+			"xp": {
+				"active": 3,
+				"collected": 14,
+				"emitted": 21,
+				"lost": 4,
+				"parked": 2,
+				"reserved": 0,
+				"value": 3
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 28
+			},
+			"nodes": 432.0,
+			"pool": {
+				"active": {
+					"enemy": 3,
+					"player": 28
+				},
+				"buckets": {
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 1
+				},
+				"parked": 6
+			},
+			"seconds": 50.007136,
+			"xp": {
+				"active": 1,
+				"collected": 15,
+				"emitted": 21,
+				"lost": 5,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 26
+			},
+			"nodes": 423.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 26
+				},
+				"buckets": {
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 6,
+					"tie_shot.tscn": 4
+				},
+				"parked": 11
+			},
+			"seconds": 51.011412,
+			"xp": {
+				"active": 2,
+				"collected": 15,
+				"emitted": 22,
+				"lost": 5,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 412.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 4
+				},
+				"parked": 12
+			},
+			"seconds": 52.002157,
+			"xp": {
+				"active": 0,
+				"collected": 16,
+				"emitted": 22,
+				"lost": 6,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 20
+			},
+			"nodes": 422.0,
+			"pool": {
+				"active": {
+					"enemy": 2,
+					"player": 20
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 8,
+					"tie_shot.tscn": 2
+				},
+				"parked": 15
+			},
+			"seconds": 53.000723,
+			"xp": {
+				"active": 2,
+				"collected": 16,
+				"emitted": 24,
+				"lost": 6,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 27
+			},
+			"nodes": 412.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 27
+				},
+				"buckets": {
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 3
+				},
+				"parked": 9
+			},
+			"seconds": 54.006657,
+			"xp": {
+				"active": 2,
+				"collected": 16,
+				"emitted": 24,
+				"lost": 6,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 27
+			},
+			"nodes": 412.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 27
+				},
+				"buckets": {
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 4
+				},
+				"parked": 10
+			},
+			"seconds": 55.001957,
+			"xp": {
+				"active": 2,
+				"collected": 17,
+				"emitted": 25,
+				"lost": 6,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 1,
+				"roots": 25
+			},
+			"nodes": 434.0,
+			"pool": {
+				"active": {
+					"enemy": 1,
+					"player": 25
+				},
+				"buckets": {
+					"micro_missile.tscn": 2,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 3
+				},
+				"parked": 11
+			},
+			"seconds": 56.006746,
+			"xp": {
+				"active": 3,
+				"collected": 18,
+				"emitted": 27,
+				"lost": 6,
+				"parked": 2,
+				"reserved": 0,
+				"value": 3
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 20
+			},
+			"nodes": 412.0,
+			"pool": {
+				"active": {
+					"enemy": 2,
+					"player": 20
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 2
+				},
+				"parked": 11
+			},
+			"seconds": 57.003409,
+			"xp": {
+				"active": 3,
+				"collected": 18,
+				"emitted": 27,
+				"lost": 6,
+				"parked": 2,
+				"reserved": 0,
+				"value": 3
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 24
+			},
+			"nodes": 412.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 24
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 4
+				},
+				"parked": 13
+			},
+			"seconds": 58.003955,
+			"xp": {
+				"active": 3,
+				"collected": 18,
+				"emitted": 27,
+				"lost": 6,
+				"parked": 2,
+				"reserved": 0,
+				"value": 3
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 24
+			},
+			"nodes": 412.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 24
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 4
+				},
+				"parked": 13
+			},
+			"seconds": 59.016475,
+			"xp": {
+				"active": 2,
+				"collected": 19,
+				"emitted": 27,
+				"lost": 6,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 24
+			},
+			"nodes": 437.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 24
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 2
+				},
+				"parked": 11
+			},
+			"seconds": 60.004898,
+			"xp": {
+				"active": 1,
+				"collected": 19,
+				"emitted": 27,
+				"lost": 7,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 25
+			},
+			"nodes": 417.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 25
+				},
+				"buckets": {
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 4
+				},
+				"parked": 12
+			},
+			"seconds": 61.001241,
+			"xp": {
+				"active": 1,
+				"collected": 19,
+				"emitted": 27,
+				"lost": 7,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 27
+			},
+			"nodes": 417.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 27
+				},
+				"buckets": {
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 4
+				},
+				"parked": 10
+			},
+			"seconds": 62.01196,
+			"xp": {
+				"active": 1,
+				"collected": 19,
+				"emitted": 27,
+				"lost": 7,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 24
+			},
+			"nodes": 423.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 24
+				},
+				"buckets": {
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 7,
+					"tie_shot.tscn": 4
+				},
+				"parked": 13
+			},
+			"seconds": 63.009267,
+			"xp": {
+				"active": 0,
+				"collected": 19,
+				"emitted": 27,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 19
+			},
+			"nodes": 537.0,
+			"pool": {
+				"active": {
+					"enemy": 22,
+					"player": 19
+				},
+				"buckets": {
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 4,
+					"player_side_shot.tscn": 10,
+					"tie_shot.tscn": 4
+				},
+				"parked": 18
+			},
+			"seconds": 64.009408,
+			"xp": {
+				"active": 0,
+				"collected": 19,
+				"emitted": 27,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 23
+			},
+			"nodes": 638.0,
+			"pool": {
+				"active": {
+					"enemy": 38,
+					"player": 23
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 5,
+					"tie_shot.tscn": 4
+				},
+				"parked": 20
+			},
+			"seconds": 65.011789,
+			"xp": {
+				"active": 0,
+				"collected": 19,
+				"emitted": 27,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 24
+			},
+			"nodes": 737.0,
+			"pool": {
+				"active": {
+					"enemy": 33,
+					"player": 24
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 31,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 4,
+					"tie_shot.tscn": 4
+				},
+				"parked": 44
+			},
+			"seconds": 66.017412,
+			"xp": {
+				"active": 0,
+				"collected": 19,
+				"emitted": 27,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 26
+			},
+			"nodes": 788.0,
+			"pool": {
+				"active": {
+					"enemy": 31,
+					"player": 26
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 43,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 5,
+					"tie_shot.tscn": 4
+				},
+				"parked": 54
+			},
+			"seconds": 67.023467,
+			"xp": {
+				"active": 0,
+				"collected": 19,
+				"emitted": 27,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 21
+			},
+			"nodes": 788.0,
+			"pool": {
+				"active": {
+					"enemy": 8,
+					"player": 21
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 40,
+					"dread_ark_shot.tscn": 26,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 9,
+					"tie_shot.tscn": 4
+				},
+				"parked": 82
+			},
+			"seconds": 68.010832,
+			"xp": {
+				"active": 0,
+				"collected": 19,
+				"emitted": 27,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 23
+			},
+			"nodes": 784.0,
+			"pool": {
+				"active": {
+					"enemy": 22,
+					"player": 23
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 22,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 6,
+					"tie_shot.tscn": 4
+				},
+				"parked": 66
+			},
+			"seconds": 69.006864,
+			"xp": {
+				"active": 0,
+				"collected": 19,
+				"emitted": 27,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 21
+			},
+			"nodes": 786.0,
+			"pool": {
+				"active": {
+					"enemy": 25,
+					"player": 21
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 19,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 8,
+					"tie_shot.tscn": 4
+				},
+				"parked": 65
+			},
+			"seconds": 70.014143,
+			"xp": {
+				"active": 0,
+				"collected": 19,
+				"emitted": 27,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 15
+			},
+			"nodes": 792.0,
+			"pool": {
+				"active": {
+					"enemy": 18,
+					"player": 15
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 35,
+					"dread_ark_shot.tscn": 20,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 12,
+					"tie_shot.tscn": 4
+				},
+				"parked": 77
+			},
+			"seconds": 71.006598,
+			"xp": {
+				"active": 0,
+				"collected": 19,
+				"emitted": 27,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 17
+			},
+			"nodes": 791.0,
+			"pool": {
+				"active": {
+					"enemy": 30,
+					"player": 17
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 44,
+					"dread_ark_shot.tscn": 0,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 10,
+					"tie_shot.tscn": 4
+				},
+				"parked": 64
+			},
+			"seconds": 72.013866,
+			"xp": {
+				"active": 0,
+				"collected": 19,
+				"emitted": 27,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 22
+			},
+			"nodes": 797.0,
+			"pool": {
+				"active": {
+					"enemy": 1,
+					"player": 22
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 44,
+					"dread_ark_shot.tscn": 29,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 8,
+					"tie_shot.tscn": 4
+				},
+				"parked": 88
+			},
+			"seconds": 73.000478,
+			"xp": {
+				"active": 0,
+				"collected": 19,
+				"emitted": 27,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 22
+			},
+			"nodes": 812.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 22
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 44,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 9,
+					"tie_shot.tscn": 4
+				},
+				"parked": 89
+			},
+			"seconds": 74.017026,
+			"xp": {
+				"active": 0,
+				"collected": 19,
+				"emitted": 27,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 20
+			},
+			"nodes": 813.0,
+			"pool": {
+				"active": {
+					"enemy": 44,
+					"player": 20
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 0,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 8,
+					"tie_shot.tscn": 4
+				},
+				"parked": 47
+			},
+			"seconds": 75.009686,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 783.0,
+			"pool": {
+				"active": {
+					"enemy": 29,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 15,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"tie_shot.tscn": 4
+				},
+				"parked": 79
+			},
+			"seconds": 76.010692,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 782.0,
+			"pool": {
+				"active": {
+					"enemy": 33,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 41,
+					"dread_ark_shot.tscn": 0,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"tie_shot.tscn": 4
+				},
+				"parked": 74
+			},
+			"seconds": 77.007764,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 782.0,
+			"pool": {
+				"active": {
+					"enemy": 5,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 44,
+					"dread_ark_shot.tscn": 25,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"tie_shot.tscn": 4
+				},
+				"parked": 101
+			},
+			"seconds": 78.021747,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 782.0,
+			"pool": {
+				"active": {
+					"enemy": 16,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 28,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"tie_shot.tscn": 4
+				},
+				"parked": 90
+			},
+			"seconds": 79.004419,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 782.0,
+			"pool": {
+				"active": {
+					"enemy": 25,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 19,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"tie_shot.tscn": 4
+				},
+				"parked": 81
+			},
+			"seconds": 80.000454,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 784.0,
+			"pool": {
+				"active": {
+					"enemy": 15,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 29,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"tie_shot.tscn": 4
+				},
+				"parked": 93
+			},
+			"seconds": 81.009641,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 782.0,
+			"pool": {
+				"active": {
+					"enemy": 32,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 42,
+					"dread_ark_shot.tscn": 0,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"tie_shot.tscn": 4
+				},
+				"parked": 74
+			},
+			"seconds": 82.005278,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 782.0,
+			"pool": {
+				"active": {
+					"enemy": 14,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 44,
+					"dread_ark_shot.tscn": 16,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"tie_shot.tscn": 4
+				},
+				"parked": 92
+			},
+			"seconds": 83.005288,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 818.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 44,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"tie_shot.tscn": 4
+				},
+				"parked": 107
+			},
+			"seconds": 84.009983,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 795.0,
+			"pool": {
+				"active": {
+					"enemy": 44,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 0,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 1,
+					"tie_shot.tscn": 4
+				},
+				"parked": 65
+			},
+			"seconds": 85.009253,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 787.0,
+			"pool": {
+				"active": {
+					"enemy": 29,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 14,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 1,
+					"tie_shot.tscn": 4
+				},
+				"parked": 79
+			},
+			"seconds": 86.000784,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 783.0,
+			"pool": {
+				"active": {
+					"enemy": 42,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 32,
+					"dread_ark_shot.tscn": 0,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 1,
+					"tie_shot.tscn": 4
+				},
+				"parked": 65
+			},
+			"seconds": 87.005699,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 783.0,
+			"pool": {
+				"active": {
+					"enemy": 26,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 41,
+					"dread_ark_shot.tscn": 7,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 1,
+					"tie_shot.tscn": 4
+				},
+				"parked": 81
+			},
+			"seconds": 88.015179,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 783.0,
+			"pool": {
+				"active": {
+					"enemy": 10,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 36,
+					"dread_ark_shot.tscn": 28,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 1,
+					"tie_shot.tscn": 4
+				},
+				"parked": 97
+			},
+			"seconds": 89.005761,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 1,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 787.0,
+			"pool": {
+				"active": {
+					"enemy": 29,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 15,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 1,
+					"tie_shot.tscn": 4
+				},
+				"parked": 80
+			},
+			"seconds": 90.008529,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 785.0,
+			"pool": {
+				"active": {
+					"enemy": 23,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 21,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 1,
+					"tie_shot.tscn": 4
+				},
+				"parked": 86
+			},
+			"seconds": 91.001846,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 1,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 787.0,
+			"pool": {
+				"active": {
+					"enemy": 23,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 41,
+					"dread_ark_shot.tscn": 10,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 1,
+					"tie_shot.tscn": 4
+				},
+				"parked": 86
+			},
+			"seconds": 92.001979,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 783.0,
+			"pool": {
+				"active": {
+					"enemy": 23,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 44,
+					"dread_ark_shot.tscn": 7,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 1,
+					"tie_shot.tscn": 4
+				},
+				"parked": 85
+			},
+			"seconds": 93.004599,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 801.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 44,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 1,
+					"tie_shot.tscn": 4
+				},
+				"parked": 107
+			},
+			"seconds": 94.001431,
+			"xp": {
+				"active": 0,
+				"collected": 21,
+				"emitted": 29,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 1,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 802.0,
+			"pool": {
+				"active": {
+					"enemy": 22,
+					"player": 2
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 22,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 4,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 89
+			},
+			"seconds": 95.007951,
+			"xp": {
+				"active": 2,
+				"collected": 22,
+				"emitted": 32,
+				"lost": 8,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 789.0,
+			"pool": {
+				"active": {
+					"enemy": 39,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 5,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 70
+			},
+			"seconds": 96.01808,
+			"xp": {
+				"active": 2,
+				"collected": 22,
+				"emitted": 32,
+				"lost": 8,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 789.0,
+			"pool": {
+				"active": {
+					"enemy": 35,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 19,
+					"dread_ark_shot.tscn": 20,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 74
+			},
+			"seconds": 97.003082,
+			"xp": {
+				"active": 2,
+				"collected": 22,
+				"emitted": 32,
+				"lost": 8,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 792.0,
+			"pool": {
+				"active": {
+					"enemy": 31,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 43,
+					"dread_ark_shot.tscn": 0,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 79
+			},
+			"seconds": 98.007364,
+			"xp": {
+				"active": 2,
+				"collected": 22,
+				"emitted": 32,
+				"lost": 8,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 784.0,
+			"pool": {
+				"active": {
+					"enemy": 3,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 42,
+					"dread_ark_shot.tscn": 29,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 106
+			},
+			"seconds": 99.009389,
+			"xp": {
+				"active": 0,
+				"collected": 24,
+				"emitted": 32,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"capture": true,
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 784.0,
+			"pool": {
+				"active": {
+					"enemy": 21,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 23,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 88
+			},
+			"seconds": 100.012449,
+			"xp": {
+				"active": 0,
+				"collected": 24,
+				"emitted": 32,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 784.0,
+			"pool": {
+				"active": {
+					"enemy": 28,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 16,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 80
+			},
+			"seconds": 101.009879,
+			"xp": {
+				"active": 0,
+				"collected": 24,
+				"emitted": 32,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 784.0,
+			"pool": {
+				"active": {
+					"enemy": 12,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 32,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 96
+			},
+			"seconds": 102.00388,
+			"xp": {
+				"active": 0,
+				"collected": 24,
+				"emitted": 32,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 788.0,
+			"pool": {
+				"active": {
+					"enemy": 30,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 44,
+					"dread_ark_shot.tscn": 0,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 80
+			},
+			"seconds": 103.008807,
+			"xp": {
+				"active": 0,
+				"collected": 24,
+				"emitted": 32,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 1,
+				"reservations": 1,
+				"roots": 3
+			},
+			"nodes": 804.0,
+			"pool": {
+				"active": {
+					"enemy": 1,
+					"player": 2
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 44,
+					"dread_ark_shot.tscn": 29,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 4,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 1,
+					"tie_shot.tscn": 4
+				},
+				"parked": 109
+			},
+			"seconds": 104.000562,
+			"xp": {
+				"active": 0,
+				"collected": 24,
+				"emitted": 32,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 811.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 44,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 108
+			},
+			"seconds": 105.008655,
+			"xp": {
+				"active": 0,
+				"collected": 24,
+				"emitted": 32,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 816.0,
+			"pool": {
+				"active": {
+					"enemy": 44,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 0,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 66
+			},
+			"seconds": 106.00182,
+			"xp": {
+				"active": 0,
+				"collected": 25,
+				"emitted": 33,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 789.0,
+			"pool": {
+				"active": {
+					"enemy": 27,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 17,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 82
+			},
+			"seconds": 107.000771,
+			"xp": {
+				"active": 0,
+				"collected": 25,
+				"emitted": 33,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 787.0,
+			"pool": {
+				"active": {
+					"enemy": 35,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 39,
+					"dread_ark_shot.tscn": 0,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 75
+			},
+			"seconds": 108.004635,
+			"xp": {
+				"active": 0,
+				"collected": 25,
+				"emitted": 33,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 784.0,
+			"pool": {
+				"active": {
+					"enemy": 10,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 44,
+					"dread_ark_shot.tscn": 20,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 98
+			},
+			"seconds": 109.001325,
+			"xp": {
+				"active": 0,
+				"collected": 25,
+				"emitted": 33,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 784.0,
+			"pool": {
+				"active": {
+					"enemy": 14,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 30,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 95
+			},
+			"seconds": 110.013141,
+			"xp": {
+				"active": 0,
+				"collected": 25,
+				"emitted": 33,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 784.0,
+			"pool": {
+				"active": {
+					"enemy": 26,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 18,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 82
+			},
+			"seconds": 111.002321,
+			"xp": {
+				"active": 0,
+				"collected": 25,
+				"emitted": 33,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 784.0,
+			"pool": {
+				"active": {
+					"enemy": 17,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 27,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 92
+			},
+			"seconds": 112.019302,
+			"xp": {
+				"active": 0,
+				"collected": 25,
+				"emitted": 33,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 1,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 787.0,
+			"pool": {
+				"active": {
+					"enemy": 34,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 40,
+					"dread_ark_shot.tscn": 0,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 75
+			},
+			"seconds": 113.011117,
+			"xp": {
+				"active": 0,
+				"collected": 25,
+				"emitted": 33,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 784.0,
+			"pool": {
+				"active": {
+					"enemy": 22,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 44,
+					"dread_ark_shot.tscn": 8,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 86
+			},
+			"seconds": 114.011065,
+			"xp": {
+				"active": 0,
+				"collected": 25,
+				"emitted": 33,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 811.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 44,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 109
+			},
+			"seconds": 115.016665,
+			"xp": {
+				"active": 0,
+				"collected": 25,
+				"emitted": 33,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 1,
+				"roots": 4
+			},
+			"nodes": 811.0,
+			"pool": {
+				"active": {
+					"enemy": 22,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 22,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 1,
+					"tie_shot.tscn": 4
+				},
+				"parked": 87
+			},
+			"seconds": 116.015435,
+			"xp": {
+				"active": 1,
+				"collected": 25,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 1,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 789.0,
+			"pool": {
+				"active": {
+					"enemy": 34,
+					"player": 2
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 10,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 4,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 77
+			},
+			"seconds": 117.020919,
+			"xp": {
+				"active": 0,
+				"collected": 26,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 787.0,
+			"pool": {
+				"active": {
+					"enemy": 38,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 26,
+					"dread_ark_shot.tscn": 10,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 72
+			},
+			"seconds": 118.009151,
+			"xp": {
+				"active": 0,
+				"collected": 26,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 1,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 788.0,
+			"pool": {
+				"active": {
+					"enemy": 24,
+					"player": 2
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 44,
+					"dread_ark_shot.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 4,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 87
+			},
+			"seconds": 119.012931,
+			"xp": {
+				"active": 0,
+				"collected": 26,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 786.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 38,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 104
+			},
+			"seconds": 120.006795,
+			"xp": {
+				"active": 0,
+				"collected": 26,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 784.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 44,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 108
+			},
+			"seconds": 121.007081,
+			"xp": {
+				"active": 0,
+				"collected": 26,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 788.0,
+			"pool": {
+				"active": {
+					"enemy": 29,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 15,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 81
+			},
+			"seconds": 122.016158,
+			"xp": {
+				"active": 0,
+				"collected": 26,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 999.0,
+			"pool": {
+				"active": {
+					"enemy": 79,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 8,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 73
+			},
+			"seconds": 123.003255,
+			"xp": {
+				"active": 0,
+				"collected": 26,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 999.0,
+			"pool": {
+				"active": {
+					"enemy": 44,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 43,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 108
+			},
+			"seconds": 124.014938,
+			"xp": {
+				"active": 0,
+				"collected": 26,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 1002.0,
+			"pool": {
+				"active": {
+					"enemy": 29,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 86,
+					"dread_ark_shot.tscn": 2,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 124
+			},
+			"seconds": 125.007064,
+			"xp": {
+				"active": 0,
+				"collected": 26,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 999.0,
+			"pool": {
+				"active": {
+					"enemy": 14,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 15,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 137
+			},
+			"seconds": 126.005706,
+			"xp": {
+				"active": 0,
+				"collected": 26,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 999.0,
+			"pool": {
+				"active": {
+					"enemy": 12,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 75,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 140
+			},
+			"seconds": 127.007122,
+			"xp": {
+				"active": 0,
+				"collected": 26,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 999.0,
+			"pool": {
+				"active": {
+					"enemy": 33,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 54,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 118
+			},
+			"seconds": 128.004617,
+			"xp": {
+				"active": 0,
+				"collected": 26,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 1,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1003.0,
+			"pool": {
+				"active": {
+					"enemy": 19,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 68,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 134
+			},
+			"seconds": 129.008225,
+			"xp": {
+				"active": 0,
+				"collected": 26,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 1003.0,
+			"pool": {
+				"active": {
+					"enemy": 4,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 83,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 149
+			},
+			"seconds": 130.007173,
+			"xp": {
+				"active": 0,
+				"collected": 26,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 999.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 152
+			},
+			"seconds": 131.017431,
+			"xp": {
+				"active": 0,
+				"collected": 26,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 999.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 152
+			},
+			"seconds": 132.013108,
+			"xp": {
+				"active": 0,
+				"collected": 26,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 999.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 152
+			},
+			"seconds": 133.01666,
+			"xp": {
+				"active": 0,
+				"collected": 26,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 999.0,
+			"pool": {
+				"active": {
+					"enemy": 28,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 2,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 124
+			},
+			"seconds": 134.010412,
+			"xp": {
+				"active": 0,
+				"collected": 26,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 999.0,
+			"pool": {
+				"active": {
+					"enemy": 8,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 21,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 142
+			},
+			"seconds": 135.006809,
+			"xp": {
+				"active": 0,
+				"collected": 26,
+				"emitted": 34,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 1,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1038.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 153
+			},
+			"seconds": 136.018862,
+			"xp": {
+				"active": 1,
+				"collected": 26,
+				"emitted": 35,
+				"lost": 8,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 999.0,
+			"pool": {
+				"active": {
+					"enemy": 58,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 29,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 93
+			},
+			"seconds": 137.00027,
+			"xp": {
+				"active": 1,
+				"collected": 26,
+				"emitted": 35,
+				"lost": 8,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 999.0,
+			"pool": {
+				"active": {
+					"enemy": 64,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 23,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 87
+			},
+			"seconds": 138.00677,
+			"xp": {
+				"active": 0,
+				"collected": 27,
+				"emitted": 35,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 1,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1003.0,
+			"pool": {
+				"active": {
+					"enemy": 29,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 65,
+					"dread_ark_shot.tscn": 23,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 124
+			},
+			"seconds": 139.018041,
+			"xp": {
+				"active": 0,
+				"collected": 27,
+				"emitted": 35,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 999.0,
+			"pool": {
+				"active": {
+					"enemy": 28,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 2,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 124
+			},
+			"seconds": 140.00104,
+			"xp": {
+				"active": 0,
+				"collected": 27,
+				"emitted": 35,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 1,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1002.0,
+			"pool": {
+				"active": {
+					"enemy": 3,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 27,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 150
+			},
+			"seconds": 141.011587,
+			"xp": {
+				"active": 0,
+				"collected": 27,
+				"emitted": 35,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 1001.0,
+			"pool": {
+				"active": {
+					"enemy": 20,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 67,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 133
+			},
+			"seconds": 142.005253,
+			"xp": {
+				"active": 0,
+				"collected": 27,
+				"emitted": 35,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 1003.0,
+			"pool": {
+				"active": {
+					"enemy": 27,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 60,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 126
+			},
+			"seconds": 143.007929,
+			"xp": {
+				"active": 0,
+				"collected": 27,
+				"emitted": 35,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 1,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1003.0,
+			"pool": {
+				"active": {
+					"enemy": 12,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 75,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 141
+			},
+			"seconds": 144.004353,
+			"xp": {
+				"active": 0,
+				"collected": 27,
+				"emitted": 35,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 999.0,
+			"pool": {
+				"active": {
+					"enemy": 3,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 84,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 148
+			},
+			"seconds": 145.00662,
+			"xp": {
+				"active": 0,
+				"collected": 27,
+				"emitted": 35,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 999.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 151
+			},
+			"seconds": 146.013263,
+			"xp": {
+				"active": 0,
+				"collected": 27,
+				"emitted": 35,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 999.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 152
+			},
+			"seconds": 147.008175,
+			"xp": {
+				"active": 0,
+				"collected": 27,
+				"emitted": 35,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 2
+			},
+			"nodes": 1003.0,
+			"pool": {
+				"active": {
+					"enemy": 14,
+					"player": 2
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 16,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 4,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 140
+			},
+			"seconds": 148.015253,
+			"xp": {
+				"active": 0,
+				"collected": 27,
+				"emitted": 35,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 2
+			},
+			"nodes": 1001.0,
+			"pool": {
+				"active": {
+					"enemy": 22,
+					"player": 2
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 8,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 4,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 132
+			},
+			"seconds": 149.00703,
+			"xp": {
+				"active": 0,
+				"collected": 27,
+				"emitted": 35,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1053.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 152
+			},
+			"seconds": 150.000887,
+			"xp": {
+				"active": 0,
+				"collected": 27,
+				"emitted": 35,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 8,
+				"roots": 12
+			},
+			"nodes": 1084.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 12
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 0,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 149
+			},
+			"seconds": 151.014721,
+			"xp": {
+				"active": 2,
+				"collected": 27,
+				"emitted": 37,
+				"lost": 8,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 2,
+				"roots": 6
+			},
+			"nodes": 1056.0,
+			"pool": {
+				"active": {
+					"enemy": 82,
+					"player": 6
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 5,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 1,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 73
+			},
+			"seconds": 152.012572,
+			"xp": {
+				"active": 0,
+				"collected": 29,
+				"emitted": 37,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 1,
+				"roots": 3
+			},
+			"nodes": 1058.0,
+			"pool": {
+				"active": {
+					"enemy": 39,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 48,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 2,
+					"player_shot.tscn": 4,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 119
+			},
+			"seconds": 153.000163,
+			"xp": {
+				"active": 0,
+				"collected": 29,
+				"emitted": 37,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1056.0,
+			"pool": {
+				"active": {
+					"enemy": 30,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 78,
+					"dread_ark_shot.tscn": 9,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 127
+			},
+			"seconds": 154.022966,
+			"xp": {
+				"active": 0,
+				"collected": 29,
+				"emitted": 37,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1056.0,
+			"pool": {
+				"active": {
+					"enemy": 22,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 8,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 134
+			},
+			"seconds": 155.017326,
+			"xp": {
+				"active": 0,
+				"collected": 29,
+				"emitted": 37,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 1,
+				"roots": 6
+			},
+			"nodes": 1058.0,
+			"pool": {
+				"active": {
+					"enemy": 9,
+					"player": 6
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 79,
+					"dread_ark_shot.tscn": 29,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 2,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 146
+			},
+			"seconds": 156.015186,
+			"xp": {
+				"active": 0,
+				"collected": 29,
+				"emitted": 37,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1056.0,
+			"pool": {
+				"active": {
+					"enemy": 28,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 59,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 129
+			},
+			"seconds": 157.021142,
+			"xp": {
+				"active": 0,
+				"collected": 29,
+				"emitted": 37,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1056.0,
+			"pool": {
+				"active": {
+					"enemy": 24,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 63,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 133
+			},
+			"seconds": 158.022646,
+			"xp": {
+				"active": 0,
+				"collected": 29,
+				"emitted": 37,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 1058.0,
+			"pool": {
+				"active": {
+					"enemy": 5,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 82,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 153
+			},
+			"seconds": 159.0024,
+			"xp": {
+				"active": 0,
+				"collected": 29,
+				"emitted": 37,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"capture": true,
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 1078.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 158
+			},
+			"seconds": 160.008172,
+			"xp": {
+				"active": 0,
+				"collected": 29,
+				"emitted": 37,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 1078.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 158
+			},
+			"seconds": 161.006329,
+			"xp": {
+				"active": 0,
+				"collected": 29,
+				"emitted": 37,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 162.005516,
+			"xp": {
+				"active": 0,
+				"collected": 29,
+				"emitted": 37,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 21,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 9,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 136
+			},
+			"seconds": 163.018244,
+			"xp": {
+				"active": 0,
+				"collected": 29,
+				"emitted": 37,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 7
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 22,
+					"player": 7
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 8,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 132
+			},
+			"seconds": 164.028457,
+			"xp": {
+				"active": 0,
+				"collected": 29,
+				"emitted": 37,
+				"lost": 8,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 5,
+				"roots": 8
+			},
+			"nodes": 1106.0,
+			"pool": {
+				"active": {
+					"enemy": 1,
+					"player": 8
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 29,
+					"drone_bolt.tscn": 3,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 152
+			},
+			"seconds": 165.021369,
+			"xp": {
+				"active": 1,
+				"collected": 29,
+				"emitted": 38,
+				"lost": 8,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 2,
+				"roots": 5
+			},
+			"nodes": 1080.0,
+			"pool": {
+				"active": {
+					"enemy": 29,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 58,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 1,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 127
+			},
+			"seconds": 166.000745,
+			"xp": {
+				"active": 1,
+				"collected": 30,
+				"emitted": 39,
+				"lost": 8,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 2,
+				"roots": 6
+			},
+			"nodes": 1078.0,
+			"pool": {
+				"active": {
+					"enemy": 73,
+					"player": 6
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 14,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 1,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 82
+			},
+			"seconds": 167.023929,
+			"xp": {
+				"active": 1,
+				"collected": 30,
+				"emitted": 39,
+				"lost": 8,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 40,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 54,
+					"dread_ark_shot.tscn": 23,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 117
+			},
+			"seconds": 168.010639,
+			"xp": {
+				"active": 1,
+				"collected": 30,
+				"emitted": 39,
+				"lost": 8,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 29,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 86,
+					"dread_ark_shot.tscn": 2,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 128
+			},
+			"seconds": 169.017577,
+			"xp": {
+				"active": 1,
+				"collected": 30,
+				"emitted": 39,
+				"lost": 8,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 2
+			},
+			"nodes": 1079.0,
+			"pool": {
+				"active": {
+					"enemy": 22,
+					"player": 2
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 8,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 4,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 137
+			},
+			"seconds": 170.030421,
+			"xp": {
+				"active": 0,
+				"collected": 30,
+				"emitted": 39,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 1079.0,
+			"pool": {
+				"active": {
+					"enemy": 19,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 69,
+					"dread_ark_shot.tscn": 29,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 139
+			},
+			"seconds": 171.013907,
+			"xp": {
+				"active": 0,
+				"collected": 30,
+				"emitted": 39,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1080.0,
+			"pool": {
+				"active": {
+					"enemy": 34,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 53,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 122
+			},
+			"seconds": 172.026879,
+			"xp": {
+				"active": 0,
+				"collected": 30,
+				"emitted": 39,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1080.0,
+			"pool": {
+				"active": {
+					"enemy": 17,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 70,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 140
+			},
+			"seconds": 173.035665,
+			"xp": {
+				"active": 0,
+				"collected": 30,
+				"emitted": 39,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 8
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 1,
+					"player": 8
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 86,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 152
+			},
+			"seconds": 174.021442,
+			"xp": {
+				"active": 0,
+				"collected": 30,
+				"emitted": 39,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 5
+			},
+			"nodes": 1081.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 4,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 156
+			},
+			"seconds": 175.001651,
+			"xp": {
+				"active": 0,
+				"collected": 30,
+				"emitted": 39,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 6
+			},
+			"nodes": 1078.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 6
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 155
+			},
+			"seconds": 176.025513,
+			"xp": {
+				"active": 0,
+				"collected": 30,
+				"emitted": 39,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 1079.0,
+			"pool": {
+				"active": {
+					"enemy": 7,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 23,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 151
+			},
+			"seconds": 177.025098,
+			"xp": {
+				"active": 0,
+				"collected": 30,
+				"emitted": 39,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 2
+			},
+			"nodes": 1079.0,
+			"pool": {
+				"active": {
+					"enemy": 28,
+					"player": 2
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 2,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 4,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 131
+			},
+			"seconds": 178.013523,
+			"xp": {
+				"active": 0,
+				"collected": 30,
+				"emitted": 39,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 1079.0,
+			"pool": {
+				"active": {
+					"enemy": 6,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 24,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 152
+			},
+			"seconds": 179.01063,
+			"xp": {
+				"active": 0,
+				"collected": 30,
+				"emitted": 39,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 7,
+				"roots": 10
+			},
+			"nodes": 1108.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 10
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 1,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 151
+			},
+			"seconds": 180.030619,
+			"xp": {
+				"active": 1,
+				"collected": 30,
+				"emitted": 40,
+				"lost": 9,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 4,
+				"roots": 7
+			},
+			"nodes": 1081.0,
+			"pool": {
+				"active": {
+					"enemy": 87,
+					"player": 7
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 0,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 4,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 67
+			},
+			"seconds": 181.000158,
+			"xp": {
+				"active": 2,
+				"collected": 30,
+				"emitted": 41,
+				"lost": 9,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1080.0,
+			"pool": {
+				"active": {
+					"enemy": 56,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 31,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 101
+			},
+			"seconds": 182.003696,
+			"xp": {
+				"active": 2,
+				"collected": 30,
+				"emitted": 41,
+				"lost": 9,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 7
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 24,
+					"player": 7
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 77,
+					"dread_ark_shot.tscn": 16,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 130
+			},
+			"seconds": 183.006455,
+			"xp": {
+				"active": 2,
+				"collected": 30,
+				"emitted": 41,
+				"lost": 9,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 6
+			},
+			"nodes": 1078.0,
+			"pool": {
+				"active": {
+					"enemy": 23,
+					"player": 6
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 7,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 132
+			},
+			"seconds": 184.013048,
+			"xp": {
+				"active": 1,
+				"collected": 31,
+				"emitted": 41,
+				"lost": 9,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 2,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 85,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 155
+			},
+			"seconds": 185.013459,
+			"xp": {
+				"active": 0,
+				"collected": 32,
+				"emitted": 41,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 27,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 60,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 129
+			},
+			"seconds": 186.004599,
+			"xp": {
+				"active": 0,
+				"collected": 32,
+				"emitted": 41,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 30,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 57,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 127
+			},
+			"seconds": 187.002193,
+			"xp": {
+				"active": 0,
+				"collected": 32,
+				"emitted": 41,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 2
+			},
+			"nodes": 1079.0,
+			"pool": {
+				"active": {
+					"enemy": 8,
+					"player": 2
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 79,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 4,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 151
+			},
+			"seconds": 188.011293,
+			"xp": {
+				"active": 0,
+				"collected": 32,
+				"emitted": 41,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 1078.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 158
+			},
+			"seconds": 189.017888,
+			"xp": {
+				"active": 0,
+				"collected": 32,
+				"emitted": 41,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 156
+			},
+			"seconds": 190.008904,
+			"xp": {
+				"active": 0,
+				"collected": 32,
+				"emitted": 41,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 191.016309,
+			"xp": {
+				"active": 0,
+				"collected": 32,
+				"emitted": 41,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 7
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 21,
+					"player": 7
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 9,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 133
+			},
+			"seconds": 192.004691,
+			"xp": {
+				"active": 0,
+				"collected": 32,
+				"emitted": 41,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 8
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 23,
+					"player": 8
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 7,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 130
+			},
+			"seconds": 193.019401,
+			"xp": {
+				"active": 0,
+				"collected": 32,
+				"emitted": 41,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 5,
+				"roots": 8
+			},
+			"nodes": 1096.0,
+			"pool": {
+				"active": {
+					"enemy": 1,
+					"player": 8
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 29,
+					"drone_bolt.tscn": 3,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 152
+			},
+			"seconds": 194.004915,
+			"xp": {
+				"active": 1,
+				"collected": 32,
+				"emitted": 42,
+				"lost": 9,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 6,
+				"roots": 10
+			},
+			"nodes": 1090.0,
+			"pool": {
+				"active": {
+					"enemy": 29,
+					"player": 10
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 58,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 2,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 122
+			},
+			"seconds": 195.01524,
+			"xp": {
+				"active": 3,
+				"collected": 32,
+				"emitted": 44,
+				"lost": 9,
+				"parked": 2,
+				"reserved": 0,
+				"value": 3
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 79,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 8,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 78
+			},
+			"seconds": 196.008322,
+			"xp": {
+				"active": 1,
+				"collected": 34,
+				"emitted": 44,
+				"lost": 9,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 41,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 46,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 115
+			},
+			"seconds": 197.003154,
+			"xp": {
+				"active": 0,
+				"collected": 35,
+				"emitted": 44,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 1081.0,
+			"pool": {
+				"active": {
+					"enemy": 29,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 86,
+					"dread_ark_shot.tscn": 2,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 129
+			},
+			"seconds": 198.0102,
+			"xp": {
+				"active": 0,
+				"collected": 35,
+				"emitted": 44,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1080.0,
+			"pool": {
+				"active": {
+					"enemy": 14,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 16,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 142
+			},
+			"seconds": 199.013157,
+			"xp": {
+				"active": 0,
+				"collected": 35,
+				"emitted": 44,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 7
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 12,
+					"player": 7
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 75,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 142
+			},
+			"seconds": 200.01195,
+			"xp": {
+				"active": 0,
+				"collected": 35,
+				"emitted": 44,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 5
+			},
+			"nodes": 1079.0,
+			"pool": {
+				"active": {
+					"enemy": 34,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 53,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 4,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 122
+			},
+			"seconds": 201.013742,
+			"xp": {
+				"active": 0,
+				"collected": 35,
+				"emitted": 44,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 6
+			},
+			"nodes": 1078.0,
+			"pool": {
+				"active": {
+					"enemy": 17,
+					"player": 6
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 70,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 138
+			},
+			"seconds": 202.04186,
+			"xp": {
+				"active": 0,
+				"collected": 35,
+				"emitted": 44,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 3,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 84,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 154
+			},
+			"seconds": 203.014817,
+			"xp": {
+				"active": 0,
+				"collected": 35,
+				"emitted": 44,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 204.022441,
+			"xp": {
+				"active": 0,
+				"collected": 35,
+				"emitted": 44,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 156
+			},
+			"seconds": 205.010695,
+			"xp": {
+				"active": 0,
+				"collected": 35,
+				"emitted": 44,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 1078.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 158
+			},
+			"seconds": 206.01531,
+			"xp": {
+				"active": 0,
+				"collected": 35,
+				"emitted": 44,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 2
+			},
+			"nodes": 1080.0,
+			"pool": {
+				"active": {
+					"enemy": 28,
+					"player": 2
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 2,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 4,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 131
+			},
+			"seconds": 207.03954,
+			"xp": {
+				"active": 0,
+				"collected": 35,
+				"emitted": 44,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 6
+			},
+			"nodes": 1079.0,
+			"pool": {
+				"active": {
+					"enemy": 14,
+					"player": 6
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 16,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 141
+			},
+			"seconds": 208.006801,
+			"xp": {
+				"active": 0,
+				"collected": 35,
+				"emitted": 44,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 5,
+				"roots": 9
+			},
+			"nodes": 1115.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 9
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 3,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 152
+			},
+			"seconds": 209.004727,
+			"xp": {
+				"active": 1,
+				"collected": 35,
+				"emitted": 45,
+				"lost": 9,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 7
+			},
+			"nodes": 1080.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 7
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 29,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 3,
+					"micro_missile.tscn": 2,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 96
+			},
+			"seconds": 210.004645,
+			"xp": {
+				"active": 1,
+				"collected": 36,
+				"emitted": 46,
+				"lost": 9,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1080.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 211.00463,
+			"xp": {
+				"active": 0,
+				"collected": 37,
+				"emitted": 46,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1057.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 212.004584,
+			"xp": {
+				"active": 0,
+				"collected": 37,
+				"emitted": 46,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1057.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 213.004547,
+			"xp": {
+				"active": 0,
+				"collected": 37,
+				"emitted": 46,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1057.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 214.004505,
+			"xp": {
+				"active": 0,
+				"collected": 37,
+				"emitted": 46,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1057.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 215.004472,
+			"xp": {
+				"active": 0,
+				"collected": 37,
+				"emitted": 46,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1057.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 216.004414,
+			"xp": {
+				"active": 0,
+				"collected": 37,
+				"emitted": 46,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1057.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 217.004399,
+			"xp": {
+				"active": 0,
+				"collected": 37,
+				"emitted": 46,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1064.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 218.014538,
+			"xp": {
+				"active": 0,
+				"collected": 37,
+				"emitted": 46,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1078.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 156
+			},
+			"seconds": 219.008578,
+			"xp": {
+				"active": 0,
+				"collected": 37,
+				"emitted": 46,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 4,
+				"roots": 8
+			},
+			"nodes": 1078.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 8
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 4,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 153
+			},
+			"seconds": 220.008653,
+			"xp": {
+				"active": 0,
+				"collected": 37,
+				"emitted": 46,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 2,
+				"roots": 4
+			},
+			"nodes": 1182.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 3,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 4,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 221.006896,
+			"xp": {
+				"active": 3,
+				"collected": 37,
+				"emitted": 52,
+				"lost": 9,
+				"parked": 2,
+				"reserved": 0,
+				"value": 6
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 3,
+				"roots": 6
+			},
+			"nodes": 1184.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 6
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 5,
+					"micro_missile.tscn": 0,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 155
+			},
+			"seconds": 222.006635,
+			"xp": {
+				"active": 0,
+				"collected": 43,
+				"emitted": 52,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 8,
+				"roots": 13
+			},
+			"nodes": 1116.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 13
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 0,
+					"micro_missile.tscn": 1,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 149
+			},
+			"seconds": 223.007137,
+			"xp": {
+				"active": 2,
+				"collected": 43,
+				"emitted": 59,
+				"lost": 9,
+				"parked": 3,
+				"reserved": 0,
+				"value": 7
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1129.0,
+			"pool": {
+				"active": {
+					"enemy": 3,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 1
+				},
+				"parked": 154
+			},
+			"seconds": 224.006628,
+			"xp": {
+				"active": 0,
+				"collected": 50,
+				"emitted": 59,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 6,
+				"roots": 11
+			},
+			"nodes": 1121.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 11
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 2,
+					"micro_missile.tscn": 1,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 151
+			},
+			"seconds": 225.006247,
+			"xp": {
+				"active": 0,
+				"collected": 50,
+				"emitted": 59,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1115.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 158
+			},
+			"seconds": 226.006355,
+			"xp": {
+				"active": 0,
+				"collected": 56,
+				"emitted": 65,
+				"lost": 9,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1090.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 227.006519,
+			"xp": {
+				"active": 1,
+				"collected": 56,
+				"emitted": 66,
+				"lost": 9,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1130.0,
+			"pool": {
+				"active": {
+					"enemy": 2,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 2
+				},
+				"parked": 155
+			},
+			"seconds": 228.006383,
+			"xp": {
+				"active": 1,
+				"collected": 56,
+				"emitted": 66,
+				"lost": 9,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1074.0,
+			"pool": {
+				"active": {
+					"enemy": 2,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 2
+				},
+				"parked": 155
+			},
+			"seconds": 229.006284,
+			"xp": {
+				"active": 1,
+				"collected": 57,
+				"emitted": 67,
+				"lost": 9,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1095.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 230.006497,
+			"xp": {
+				"active": 1,
+				"collected": 57,
+				"emitted": 67,
+				"lost": 9,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1120.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 158
+			},
+			"seconds": 231.006057,
+			"xp": {
+				"active": 2,
+				"collected": 58,
+				"emitted": 70,
+				"lost": 9,
+				"parked": 3,
+				"reserved": 0,
+				"value": 3
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1119.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 232.006071,
+			"xp": {
+				"active": 4,
+				"collected": 58,
+				"emitted": 74,
+				"lost": 9,
+				"parked": 1,
+				"reserved": 0,
+				"value": 7
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1098.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 233.006225,
+			"xp": {
+				"active": 4,
+				"collected": 58,
+				"emitted": 74,
+				"lost": 9,
+				"parked": 1,
+				"reserved": 0,
+				"value": 7
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1098.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 234.005925,
+			"xp": {
+				"active": 3,
+				"collected": 58,
+				"emitted": 74,
+				"lost": 10,
+				"parked": 2,
+				"reserved": 0,
+				"value": 6
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1070.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 235.006028,
+			"xp": {
+				"active": 3,
+				"collected": 58,
+				"emitted": 74,
+				"lost": 10,
+				"parked": 2,
+				"reserved": 0,
+				"value": 6
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1080.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 236.005846,
+			"xp": {
+				"active": 3,
+				"collected": 58,
+				"emitted": 74,
+				"lost": 10,
+				"parked": 2,
+				"reserved": 0,
+				"value": 6
+			}
+		},
+		{
+			"effects": {
+				"requests": 1,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1114.0,
+			"pool": {
+				"active": {
+					"enemy": 4,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 0
+				},
+				"parked": 154
+			},
+			"seconds": 237.006487,
+			"xp": {
+				"active": 0,
+				"collected": 58,
+				"emitted": 74,
+				"lost": 16,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 6
+			},
+			"nodes": 1097.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 238.006407,
+			"xp": {
+				"active": 1,
+				"collected": 58,
+				"emitted": 80,
+				"lost": 16,
+				"parked": 4,
+				"reserved": 0,
+				"value": 6
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1113.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 158
+			},
+			"seconds": 239.00573,
+			"xp": {
+				"active": 1,
+				"collected": 59,
+				"emitted": 81,
+				"lost": 16,
+				"parked": 4,
+				"reserved": 0,
+				"value": 6
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1103.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 240.005591,
+			"xp": {
+				"active": 1,
+				"collected": 59,
+				"emitted": 81,
+				"lost": 16,
+				"parked": 4,
+				"reserved": 0,
+				"value": 6
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 6
+			},
+			"nodes": 1112.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 241.005857,
+			"xp": {
+				"active": 1,
+				"collected": 59,
+				"emitted": 81,
+				"lost": 16,
+				"parked": 4,
+				"reserved": 0,
+				"value": 6
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1121.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 242.0056,
+			"xp": {
+				"active": 1,
+				"collected": 59,
+				"emitted": 81,
+				"lost": 16,
+				"parked": 4,
+				"reserved": 0,
+				"value": 6
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1116.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 158
+			},
+			"seconds": 243.005532,
+			"xp": {
+				"active": 2,
+				"collected": 65,
+				"emitted": 88,
+				"lost": 16,
+				"parked": 3,
+				"reserved": 0,
+				"value": 7
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 6
+			},
+			"nodes": 1084.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 244.005623,
+			"xp": {
+				"active": 2,
+				"collected": 65,
+				"emitted": 88,
+				"lost": 16,
+				"parked": 3,
+				"reserved": 0,
+				"value": 7
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1105.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 245.005422,
+			"xp": {
+				"active": 2,
+				"collected": 65,
+				"emitted": 88,
+				"lost": 16,
+				"parked": 3,
+				"reserved": 0,
+				"value": 7
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1133.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 246.00541,
+			"xp": {
+				"active": 2,
+				"collected": 65,
+				"emitted": 88,
+				"lost": 16,
+				"parked": 3,
+				"reserved": 0,
+				"value": 7
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 6
+			},
+			"nodes": 1153.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 247.005645,
+			"xp": {
+				"active": 0,
+				"collected": 72,
+				"emitted": 88,
+				"lost": 16,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1136.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 158
+			},
+			"seconds": 248.005413,
+			"xp": {
+				"active": 0,
+				"collected": 73,
+				"emitted": 89,
+				"lost": 16,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1104.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 249.005625,
+			"xp": {
+				"active": 1,
+				"collected": 73,
+				"emitted": 90,
+				"lost": 16,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"capture": true,
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 6
+			},
+			"nodes": 1083.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 250.005474,
+			"xp": {
+				"active": 2,
+				"collected": 73,
+				"emitted": 91,
+				"lost": 16,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 1,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1096.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 159
+			},
+			"seconds": 251.009531,
+			"xp": {
+				"active": 2,
+				"collected": 73,
+				"emitted": 91,
+				"lost": 16,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1102.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 158
+			},
+			"seconds": 252.008716,
+			"xp": {
+				"active": 5,
+				"collected": 73,
+				"emitted": 94,
+				"lost": 16,
+				"parked": 0,
+				"reserved": 0,
+				"value": 5
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 6
+			},
+			"nodes": 1101.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 253.009364,
+			"xp": {
+				"active": 5,
+				"collected": 73,
+				"emitted": 94,
+				"lost": 16,
+				"parked": 0,
+				"reserved": 0,
+				"value": 5
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1121.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 254.008763,
+			"xp": {
+				"active": 5,
+				"collected": 73,
+				"emitted": 94,
+				"lost": 16,
+				"parked": 0,
+				"reserved": 0,
+				"value": 5
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1140.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 255.008814,
+			"xp": {
+				"active": 3,
+				"collected": 74,
+				"emitted": 94,
+				"lost": 17,
+				"parked": 2,
+				"reserved": 0,
+				"value": 3
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1138.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 158
+			},
+			"seconds": 256.008956,
+			"xp": {
+				"active": 3,
+				"collected": 76,
+				"emitted": 96,
+				"lost": 17,
+				"parked": 2,
+				"reserved": 0,
+				"value": 3
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1087.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 257.008669,
+			"xp": {
+				"active": 1,
+				"collected": 79,
+				"emitted": 97,
+				"lost": 17,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1098.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 258.008987,
+			"xp": {
+				"active": 1,
+				"collected": 79,
+				"emitted": 97,
+				"lost": 17,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 6
+			},
+			"nodes": 1109.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 259.008522,
+			"xp": {
+				"active": 3,
+				"collected": 79,
+				"emitted": 99,
+				"lost": 17,
+				"parked": 2,
+				"reserved": 0,
+				"value": 3
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 260.008342,
+			"xp": {
+				"active": 2,
+				"collected": 79,
+				"emitted": 99,
+				"lost": 18,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1098.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 261.008435,
+			"xp": {
+				"active": 2,
+				"collected": 80,
+				"emitted": 100,
+				"lost": 18,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 6
+			},
+			"nodes": 1077.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 262.008553,
+			"xp": {
+				"active": 2,
+				"collected": 80,
+				"emitted": 100,
+				"lost": 18,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1065.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 263.008227,
+			"xp": {
+				"active": 2,
+				"collected": 80,
+				"emitted": 100,
+				"lost": 18,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1065.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 264.00818,
+			"xp": {
+				"active": 2,
+				"collected": 80,
+				"emitted": 100,
+				"lost": 18,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1079.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 265.008116,
+			"xp": {
+				"active": 1,
+				"collected": 80,
+				"emitted": 100,
+				"lost": 19,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1086.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 266.008067,
+			"xp": {
+				"active": 0,
+				"collected": 81,
+				"emitted": 100,
+				"lost": 19,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1081.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 267.008057,
+			"xp": {
+				"active": 0,
+				"collected": 81,
+				"emitted": 100,
+				"lost": 19,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1103.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 268.008137,
+			"xp": {
+				"active": 0,
+				"collected": 81,
+				"emitted": 100,
+				"lost": 19,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 1,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1111.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 159
+			},
+			"seconds": 269.008149,
+			"xp": {
+				"active": 1,
+				"collected": 81,
+				"emitted": 101,
+				"lost": 19,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1089.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 270.007948,
+			"xp": {
+				"active": 0,
+				"collected": 90,
+				"emitted": 109,
+				"lost": 19,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1091.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 271.007996,
+			"xp": {
+				"active": 0,
+				"collected": 90,
+				"emitted": 109,
+				"lost": 19,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1098.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 272.007865,
+			"xp": {
+				"active": 0,
+				"collected": 90,
+				"emitted": 109,
+				"lost": 19,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1091.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 273.007865,
+			"xp": {
+				"active": 0,
+				"collected": 90,
+				"emitted": 109,
+				"lost": 19,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1065.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 274.007765,
+			"xp": {
+				"active": 0,
+				"collected": 90,
+				"emitted": 109,
+				"lost": 19,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 1,
+				"reservations": 0,
+				"roots": 6
+			},
+			"nodes": 1165.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 275.008991,
+			"xp": {
+				"active": 1,
+				"collected": 94,
+				"emitted": 115,
+				"lost": 19,
+				"parked": 4,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 1,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1095.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 158
+			},
+			"seconds": 276.0078,
+			"xp": {
+				"active": 0,
+				"collected": 96,
+				"emitted": 115,
+				"lost": 19,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1119.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 277.007678,
+			"xp": {
+				"active": 2,
+				"collected": 96,
+				"emitted": 119,
+				"lost": 19,
+				"parked": 3,
+				"reserved": 0,
+				"value": 4
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1084.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 278.007507,
+			"xp": {
+				"active": 2,
+				"collected": 96,
+				"emitted": 119,
+				"lost": 19,
+				"parked": 3,
+				"reserved": 0,
+				"value": 4
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1084.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 279.007537,
+			"xp": {
+				"active": 2,
+				"collected": 96,
+				"emitted": 119,
+				"lost": 19,
+				"parked": 3,
+				"reserved": 0,
+				"value": 4
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1086.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 280.007616,
+			"xp": {
+				"active": 2,
+				"collected": 96,
+				"emitted": 119,
+				"lost": 19,
+				"parked": 3,
+				"reserved": 0,
+				"value": 4
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1086.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 281.007504,
+			"xp": {
+				"active": 2,
+				"collected": 96,
+				"emitted": 119,
+				"lost": 19,
+				"parked": 3,
+				"reserved": 0,
+				"value": 4
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1121.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 282.007897,
+			"xp": {
+				"active": 0,
+				"collected": 96,
+				"emitted": 119,
+				"lost": 23,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1079.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 283.007502,
+			"xp": {
+				"active": 0,
+				"collected": 96,
+				"emitted": 119,
+				"lost": 23,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 1115.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 159
+			},
+			"seconds": 284.007501,
+			"xp": {
+				"active": 0,
+				"collected": 96,
+				"emitted": 119,
+				"lost": 23,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1094.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 158
+			},
+			"seconds": 285.007503,
+			"xp": {
+				"active": 1,
+				"collected": 97,
+				"emitted": 121,
+				"lost": 23,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1072.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 286.00729,
+			"xp": {
+				"active": 1,
+				"collected": 97,
+				"emitted": 121,
+				"lost": 23,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1072.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 287.007679,
+			"xp": {
+				"active": 1,
+				"collected": 98,
+				"emitted": 122,
+				"lost": 23,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 6
+			},
+			"nodes": 1074.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 288.008218,
+			"xp": {
+				"active": 1,
+				"collected": 98,
+				"emitted": 122,
+				"lost": 23,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1121.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 289.007436,
+			"xp": {
+				"active": 1,
+				"collected": 98,
+				"emitted": 122,
+				"lost": 23,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1119.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 290.007232,
+			"xp": {
+				"active": 1,
+				"collected": 98,
+				"emitted": 122,
+				"lost": 23,
+				"parked": 4,
+				"reserved": 0,
+				"value": 1
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 6
+			},
+			"nodes": 1144.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 157
+			},
+			"seconds": 291.007422,
+			"xp": {
+				"active": 2,
+				"collected": 98,
+				"emitted": 124,
+				"lost": 24,
+				"parked": 3,
+				"reserved": 0,
+				"value": 2
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 1109.0,
+			"pool": {
+				"active": {
+					"enemy": 6,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"interceptor_side_shot.tscn": 2,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 2
+				},
+				"parked": 159
+			},
+			"seconds": 292.00706,
+			"xp": {
+				"active": 0,
+				"collected": 100,
+				"emitted": 124,
+				"lost": 24,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1099.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"interceptor_side_shot.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 163
+			},
+			"seconds": 293.006884,
+			"xp": {
+				"active": 1,
+				"collected": 100,
+				"emitted": 128,
+				"lost": 24,
+				"parked": 4,
+				"reserved": 0,
+				"value": 4
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 6
+			},
+			"nodes": 1099.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"interceptor_side_shot.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 163
+			},
+			"seconds": 294.007084,
+			"xp": {
+				"active": 1,
+				"collected": 100,
+				"emitted": 128,
+				"lost": 24,
+				"parked": 4,
+				"reserved": 0,
+				"value": 4
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1125.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"interceptor_side_shot.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 163
+			},
+			"seconds": 295.00706,
+			"xp": {
+				"active": 0,
+				"collected": 104,
+				"emitted": 128,
+				"lost": 24,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 1128.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"interceptor_side_shot.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 165
+			},
+			"seconds": 296.006881,
+			"xp": {
+				"active": 0,
+				"collected": 104,
+				"emitted": 128,
+				"lost": 24,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 4
+			},
+			"nodes": 1141.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"interceptor_side_shot.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 165
+			},
+			"seconds": 297.007095,
+			"xp": {
+				"active": 0,
+				"collected": 110,
+				"emitted": 134,
+				"lost": 24,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 3
+			},
+			"nodes": 1118.0,
+			"pool": {
+				"active": {
+					"enemy": 9,
+					"player": 3
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"interceptor_side_shot.tscn": 0,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 3,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 1
+				},
+				"parked": 156
+			},
+			"seconds": 298.006833,
+			"xp": {
+				"active": 0,
+				"collected": 110,
+				"emitted": 134,
+				"lost": 24,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1114.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 5
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"interceptor_side_shot.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 1,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 163
+			},
+			"seconds": 299.006649,
+			"xp": {
+				"active": 0,
+				"collected": 110,
+				"emitted": 134,
+				"lost": 24,
+				"parked": 5,
+				"reserved": 0,
+				"value": 0
+			}
+		},
+		{
+			"effects": {
+				"requests": 0,
+				"reservations": 0,
+				"roots": 5
+			},
+			"nodes": 1116.0,
+			"pool": {
+				"active": {
+					"enemy": 0,
+					"player": 4
+				},
+				"buckets": {
+					"dread_ark_orb.tscn": 87,
+					"dread_ark_shot.tscn": 30,
+					"drone_bolt.tscn": 6,
+					"interceptor_side_shot.tscn": 6,
+					"micro_missile.tscn": 3,
+					"player_shot.tscn": 2,
+					"player_side_shot.tscn": 24,
+					"ricochet_shard.tscn": 2,
+					"tie_shot.tscn": 4
+				},
+				"parked": 164
+			},
+			"seconds": 300.006943,
+			"xp": {
+				"active": 1,
+				"collected": 110,
+				"emitted": 138,
+				"lost": 24,
+				"parked": 4,
+				"reserved": 0,
+				"value": 4
+			}
+		}
+	],
+	"seed": 1400,
+	"teardown_nodes": [
+		3,
+		3,
+		3,
+		3,
+		3
+	],
+	"vsync": false
+}

@@ -1,0 +1,71 @@
+{
+  "fixture_version": 1,
+  "godot": "4.7.2-stable (official)",
+  "seed_count": 100,
+  "seconds": 300,
+  "repeats": 2,
+  "unique_runs": 400,
+  "elapsed_wall_seconds": 293.518,
+  "groups": [
+    {
+      "mode": "solo",
+      "profile": "perfect",
+      "medians": [
+        23.0,
+        21.7333333333333,
+        26.4666666666667,
+        33.0666666666667,
+        35.5
+      ],
+      "mean_emitted": 329.34,
+      "mean_collected": 325.16,
+      "mean_lost": 0.0,
+      "mean_active": 4.18
+    },
+    {
+      "mode": "solo",
+      "profile": "miss-every-fifth",
+      "medians": [
+        26.3833333333333,
+        27.9166666666667,
+        33.2166666666667,
+        38.3833333333333,
+        38.1666666666667
+      ],
+      "mean_emitted": 329.34,
+      "mean_collected": 259.71,
+      "mean_lost": 63.12,
+      "mean_active": 6.51
+    },
+    {
+      "mode": "coop",
+      "profile": "perfect",
+      "medians": [
+        20.8666666666667,
+        19.0333333333333,
+        23.8166666666667,
+        27.8666666666667,
+        32.5333333333333
+      ],
+      "mean_emitted": 393.51,
+      "mean_collected": 389.13,
+      "mean_lost": 0.0,
+      "mean_active": 4.38
+    },
+    {
+      "mode": "coop",
+      "profile": "miss-every-fifth",
+      "medians": [
+        23.0666666666667,
+        24.3833333333333,
+        27.5,
+        33.9666666666667,
+        35.7333333333333
+      ],
+      "mean_emitted": 393.51,
+      "mean_collected": 314.2,
+      "mean_lost": 71.83,
+      "mean_active": 7.48
+    }
+  ]
+}

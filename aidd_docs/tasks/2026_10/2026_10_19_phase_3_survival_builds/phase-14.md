@@ -1,5 +1,5 @@
 ---
-status: pending
+status: in-progress
 ---
 
 # Instruction: Validate builds, economy, performance and final presentation
@@ -126,3 +126,13 @@ journey
 | 3 | Source/export checks and native/wide captures establish readable ownership, effects, slots/cards and preserved manual plasma identity; technical co-op evidence is distinct from deferred Phase 6 human acceptance. |
 | 4 | Dedicated selection audio has maintainer listening approval or explicit recorded deferral; null/mute/Web-blocked playback never delays choice, and the gameplay track resumes without rewinding. |
 | 4 | Documentation distinguishes observed passes, known baseline failures/warnings and pending human checks; no automatic commit or later-phase implementation occurs. |
+
+## Current-contract execution — 2026-10-29
+
+The maintainer accepted the returning ricochet checkpoint, authorized commit a4108bb and requested the next step. Execute this verification against the current catalog: nine offensive and ten utility families, three offensive plus three utility slots, 84 offensive triples and 120 utility triples (10,080 maximal cross-product builds), and two escort drones at rank three. Earlier four-slot/eight-family/one-drone references are historical. The supplied selection music is integrated separately; its listening approval is still pending. Economy changes remain gated by task 2.3; no pressure, combat-stat or slot tuning is implied.
+
+The refreshed 800-run economy replay reproduces the prior target mismatch. The maintainer explicitly chose "Conserver le rythme actuel pour l'instant" after reviewing the new medians, authorizing continued verification against the current provisional cadence. Keep the mismatch and remaining human observations visible; no threshold or reward changes are authorized.
+
+## Verification checkpoint — 2026-10-30
+
+[Current evidence](validation/step_14_verification.md) records the full legal-build cross product, refreshed economy, 48 reference-combat cases, completed sequential five-minute native solo/co-op samples, 28 native catalog layouts and scoped presentation corrections. Automated assertions pass in the recorded suites. The phase remains in progress: two solo observations and qualitative feedback, final audio listening/deferral and the recorded performance limitations have not been silently accepted. No Phase 4 work or further commit/push is implied.

@@ -1,0 +1,967 @@
+{
+	"accelerated": 8,
+	"builds": {
+		"autonomous": [
+			"micro_missiles",
+			"escort_drone",
+			"orbiting_satellites"
+		],
+		"precision": [
+			"side_shot",
+			"critical_hits",
+			"micro_missiles"
+		],
+		"propagation": [
+			"impact_explosions",
+			"energy_chains",
+			"ricochet"
+		],
+		"proximity": [
+			"guard_blades",
+			"orbiting_satellites",
+			"impact_explosions"
+		]
+	},
+	"checks": 1212,
+	"common_utilities": [
+		"damage",
+		"fire_rate",
+		"orb_magnet"
+	],
+	"failures": 0,
+	"layouts": {
+		"cluster": "nine stationary 6-HP real drones, 28px grid",
+		"focused": "one stationary 20-HP real drone"
+	},
+	"physics_step": "1/60 gameplay second",
+	"positions": {
+		"close": [
+			320,
+			215
+		],
+		"ranged": [
+			320,
+			350
+		]
+	},
+	"runs": [
+		{
+			"accepted_impacts": 5,
+			"build": "precision",
+			"clear_seconds": 0.7,
+			"damaged": 1,
+			"distance": "ranged",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 0.7
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 0.7,
+			"seed": 0,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 7,
+			"build": "precision",
+			"clear_seconds": 0.183333333333333,
+			"damaged": 1,
+			"distance": "close",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 0.183333333333333
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 0.183333333333333,
+			"seed": 0,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 26,
+			"build": "precision",
+			"clear_seconds": 1.41666666666667,
+			"damaged": 9,
+			"distance": "ranged",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 54.0,
+				"kills": 9,
+				"seconds": 1.41666666666667
+			},
+			"effective_damage": 54.0,
+			"kills": 9,
+			"layout": "cluster",
+			"observed_seconds": 1.41666666666667,
+			"seed": 0,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 26,
+			"build": "precision",
+			"clear_seconds": 1.56666666666667,
+			"damaged": 9,
+			"distance": "close",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 54.0,
+				"kills": 9,
+				"seconds": 1.56666666666667
+			},
+			"effective_damage": 54.0,
+			"kills": 9,
+			"layout": "cluster",
+			"observed_seconds": 1.56666666666667,
+			"seed": 0,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 9,
+			"build": "propagation",
+			"clear_seconds": 1.66666666666667,
+			"damaged": 1,
+			"distance": "ranged",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 1.66666666666667
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 1.66666666666667,
+			"seed": 0,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 9,
+			"build": "propagation",
+			"clear_seconds": 1.41666666666667,
+			"damaged": 1,
+			"distance": "close",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 1.41666666666667
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 1.41666666666667,
+			"seed": 0,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 43,
+			"build": "propagation",
+			"clear_seconds": 1.11666666666667,
+			"damaged": 9,
+			"distance": "ranged",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 54.0,
+				"kills": 9,
+				"seconds": 1.11666666666667
+			},
+			"effective_damage": 54.0,
+			"kills": 9,
+			"layout": "cluster",
+			"observed_seconds": 1.11666666666667,
+			"seed": 0,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 44,
+			"build": "propagation",
+			"clear_seconds": 1.0,
+			"damaged": 9,
+			"distance": "close",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 54.0,
+				"kills": 9,
+				"seconds": 1.0
+			},
+			"effective_damage": 54.0,
+			"kills": 9,
+			"layout": "cluster",
+			"observed_seconds": 1.0,
+			"seed": 0,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 9,
+			"build": "autonomous",
+			"clear_seconds": 0.816666666666667,
+			"damaged": 1,
+			"distance": "ranged",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 0.816666666666667
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 0.816666666666667,
+			"seed": 0,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 8,
+			"build": "autonomous",
+			"clear_seconds": 0.266666666666667,
+			"damaged": 1,
+			"distance": "close",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 0.266666666666667
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 0.266666666666667,
+			"seed": 0,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 24,
+			"build": "autonomous",
+			"clear_seconds": null,
+			"damaged": 9,
+			"distance": "ranged",
+			"early": {
+				"damaged": 8,
+				"effective_damage": 43.8749997317791,
+				"kills": 6,
+				"seconds": 2.0
+			},
+			"effective_damage": 50.7749996781349,
+			"kills": 7,
+			"layout": "cluster",
+			"observed_seconds": 8.0,
+			"seed": 0,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 25,
+			"build": "autonomous",
+			"clear_seconds": 1.36666666666667,
+			"damaged": 9,
+			"distance": "close",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 54.0,
+				"kills": 9,
+				"seconds": 1.36666666666667
+			},
+			"effective_damage": 54.0,
+			"kills": 9,
+			"layout": "cluster",
+			"observed_seconds": 1.36666666666667,
+			"seed": 0,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 9,
+			"build": "proximity",
+			"clear_seconds": 1.66666666666667,
+			"damaged": 1,
+			"distance": "ranged",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 1.66666666666667
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 1.66666666666667,
+			"seed": 0,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 6,
+			"build": "proximity",
+			"clear_seconds": 0.716666666666667,
+			"damaged": 1,
+			"distance": "close",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 0.716666666666667
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 0.716666666666667,
+			"seed": 0,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 23,
+			"build": "proximity",
+			"clear_seconds": null,
+			"damaged": 9,
+			"distance": "ranged",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 49.8000004291534,
+				"kills": 5,
+				"seconds": 2.0
+			},
+			"effective_damage": 49.8000004291534,
+			"kills": 5,
+			"layout": "cluster",
+			"observed_seconds": 8.0,
+			"seed": 0,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 20,
+			"build": "proximity",
+			"clear_seconds": 0.8,
+			"damaged": 9,
+			"distance": "close",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 54.0,
+				"kills": 9,
+				"seconds": 0.8
+			},
+			"effective_damage": 54.0,
+			"kills": 9,
+			"layout": "cluster",
+			"observed_seconds": 0.8,
+			"seed": 0,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 5,
+			"build": "precision",
+			"clear_seconds": 0.7,
+			"damaged": 1,
+			"distance": "ranged",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 0.7
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 0.7,
+			"seed": 29,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 6,
+			"build": "precision",
+			"clear_seconds": 0.183333333333333,
+			"damaged": 1,
+			"distance": "close",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 0.183333333333333
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 0.183333333333333,
+			"seed": 29,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 24,
+			"build": "precision",
+			"clear_seconds": 1.23333333333333,
+			"damaged": 9,
+			"distance": "ranged",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 54.0,
+				"kills": 9,
+				"seconds": 1.23333333333333
+			},
+			"effective_damage": 54.0,
+			"kills": 9,
+			"layout": "cluster",
+			"observed_seconds": 1.23333333333333,
+			"seed": 29,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 25,
+			"build": "precision",
+			"clear_seconds": 2.2,
+			"damaged": 9,
+			"distance": "close",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 53.6999995708466,
+				"kills": 7,
+				"seconds": 2.0
+			},
+			"effective_damage": 54.0,
+			"kills": 9,
+			"layout": "cluster",
+			"observed_seconds": 2.2,
+			"seed": 29,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 9,
+			"build": "propagation",
+			"clear_seconds": 1.65,
+			"damaged": 1,
+			"distance": "ranged",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 1.65
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 1.65,
+			"seed": 29,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 9,
+			"build": "propagation",
+			"clear_seconds": 1.41666666666667,
+			"damaged": 1,
+			"distance": "close",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 1.41666666666667
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 1.41666666666667,
+			"seed": 29,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 43,
+			"build": "propagation",
+			"clear_seconds": 1.11666666666667,
+			"damaged": 9,
+			"distance": "ranged",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 54.0,
+				"kills": 9,
+				"seconds": 1.11666666666667
+			},
+			"effective_damage": 54.0,
+			"kills": 9,
+			"layout": "cluster",
+			"observed_seconds": 1.11666666666667,
+			"seed": 29,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 43,
+			"build": "propagation",
+			"clear_seconds": 1.06666666666667,
+			"damaged": 9,
+			"distance": "close",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 54.0,
+				"kills": 9,
+				"seconds": 1.06666666666667
+			},
+			"effective_damage": 54.0,
+			"kills": 9,
+			"layout": "cluster",
+			"observed_seconds": 1.06666666666667,
+			"seed": 29,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 9,
+			"build": "autonomous",
+			"clear_seconds": 0.816666666666667,
+			"damaged": 1,
+			"distance": "ranged",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 0.816666666666667
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 0.816666666666667,
+			"seed": 29,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 8,
+			"build": "autonomous",
+			"clear_seconds": 0.25,
+			"damaged": 1,
+			"distance": "close",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 0.25
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 0.25,
+			"seed": 29,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 24,
+			"build": "autonomous",
+			"clear_seconds": null,
+			"damaged": 9,
+			"distance": "ranged",
+			"early": {
+				"damaged": 8,
+				"effective_damage": 43.8749997317791,
+				"kills": 6,
+				"seconds": 2.0
+			},
+			"effective_damage": 50.7749996781349,
+			"kills": 7,
+			"layout": "cluster",
+			"observed_seconds": 8.0,
+			"seed": 29,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 25,
+			"build": "autonomous",
+			"clear_seconds": 1.36666666666667,
+			"damaged": 9,
+			"distance": "close",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 54.0,
+				"kills": 9,
+				"seconds": 1.36666666666667
+			},
+			"effective_damage": 54.0,
+			"kills": 9,
+			"layout": "cluster",
+			"observed_seconds": 1.36666666666667,
+			"seed": 29,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 9,
+			"build": "proximity",
+			"clear_seconds": 1.65,
+			"damaged": 1,
+			"distance": "ranged",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 1.65
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 1.65,
+			"seed": 29,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 6,
+			"build": "proximity",
+			"clear_seconds": 0.716666666666667,
+			"damaged": 1,
+			"distance": "close",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 0.716666666666667
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 0.716666666666667,
+			"seed": 29,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 23,
+			"build": "proximity",
+			"clear_seconds": null,
+			"damaged": 9,
+			"distance": "ranged",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 49.8000004291534,
+				"kills": 5,
+				"seconds": 2.0
+			},
+			"effective_damage": 49.8000004291534,
+			"kills": 5,
+			"layout": "cluster",
+			"observed_seconds": 8.0,
+			"seed": 29,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 20,
+			"build": "proximity",
+			"clear_seconds": 0.8,
+			"damaged": 9,
+			"distance": "close",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 54.0,
+				"kills": 9,
+				"seconds": 0.8
+			},
+			"effective_damage": 54.0,
+			"kills": 9,
+			"layout": "cluster",
+			"observed_seconds": 0.8,
+			"seed": 29,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 6,
+			"build": "precision",
+			"clear_seconds": 0.7,
+			"damaged": 1,
+			"distance": "ranged",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 0.7
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 0.7,
+			"seed": 69,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 8,
+			"build": "precision",
+			"clear_seconds": 0.183333333333333,
+			"damaged": 1,
+			"distance": "close",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 0.183333333333333
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 0.183333333333333,
+			"seed": 69,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 27,
+			"build": "precision",
+			"clear_seconds": 1.43333333333333,
+			"damaged": 9,
+			"distance": "ranged",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 54.0,
+				"kills": 9,
+				"seconds": 1.43333333333333
+			},
+			"effective_damage": 54.0,
+			"kills": 9,
+			"layout": "cluster",
+			"observed_seconds": 1.43333333333333,
+			"seed": 69,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 24,
+			"build": "precision",
+			"clear_seconds": null,
+			"damaged": 9,
+			"distance": "close",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 50.6249994635582,
+				"kills": 6,
+				"seconds": 2.0
+			},
+			"effective_damage": 50.6249994635582,
+			"kills": 6,
+			"layout": "cluster",
+			"observed_seconds": 8.0,
+			"seed": 69,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 9,
+			"build": "propagation",
+			"clear_seconds": 1.65,
+			"damaged": 1,
+			"distance": "ranged",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 1.65
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 1.65,
+			"seed": 69,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 9,
+			"build": "propagation",
+			"clear_seconds": 1.43333333333333,
+			"damaged": 1,
+			"distance": "close",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 1.43333333333333
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 1.43333333333333,
+			"seed": 69,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 43,
+			"build": "propagation",
+			"clear_seconds": 1.11666666666667,
+			"damaged": 9,
+			"distance": "ranged",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 54.0,
+				"kills": 9,
+				"seconds": 1.11666666666667
+			},
+			"effective_damage": 54.0,
+			"kills": 9,
+			"layout": "cluster",
+			"observed_seconds": 1.11666666666667,
+			"seed": 69,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 44,
+			"build": "propagation",
+			"clear_seconds": 1.0,
+			"damaged": 9,
+			"distance": "close",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 54.0,
+				"kills": 9,
+				"seconds": 1.0
+			},
+			"effective_damage": 54.0,
+			"kills": 9,
+			"layout": "cluster",
+			"observed_seconds": 1.0,
+			"seed": 69,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 9,
+			"build": "autonomous",
+			"clear_seconds": 0.816666666666667,
+			"damaged": 1,
+			"distance": "ranged",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 0.816666666666667
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 0.816666666666667,
+			"seed": 69,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 8,
+			"build": "autonomous",
+			"clear_seconds": 0.266666666666667,
+			"damaged": 1,
+			"distance": "close",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 0.266666666666667
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 0.266666666666667,
+			"seed": 69,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 24,
+			"build": "autonomous",
+			"clear_seconds": null,
+			"damaged": 9,
+			"distance": "ranged",
+			"early": {
+				"damaged": 8,
+				"effective_damage": 43.8749997317791,
+				"kills": 6,
+				"seconds": 2.0
+			},
+			"effective_damage": 50.7749996781349,
+			"kills": 7,
+			"layout": "cluster",
+			"observed_seconds": 8.0,
+			"seed": 69,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 25,
+			"build": "autonomous",
+			"clear_seconds": 1.36666666666667,
+			"damaged": 9,
+			"distance": "close",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 54.0,
+				"kills": 9,
+				"seconds": 1.36666666666667
+			},
+			"effective_damage": 54.0,
+			"kills": 9,
+			"layout": "cluster",
+			"observed_seconds": 1.36666666666667,
+			"seed": 69,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 9,
+			"build": "proximity",
+			"clear_seconds": 1.66666666666667,
+			"damaged": 1,
+			"distance": "ranged",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 1.66666666666667
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 1.66666666666667,
+			"seed": 69,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 6,
+			"build": "proximity",
+			"clear_seconds": 0.716666666666667,
+			"damaged": 1,
+			"distance": "close",
+			"early": {
+				"damaged": 1,
+				"effective_damage": 20.0,
+				"kills": 1,
+				"seconds": 0.716666666666667
+			},
+			"effective_damage": 20.0,
+			"kills": 1,
+			"layout": "focused",
+			"observed_seconds": 0.716666666666667,
+			"seed": 69,
+			"targets": 1
+		},
+		{
+			"accepted_impacts": 23,
+			"build": "proximity",
+			"clear_seconds": null,
+			"damaged": 9,
+			"distance": "ranged",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 49.8000004291534,
+				"kills": 5,
+				"seconds": 2.0
+			},
+			"effective_damage": 49.8000004291534,
+			"kills": 5,
+			"layout": "cluster",
+			"observed_seconds": 8.0,
+			"seed": 69,
+			"targets": 9
+		},
+		{
+			"accepted_impacts": 20,
+			"build": "proximity",
+			"clear_seconds": 0.816666666666667,
+			"damaged": 9,
+			"distance": "close",
+			"early": {
+				"damaged": 9,
+				"effective_damage": 54.0,
+				"kills": 9,
+				"seconds": 0.816666666666667
+			},
+			"effective_damage": 54.0,
+			"kills": 9,
+			"layout": "cluster",
+			"observed_seconds": 0.816666666666667,
+			"seed": 69,
+			"targets": 9
+		}
+	],
+	"seconds_per_case": 8,
+	"seeds": [
+		0,
+		29,
+		69
+	]
+}

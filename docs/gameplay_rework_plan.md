@@ -1,6 +1,6 @@
 # Gameplay roadmap
 
-Updated: 2026-10-29.
+Updated: 2026-10-30.
 
 **Goal:** a continuous survival shmup with varied builds, enemies and formations, increasing pressure over time, solo and local co-op.
 
@@ -16,7 +16,7 @@ The split is implemented locally. [Validation](../aidd_docs/tasks/2026_10/2026_1
 
 **Current Reactive Armor contract (2026-10-28):** the maintainer approved replacing extra injury invulnerability with delayed hull repair. A nonfatal hull injury starts one repair: restore one energy point after 8/6/4 seconds without further hull damage. New damage restarts the delay; one completed recovery restores only one point. Reflected or Retaliation-protected hits do not start or reset it. Ordinary one-second injury grace remains. A green personal HUD progress bar/countdown and `REPAIRED +1` feedback explain the effect, with explicit hull-damage and quiet-delay copy on the card. [Implementation and validation](../aidd_docs/tasks/2026_10/2026_10_28_reactive_repair/validation.md): 74 headless and 122 native repair checks pass, plus affected defense, collision, offer and selection regressions. Earlier extra-grace checkpoints below are historical. Await maintainer playtest.
 
-**Next step:** Playtest step 13 ricochet shards and combined builds, retaining three offensive and three utility slots. The maintainer explicitly authorized ricochet on 2026-10-29; steps 1-4 and 6-13 are implemented. See [ricochet evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/ricochet_shards.md). Stop before step 14. Step 5 still needs two solo observations and qualitative feedback; effect balancing remains deferred and dedicated selection audio remains pending. See [Phase 3 evidence](phase_3_validation.md).
+**Next step:** Step 14 verification remains in progress after maintainer acceptance of returning ricochets and local commit `a4108bb`. The maintainer explicitly retains the current XP cadence provisionally. [Current evidence](../aidd_docs/tasks/2026_10/2026_10_19_phase_3_survival_builds/validation/step_14_verification.md) records 10,080 legal builds, 800 economy simulations, 48 combat cases, 28 native card layouts and five-minute native solo/co-op samples. Remaining gates are human XP/audio feedback and the documented performance limitations; no Phase 4 or balancing changes are included.
 
 ## Progress and delivery order
 
