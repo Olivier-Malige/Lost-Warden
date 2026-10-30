@@ -400,14 +400,14 @@ func _style(team: int, state: int) -> StyleBox:
 
 func _label(parent: Control, text: String, rect: Rect2, font_size: int = 12, color: Color = WHITE) -> Label:
 	var label := Label.new()
-	label.text = text
-	label.position = rect.position
-	label.size = rect.size
 	label.add_theme_font_override("font", FONT)
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", color)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	parent.add_child(label)
+	label.text = text
+	label.position = rect.position
+	label.size = rect.size
 	return label
 
 func _tween() -> Tween:
