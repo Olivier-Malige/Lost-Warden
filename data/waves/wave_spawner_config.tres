@@ -1,20 +1,12 @@
 [gd_resource type="Resource" script_class="WaveSpawnerConfig" format=3 uid="uid://5e58sfsp71n3"]
 
 [ext_resource type="Script" uid="uid://b8o8y28hmjlbn" path="res://data/waves/wave_spawner_config.gd" id="1"]
+[ext_resource type="Script" uid="uid://vk4ifsu7jvlt" path="res://data/bosses/boss_definition.gd" id="1_fuyif"]
 [ext_resource type="Resource" path="res://data/enemies/elite_definition.tres" id="2"]
-[ext_resource type="Resource" path="res://data/bosses/dread_ark.tres" id="3"]
+[ext_resource type="Resource" uid="uid://b434rvegswxxn" path="res://data/bosses/dread_ark.tres" id="3"]
+[ext_resource type="Curve" path="res://data/waves/enemy_health_progression.tres" id="4_ube1y"]
 
 [resource]
 script = ExtResource("1")
-initial_spawn_delay = 3.0
-solo_enemy_cap = 70
-coop_enemy_cap = 90
-coop_budget_multiplier = 1.2
-v_formation_depth = 6.0
-coop_common_health_multiplier = 1.25
-coop_specialist_health_multiplier = 1.45
-coop_heavy_health_multiplier = 1.60
 elite_definition = ExtResource("2")
-elite_cap = 3
-bosses = [ExtResource("3")]
-boss_approach_clear_time = 0.5
+bosses = Array[ExtResource("1_fuyif")]([ExtResource("3")])

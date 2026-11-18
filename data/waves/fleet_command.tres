@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="WaveDefinition" format=3 uid="uid://cloln67oyrq8h"]
+
+[ext_resource type="Script" uid="uid://dpr5rymyr25n2" path="res://data/waves/wave_definition.gd" id="1"]
+[ext_resource type="Script" uid="uid://ctp3qhk1vo1qm" path="res://data/waves/spawn_rule.gd" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/assault_commander.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/dive_hunter.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/bastion.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/tie.tscn" id="6"]
+
+[sub_resource type="Resource" id="Rule0"]
+script = ExtResource("2")
+minimum_survival_time = 420
+scene = ExtResource("3")
+reinforcement_scene = ExtResource("4")
+
+[sub_resource type="Resource" id="Rule1"]
+script = ExtResource("2")
+minimum_survival_time = 180
+scene = ExtResource("5")
+
+[sub_resource type="Resource" id="Rule2"]
+script = ExtResource("2")
+scene = ExtResource("6")
+formation = 5
+pattern = 7
+
+[resource]
+script = ExtResource("1")
+duration = 25.0
+rules = Array[ExtResource("2")]([SubResource("Rule0"), SubResource("Rule1"), SubResource("Rule2")])
+id = &"fleet_command"
+threat_budget = 75.0
+family = 1
+coordinated = true

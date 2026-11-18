@@ -50,17 +50,19 @@ func check_health_and_impacts() -> void:
 	var kinds := ["drone", "tie", "interceptor", "turret", "mother_ship", "mother_ship_turret", "asteroid", "big_asteroid"]
 	var base_health := [2.0, 2.0, 10.0, 56.0, 76.0, 19.0, 2.0, 8.0]
 	var coop_scale := [1.25, 1.25, 1.45, 1.6, 1.6, 1.45, 1.0, 1.0]
+	var health_bonus := [0.12, 0.12, 0.20, 0.35, 0.35, 0.20, 0.0, 0.0]
 	for coop in [false, true]:
 		globals.coop = coop
 		spawner._run_coop = coop
 		for elapsed in [0.0, 300.0, 720.0, 1800.0]:
 			spawner.director.elapsed = elapsed
+			spawner.director.regular_elapsed = elapsed
 			for index in kinds.size():
 				var data := definition(kinds[index])
 				var expected: float = coop_scale[index] if coop else 1.0
-				if data.durability != EnemyDefinition.Durability.HAZARD:
-					expected *= spawner.director.health_multiplier()
+				expected *= 1.0 + health_bonus[index] * minf(elapsed / 1200.0, 1.0)
 				check(is_equal_approx(data.max_health * spawner._health_multiplier(data), base_health[index] * expected), "%s health: coop=%s elapsed=%s" % [kinds[index], coop, elapsed])
+		spawner.director.regular_elapsed = 0.0
 		for kind in ["drone", "tie"]:
 			for rank in range(DAMAGE.max_rank + 1):
 				var loadout := PlayerLoadout.new(STATS)
@@ -172,7 +174,7 @@ func run() -> void:
 	spawner.catalog = catalog
 	spawner.director = EncounterDirector.new(RunRandom.new(42))
 	check(CONFIG.is_valid(), "approved balance configuration must be valid")
-	check(catalog.waves.size() == 18, "catalog must retain 18 waves")
+	check(catalog.waves.has(load("res://data/waves/wave_17.tres")), "catalog retains the final original encounter")
 	check_health_and_impacts()
 	await check_upgrades_and_rewards()
 	check_duo_death()

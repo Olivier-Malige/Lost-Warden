@@ -11,8 +11,17 @@ extends Resource
 @export var selection_weight := 1.0
 @export var threat_budget := 30.0
 
+enum Family { OPENING, FLEET, AMBUSH, DEBRIS, ELITE_HUNT, CROSSFIRE, REENTRY }
+
+@export var family: Family = Family.OPENING
+@export var minimum_combat_time := 0.0
+@export var minimum_survival_time := 0.0
+@export var coordinated := false
+@export_range(0.35, 5.0, 0.05) var coordinated_delay := 1.15
+
 func is_encounter_valid(lane_count: int = 12) -> bool:
-	return id != &"" and duration >= 20.0 and duration <= 30.0 \
+	var minimum_duration := 6.0 if family in [Family.REENTRY, Family.DEBRIS] else 20.0
+	return id != &"" and duration >= minimum_duration and duration <= 30.0 \
 		and minimum_danger >= 1.0 and maximum_danger >= minimum_danger \
 		and selection_weight >= 0.0 and threat_budget > 0.0 and is_valid(lane_count)
 

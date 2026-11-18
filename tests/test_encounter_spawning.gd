@@ -91,7 +91,9 @@ func _test_catalog() -> void:
 	var spawner = _make_spawner(12)
 	var ids: Array[StringName] = []
 	var patterns: Array[int] = []
-	_check(CATALOG.waves.size() == 18, "all eighteen original encounter compositions are retained")
+	for index in 18:
+		var expected = load("res://data/waves/wave_%02d.tres" % index)
+		_check(expected != null and expected in CATALOG.waves, "original encounter %d is retained" % index)
 	for wave in CATALOG.waves:
 		_check(wave.is_encounter_valid(CONFIG.lane_count), "encounter metadata, duration and formations are valid")
 		_check(wave.id not in ids, "encounter identifiers are unique")

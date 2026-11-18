@@ -25,7 +25,7 @@ The split is implemented locally. [Validation](../aidd_docs/tasks/2026_10/2026_1
 | Preparation, Phase 1 and art | Original identity, display, core combat, controls, plasma and graphics | Complete |
 | 2 — Continuous survival | Seeded encounters, elites, first boss, survival UI and records | Complete; solo accepted, co-op playtest deferred |
 | 3 — Experience and power-ups | XP, personal builds, original weapon sprites and audiovisual level-up choices | In progress; steps 1-4 and 6-13 implemented; plasma piercing, criticals, chains, micro-missiles, escort drones, orbiting satellites, impact explosions, guard blades and ricochet shards playable; human XP acceptance deferred |
-| 4 — Enemies and density | Redesign current enemies, add roles, enrich formations, increase pressure over time | Planned; after Phase 3 |
+| 4 — Enemies and density | Six combat roles, multidirectional entries, obstacle passages and escalating endless survival | Implemented for playtest; solo/co-op gameplay and XP pacing acceptance pending |
 | 5 — Combat effects | Impacts, explosions, collections and upgrade feedback | Planned |
 | 6 — Final balance | Complete solo/co-op runs, performance and regression checks | Planned; includes deferred co-op gameplay acceptance after power-up and balance rework |
 
@@ -92,6 +92,10 @@ Ranks provide one / two / three contact orbiters at radius 32 px, fixed period 2
 - Revisit every existing enemy family and asteroid hazards; define clear roles and varied movement/attack patterns.
 - Add the dive hunter, bomber and sniper. Expand formations with diagonals, pincers, escorts and coordinated mixed groups, keeping dodge openings.
 - Increase spawn pressure as survival time passes. Tune density against the completed power-up system, with readable attacks and measured solo/co-op performance.
+
+The first Dread Ark victory unlocks an authored side pincer and an endless catalog of fleet, ambush, debris, elite hunt and crossfire encounters. Regular combat time drives three-minute tiers after the first victory. Bosses return after five minutes of regular combat and preserve the attained tier. The six new families are the dive hunter, bomber, sniper, rear stalker, bastion and assault commander. Rear entries reserve a slot before showing their one-second warning, and commander reinforcements wait for its signal. Three debris rows share an opening, and advanced debris passages add a bomber on the opposite side. Elite hunts recur within five encounters and carry an unfulfilled promotion forward if all three elite slots are occupied.
+
+The Phase 4 headless suite exercises deferred spawning, seed reproducibility and one hour of scheduling in solo and co-op with simulated kills and boss defeats. Native gameplay acceptance and an in-game XP-per-minute comparison remain open.
 
 ## Delivery rules
 

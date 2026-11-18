@@ -8,6 +8,10 @@ extends Resource
 @export_range(1, 200, 1) var coop_enemy_cap := 90
 @export_range(0.0, 20.0, 1.0) var v_formation_depth := 6.0
 
+@export_group("Enemy Health")
+## X is regular combat time in seconds. Y is the fraction of the maximum health bonus.
+@export var enemy_health_curve: Curve = preload("res://data/waves/enemy_health_progression.tres")
+
 @export_group("Co-op")
 @export_range(1.0, 3.0, 0.05) var coop_budget_multiplier := 1.2
 @export_range(1.0, 5.0, 0.05) var coop_common_health_multiplier := 1.25
@@ -30,4 +34,4 @@ func is_valid() -> bool:
 		and v_formation_depth >= 0.0 and coop_budget_multiplier >= 1.0 \
 		and coop_common_health_multiplier >= 1.0 and coop_specialist_health_multiplier >= 1.0 \
 		and coop_heavy_health_multiplier >= 1.0 and elite_definition != null and elite_cap > 0 \
-		and boss_approach_clear_time > 0.0
+		and boss_approach_clear_time > 0.0 and enemy_health_curve != null and enemy_health_curve.point_count > 0

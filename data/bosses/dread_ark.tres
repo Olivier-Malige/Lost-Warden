@@ -1,30 +1,24 @@
-[gd_resource type="Resource" script_class="BossDefinition" format=3]
+[gd_resource type="Resource" script_class="BossDefinition" format=3 uid="uid://b434rvegswxxn"]
 
-[ext_resource type="Script" path="res://data/bosses/boss_definition.gd" id="1"]
+[ext_resource type="Script" uid="uid://vk4ifsu7jvlt" path="res://data/bosses/boss_definition.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/bosses/dread_ark.tscn" id="2"]
-[ext_resource type="Script" path="res://data/waves/spawn_rule.gd" id="3"]
+[ext_resource type="Script" uid="uid://ctp3qhk1vo1qm" path="res://data/waves/spawn_rule.gd" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/drone_hunter.tscn" id="4"]
 [ext_resource type="Resource" path="res://data/enemies/movement/boss_drone_chase.tres" id="5"]
-[ext_resource type="Script" path="res://data/bosses/boss_attack_pattern.gd" id="6"]
+[ext_resource type="Script" uid="uid://ssyt2px4ucqy" path="res://data/bosses/boss_attack_pattern.gd" id="6"]
 
 [sub_resource type="Resource" id="Rings1"]
 script = ExtResource("6")
 kind = 1
 projectile_count = 24
-gap_degrees = 30.0
 burst_count = 2
 burst_interval = 0.38
 projectile_speed = 145.0
 angular_step_degrees = 15.0
+gap_degrees = 30.0
 
 [sub_resource type="Resource" id="Aimed1"]
 script = ExtResource("6")
-kind = 0
-projectile_count = 5
-burst_count = 3
-burst_interval = 0.25
-projectile_speed = 230.0
-angular_step_degrees = 7.0
 
 [sub_resource type="Resource" id="Spiral1"]
 script = ExtResource("6")
@@ -43,20 +37,15 @@ kind = 3
 script = ExtResource("6")
 kind = 1
 projectile_count = 32
-gap_degrees = 30.0
-burst_count = 3
 burst_interval = 0.32
 projectile_speed = 165.0
 angular_step_degrees = 15.0
+gap_degrees = 30.0
 
 [sub_resource type="Resource" id="Aimed2"]
 script = ExtResource("6")
-kind = 0
 projectile_count = 7
 burst_count = 4
-burst_interval = 0.25
-projectile_speed = 230.0
-angular_step_degrees = 7.0
 
 [sub_resource type="Resource" id="Spiral2"]
 script = ExtResource("6")
@@ -75,8 +64,8 @@ kind = 4
 script = ExtResource("3")
 scene = ExtResource("4")
 formation = 4
-spawn_gap = 0.25
 pattern = 1
+spawn_gap = 0.25
 movement_profile_override = ExtResource("5")
 
 [resource]
@@ -85,22 +74,13 @@ id = &"dread_ark"
 display_name = "Dread Ark"
 scene = ExtResource("2")
 health = 650.0
-coop_health_multiplier = 1.6
 cannon_health = 90.0
 phase_thresholds = PackedFloat32Array(0.5)
 movement_speeds = PackedFloat32Array(80, 115)
 movement_ranges = PackedFloat32Array(120, 144)
 movement_acceleration = 220.0
 movement_arrival_pause = 0.15
-vertical_movement_range = 14.0
-attack_pause = 0.35
-phase_one_patterns = [SubResource("Rings1"), SubResource("Aimed1"), SubResource("Spiral1"), SubResource("Aimed1"), SubResource("DronesPattern")]
-phase_two_patterns = [SubResource("Rings2"), SubResource("Aimed2"), SubResource("Spiral2"), SubResource("BeamPattern"), SubResource("Aimed2"), SubResource("DronesPattern")]
+phase_one_patterns = Array[ExtResource("6")]([SubResource("Rings1"), SubResource("Aimed1"), SubResource("Spiral1"), SubResource("Aimed1"), SubResource("DronesPattern")])
+phase_two_patterns = Array[ExtResource("6")]([SubResource("Rings2"), SubResource("Aimed2"), SubResource("Spiral2"), SubResource("BeamPattern"), SubResource("Aimed2"), SubResource("DronesPattern")])
 reinforcement_cap = 8
-coop_reinforcement_multiplier = 1.5
-beam_charge_time = 0.96
-beam_fire_time = 1.25
-beam_width = 12.0
-central_beam_width = 24.0
-beam_damage_interval = 0.35
-reinforcements = [SubResource("Drones")]
+reinforcements = Array[ExtResource("3")]([SubResource("Drones")])

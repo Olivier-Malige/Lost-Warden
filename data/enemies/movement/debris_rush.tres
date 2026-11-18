@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MovementProfile" format=3]
+
+[ext_resource type="Script" path="res://data/enemies/movement_profile.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"debris_rush"
+velocity = Vector2(0, 235)
+random_rotation = true
+rotation_speed_min = -2.0
+rotation_speed_max = 2.0

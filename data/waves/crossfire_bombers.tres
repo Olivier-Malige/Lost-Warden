@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="WaveDefinition" format=3 uid="uid://d1bm70jrsqkbk"]
+
+[ext_resource type="Script" uid="uid://dpr5rymyr25n2" path="res://data/waves/wave_definition.gd" id="1"]
+[ext_resource type="Script" uid="uid://ctp3qhk1vo1qm" path="res://data/waves/spawn_rule.gd" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/bomber.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/sniper.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/drone.tscn" id="5"]
+
+[sub_resource type="Resource" id="Rule0"]
+script = ExtResource("2")
+entry = 3
+scene = ExtResource("3")
+formation = 2
+pattern = 1
+spawn_gap = 0.9
+
+[sub_resource type="Resource" id="Rule1"]
+script = ExtResource("2")
+scene = ExtResource("4")
+
+[sub_resource type="Resource" id="Rule2"]
+script = ExtResource("2")
+scene = ExtResource("5")
+formation = 4
+pattern = 2
+
+[resource]
+script = ExtResource("1")
+duration = 25.0
+rules = Array[ExtResource("2")]([SubResource("Rule0"), SubResource("Rule1"), SubResource("Rule2")])
+id = &"crossfire_bombers"
+threat_budget = 68.0
+family = 5
+coordinated = true

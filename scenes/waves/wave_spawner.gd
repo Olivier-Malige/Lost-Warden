@@ -63,7 +63,7 @@ func start_run() -> void:
 				push_error("Every encounter rule requires an identified enemy family with a positive threat cost.")
 				return
 	var streams := RunRandom.new(_seed_override) if _seed_override >= 0 else global.run_random
-	director = EncounterDirector.new(streams)
+	director = EncounterDirector.new(streams, config.enemy_health_curve)
 	_run_coop = global.coop
 	_started = true
 	_running = true
@@ -91,6 +91,7 @@ func _cancel_formations() -> void:
 	for item in _pending:
 		_release_reservation(item)
 	_pending.clear()
+	queue_redraw()
 
 func _physics_process(delta: float) -> void:
 	if not _running:
@@ -114,6 +115,7 @@ func _physics_process(delta: float) -> void:
 	if director.elapsed + 0.000001 >= _next_formation_at:
 		_schedule_formation()
 	_flush_pending()
+	queue_redraw()
 
 func _begin_boss(force := false) -> bool:
 	var chosen := director.choose_boss(config.bosses, force)
@@ -303,6 +305,8 @@ func get_debug_snapshot() -> Dictionary:
 		"danger": director.danger(), "danger_offset": director.danger_offset,
 		"encounter": String(director.encounter.id) if director.encounter else "none",
 		"encounter_number": director.encounter_number, "encounter_left": director.encounter_left,
+		"survival_tier": director.survival_tier(), "survival_combat_time": director.survival_combat_time,
+		"encounter_family": WaveDefinition.Family.keys()[director.encounter.family] if director.encounter else "NONE",
 		"recent": director.recent.duplicate(), "budget_left": _budget_left, "budget_rate": _budget_rate,
 		"next_formation": maxf(_next_formation_at - director.elapsed, 0.0), "formation_cycle": _formation_cycle,
 		"bodies": _active_enemy_count() - _reserved_slots, "reserved": _reserved_slots,
@@ -332,12 +336,36 @@ func _boss_snapshot() -> Dictionary:
 		"reserved_adds": _reserved_boss_adds, "add_cap": _boss_reinforcement_cap()}
 
 func _schedule_formation() -> void:
+	var wave := director.encounter
+	if wave.family == WaveDefinition.Family.DEBRIS:
+		if _formation_cycle == 0:
+			_schedule_debris(wave.rules[0])
+			director.encounter_left = wave.duration
+		return
+	if wave.family == WaveDefinition.Family.REENTRY and _formation_cycle > 0:
+		return
+	if wave.family != WaveDefinition.Family.OPENING and _offensive_formations() >= (2 if director.survival_tier() >= 3 else 1):
+		_next_formation_at = director.elapsed + 0.25
+		return
 	var eligible: Array[SpawnRule] = []
 	var weights := PackedFloat32Array()
-	for rule in director.encounter.rules:
-		var candidate_definition := _rule_definition(rule)
-		var weight := rule.weight * candidate_definition.weight_at(director.danger()) / rule.interval
-		if weight > 0.0 and candidate_definition.threat_cost <= _budget_left and _available_members(candidate_definition) > 0:
+	for rule in wave.rules:
+		if rule.minimum_combat_time > director.regular_elapsed or rule.minimum_survival_time > director.survival_combat_time:
+			continue
+		var definition := _rule_definition(rule)
+		var weight := rule.weight * definition.weight_at(director.danger()) / rule.interval
+		if wave.family != WaveDefinition.Family.OPENING:
+			weight = rule.weight / rule.interval
+		if wave.minimum_combat_time > 0.0 and _formation_cycle == 0 and rule != wave.rules[0]:
+			continue
+		if rule.reinforcement_scene:
+			var escort := SpawnRule.new()
+			escort.scene = rule.reinforcement_scene
+			var escort_definition := _rule_definition(escort)
+			if escort_definition == null or _available_members(escort_definition) < 4 or _budget_left < definition.threat_cost + 4.0 * escort_definition.threat_cost \
+					or _enemy_cap() - _active_enemy_count() < definition.spawn_slots + 4 * escort_definition.spawn_slots:
+				continue
+		if weight > 0.0 and definition.threat_cost <= _budget_left and _available_members(definition) > 0:
 			eligible.append(rule)
 			weights.append(weight)
 	if eligible.is_empty():
@@ -347,51 +375,209 @@ func _schedule_formation() -> void:
 	var definition := _rule_definition(rule)
 	var count := mini(rule.formation, floori(_budget_left / definition.threat_cost))
 	count = mini(count, _available_members(definition))
+	if wave.family == WaveDefinition.Family.REENTRY and count < rule.formation:
+		_next_formation_at = director.elapsed + 0.25
+		return
 	var lanes := _formation_lanes(rule, count, _formation_cycle)
+	var start := _pending.size()
+	var formation_id := _combat_sequence + 1
 	var formation_seed := director.random.enemies.randi()
-	var elite_index := -1
-	var promotion_chance := director.elite_chance()
-	if definition.elite_eligible and promotion_chance > 0.0 and _active_elite_count() < config.elite_cap:
-		for index in lanes.size():
-			if director.random.enemies.randf() < promotion_chance:
-				elite_index = index
-				break
+	var elite_index := _elite_index(definition, lanes.size())
+	var side := 1 if formation_seed % 2 == 0 else -1
 	for index in lanes.size():
-		var lane := lanes[index]
-		var marker := get_node("spawnPos%d" % lane) as Node2D
-		var context := EnemySpawnContext.new()
-		context.combat_id = _next_combat_identity()
-		context.elite = index == elite_index
-		context.elite_definition = config.elite_definition if context.elite else null
-		context.health_multiplier = _health_multiplier(definition)
-		context.speed_multiplier = rule.speed_multiplier * (1.0 if definition.durability == EnemyDefinition.Durability.HAZARD else director.speed_multiplier())
-		context.fire_delay_multiplier = director.fire_delay_multiplier()
-		context.rule_health_multiplier = rule.health_multiplier
-		context.movement_profile = rule.movement_profile_override
-		context.formation_seed = formation_seed
-		context.movement_seed = director.random.enemies.randi()
-		context.movement_time_offset = index * rule.spawn_gap
-		var offset := Vector2.ZERO
-		if rule.pattern == SpawnRule.Pattern.V:
-			offset.y = -absf(lane - lanes[0]) * config.v_formation_depth
-		var item := {
-			"scene": rule.scene, "position": marker.position + offset,
-			"context": context, "at": director.elapsed + index * rule.spawn_gap,
-			"slots": definition.spawn_slots, "family": definition.id,
-			"elite": context.elite,
-			"generation": _generation,
-		}
-		_reserve(item)
-		_pending.append(item)
+		var edge := rule.entry
+		if edge == SpawnRule.Entry.SIDE or edge == SpawnRule.Entry.PINCER:
+			var mirror := side * (-1 if edge == SpawnRule.Entry.PINCER and index % 2 == 1 else 1)
+			edge = SpawnRule.Entry.LEFT if mirror > 0 else SpawnRule.Entry.RIGHT
+		var marker := _entry_position(edge, lanes[index])
+		if rule.entry == SpawnRule.Entry.PINCER and index % 2 == 1:
+			marker.y = _entry_position(edge, lanes[index - 1]).y
+		if rule.pattern == SpawnRule.Pattern.V and edge == SpawnRule.Entry.TOP:
+			marker.y -= absf(lanes[index] - lanes[0]) * config.v_formation_depth
+		var item := _queue_member(rule, definition, marker, index * rule.spawn_gap, formation_id, formation_seed, index == elite_index, edge)
+		if rule.reinforcement_scene:
+			item["squad"] = {}
 	var cost := lanes.size() * definition.threat_cost
+	if rule.reinforcement_scene:
+		var commander := _pending[start]
+		var extra_cost := _schedule_reinforcements(rule, commander.squad, cost, formation_id, formation_seed)
+		if extra_cost <= 0.0:
+			while _pending.size() > start:
+				_release_reservation(_pending.pop_back())
+			_next_formation_at = director.elapsed + 0.25
+			return
+		cost += extra_cost
+	var heavy_escort := wave.family == WaveDefinition.Family.FLEET and definition.durability == EnemyDefinition.Durability.HEAVY
+	if (heavy_escort or (wave.coordinated and director.survival_tier() >= 5)) and not rule.reinforcement_scene:
+		var extra_cost := _schedule_followup(eligible, rule, cost, formation_id, formation_seed)
+		if extra_cost <= 0.0:
+			while _pending.size() > start:
+				_release_reservation(_pending.pop_back())
+			_next_formation_at = director.elapsed + 0.25
+			return
+		cost += extra_cost
+	if elite_index >= 0:
+		director.elite_due = false
 	_budget_left = maxf(_budget_left - cost, 0.0)
-	_next_formation_at = director.elapsed + cost / _budget_rate
+	var interval := cost / _budget_rate
+	if wave.family != WaveDefinition.Family.OPENING:
+		interval = maxf(0.85 * director.formation_interval_scale(), interval)
+	_next_formation_at = director.elapsed + interval
 	_formation_cycle += 1
+
+func _elite_index(definition: EnemyDefinition, count: int) -> int:
+	if not definition.elite_eligible or count <= 0 or _active_elite_count() >= config.elite_cap:
+		return -1
+	if director.elite_due:
+		return 0
+	var chance := director.elite_chance()
+	if director.encounter.family != WaveDefinition.Family.OPENING:
+		chance = minf(0.4, chance + 0.06 + 0.015 * director.survival_tier())
+	if chance > 0.0:
+		for index in count:
+			if director.random.enemies.randf() < chance:
+				return index
+	return -1
+
+func _entry_position(edge: SpawnRule.Entry, lane: int) -> Vector2:
+	var marker := get_node("spawnPos%d" % lane) as Node2D
+	var arena := get_viewport_rect().size
+	match edge:
+		SpawnRule.Entry.LEFT:
+			return Vector2((get_node("spawnPos0") as Node2D).position.x - 24.0, lerpf(78.0, 158.0, float(lane) / maxi(1, config.lane_count - 1)))
+		SpawnRule.Entry.RIGHT:
+			return Vector2((get_node("spawnPos%d" % (config.lane_count - 1)) as Node2D).position.x + 24.0, lerpf(78.0, 158.0, float(lane) / maxi(1, config.lane_count - 1)))
+		SpawnRule.Entry.BOTTOM:
+			return Vector2(marker.position.x, arena.y + 22.0)
+	return marker.position
+
+func _queue_member(rule: SpawnRule, definition: EnemyDefinition, marker: Vector2, delay: float, formation_id: int, formation_seed: int, elite: bool, edge := SpawnRule.Entry.TOP) -> Dictionary:
+	var context := EnemySpawnContext.new()
+	context.combat_id = _next_combat_identity()
+	context.elite = elite
+	context.elite_definition = config.elite_definition if elite else null
+	context.health_multiplier = _health_multiplier(definition)
+	context.speed_multiplier = rule.speed_multiplier * (1.0 if definition.durability == EnemyDefinition.Durability.HAZARD else director.speed_multiplier())
+	context.fire_delay_multiplier = director.fire_delay_multiplier()
+	context.rule_health_multiplier = rule.health_multiplier
+	context.movement_profile = rule.movement_profile_override
+	context.formation_seed = formation_seed
+	context.movement_seed = director.random.enemies.randi()
+	context.movement_time_offset = delay
+	var item := {
+		"scene": rule.scene, "position": marker, "context": context,
+		"at": director.elapsed + delay + (1.0 if edge == SpawnRule.Entry.BOTTOM else 0.0),
+		"edge": edge, "slots": definition.spawn_slots, "family": definition.id,
+		"elite": elite, "formation": formation_id, "generation": _generation,
+	}
+	_reserve(item)
+	_pending.append(item)
+	return item
+
+func _schedule_reinforcements(rule: SpawnRule, squad: Dictionary, cost: float, formation_id: int, formation_seed: int) -> float:
+	var escort := SpawnRule.new()
+	escort.scene = rule.reinforcement_scene
+	var definition := _rule_definition(escort)
+	var extra_cost := 4.0 * definition.threat_cost
+	if _available_members(definition) < 4 or cost + extra_cost > _budget_left:
+		return 0.0
+	for index in 4:
+		var edge := SpawnRule.Entry.LEFT if (index + formation_seed) % 2 == 0 else SpawnRule.Entry.RIGHT
+		var item := _queue_member(escort, definition, _entry_position(edge, index * 3), 0.0, formation_id, formation_seed, false, edge)
+		item.at = INF
+		item["squad"] = squad
+		item["reinforcement"] = true
+		item["signal_delay"] = floori(index / 2.0)
+	return extra_cost
+
+func _schedule_followup(rules: Array[SpawnRule], primary: SpawnRule, cost: float, formation_id: int, formation_seed: int) -> float:
+	for rule in rules:
+		if rule == primary or rule.reinforcement_scene or rule.entry == SpawnRule.Entry.BOTTOM:
+			continue
+		var definition := _rule_definition(rule)
+		if definition.durability == EnemyDefinition.Durability.HEAVY:
+			continue
+		var count := mini(2, rule.formation)
+		var extra_cost := count * definition.threat_cost
+		if _available_members(definition) < count or _budget_left < cost + extra_cost:
+			continue
+		var lanes := _formation_lanes(rule, count, _formation_cycle + 1)
+		var edge := rule.entry
+		if edge == SpawnRule.Entry.SIDE or edge == SpawnRule.Entry.PINCER:
+			edge = SpawnRule.Entry.RIGHT if formation_seed % 2 == 0 else SpawnRule.Entry.LEFT
+		for index in lanes.size():
+			var delay := maxf(director.encounter.coordinated_delay, (primary.formation - 1) * primary.spawn_gap + 0.35)
+			_queue_member(rule, definition, _entry_position(edge, lanes[index]), delay + index * rule.spawn_gap, formation_id, formation_seed, false, edge)
+		return lanes.size() * definition.threat_cost
+	return 0.0
+
+func _offensive_formations() -> int:
+	var formations := {}
+	for enemy in get_tree().get_nodes_in_group(&"enemy"):
+		if enemy.has_meta(&"survival_formation") and not enemy.destroyed:
+			formations[enemy.get_meta(&"survival_formation")] = true
+	for item in _pending:
+		if item.has("formation"):
+			formations[item.formation] = true
+	return formations.size()
+
+func _schedule_debris(rule: SpawnRule) -> void:
+	var definition := _rule_definition(rule)
+	var openings := 4
+	var members := (config.lane_count - openings) * 3
+	var cost := members * definition.threat_cost
+	if config.lane_count < 8 or _active_enemy_count() > 0 or _available_members(definition) < members or _budget_left < cost:
+		_next_formation_at = director.elapsed + 0.25
+		return
+	for shot in get_tree().get_nodes_in_group(&"enemy_Shot"):
+		if not shot.get_meta(&"pooled", false) and not shot.is_queued_for_deletion():
+			_next_formation_at = director.elapsed + 0.25
+			return
+	var formation_id := _combat_sequence + 1
+	var formation_seed := director.random.enemies.randi()
+	var opens_right := director.encounter.id == &"debris_right"
+	var start_lane := config.lane_count - 5 if opens_right else 1
+	var shift := 1 if opens_right else -1
+	for row in 3:
+		var gap_start := start_lane + (shift if row == 1 else 0)
+		for lane in config.lane_count:
+			if lane >= gap_start and lane < gap_start + openings:
+				continue
+			_queue_member(rule, definition, _entry_position(SpawnRule.Entry.TOP, lane), row * 0.78, formation_id, formation_seed, false)
+	if director.survival_tier() >= 4 and director.encounter.rules.size() > 1:
+		var bomber_rule := director.encounter.rules[1]
+		var bomber := _rule_definition(bomber_rule)
+		if _available_members(bomber) > 0 and _budget_left >= cost + bomber.threat_cost:
+			var outside_lane := 0 if opens_right else config.lane_count - 1
+			_queue_member(bomber_rule, bomber, _entry_position(SpawnRule.Entry.TOP, outside_lane), 0.35, formation_id, formation_seed, false)
+			cost += bomber.threat_cost
+	_budget_left -= cost
+	_formation_cycle += 1
+
+func _draw() -> void:
+	if not _running:
+		return
+	var edge_y := get_viewport_rect().size.y - 17.0
+	for item in _pending:
+		if item.get("edge", SpawnRule.Entry.TOP) != SpawnRule.Entry.BOTTOM or item.at - director.elapsed > 1.0:
+			continue
+		var center := Vector2(item.position.x, edge_y)
+		var warning := Color("#ff9e68")
+		draw_polyline(PackedVector2Array([center + Vector2(-9, 5), center + Vector2(0, -5), center + Vector2(9, 5)]), warning, 2.0)
+		draw_line(center + Vector2(-10, 8), center + Vector2(10, 8), warning, 1.0)
 
 func _flush_pending() -> void:
 	var index := 0
 	while index < _pending.size():
 		var item := _pending[index]
+		if item.get("reinforcement", false) and item.squad.has("commander"):
+			var commander = item.squad.commander
+			if not is_instance_valid(commander) or commander.destroyed:
+				_pending.remove_at(index)
+				_release_reservation(item)
+				continue
+			if item.squad.has("signal_at"):
+				item.at = item.squad.signal_at + item.signal_delay
 		if item.at <= director.elapsed + 0.000001:
 			_pending.remove_at(index)
 			call_deferred("_materialize", item)
@@ -402,7 +588,17 @@ func _materialize(item: Dictionary) -> void:
 	_release_reservation(item)
 	if not _running or item.generation != _generation:
 		return
+	if item.get("reinforcement", false):
+		var commander = item.squad.get("commander")
+		if not is_instance_valid(commander) or commander.destroyed:
+			return
 	var enemy := (item.scene as PackedScene).instantiate() as Enemy
+	if item.has("formation") and director.encounter.family != WaveDefinition.Family.OPENING:
+		enemy.set_meta(&"survival_formation", item.formation)
+	if item.has("squad") and not item.get("reinforcement", false):
+		var squad: Dictionary = item.squad
+		squad["commander"] = enemy
+		enemy.connect(&"reinforcement_signal", func() -> void: squad["signal_at"] = director.elapsed, CONNECT_ONE_SHOT)
 	if item.get("boss_add", false):
 		enemy.add_to_group("boss_add")
 	enemy.configure_spawn(item.context)
@@ -480,7 +676,13 @@ func _health_multiplier(definition: EnemyDefinition) -> float:
 				coop_scale = config.coop_specialist_health_multiplier
 			EnemyDefinition.Durability.HEAVY:
 				coop_scale = config.coop_heavy_health_multiplier
-	return coop_scale * director.health_multiplier()
+	var maximum := 1.20
+	match definition.durability:
+		EnemyDefinition.Durability.FODDER, EnemyDefinition.Durability.FIGHTER:
+			maximum = 1.12
+		EnemyDefinition.Durability.HEAVY:
+			maximum = 1.35
+	return coop_scale * director.health_multiplier(maximum)
 
 func _rule_definition(rule: SpawnRule) -> EnemyDefinition:
 	if _definitions.has(rule.scene):

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EnemyDefinition" format=3]
+
+[ext_resource type="Script" path="res://data/enemies/enemy_definition.gd" id="1"]
+[ext_resource type="Resource" path="res://data/enemies/movement/interceptor_strafe.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"bastion"
+threat_cost = 8.0
+active_limit = 2
+max_health = 24
+score = 180
+durability = 4
+xp_value = 4
+xp_drop_chance = 100
+movement_profile = ExtResource("2")

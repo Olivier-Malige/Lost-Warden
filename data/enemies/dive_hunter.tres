@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EnemyDefinition" format=3]
+
+[ext_resource type="Script" path="res://data/enemies/enemy_definition.gd" id="1"]
+[ext_resource type="Resource" path="res://data/enemies/movement/interceptor_strafe.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"dive_hunter"
+threat_cost = 2.0
+active_limit = 8
+max_health = 4
+score = 40
+durability = 2
+xp_value = 1
+xp_drop_chance = 65
+movement_profile = ExtResource("2")

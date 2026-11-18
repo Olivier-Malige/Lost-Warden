@@ -14,7 +14,13 @@ enum Pattern {
 	GAP_WALL,
 }
 
+enum Entry { TOP, LEFT, RIGHT, BOTTOM, SIDE, PINCER }
+
+@export var entry: Entry = Entry.TOP
+@export var minimum_combat_time := 0.0
+@export var minimum_survival_time := 0.0
 @export var scene: PackedScene
+@export var reinforcement_scene: PackedScene
 @export_range(0.05, 60.0, 0.05) var interval: float = 1.0
 @export var weight: float = 1.0
 @export_range(0, 31, 1) var spawn_min: int = 0

@@ -75,7 +75,17 @@ func _test_curves() -> void:
 	for index in elite_times.size():
 		director.elapsed = elite_times[index]
 		_check(is_equal_approx(director.elite_chance(), chances[index]), "elite curve at %s seconds" % elite_times[index])
-	_check(is_equal_approx(director.health_multiplier(), 1.5), "health scaling is capped")
+	for seconds in [0.0, 300.0, 600.0, 1200.0, 1800.0]:
+		director.regular_elapsed = seconds
+		_check(is_equal_approx(director.health_multiplier(), 1.0 + minf(seconds / 1200.0, 1.0) * 0.20), "health scales slowly with combat time")
+	var custom_curve := Curve.new()
+	custom_curve.max_domain = 1200.0
+	custom_curve.add_point(Vector2(0.0, 0.0))
+	custom_curve.add_point(Vector2(600.0, 0.25))
+	custom_curve.add_point(Vector2(1200.0, 1.0))
+	var custom_director := EncounterDirector.new(RunRandom.new(1), custom_curve)
+	custom_director.regular_elapsed = 600.0
+	_check(is_equal_approx(custom_director.health_multiplier(), 1.05), "authored control points change the health curve")
 	_check(is_equal_approx(director.speed_multiplier(), 1.2), "movement scaling is capped")
 	_check(is_equal_approx(director.fire_delay_multiplier(), 0.8), "firing delay scaling is capped")
 	director.danger_offset = -100.0

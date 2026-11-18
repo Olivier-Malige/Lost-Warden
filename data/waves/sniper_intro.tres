@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="WaveDefinition" format=3 uid="uid://c1iakc8tneqx2"]
+
+[ext_resource type="Script" uid="uid://dpr5rymyr25n2" path="res://data/waves/wave_definition.gd" id="1"]
+[ext_resource type="Script" uid="uid://ctp3qhk1vo1qm" path="res://data/waves/spawn_rule.gd" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/sniper.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/tie.tscn" id="4"]
+
+[sub_resource type="Resource" id="Rule0"]
+script = ExtResource("2")
+scene = ExtResource("3")
+weight = 3
+
+[sub_resource type="Resource" id="Rule1"]
+script = ExtResource("2")
+scene = ExtResource("4")
+formation = 4
+pattern = 7
+
+[resource]
+script = ExtResource("1")
+duration = 25.0
+rules = Array[ExtResource("2")]([SubResource("Rule0"), SubResource("Rule1")])
+id = &"sniper_intro"
+threat_budget = 43.0
+minimum_combat_time = 180.0

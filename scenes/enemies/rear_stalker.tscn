@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemies/interceptor.tscn" id="1"]
+[ext_resource type="Script" path="res://scenes/enemies/phase_four_enemy.gd" id="2"]
+[ext_resource type="Resource" path="res://data/enemies/rear_stalker.tres" id="3"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rear_stalker.png" id="4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/rear_stalker_elite.png" id="5"]
+
+[node name="RearStalker" instance=ExtResource("1")]
+script = ExtResource("2")
+definition = ExtResource("3")
+role = 3
+hull_texture = ExtResource("4")
+elite_hull_texture = ExtResource("5")

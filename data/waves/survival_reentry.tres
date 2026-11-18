@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="WaveDefinition" format=3 uid="uid://cdsv7w48ukmq"]
+
+[ext_resource type="Script" uid="uid://dpr5rymyr25n2" path="res://data/waves/wave_definition.gd" id="1"]
+[ext_resource type="Script" uid="uid://ctp3qhk1vo1qm" path="res://data/waves/spawn_rule.gd" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/dive_hunter.tscn" id="3"]
+
+[sub_resource type="Resource" id="Rule0"]
+script = ExtResource("2")
+entry = 5
+scene = ExtResource("3")
+formation = 6
+pattern = 1
+spawn_gap = 0.24
+
+[resource]
+script = ExtResource("1")
+duration = 6.0
+rules = Array[ExtResource("2")]([SubResource("Rule0")])
+id = &"survival_reentry"
+threat_budget = 48.0
+family = 6

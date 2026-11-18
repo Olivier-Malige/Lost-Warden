@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EnemyDefinition" format=3]
+
+[ext_resource type="Script" path="res://data/enemies/enemy_definition.gd" id="1"]
+[ext_resource type="Resource" path="res://data/enemies/movement/interceptor_strafe.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"assault_commander"
+threat_cost = 11.0
+active_limit = 1
+max_health = 34
+score = 240
+durability = 4
+xp_value = 5
+xp_drop_chance = 100
+movement_profile = ExtResource("2")

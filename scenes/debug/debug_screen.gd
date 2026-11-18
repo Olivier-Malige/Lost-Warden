@@ -118,6 +118,7 @@ func _run_text(data: Dictionary) -> String:
 		"", "[color=#d6d653]ENCOUNTER / %d / %s[/color]" % [d.encounter_number, d.encounter],
 		"Time left: %.2fs   Formation cycle: %d" % [d.encounter_left, d.formation_cycle],
 		"Threat left: %.2f   Budget rate: %.2f / s" % [d.budget_left, d.budget_rate],
+		"Survival tier: %d   Family: %s" % [d.get("survival_tier", 0), d.get("encounter_family", "NONE")],
 		"Next formation: %.2fs   Pending entries: %d" % [d.next_formation, d.pending],
 		"Body slots: %d live-tree + %d reserved / %d cap" % [d.bodies, d.reserved, d.cap],
 		"Recorded body spawns: %d   Rolling minute: %d" % [data.spawn_total, data.spawns_last_minute],

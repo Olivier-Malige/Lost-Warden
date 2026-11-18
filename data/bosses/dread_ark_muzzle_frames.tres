@@ -1,6 +1,6 @@
-[gd_resource type="SpriteFrames" load_steps=14 format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://b1a31eu2xk8pn"]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/combat/dread_ark_muzzle_sheet.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://lpoejeocsf42" path="res://assets/sprites/combat/dread_ark_muzzle_sheet.png" id="1"]
 
 [sub_resource type="AtlasTexture" id="Frame0"]
 atlas = ExtResource("1")
@@ -51,38 +51,55 @@ atlas = ExtResource("1")
 region = Rect2(176, 0, 16, 16)
 
 [resource]
-animations = [
-{
-"frames": [
-{"duration": 1.0, "texture": SubResource("Frame0")},
-{"duration": 1.0, "texture": SubResource("Frame1")},
-{"duration": 1.0, "texture": SubResource("Frame2")},
-{"duration": 1.0, "texture": SubResource("Frame3")}
-],
-"loop": false,
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Frame0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Frame1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Frame2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Frame3")
+}],
+"loop": 0,
 "name": &"charge",
 "speed": 6.666666666666667
-},
-{
-"frames": [
-{"duration": 1.0, "texture": SubResource("Frame4")},
-{"duration": 1.0, "texture": SubResource("Frame5")},
-{"duration": 1.0, "texture": SubResource("Frame6")},
-{"duration": 1.0, "texture": SubResource("Frame7")}
-],
-"loop": true,
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Frame4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Frame5")
+}, {
+"duration": 1.0,
+"texture": SubResource("Frame6")
+}, {
+"duration": 1.0,
+"texture": SubResource("Frame7")
+}],
+"loop": 1,
 "name": &"fire",
 "speed": 13.333333333333334
-},
-{
-"frames": [
-{"duration": 1.0, "texture": SubResource("Frame8")},
-{"duration": 1.0, "texture": SubResource("Frame9")},
-{"duration": 1.0, "texture": SubResource("Frame10")},
-{"duration": 1.0, "texture": SubResource("Frame11")}
-],
-"loop": false,
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Frame8")
+}, {
+"duration": 1.0,
+"texture": SubResource("Frame9")
+}, {
+"duration": 1.0,
+"texture": SubResource("Frame10")
+}, {
+"duration": 1.0,
+"texture": SubResource("Frame11")
+}],
+"loop": 0,
 "name": &"recover",
-"speed": 10
-}
-]
+"speed": 10.0
+}]

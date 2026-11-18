@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="WaveDefinition" format=3 uid="uid://bmdby4upy12e7"]
+
+[ext_resource type="Script" uid="uid://dpr5rymyr25n2" path="res://data/waves/wave_definition.gd" id="1"]
+[ext_resource type="Script" uid="uid://ctp3qhk1vo1qm" path="res://data/waves/spawn_rule.gd" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/asteroid.tscn" id="3"]
+[ext_resource type="Resource" path="res://data/enemies/movement/debris_rush.tres" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/bomber.tscn" id="5"]
+
+[sub_resource type="Resource" id="Rule0"]
+script = ExtResource("2")
+scene = ExtResource("3")
+movement_profile_override = ExtResource("4")
+
+[sub_resource type="Resource" id="Rule1"]
+script = ExtResource("2")
+scene = ExtResource("5")
+
+[resource]
+script = ExtResource("1")
+duration = 8.0
+rules = Array[ExtResource("2")]([SubResource("Rule0"), SubResource("Rule1")])
+id = &"debris_left"
+threat_budget = 42.0
+family = 3
